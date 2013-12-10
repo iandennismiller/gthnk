@@ -1,0 +1,15 @@
+0120
+
+It did not work.
+
+1015
+
+Okay - that will get the job done.  Now all I need is to increment the date 10 days at a time, put it on a delay, and let it rip.
+
+1612
+
+So, the journal did not work it seems.  
+
+1637
+
+Gonna have to see how that works out tonight.  

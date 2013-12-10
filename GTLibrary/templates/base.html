@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <link rel="icon" type="image/png" href="/static/favicon.ico">
+    <title>{% block title %}{% endblock %} - greenthink-library</title>
+    {% block htmlhead %}{% endblock %}
+</head>
+<body {% block bodyclass %}{% endblock %}>
+  {% block navigation %}{% endblock %}
+
+  <div id="content">
+    {% block content %}{% endblock %}
+  </div>
+
+  <div id="footer">
+    {% block footer %}
+    &copy; 2013 greenthink-library
+    {% endblock %}
+  </div>
+</body>

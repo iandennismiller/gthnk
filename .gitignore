@@ -1,0 +1,4 @@
+build/
+sphinx/build/
+dist/
+*.egg-info
