@@ -10,5 +10,10 @@
     <true/>
     <key>RunAtLoad</key>
     <true/>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>SETTINGS</key>
+        <string>/Users/idm/Work/greenthink-library/etc/dev.conf</string>
+    </dict>
 </dict>
 </plist>

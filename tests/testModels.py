@@ -20,15 +20,17 @@ class ModelTestCase(TestCase):
         db.session.remove()
 
     def test_user(self):
-        user_datastore.create_user(email='admin', password='aaa')
-        db.session.commit()
-        newuser = Model.User.query.filter_by(email='admin').first()
+        with app.app_context():
+            user_datastore.create_user(email='admin', password='aaa')
+            db.session.commit()
+        newuser = Model.User.find(email='admin')
         assert newuser
         assert newuser.email == 'admin'
 
     def test_asset(self):
-        user_datastore.create_user(email='admin', password='aaa')
-        db.session.commit()
+        with app.app_context():
+            user_datastore.create_user(email='admin', password='aaa')
+            db.session.commit()
         user = Model.User.query.filter_by(email='admin').first()
 
         a = Model.Asset(owner=user, name='something')

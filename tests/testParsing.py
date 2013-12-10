@@ -3,7 +3,7 @@ from nose.plugins.attrib import attr
 
 from unittest import TestCase
 import os, shutil
-from journal.base import Journal
+from GT.journal import Journal
 
 with open('tests/data/correct_output.txt', 'r') as f:
     correct_output = ''.join(f.readlines())

@@ -3,8 +3,8 @@ from nose.plugins.attrib import attr
 
 from unittest import TestCase
 import os, shutil
-from journal.base import Journal
-from journal.todo import Todo
+from GT.journal import Journal
+from GT.journal.todo import Todo
 
 class TestActions(TestCase):
     def setUp(self):

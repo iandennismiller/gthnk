@@ -13,16 +13,14 @@ from GT import app, db, user_datastore, Model
 class ViewTestCase(TestCase):
 
     def setUp(self):
-        app.config['TESTING'] = True
-
         # fresh testing database
         db.drop_all()
         db.create_all()
-        db.session.commit()
 
         # here, load some data
-        user_datastore.create_user(email='admin', password='aaa')
-        db.session.commit()
+        with app.app_context():
+            user_datastore.create_user(email='admin', password='aaa')
+            db.session.commit()
 
     def tearDown(self):
         db.session.remove()
@@ -38,7 +36,7 @@ class ViewTestCase(TestCase):
                 sess['_fresh'] = True
 
             rv = c.get('/')
-            assert 'index' in rv.data
+            assert 'Login' in rv.data
 
     @attr('online')
     def test_recruit_post(self):
