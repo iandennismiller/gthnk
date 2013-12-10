@@ -7,6 +7,7 @@ import json, sys, glob, csv, time, datetime, string, random, re, os
 
 from GT import app
 from flask.ext.security import login_required
+import GT.dashboard
 
 # this is really just for debugging on the local machine.
 @app.route('/')
@@ -17,6 +18,14 @@ def index():
 @app.route('/get/<datestamp>')
 def get_file():
     return render_template('index.html')
+
+@app.route('/dashboard.html')
+def dashboard():
+    lists = GT.dashboard.IdeaListsWidget().render()
+    todo = GT.dashboard.TodoWidget().render()
+    work = GT.dashboard.WorkWidget().render()
+
+    return render_template('dashboard.html', lists=lists, todo=todo, work=work)
 
 @app.route('/search', methods=['POST', 'GET'])
 def search_query():

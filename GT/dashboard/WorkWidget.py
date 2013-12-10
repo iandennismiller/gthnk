@@ -1,6 +1,9 @@
-#!/usr/bin/env python
+# (c) 2013 Ian Dennis Miller
+# -*- coding: utf-8 -*-
 
 import os, sys, time, json
+from stat import S_ISREG, ST_CTIME, ST_MODE
+from GT.dashboard import DashboardWidget
 
 def newest_file_in_tree(rootfolder):
     # http://stackoverflow.com/questions/837606/find-the-oldest-file-recursively-in-a-directory
@@ -27,11 +30,8 @@ def recently_modified(dirpath):
     files = list((time.ctime(cdate), os.path.basename(path)) for cdate, newest, path in s_entries)
     return files
 
-def main():
-    dirpath = sys.argv[1] if len(sys.argv) == 2 else r'.'
-    files = recently_modified(dirpath)
-    with open('/tmp/work_ls.json', 'w') as f:
-        buf = "var files = " + json.dumps(files, indent=4)
-        f.write(buf)
-
-main()
+class WorkWidget(DashboardWidget):
+    def render(self):
+        dirpath = sys.argv[1] if len(sys.argv) == 2 else r'.'
+        files = recently_modified(dirpath)
+        return json.dumps(files, indent=4)
