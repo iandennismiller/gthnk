@@ -10,6 +10,8 @@ clean:
 	rm -rf build dist *.egg-info *.pyc
 
 install: www launch
+	mkdir -p /var/lib/greenthink-library
+	mkdir -p ~/.gt
 	python setup.py install
 
 www:

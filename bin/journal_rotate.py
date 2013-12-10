@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
-from GT.journal import Journal
+import sys
+sys.path.insert(0, '.')
+
+#from GT.journal import Journal
+import GT.journal
 import datetime, os
 
 journal_path = "/Users/idm/Library/Journal"
@@ -15,7 +19,7 @@ datestamp = "%s-%s-%s.txt" % (now.year, now.month, now.day)
 
 os.system("cp %s %s/%s" % (live_file, backup_path, datestamp))
 
-j = Journal(export_path)
+j = GT.journal.Journal(export_path)
 j.parse(live_file)
 j.parse(http_file)
 

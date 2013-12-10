@@ -13,5 +13,10 @@
 		<key>Minute</key>
 		<integer>3</integer>
 	</dict>
+	<key>EnvironmentVariables</key>
+    <dict>
+		<key>SETTINGS</key>
+		<string>/Users/idm/Work/greenthink-library/etc/dev.conf</string>
+    </dict>
 </dict>
 </plist>
