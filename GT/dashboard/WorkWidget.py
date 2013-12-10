@@ -17,11 +17,13 @@ def newest_file_in_tree(rootfolder):
     except (ValueError, OSError):
         return
 
-def recently_modified(dirpath):
+def recently_modified_git(dirpath):
     # http://stackoverflow.com/questions/168409/how-do-you-get-a-directory-listing-sorted-by-creation-date-in-python
 
     entries = (os.path.join(dirpath, fn) for fn in os.listdir(dirpath))
-    entries = ((newest_file_in_tree(path), path) for path in entries)
+    #entries = ((newest_file_in_tree(path), path) for path in entries)
+    # only look inside .git paths here
+    entries = ((newest_file_in_tree(os.path.join(path, ".git")), path) for path in entries)
     entries = ((os.stat(newest).st_mtime, newest, path) for (newest, path) in entries if newest)
 
     s_entries = sorted(entries)
@@ -34,6 +36,6 @@ class WorkWidget(DashboardWidget):
     def render(self):
         #dirpath = sys.argv[1] if len(sys.argv) == 2 else r'.'
         dirpath = "/Users/idm/Work"
-        #files = recently_modified(dirpath)
-        files = []
+        files = recently_modified_git(dirpath)
+        #files = []
         return files

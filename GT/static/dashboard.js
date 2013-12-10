@@ -44,12 +44,12 @@ for (var i in data['lists']['media']) {
     $("#media_list").append(li);
 }
 
-for (var i in lists['radar']) {
+for (var i in data['lists']['radar']) {
     var li = $("<li>").html(data['lists']['radar'][i]);
     $("#radar_list").append(li);
 }
 
-for (var i in lists['wanna']) {
+for (var i in data['lists']['wanna']) {
     var li = $("<li>").html(data['lists']['wanna'][i]);
     $("#wanna_list").append(li);
 }

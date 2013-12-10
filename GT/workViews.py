@@ -23,32 +23,13 @@ def get_file():
 
 @app.route('/dashboard.json')
 def dashboard_data():
-    cache_name = "/tmp/dashboard.json"
-    if os.path.exists(cache_name):
-        mtime = os.stat(cache_name).st_mtime
-        delta = datetime.datetime.now() - datetime.datetime.fromtimestamp(mtime)
-        seconds = delta.seconds
-    else:
-        seconds = 99999
+    h = {
+        "lists": IdeaListsWidget().render(),
+        "todo": TodoWidget().render(),
+        "work": WorkWidget().render(),
+    }
 
-    # if the file is old and expired
-    if seconds > 1500:
-        app.logger.debug("rebuild")
-        h = {
-            "lists": IdeaListsWidget().render(),
-            "todo": TodoWidget().render(),
-            "work": WorkWidget().render(),
-        }
-
-        with open(cache_name, "w") as f:
-            buf = render_template('dashboard.json', dump=json.dumps(h, indent=4))
-            f.write(buf)
-    # otherwise just grab the saved copy
-    else:
-        app.logger.debug("cached")
-        with open(cache_name, "r") as f:
-            buf = f.read()
-    return buf
+    return render_template('dashboard.json', dump=json.dumps(h, indent=4))
 
 @app.route('/search', methods=['POST', 'GET'])
 def search_query():
