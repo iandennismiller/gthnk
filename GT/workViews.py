@@ -18,18 +18,42 @@ def index():
     return render_template('index.html')
 
 @app.route('/get/<datestamp>')
-def get_file():
-    return render_template('index.html')
+def get_file(datestamp):
+    auto_path = "/Users/idm/Library/Journal/auto"
+    target_file = os.path.join(auto_path, "%s.txt" % datestamp)
+    if os.path.exists(target_file):
+        with open(target_file, "r") as f:
+            buf = f.read()
+    buf = re.sub(r"\n", "<br/>", buf)
+    return render_template('article.html', buf=buf)
 
 @app.route('/dashboard.json')
 def dashboard_data():
-    h = {
-        "lists": IdeaListsWidget().render(),
-        "todo": TodoWidget().render(),
-        "work": WorkWidget().render(),
-    }
+    cache_name = "/tmp/dashboard.json"
+    if os.path.exists(cache_name):
+        mtime = os.stat(cache_name).st_mtime
+        delta = datetime.datetime.now() - datetime.datetime.fromtimestamp(mtime)
+        seconds = delta.seconds
+    else:
+        seconds = 99999
 
-    return render_template('dashboard.json', dump=json.dumps(h, indent=4))
+    # if the file is old and expired (i.e. more than 30 minutes)
+    if seconds > 1800:
+        app.logger.debug("rebuild")
+        h = {
+            "lists": IdeaListsWidget().render(),
+            "todo": TodoWidget().render(),
+            "work": WorkWidget().render(),
+        }
+        with open(cache_name, "w") as f:
+            buf = render_template('dashboard.json', dump=json.dumps(h, indent=4))
+            f.write(buf)
+    # otherwise just grab the saved copy
+    else:
+        app.logger.debug("cached")
+        with open(cache_name, "r") as f:
+            buf = f.read()
+    return buf
 
 @app.route('/search', methods=['POST', 'GET'])
 def search_query():
@@ -56,11 +80,11 @@ def search_query_ack(query):
     cmd = [
         '/usr/local/bin/ack',
         '-a',
-        '-C3', 
-        '-i', 
-        query, 
+        '-C3',
+        '-i',
+        query,
         "/Users/idm/Library/Journal/journal.txt",
-        "/Users/idm/Library/Journal/auto", 
+        "/Users/idm/Library/Journal/auto",
     ]
     output = subprocess.check_output(cmd)
     output = re.sub("/Users/idm/Library/Journal/auto/", "", output)

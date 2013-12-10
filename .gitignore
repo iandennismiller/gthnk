@@ -2,3 +2,4 @@ build/
 sphinx/build/
 dist/
 *.egg-info
+lib/poodledo
