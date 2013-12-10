@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>Label</key>
-	<string>com.iandennismiller.greenthink.search</string>
+	<string>com.gthnk.search</string>
 	<key>Program</key>
-	<string>/Users/idm/.virtualenvs/greenthink/bin/gtsearch-server.py</string>
+	<string>/Users/idm/.virtualenvs/greenthink/bin/runserver.py</string>
     <key>KeepAlive</key>
     <true/>
     <key>RunAtLoad</key>

@@ -41,7 +41,6 @@ setup(version=version,
             "Fabric==1.8.0",
             "nose==1.2.1",
             "watchdog==0.6.0",
-            "distribute>=0.6.35",
             "ipython>=0.13",
             "pylint==0.26.0",
 

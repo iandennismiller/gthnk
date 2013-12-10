@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from journal.base import Journal
+from GT.journal import Journal
 import datetime, os
 
 journal_path = "/Users/idm/Library/Journal"

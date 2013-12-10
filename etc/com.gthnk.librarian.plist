@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Label</key>
-	<string>com.iandennismiller.greenthink.librarian</string>
+	<string>com.gthnk.librarian</string>
 	<key>Program</key>
 	<string>/Users/idm/.virtualenvs/greenthink/bin/journal_cron.sh</string>
 	<key>StartCalendarInterval</key>
