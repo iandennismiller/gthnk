@@ -13,7 +13,7 @@
     <key>EnvironmentVariables</key>
     <dict>
         <key>SETTINGS</key>
-        <string>/Users/idm/Work/greenthink-library/etc/dev.conf</string>
+        <string>/Users/idm/.gt/greenthink.conf</string>
     </dict>
 </dict>
 </plist>

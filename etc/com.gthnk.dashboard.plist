@@ -3,15 +3,15 @@
 <plist version="1.0">
 <dict>
 	<key>Label</key>
-	<string>com.gthnk.librarian</string>
+	<string>com.gthink.dashboard</string>
 	<key>Program</key>
-	<string>/Users/idm/.virtualenvs/greenthink/bin/journal_cron.sh</string>
+    	<string>/Users/idm/.virtualenvs/greenthink/bin/dashboard.sh</string>
 	<key>StartCalendarInterval</key>
 	<dict>
 		<key>Hour</key>
-		<integer>0</integer>
+		<integer>9</integer>
 		<key>Minute</key>
-		<integer>3</integer>
+		<integer>0</integer>
 	</dict>
 	<key>EnvironmentVariables</key>
     <dict>

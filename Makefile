@@ -5,6 +5,7 @@ WWWROOT=/var/www/greenthink-library
 TEST_CMD=SETTINGS=$$PWD/etc/testing.conf nosetests -c nose.cfg
 SEARCH_PLIST=com.gthnk.search.plist
 LIBRARIAN_PLIST=com.gthnk.librarian.plist
+DASHBOARD_PLIST=com.gthnk.dashboard.plist
 
 clean:
 	rm -rf build dist *.egg-info *.pyc
@@ -13,6 +14,7 @@ install: www launch
 	mkdir -p /var/lib/greenthink-library
 	mkdir -p ~/.gt
 	python setup.py install
+	cp etc/dev.conf ~/.gt/greenthink.conf
 
 www:
 	rsync -a www/ $(WWWROOT)
@@ -28,6 +30,10 @@ launch:
 	cp etc/$(LIBRARIAN_PLIST) ~/Library/LaunchAgents
 	-launchctl unload ~/Library/LaunchAgents/$(LIBRARIAN_PLIST)
 	launchctl load ~/Library/LaunchAgents/$(LIBRARIAN_PLIST)
+
+	cp etc/$(DASHBOARD_PLIST) ~/Library/LaunchAgents
+	-launchctl unload ~/Library/LaunchAgents/$(DASHBOARD_PLIST)
+	launchctl load ~/Library/LaunchAgents/$(DASHBOARD_PLIST)
 
 server:
 	SETTINGS=$$PWD/etc/dev.conf bin/manage.py runserver
