@@ -6,7 +6,7 @@ from flask.ext.admin import Admin, BaseView, expose
 from flask.ext.admin.base import MenuLink
 from flask.ext.admin.contrib.sqlamodel import ModelView
 from flask.ext.security import current_user
-from GTLibrary import Model
+from GT import Model
 
 class AuthView(ModelView):
     def is_accessible(self):

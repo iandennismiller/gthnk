@@ -5,7 +5,7 @@ from flask.ext.wtf import Form
 from wtforms import TextField, BooleanField, PasswordField, TextAreaField
 from wtforms.validators import Required
 
-from GTLibrary import app
+from GT import app
 
 # 'csrf_enabled' has to be set to false otherwise Flask-WTForms do not work and you get an error message 
 # {'csrf': ['Missing or invalid CSRF token']}!

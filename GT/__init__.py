@@ -27,7 +27,7 @@ security = Security(app, user_datastore)
 # admin interface
 from flask.ext.admin import Admin
 import adminViews
-admin = Admin(app, name='GTLibrary')
+admin = Admin(app, name='GT')
 admin.add_view(adminViews.StatusView(name="Status"))
 admin.add_view(adminViews.UserAdmin(db.session))
 admin.add_view(adminViews.AssetAdmin(db.session))
@@ -35,7 +35,7 @@ admin.add_link(adminViews.AuthenticatedMenuLink(name='Logout', url='/logout'))
 admin.add_link(adminViews.NotAuthenticatedMenuLink(name='Login', url='/login'))
 
 # Setup Views
-import GTLibrary.workViews
+import GT.workViews
 
 # init logging
 import logging

@@ -6,10 +6,15 @@ version = '0.1'
 setup(version=version,
       name='greenthink-library',
       description = "greenthink-library",
-      packages = ["GTLibrary"],
+      packages = ["GT"],
       scripts = [
             "bin/runserver.py",
             "bin/manage.py",
+            "bin/journal_rotate.py",
+            "bin/journal_get.sh",
+            "bin/journal_delete.sh",
+            "bin/journal_cron.sh",
+            "bin/journal_actions.py",
       ],
       long_description="""greenthink-library""",
       classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
@@ -21,6 +26,7 @@ setup(version=version,
       install_requires = [
             ### application requirements
 
+            "poodledo>=0.2",
             #"BeautifulSoup==3.2.1",
             #"html5lib>=0.95",
             #"requests==2.0.0",

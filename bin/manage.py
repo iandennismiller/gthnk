@@ -7,8 +7,8 @@ sys.path.insert(0, '.')
 
 from flask.ext.script import Manager, Shell, Server
 from flask.ext.migrate import Migrate, MigrateCommand
-import GTLibrary.models as Model
-from GTLibrary import app, db, user_datastore
+import GT.models as Model
+from GT import app, db, user_datastore
 
 def _make_context():
     return dict(app=app, db=db, user_datastore=user_datastore, Model=Model)
@@ -36,7 +36,7 @@ def init_db():
 @manager.command
 def populate_db():
     "insert a default set of objects"
-    import GTLibrary.importing as importing
+    import GT.importing as importing
     importing.basic_users()
     #importing.typical_workflow()
 

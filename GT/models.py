@@ -6,7 +6,7 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
 from flask.ext.security.utils import encrypt_password, verify_password
 from mixins import CRUDMixin
-from GTLibrary import db, app
+from GT import db, app
 
 # Define models
 roles_users = db.Table('roles_users',

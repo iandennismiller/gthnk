@@ -1,13 +1,16 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
+# greenthink-library (c) 2013 Ian Dennis Miller
 
-import subprocess, re, glob, codecs, os
+from __future__ import with_statement
+from flask import Flask, request, jsonify, send_from_directory, abort, session, render_template, send_file, redirect
+import json, sys, glob, csv, time, datetime, string, random, re, os
 
-from flask import Flask, render_template, request, abort
-app = Flask(__name__)
-app.debug = True
+from GT import app
+from flask.ext.security import login_required
 
+# this is really just for debugging on the local machine.
 @app.route('/')
+@login_required
 def index():
     return render_template('index.html')
 

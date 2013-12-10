@@ -1,4 +1,4 @@
-from GTLibrary import app, db, user_datastore, Model
+from GT import app, db, user_datastore, Model
 
 def basic_users():
     # create users

@@ -8,7 +8,7 @@ from unittest import TestCase
 
 sys.path.insert(0, '.')
 os.environ['SETTINGS'] = "../etc/testing.conf"
-from GTLibrary import app, db, user_datastore, Model
+from GT import app, db, user_datastore, Model
 
 class ModelTestCase(TestCase):
     def setUp(self):

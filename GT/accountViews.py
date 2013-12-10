@@ -5,9 +5,9 @@ from __future__ import with_statement
 from flask import Flask, request, jsonify, send_from_directory, abort, session, render_template, send_file, redirect, flash, url_for
 import json, sys, glob, csv, time, datetime, string, random, re, os
 
-from GTLibrary import app
-from GTLibrary.database import init_db, db_session, drop_tables
-import GTLibrary.models as Models
+from GT import app
+from GT.database import init_db, db_session, drop_tables
+import GT.models as Models
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask.ext.login import login_user, logout_user, current_user, login_required

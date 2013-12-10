@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # greenthink-library (c) 2013 Ian Dennis Miller
 
-from GTLibrary import db, app
+from GT import db, app
 
 # adapted from https://github.com/semirook/flask-kit/blob/master/base/models.py
 class CRUDMixin(object):

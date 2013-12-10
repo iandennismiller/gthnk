@@ -12,7 +12,7 @@ install: www
 
 www:
     rsync -a www/ $(WWWROOT)
-	rsync -a GTLibrary/static/ $(WWWROOT)/static
+	rsync -a GT/static/ $(WWWROOT)/static
 
 server:
 	SETTINGS=$$PWD/etc/dev.conf bin/manage.py runserver
@@ -27,11 +27,11 @@ test:
 	$(TEST_CMD)
 
 lint:
-	pylint GTLibrary
+	pylint GT
 
 doc:
     rm -rf sphinx/source/auto && mkdir sphinx/source/auto
-    sphinx-apidoc -o sphinx/source/auto/GTLibrary GTLibrary
+    sphinx-apidoc -o sphinx/source/auto/GT GT
     SETTINGS=$$PWD/etc/dev.conf sphinx-build -b html sphinx/source sphinx/build
     open sphinx/build/index.html
 
