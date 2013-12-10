@@ -59,10 +59,10 @@ Todos
 */
 
 var todo_count = 0;
-for (var i in data['todos']) {
-    if (!data['todos'][i].completed) {
+for (var i in data['todo']) {
+    if (!data['todo'][i].completed) {
         todo_count += 1;
-        var li = $("<li>").html(data['todos'][i].title);
+        var li = $("<li>").html(data['todo'][i].title);
         $("#todo_list").append(li);
     }
     if (todo_count > 15) {

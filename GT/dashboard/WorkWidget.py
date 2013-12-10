@@ -38,4 +38,4 @@ class WorkWidget(DashboardWidget):
         dirpath = "/Users/idm/Work"
         files = recently_modified_git(dirpath)
         #files = []
-        return files
+        return files[:20]

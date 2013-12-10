@@ -47,4 +47,4 @@ class TodoWidget(DashboardWidget):
             todos_list = list(dict(i) for i in todos)
         except urllib2.URLError:
             todos_list = []
-        return todos_list
+        return todos_list[:40]

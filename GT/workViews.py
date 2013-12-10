@@ -40,10 +40,21 @@ def dashboard_data():
     # if the file is old and expired (i.e. more than 30 minutes)
     if seconds > 1800:
         app.logger.debug("rebuild")
+
+        # todo
+        app.logger.debug("start todo")
+        todo = TodoWidget().render()
+        app.logger.debug("finish todo")
+
+        # work
+        app.logger.debug("start work")
+        work = WorkWidget().render()
+        app.logger.debug("finish work")
+
         h = {
             "lists": IdeaListsWidget().render(),
-            "todo": TodoWidget().render(),
-            "work": WorkWidget().render(),
+            "todo": todo,
+            "work": work,
         }
         with open(cache_name, "w") as f:
             buf = render_template('dashboard.json', dump=json.dumps(h, indent=4))
