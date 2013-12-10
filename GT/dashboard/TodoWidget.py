@@ -4,13 +4,12 @@
 from poodledo.apiclient import ApiClient, PoodledoError, ToodledoError
 import json, os
 from GT.dashboard import DashboardWidget
+import urllib2
 
 class TodoWidget(DashboardWidget):
-    filename = "~/.gt/dashboard.json"
-
-    def do_login(self):
+    def do_login(self, credential_file):
         client = ApiClient()
-        with open(os.path.expanduser(filename), "r") as f:
+        with open(os.path.expanduser(credential_file), "r") as f:
             auth = json.load(f)
 
         try:
@@ -33,14 +32,19 @@ class TodoWidget(DashboardWidget):
                 raise e
 
             auth['session_key'] = client.key
-            with open(os.path.expanduser(filename), "w") as f:
+            with open(os.path.expanduser(credential_file), "w") as f:
                 json.dump(auth, f, indent=4)
 
         return client
 
     def render(self):
-        c = self.do_login()
-        todos = c.getTasks()
-        todos.reverse()
-        todos_list = list(dict(i) for i in todos)
-        return json.dumps(todos_list, indent=4)
+        credential_file = "~/.gt/dashboard.json"
+
+        try:
+            c = self.do_login(credential_file)
+            todos = c.getTasks()
+            todos.reverse()
+            todos_list = list(dict(i) for i in todos)
+        except urllib2.URLError:
+            todos_list = []
+        return todos_list

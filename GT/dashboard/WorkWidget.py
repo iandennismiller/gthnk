@@ -32,6 +32,8 @@ def recently_modified(dirpath):
 
 class WorkWidget(DashboardWidget):
     def render(self):
-        dirpath = sys.argv[1] if len(sys.argv) == 2 else r'.'
-        files = recently_modified(dirpath)
-        return json.dumps(files, indent=4)
+        #dirpath = sys.argv[1] if len(sys.argv) == 2 else r'.'
+        dirpath = "/Users/idm/Work"
+        #files = recently_modified(dirpath)
+        files = []
+        return files

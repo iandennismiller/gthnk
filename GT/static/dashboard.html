@@ -1,6 +1,6 @@
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="/static/dashboard.css">
     <title>Life Dashboard</title>
 </head>
 <body>
@@ -61,11 +61,7 @@
     </div>
 
     <script src="/static/jquery-1.10.2.min.js"></script>
-    <script>
-        var lists = {{ lists }};
-        var todos = {{ todo }};
-        var files = {{ work }};
-    </script>
+    <script src="/dashboard.json"></script>
     <script src="/static/dashboard.js"></script>
 </body>
 </html>

@@ -3,11 +3,13 @@
 
 from __future__ import with_statement
 from flask import Flask, request, jsonify, send_from_directory, abort, session, render_template, send_file, redirect
-import json, sys, glob, csv, time, datetime, string, random, re, os
+import json, sys, glob, csv, time, datetime, string, random, re, os, codecs
 
 from GT import app
 from flask.ext.security import login_required
-import GT.dashboard
+from GT.dashboard.IdeaListsWidget import IdeaListsWidget
+from GT.dashboard.TodoWidget import TodoWidget
+from GT.dashboard.WorkWidget import WorkWidget
 
 # this is really just for debugging on the local machine.
 @app.route('/')
@@ -19,13 +21,34 @@ def index():
 def get_file():
     return render_template('index.html')
 
-@app.route('/dashboard.html')
-def dashboard():
-    lists = GT.dashboard.IdeaListsWidget().render()
-    todo = GT.dashboard.TodoWidget().render()
-    work = GT.dashboard.WorkWidget().render()
+@app.route('/dashboard.json')
+def dashboard_data():
+    cache_name = "/tmp/dashboard.json"
+    if os.path.exists(cache_name):
+        mtime = os.stat(cache_name).st_mtime
+        delta = datetime.datetime.now() - datetime.datetime.fromtimestamp(mtime)
+        seconds = delta.seconds
+    else:
+        seconds = 99999
 
-    return render_template('dashboard.html', lists=lists, todo=todo, work=work)
+    # if the file is old and expired
+    if seconds > 1500:
+        app.logger.debug("rebuild")
+        h = {
+            "lists": IdeaListsWidget().render(),
+            "todo": TodoWidget().render(),
+            "work": WorkWidget().render(),
+        }
+
+        with open(cache_name, "w") as f:
+            buf = render_template('dashboard.json', dump=json.dumps(h, indent=4))
+            f.write(buf)
+    # otherwise just grab the saved copy
+    else:
+        app.logger.debug("cached")
+        with open(cache_name, "r") as f:
+            buf = f.read()
+    return buf
 
 @app.route('/search', methods=['POST', 'GET'])
 def search_query():

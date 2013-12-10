@@ -1,0 +1,45 @@
+.time {
+    display: inline-block;
+    width: 7em;
+}
+
+.ctl {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#ideas_list, #media_list, #radar_list, #wanna_list {
+    display: none;
+}
+
+#recent, #todo {
+    float: right;
+    margin-right: 2em;
+    width: 20em;
+}
+
+#recent li, #todo li {
+    margin: 0.5em 0em;
+}
+
+li {
+    list-style-type: square;
+}
+
+ul {
+    padding-left: 1.1em;
+}
+
+#search {
+    float: left;
+    margin-right: 1em;
+}
+
+#quick {
+    margin-bottom: 1.5em;
+}
+
+h1 {
+    margin-top: 0em;
+}

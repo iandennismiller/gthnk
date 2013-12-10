@@ -12,7 +12,7 @@ var day = 60*60*24*1000;
 var week = day*7;
 
 // go through the 10 most recent
-recent = files.slice(0, 20);
+recent = data['work'].slice(0, 20);
 for (var i in recent) {
     var d = new Date(recent[i][0]);
     // color code: each day the font gets lighter
@@ -29,28 +29,28 @@ for (var i in recent) {
 lists
 */
 
-for (var i in lists['ideas']) {
-    var li = $("<li>").html(lists['ideas'][i]);
+for (var i in data['lists']['ideas']) {
+    var li = $("<li>").html(data['lists']['ideas'][i]);
     $("#ideas_list").append(li);
 }
 
-for (var i in lists['themes']) {
-    var li = $("<li>").html(lists['themes'][i]);
+for (var i in data['lists']['themes']) {
+    var li = $("<li>").html(data['lists']['themes'][i]);
     $("#themes_list").append(li);
 }
 
-for (var i in lists['media']) {
-    var li = $("<li>").html(lists['media'][i]);
+for (var i in data['lists']['media']) {
+    var li = $("<li>").html(data['lists']['media'][i]);
     $("#media_list").append(li);
 }
 
 for (var i in lists['radar']) {
-    var li = $("<li>").html(lists['radar'][i]);
+    var li = $("<li>").html(data['lists']['radar'][i]);
     $("#radar_list").append(li);
 }
 
 for (var i in lists['wanna']) {
-    var li = $("<li>").html(lists['wanna'][i]);
+    var li = $("<li>").html(data['lists']['wanna'][i]);
     $("#wanna_list").append(li);
 }
 
@@ -59,10 +59,10 @@ Todos
 */
 
 var todo_count = 0;
-for (var i in todos) {
-    if (!todos[i].completed) {
+for (var i in data['todos']) {
+    if (!data['todos'][i].completed) {
         todo_count += 1;
-        var li = $("<li>").html(todos[i].title);
+        var li = $("<li>").html(data['todos'][i].title);
         $("#todo_list").append(li);
     }
     if (todo_count > 15) {

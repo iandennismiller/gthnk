@@ -7,7 +7,7 @@ from GT.dashboard import DashboardWidget
 class IdeaListsWidget(DashboardWidget):
     # http://stackoverflow.com/questions/168409/how-do-you-get-a-directory-listing-sorted-by-creation-date-in-python
 
-    def render_idea_lists(self):
+    def render(self):
         lists = {}
 
         #######
@@ -46,7 +46,3 @@ class IdeaListsWidget(DashboardWidget):
         lists["wanna"] = wanna
 
         return lists
-
-    def render(self):
-        lists = self.render_idea_lists()
-        return json.dumps(lists, indent=4)
