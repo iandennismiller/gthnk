@@ -82,7 +82,8 @@ class IdeaListsWidget(DashboardWidget):
         j = GT.journal.Journal(export_path)
         j.parse(live_file)
 
-        buf = j.get_recent_days(1)
+        #buf = j.get_recent_days(1)
+        buf = j.dump_day(j.list_recent_days(1)[0])
         lists['yesterday'] = buf
 
         return lists
