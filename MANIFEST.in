@@ -1,1 +1,2 @@
-recursive-include greenthink-library/templates *
+recursive-include GT/templates *
+recursive-include GT/static *

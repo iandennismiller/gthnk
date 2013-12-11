@@ -3,21 +3,18 @@
 <plist version="1.0">
 <dict>
 	<key>Label</key>
-	<string>com.gthnk.librarian</string>
-	<key>Program</key>
-	<string>/Users/idm/.virtualenvs/greenthink/bin/journal_rotate.py</string>
-	<key>StartCalendarInterval</key>
-	<dict>
-		<key>Hour</key>
-		<integer>0</integer>
-		<key>Minute</key>
-		<integer>3</integer>
-	</dict>
-	<key>EnvironmentVariables</key>
+	<string>com.gthnk.server</string>
+    <key>EnvironmentVariables</key>
     <dict>
-		<key>SETTINGS</key>
-		<string>/Users/idm/.gt/greenthink.conf</string>
+        <key>SETTINGS</key>
+        <string>/Users/idm/.gt/greenthink.conf</string>
     </dict>
+    <key>Program</key>
+	<string>/Users/idm/.virtualenvs/greenthink/bin/runserver.py</string>
+    <key>KeepAlive</key>
+    <true/>
+    <key>RunAtLoad</key>
+    <true/>
     <key>StandardOutPath</key>
     <string>/var/lib/greenthink-library/launchd.out.log</string>
     <key>StandardErrorPath</key>

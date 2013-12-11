@@ -70,8 +70,8 @@ class IdeaListsWidget(DashboardWidget):
         lists["wanna"] = wanna
 
         # recent log messages
-        with open("/var/lib/greenthink-library/dev.log", "r") as f:
-            a = [l for l in islice(reversed_lines(f), 20)]
+        with open("/var/lib/greenthink-library/app.log", "r") as f:
+            a = [l for l in islice(reversed_lines(f), 40)]
             a.reverse()
             lists["log"] = a
 

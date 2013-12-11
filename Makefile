@@ -3,7 +3,7 @@
 SHELL=/bin/bash
 WWWROOT=/var/www/greenthink-library
 TEST_CMD=SETTINGS=$$PWD/etc/testing.conf nosetests -c nose.cfg
-SEARCH_PLIST=com.gthnk.search.plist
+SERVER_PLIST=com.gthnk.server.plist
 LIBRARIAN_PLIST=com.gthnk.librarian.plist
 DASHBOARD_PLIST=com.gthnk.dashboard.plist
 
@@ -14,7 +14,7 @@ install: www launch
 	mkdir -p /var/lib/greenthink-library
 	mkdir -p ~/.gt
 	python setup.py install
-	cp etc/dev.conf ~/.gt/greenthink.conf
+	cp etc/production.conf ~/.gt/greenthink.conf
 
 www:
 	rsync -a www/ $(WWWROOT)
@@ -23,9 +23,9 @@ www:
 launch:
 	@echo "Installing launch agent to ~/Library/LaunchAgents"
 
-	cp etc/$(SEARCH_PLIST) ~/Library/LaunchAgents
-	-launchctl unload ~/Library/LaunchAgents/$(SEARCH_PLIST)
-	launchctl load ~/Library/LaunchAgents/$(SEARCH_PLIST)
+	cp etc/$(SERVER_PLIST) ~/Library/LaunchAgents
+	-launchctl unload ~/Library/LaunchAgents/$(SERVER_PLIST)
+	launchctl load ~/Library/LaunchAgents/$(SERVER_PLIST)
 
 	cp etc/$(LIBRARIAN_PLIST) ~/Library/LaunchAgents
 	-launchctl unload ~/Library/LaunchAgents/$(LIBRARIAN_PLIST)

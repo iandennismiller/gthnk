@@ -6,15 +6,20 @@ version = '0.1'
 setup(version=version,
       name='greenthink-library',
       description = "greenthink-library",
-      packages = ["GT"],
+      packages = [
+            "GT",
+            "GT.journal",
+            "GT.dashboard",
+            ],
       scripts = [
             "bin/runserver.py",
             "bin/manage.py",
             "bin/journal_rotate.py",
             "bin/journal_get.sh",
             "bin/journal_delete.sh",
-            "bin/journal_cron.sh",
-            "bin/journal_actions.py",
+            "bin/journal_login.sh",
+            "bin/journal_login_csrf.sh",
+            #"bin/journal_actions.py",
       ],
       long_description="""greenthink-library""",
       classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers

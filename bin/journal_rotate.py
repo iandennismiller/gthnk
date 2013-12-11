@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 
-import sys
-sys.path.insert(0, '.')
-
-#from GT.journal import Journal
+from GT import app
 import GT.journal
 import datetime, os
+
+app.logger.debug("start clipboard download")
+os.system("/Users/idm/.virtualenvs/greenthink/bin/journal_get.sh")
+app.logger.debug("finish clipboard download")
+os.system("/Users/idm/.virtualenvs/greenthink/bin/journal_delete.sh")
+app.logger.debug("clear clipboard")
+
+app.logger.debug("start rotating journal")
 
 journal_path = "/Users/idm/Library/Journal"
 export_path = os.path.join(journal_path, "auto")
@@ -26,3 +31,5 @@ j.parse(http_file)
 exported = j.export_week_old()
 if exported:
     j.purge_week_old(live_file)
+
+app.logger.debug("finish rotating journal")

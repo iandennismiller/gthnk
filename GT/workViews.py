@@ -7,9 +7,6 @@ import json, sys, glob, csv, time, datetime, string, random, re, os, codecs
 
 from GT import app
 from flask.ext.security import login_required
-from GT.dashboard.IdeaListsWidget import IdeaListsWidget
-from GT.dashboard.TodoWidget import TodoWidget
-from GT.dashboard.WorkWidget import WorkWidget
 
 # this is really just for debugging on the local machine.
 @app.route('/')
@@ -39,6 +36,10 @@ def get_project_readme(name):
 
 @app.route('/dashboard.json')
 def dashboard_data():
+    from GT.dashboard.IdeaListsWidget import IdeaListsWidget
+    from GT.dashboard.TodoWidget import TodoWidget
+    from GT.dashboard.WorkWidget import WorkWidget
+
     cache_name = "/tmp/dashboard.json"
     if os.path.exists(cache_name):
         mtime = os.stat(cache_name).st_mtime

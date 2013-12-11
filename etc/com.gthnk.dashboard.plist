@@ -3,9 +3,12 @@
 <plist version="1.0">
 <dict>
 	<key>Label</key>
-	<string>com.gthink.dashboard</string>
-	<key>Program</key>
-    	<string>/Users/idm/.virtualenvs/greenthink/bin/dashboard.sh</string>
+	<string>com.gthnk.dashboard</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/open</string>
+        <string>http://localhost:1620/static/dashboard.html</string>
+    </array>
 	<key>StartCalendarInterval</key>
 	<dict>
 		<key>Hour</key>
@@ -18,5 +21,9 @@
 		<key>SETTINGS</key>
 		<string>/Users/idm/.gt/greenthink.conf</string>
     </dict>
+    <key>StandardOutPath</key>
+    <string>/var/lib/greenthink-library/launchd.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/var/lib/greenthink-library/launchd.err.log</string>
 </dict>
 </plist>
