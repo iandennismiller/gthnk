@@ -83,7 +83,6 @@ class IdeaListsWidget(DashboardWidget):
         j.parse(live_file)
 
         buf = j.get_recent_days(1)
-        buf = re.sub(r"\n", "<br/>", buf)
         lists['yesterday'] = buf
 
         return lists

@@ -61,7 +61,7 @@ for (var i in data['lists']['log']) {
     $("#log .expando").append(li);
 }
 
-$("#yesterday_content").html(data['lists']['yesterday']);
+$("#yesterday_content").html(markdown.toHTML(data['lists']['yesterday']));
 
 /*
 Todos
