@@ -6,16 +6,9 @@
 <body>
     <div id="window">
         <div id="content">
-            <div id="quick">
-                <form id="search" action="http://localhost:1620/search">
-                    <input type="text" name="q" autofocus/>
-                    <input type="submit" value="search">
-                </form>
-                <a id="outside-in" href="http://outside-in.baldwin.saperea.com/">Outside Conditions</a>
-            </div>
-
             <div class="col" id="card_column">
                 <div class="widget" id="recent">
+                    <div id="spinner"></div>
                     <div class="expando">
                         <ul id="recent_list"></ul>
                     </div>
@@ -59,7 +52,6 @@
 
                 <div class="widget" id="log">
                     <div class="expando">
-                        <ul id="log_list"></ul>
                     </div>
                 </div>
 
@@ -76,20 +68,28 @@
 
             <div class="col" id="button_column">
                 <h2 class="ctl" id="recent_ctl">recent</h2>
+                <h2 class="ctl" id="yesterday_ctl">yesterday</h2>
                 <h2 class="ctl" id="todo_ctl">todo</h2>
                 <h2 class="ctl" id="themes_ctl">themes</h2>
                 <h2 class="ctl" id="ideas_ctl">ideas</h2>
-                <h2 class="ctl" id="yesterday_ctl">yesterday</h2>
                 <h2 class="ctl" id="media_ctl">media</h2>
                 <h2 class="ctl" id="radar_ctl">radar</h2>
                 <h2 class="ctl" id="wanna_ctl">wanna</h2>
                 <h2 class="ctl" id="log_ctl">log</h2>
+                <div id="quick">
+                    <form id="search" action="http://localhost:1620/search">
+                        <input type="text" name="q" autofocus/>
+                        <input type="submit" value=">">
+                    </form>
+                    <!--<a id="outside-in" href="http://outside-in.baldwin.saperea.com/">Outside Conditions</a>-->
+                </div>
             </div>
 
         </div>
     </div>
 
     <script src="/static/jquery-1.10.2.min.js"></script>
+    <script src="/static/markdown.js"></script>
     <script src="/dashboard.json"></script>
     <script src="/static/dashboard.js"></script>
 </body>

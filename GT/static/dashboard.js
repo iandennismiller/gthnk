@@ -18,8 +18,10 @@ for (var i in recent) {
     // color code: each day the font gets lighter
     var luminance = (today - d) / day;
     var datestamp = $("<span class='time'>").html(dateToYMD(d));
-    var project_name = $("<span class='name'>").html(recent[i][1]);
-    var li = $("<li>").append(datestamp).append(project_name);
+    var project_str = recent[i][1];
+    var project_name = $("<span class='name'>").html(project_str);
+    var desc = $("<a href='/project/" + project_str + "'>").append(project_name).append("</a>");
+    var li = $("<li>").append(datestamp).append(desc);
     var color = "hsl(0,0%," + Math.floor(luminance) + "%)";
     li.css('color', color);
     $("#recent_list").append(li);
@@ -55,8 +57,8 @@ for (var i in data['lists']['wanna']) {
 }
 
 for (var i in data['lists']['log']) {
-    var li = $("<li>").html(data['lists']['log'][i]);
-    $("#log_list").append(li);
+    var li = $("<p>").html(data['lists']['log'][i]);
+    $("#log .expando").append(li);
 }
 
 $("#yesterday_content").html(data['lists']['yesterday']);
@@ -90,3 +92,6 @@ $('.ctl').click(function() {
     elm = $("#" + id_name + " .expando");
     elm.show();
 });
+
+$("#spinner").fadeOut();
+$("#recent .expando").fadeIn();

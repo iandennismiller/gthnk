@@ -3,8 +3,9 @@
     margin: 0px auto;
 }
 
-#content_column {
+#card_column {
     width: 35em;
+    margin-top: 1em;
 }
 
 #button_column {
@@ -12,7 +13,7 @@
 }
 
 .widget {
-    width: 35em;
+    width: 42em;
 }
 
 .time {
@@ -30,40 +31,26 @@
     display: none;
 }
 
-#recent .expando {
-    display: block;
-}
-
 .col {
     float: right;
 }
 
-#recent li, #todo li {
-    margin: 0.5em 0em;
-}
-
 li {
     list-style-type: square;
+    margin-bottom: 1em;
 }
 
 ul {
     padding-left: 1.1em;
-}
-
-#search {
-    float: left;
-    margin-right: 1em;
+    margin: 0;
 }
 
 #quick {
-    margin-bottom: 1.5em;
+    padding-top: 1em;
+    padding-left: 0.7em;
 }
 
-h1 {
-    margin-top: 0em;
-}
-
-#yesterday_content, #log_list {
+#yesterday, #log {
     font-family: monospace;
 }
 
@@ -71,6 +58,7 @@ h2 {
     width: 7em;
     padding: 0.5em;
     margin: 0em;
+    border-bottom: 1px solid gray;
 }
 
 h2:hover {
@@ -79,4 +67,33 @@ h2:hover {
 
 .selected {
     background: rgb(240, 240, 240);
+}
+
+/* spinner: http://24ways.org/2009/css-animations/ */
+
+#spinner {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    margin: -100px 0 0 -100px;
+    height: 200px;
+    width: 200px;
+    text-indent: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    -webkit-mask-image: url(/static/spinner.png);
+    background-color: #000;
+    -webkit-animation-name: spinnerRotate;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+}
+
+@-webkit-keyframes spinnerRotate {
+    from {
+        -webkit-transform:rotate(0deg);
+    }
+    to {
+        -webkit-transform:rotate(360deg);
+    }
 }

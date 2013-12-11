@@ -1,7 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div style="width:60em; margin:0px auto; font-family: monospace;">
+<div id="article">
 {{ buf|safe }}
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+    $("#article").html(markdown.toHTML($("#article").text()));
+</script>
 {% endblock %}

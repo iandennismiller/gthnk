@@ -17,14 +17,24 @@ from GT.dashboard.WorkWidget import WorkWidget
 def index():
     return render_template('index.html')
 
-@app.route('/get/<datestamp>')
+@app.route('/day/<datestamp>')
 def get_file(datestamp):
     auto_path = "/Users/idm/Library/Journal/auto"
     target_file = os.path.join(auto_path, "%s.txt" % datestamp)
     if os.path.exists(target_file):
         with open(target_file, "r") as f:
             buf = f.read()
-    buf = re.sub(r"\n", "<br/>", buf)
+    #buf = re.sub(r"\n", "<br/>", buf)
+    return render_template('article.html', buf=buf)
+
+@app.route('/project/<name>')
+def get_project_readme(name):
+    base_path = "/Users/idm/Work"
+    target_file = os.path.join(base_path, name, "Readme.md")
+    if os.path.exists(target_file):
+        with open(target_file, "r") as f:
+            buf = f.read()
+    #buf = re.sub(r"\n", "<br/>", buf)
     return render_template('article.html', buf=buf)
 
 @app.route('/dashboard.json')

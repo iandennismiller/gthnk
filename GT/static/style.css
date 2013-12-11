@@ -1,3 +1,12 @@
 #footer {
     text-align: center;
 }
+
+#article {
+    font-family: monospace;
+}
+
+#content {
+    width: 50em;
+    margin: 0px auto;
+}
