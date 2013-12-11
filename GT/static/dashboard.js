@@ -54,6 +54,13 @@ for (var i in data['lists']['wanna']) {
     $("#wanna_list").append(li);
 }
 
+for (var i in data['lists']['log']) {
+    var li = $("<li>").html(data['lists']['log'][i]);
+    $("#log_list").append(li);
+}
+
+$("#yesterday_content").html(data['lists']['yesterday']);
+
 /*
 Todos
 */
@@ -75,9 +82,11 @@ Controls: make the ul inside a .ctl respond to clicks
 */
 
 $('.ctl').click(function() {
-    var elm = $(this).parent().parent().children("ul");
-    elm.animate({
-            height: "toggle",
-            opacity: "toggle"
-        });
+    $(".expando").hide();
+    $("h2").removeClass("selected");
+    $(this).addClass("selected");
+
+    var id_name = $(this).text();
+    elm = $("#" + id_name + " .expando");
+    elm.show();
 });

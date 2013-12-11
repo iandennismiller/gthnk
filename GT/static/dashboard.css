@@ -1,22 +1,41 @@
+#content {
+    width: 49em;
+    margin: 0px auto;
+}
+
+#content_column {
+    width: 35em;
+}
+
+#button_column {
+    width: 14em;
+}
+
+.widget {
+    width: 35em;
+}
+
 .time {
     display: inline-block;
-    width: 7em;
+    width: 5.5em;
 }
 
 .ctl {
-    color: blue;
-    text-decoration: underline;
+    /*color: blue;
+    text-decoration: underline;*/
     cursor: pointer;
 }
 
-#ideas_list, #media_list, #radar_list, #wanna_list {
+.expando {
     display: none;
 }
 
-#recent, #todo {
+#recent .expando {
+    display: block;
+}
+
+.col {
     float: right;
-    margin-right: 2em;
-    width: 20em;
 }
 
 #recent li, #todo li {
@@ -42,4 +61,22 @@ ul {
 
 h1 {
     margin-top: 0em;
+}
+
+#yesterday_content, #log_list {
+    font-family: monospace;
+}
+
+h2 {
+    width: 7em;
+    padding: 0.5em;
+    margin: 0em;
+}
+
+h2:hover {
+    background: rgb(220, 220, 220);
+}
+
+.selected {
+    background: rgb(240, 240, 240);
 }
