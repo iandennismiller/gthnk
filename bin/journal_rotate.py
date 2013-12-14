@@ -53,7 +53,7 @@ app.logger.debug("finish rotating journal")
 # rotate out Dropbox file
 
 app.logger.debug("clear dropbox journal.txt")
-os.system("echo -n '' > %s" % dropbox_phone_file)
-os.system("echo -n '' > %s" % dropbox_tablet_file)
+os.system("echo '' > %s" % dropbox_phone_file)
+os.system("echo '' > %s" % dropbox_tablet_file)
 
 app.logger.debug("DONE")
