@@ -5,6 +5,7 @@ import os, sys, time, json, re
 from GT.dashboard import DashboardWidget
 from itertools import islice
 import GT.journal
+import markdown
 
 # http://stackoverflow.com/questions/260273/most-efficient-way-to-search-the-last-x-lines-of-a-file-in-python
 def reversed_lines(file):
@@ -87,6 +88,6 @@ class IdeaListsWidget(DashboardWidget):
             buf = j.dump_day(j.list_recent_days(1)[0])
         except:
             buf = ""
-        lists['yesterday'] = buf
+        lists['yesterday'] = markdown.markdown(buf, ['linkify', 'journal'])
 
         return lists

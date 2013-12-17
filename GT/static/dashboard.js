@@ -64,7 +64,8 @@ function create_lists() {
         $("#log .expando").append(li);
     }
 
-    $("#yesterday_content").html(markdown.toHTML(data['lists']['yesterday']));
+    // $("#yesterday_content").html(markdown.toHTML(data['lists']['yesterday']));
+    $("#yesterday_content").html(data['lists']['yesterday']);
 }
 
 /*

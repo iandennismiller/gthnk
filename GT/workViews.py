@@ -4,6 +4,7 @@
 from __future__ import with_statement
 from flask import Flask, request, jsonify, send_from_directory, abort, session, render_template, send_file, redirect
 import json, sys, glob, csv, time, datetime, string, random, re, os, codecs
+import markdown
 
 from GT import app
 from flask.ext.security import login_required
@@ -21,7 +22,8 @@ def get_file(datestamp):
     if os.path.exists(target_file):
         with open(target_file, "r") as f:
             buf = f.read()
-    #buf = re.sub(r"\n", "<br/>", buf)
+        #buf = markdown.markdown(buf, ['linkify', 'journal'])
+        buf = markdown.markdown(buf, ['linkify', 'journal'])
     return render_template('article.html', buf=buf)
 
 @app.route('/project/<name>')
@@ -31,6 +33,7 @@ def get_project_readme(name):
     if os.path.exists(target_file):
         with open(target_file, "r") as f:
             buf = f.read()
+        buf = markdown.markdown(buf, ['linkify', 'journal'])
     #buf = re.sub(r"\n", "<br/>", buf)
     return render_template('article.html', buf=buf)
 

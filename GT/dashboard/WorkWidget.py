@@ -4,38 +4,28 @@
 import os, sys, time, json
 from stat import S_ISREG, ST_CTIME, ST_MODE
 from GT.dashboard import DashboardWidget
+import subprocess
 
-def newest_file_in_tree(rootfolder):
-    # http://stackoverflow.com/questions/837606/find-the-oldest-file-recursively-in-a-directory
-    try:
-        return max(
-            (os.path.join(dirname, filename)
-            for dirname, dirnames, filenames in os.walk(rootfolder)
-            #for filename in filenames if not filename[0] == '.'),
-            for filename in dirnames if dirname[0] != '.' and filename[0] != "."),
-            key=lambda fn: os.stat(fn).st_mtime)
-    except (ValueError, OSError):
-        return
+def pipe(cmd):
+    sp = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+    output = sp.stdout.read()
+    sp.stdout.close()
+    sp.wait()
+    return output
 
 def recently_modified_git(dirpath):
-    # http://stackoverflow.com/questions/168409/how-do-you-get-a-directory-listing-sorted-by-creation-date-in-python
-
-    entries = (os.path.join(dirpath, fn) for fn in os.listdir(dirpath))
-    #entries = ((newest_file_in_tree(path), path) for path in entries)
-    # only look inside .git paths here
-    entries = ((newest_file_in_tree(os.path.join(path, ".git")), path) for path in entries)
-    entries = ((os.stat(newest).st_mtime, newest, path) for (newest, path) in entries if newest)
-
-    s_entries = sorted(entries)
+    cmd = "find %s -name '.git' -depth 2" % dirpath
+    output = pipe(cmd).strip()
+    entries = output.split("\n")
+    timestamped = ((os.stat(fname).st_mtime, fname) for fname in entries)
+    s_entries = sorted(timestamped)
     s_entries.reverse()
 
-    files = list((time.ctime(cdate), os.path.basename(path)) for cdate, newest, path in s_entries)
+    files = list((time.ctime(cdate), os.path.basename(os.path.dirname(path))) for cdate, path in s_entries)
     return files
 
 class WorkWidget(DashboardWidget):
     def render(self):
-        #dirpath = sys.argv[1] if len(sys.argv) == 2 else r'.'
         dirpath = "/Users/idm/Work"
         files = recently_modified_git(dirpath)
-        #files = []
         return files[:20]

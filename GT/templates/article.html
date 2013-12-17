@@ -5,9 +5,3 @@
 {{ buf|safe }}
 </div>
 {% endblock %}
-
-{% block scripts %}
-<script type="text/javascript">
-    $("#article").html(markdown.toHTML($("#article").text()));
-</script>
-{% endblock %}

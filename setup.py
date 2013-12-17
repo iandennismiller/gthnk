@@ -31,7 +31,11 @@ setup(version=version,
       install_requires = [
             ### application requirements
 
+            "mdx-linkify==0.2",
+            "Markdown==2.3.1",
             "poodledo>=0.2",
+            "mdx-journal==0.1", # http://github.com/iandennismiller/mdx_journal
+
             #"BeautifulSoup==3.2.1",
             #"html5lib>=0.95",
             #"requests==2.0.0",
