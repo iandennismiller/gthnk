@@ -2,10 +2,7 @@
 
 SHELL=/bin/bash
 WWWROOT=/var/www/greenthink-library
-TEST_CMD=SETTINGS=$$PWD/etc/testing.conf nosetests -c nose.cfg
-SERVER_PLIST=com.gthnk.server.plist
-LIBRARIAN_PLIST=com.gthnk.librarian.plist
-DASHBOARD_PLIST=com.gthnk.dashboard.plist
+TEST_CMD=SETTINGS=$$PWD/etc/testing.conf nosetests -c tests/nose/test.cfg
 
 clean:
 	rm -rf build dist *.egg-info *.pyc
@@ -18,22 +15,21 @@ install: www launch
 
 www:
 	rsync -a www/ $(WWWROOT)
-	rsync -a GT/static/ $(WWWROOT)/static
+	rsync -a Gthnk/static/ $(WWWROOT)/static
 
-launch:
-	@echo "Installing launch agent to ~/Library/LaunchAgents"
+launchd:
+	@echo "Installing launchd agent to ~/Library/LaunchAgents"
 
-	cp etc/$(SERVER_PLIST) ~/Library/LaunchAgents
-	-launchctl unload ~/Library/LaunchAgents/$(SERVER_PLIST)
-	launchctl load ~/Library/LaunchAgents/$(SERVER_PLIST)
+	cp etc/launchd/* ~/Library/LaunchAgents
 
-	cp etc/$(LIBRARIAN_PLIST) ~/Library/LaunchAgents
-	-launchctl unload ~/Library/LaunchAgents/$(LIBRARIAN_PLIST)
-	launchctl load ~/Library/LaunchAgents/$(LIBRARIAN_PLIST)
+	-launchctl unload ~/Library/LaunchAgents/com.gthnk.server.plist
+	launchctl load ~/Library/LaunchAgents/com.gthnk.server.plist
 
-	cp etc/$(DASHBOARD_PLIST) ~/Library/LaunchAgents
-	-launchctl unload ~/Library/LaunchAgents/$(DASHBOARD_PLIST)
-	launchctl load ~/Library/LaunchAgents/$(DASHBOARD_PLIST)
+	-launchctl unload ~/Library/LaunchAgents/com.gthnk.librarian.plist
+	launchctl load ~/Library/LaunchAgents/com.gthnk.librarian.plist
+
+	-launchctl unload ~/Library/LaunchAgents/com.gthnk.dashboard.plist
+	launchctl load ~/Library/LaunchAgents/com.gthnk.dashboard.plist
 
 server:
 	SETTINGS=$$PWD/etc/dev.conf bin/manage.py runserver
@@ -48,12 +44,14 @@ test:
 	$(TEST_CMD)
 
 lint:
-	pylint GT
+	pylint Gthnk
 
 doc:
-	rm -rf sphinx/source/auto && mkdir sphinx/source/auto
-	sphinx-apidoc -o sphinx/source/auto/GT GT
-	SETTINGS=$$PWD/etc/dev.conf sphinx-build -b html sphinx/source sphinx/build
-	open sphinx/build/index.html
+	rm -rf docs/source/auto
+	mkdir -p docs/source/auto/$(MOD_NAME)
+	sphinx-apidoc -o docs/source/auto/$(MOD_NAME) $(MOD_NAME)
+	SETTINGS=$$PWD/etc/dev.conf sphinx-build -b html docs/source docs/build
+	SETTINGS=$$PWD/etc/dev.conf sphinx-build -b text docs/source docs/build
+	open docs/build/index.html
 
 .PHONY: clean install test server watch lint www doc launch
