@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+# greenthink-library (c) 2013 Ian Dennis Miller
+
 import re, json, datetime, os, shutil
 from collections import defaultdict
 
@@ -7,8 +10,7 @@ re_time_tag = re.compile(r'^(\d\d\d\d)\s(\w+)$')
 re_newlines = re.compile(r'\n\n\n', re.MULTILINE)
 
 class Journal(object):
-    def __init__(self, export_path):
-        from Gthnk import app
+    def __init__(self, export_path, app):
         self.app = app
         self.export_path = export_path
         self.entries = defaultdict(lambda : defaultdict(str))

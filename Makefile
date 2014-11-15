@@ -1,5 +1,7 @@
 # gthnk (c) 2014 Ian Dennis Miller
 
+PROJECT_NAME=gthnk
+MOD_NAME=Gthnk
 SHELL=/bin/bash
 WWWROOT=/var/www/gthnk
 TEST_CMD=SETTINGS=$$PWD/etc/testing.conf nosetests -c tests/nose/test.cfg
@@ -50,7 +52,7 @@ db:
 lint:
 	pylint Gthnk
 
-doc:
+docs:
 	rm -rf docs/source/auto
 	mkdir -p docs/source/auto/$(MOD_NAME)
 	sphinx-apidoc -o docs/source/auto/$(MOD_NAME) $(MOD_NAME)
@@ -58,4 +60,4 @@ doc:
 	SETTINGS=$$PWD/etc/dev.conf sphinx-build -b text docs/source docs/build
 	open docs/build/index.html
 
-.PHONY: clean install test server watch lint www doc launchd paths all
+.PHONY: clean install test server watch lint www docs launchd paths all

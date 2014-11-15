@@ -21,5 +21,6 @@ class Gthnk(Diamond):
 def create_app():
     gthnk = Gthnk(db, security, toolbar)
     gthnk.init_app()
+    gthnk.logger(gthnk.app)
     gthnk.app.permanent_session_lifetime = timedelta(minutes=30)
     return gthnk.app

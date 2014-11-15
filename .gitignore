@@ -3,3 +3,4 @@ sphinx/build/
 dist/
 *.egg-info
 lib/poodledo
+docs/source/auto/
