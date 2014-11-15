@@ -7,7 +7,8 @@ TEST_CMD=SETTINGS=$$PWD/etc/testing.conf nosetests -c tests/nose/test.cfg
 clean:
 	rm -rf build dist *.egg-info *.pyc
 
-install: www launch
+#install: www launch
+install:
 	mkdir -p /var/lib/greenthink-library
 	mkdir -p ~/.gt
 	python setup.py install

@@ -8,8 +8,8 @@ setup(version=version,
       description = "greenthink",
       packages = [
             "Gthnk",
-            "Gthnk.journal",
-            "Gthnk.dashboard",
+            "Gthnk.Journal",
+            "Gthnk.Dashboard",
             ],
       scripts = [
             "bin/runserver.py",
@@ -26,14 +26,15 @@ setup(version=version,
       url='http://www.iandennismiller.com',
       dependency_links = [
             'https://github.com/iandennismiller/Flask-Diamond/archive/0.1.7.tar.gz#egg=flask_diamond-0.1.7',
+            'https://github.com/iandennismiller/mdx_journal/archive/0.1.tar.gz#egg=mdx_journal-0.1',
             ],
       install_requires = [
             ### app
             "flask_diamond==0.1.7",
-            "mdx-linkify==0.2",
-            "Markdown==2.3.1",
+            "mdx_linkify==0.5",
+            #"Markdown>=2.3.1",
             "poodledo>=0.2",
-            "mdx-journal==0.1", # http://github.com/iandennismiller/mdx_journal
+            "mdx_journal==0.1",
 
             ### other flask niceness
 
@@ -44,7 +45,7 @@ setup(version=version,
             "requests==2.4.1",
             "cssselect==0.9.1",
             "Flask-DbShell==1.0",
-            "python-dateutil==2.2",
+            #"python-dateutil==2.2",
 
 
             ### databases
