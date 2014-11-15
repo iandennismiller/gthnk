@@ -6,9 +6,12 @@ import sys
 sys.path.insert(0, '.')
 
 from flask.ext.script import Manager, Shell, Server
+from flask.ext.dbshell import DbShell
 from flask.ext.migrate import Migrate, MigrateCommand
-import GT.models as Model
-from GT import app, db, user_datastore
+import alembic, alembic.config
+
+from Gthnk import create_app, db, security
+app = create_app()
 
 def _make_context():
     return dict(app=app, db=db, user_datastore=user_datastore, Model=Model)
@@ -18,13 +21,15 @@ migrate = Migrate(app, db)
 manager = Manager(app)
 manager.add_command("shell", Shell(make_context=_make_context))
 manager.add_command("runserver", Server(port=app.config['PORT']))
+manager.add_command("publicserver", Server(port=app.config['PORT'], host="0.0.0.0"))
 manager.add_command('db', MigrateCommand)
 
 @manager.option('-e', '--email', help='email address')
 @manager.option('-p', '--password', help='password')
 def create_user(email, password):
     "add a user to the database"
-    Model.User.create(email=email, password=password)
+    from Gthnk import Models
+    Models.User.create(email=email, password=password)
 
 @manager.command
 def init_db():
@@ -36,9 +41,15 @@ def init_db():
 @manager.command
 def populate_db():
     "insert a default set of objects"
-    import GT.importing as importing
+    import Gthnk.importing as importing
     importing.basic_users()
     #importing.typical_workflow()
 
 if __name__ == "__main__":
-    manager.run()
+    try:
+        manager.run()
+    except Exception, e:
+        ex_type, ex, tb = sys.exc_info()
+        traceback.print_tb(tb)
+        print "Error: %s" % e
+        print "Line: %d" % sys.exc_traceback.tb_lineno
