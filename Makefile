@@ -44,6 +44,10 @@ watch:
 test:
 	$(TEST_CMD)
 
+db:
+	SETTINGS=$$PWD/etc/dev.conf bin/manage.py init_db
+	SETTINGS=$$PWD/etc/dev.conf bin/manage.py populate_db
+
 lint:
 	pylint Gthnk
 

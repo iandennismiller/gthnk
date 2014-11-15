@@ -1,17 +1,13 @@
 # -*- coding: utf-8 -*-
 # greenthink-library (c) 2013 Ian Dennis Miller
 
-import os, shutil, tempfile, sys
-from nose.tools import assert_equal, assert_not_equal, assert_raises, raises, with_setup
 from nose.plugins.attrib import attr
-from unittest import TestCase
+from datetime import datetime
+import os, shutil, tempfile, sys, unittest, json
+from flask.ext.diamond.utils.testhelpers import GeneralTestCase
+from Gthnk import Models
 
-sys.path.insert(0, '.')
-os.environ['SETTINGS'] = "../etc/testing.conf"
-from GT import app, db, user_datastore, Model
-
-class ViewTestCase(TestCase):
-
+class ViewTestCase(GeneralTestCase):
     def setUp(self):
         # fresh testing database
         db.drop_all()
@@ -25,6 +21,7 @@ class ViewTestCase(TestCase):
     def tearDown(self):
         db.session.remove()
 
+    @attr('skip')
     def test_index(self):
         with app.test_client() as c:
             rv = c.get('/', follow_redirects=True)

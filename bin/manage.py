@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # greenthink-library (c) 2013 Ian Dennis Miller
 
-import sys
+import sys, traceback
 sys.path.insert(0, '.')
 
 from flask.ext.script import Manager, Shell, Server
@@ -14,7 +14,7 @@ from Gthnk import create_app, db, security
 app = create_app()
 
 def _make_context():
-    return dict(app=app, db=db, user_datastore=user_datastore, Model=Model)
+    return dict(app=app, db=db, user_datastore=security.datastore)
 
 migrate = Migrate(app, db)
 
@@ -37,12 +37,16 @@ def init_db():
     db.drop_all()
     db.create_all()
     db.session.commit()
+    cfg = alembic.config.Config("migrations/alembic.ini")
+    alembic.command.stamp(cfg, "head")
 
 @manager.command
 def populate_db():
     "insert a default set of objects"
-    import Gthnk.importing as importing
-    importing.basic_users()
+    from flask.ext.diamond.utils import add_system_users
+    add_system_users(security)
+
+    #import Gthnk.importing as importing
     #importing.typical_workflow()
 
 if __name__ == "__main__":

@@ -1,12 +1,15 @@
-from nose.tools import assert_equal, assert_not_equal, assert_raises, raises, with_setup
+# -*- coding: utf-8 -*-
+# greenthink-library (c) 2013 Ian Dennis Miller
+
 from nose.plugins.attrib import attr
+from datetime import datetime
+import os, shutil, tempfile, sys, unittest, json
+from flask.ext.diamond.utils.testhelpers import GeneralTestCase
 
-from unittest import TestCase
-import os, shutil
-from GT.journal import Journal
-from GT.journal.todo import Todo
+#from GT.journal import Journal
+#from GT.journal.todo import Todo
 
-class TestActions(TestCase):
+class TestActions(GeneralTestCase):
     def setUp(self):
         "set up test fixtures"
         shutil.copy("tests/data/tmp_journal.txt", "/tmp/journal.txt")

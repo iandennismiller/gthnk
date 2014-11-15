@@ -1,45 +1,31 @@
 # -*- coding: utf-8 -*-
 # greenthink-library (c) 2013 Ian Dennis Miller
 
-import os, shutil, tempfile, sys
-from nose.tools import assert_equal, assert_not_equal, assert_raises, raises, with_setup
 from nose.plugins.attrib import attr
-from unittest import TestCase
+from datetime import datetime
+import os, shutil, tempfile, sys, unittest, json
+from flask.ext.diamond.utils.testhelpers import GeneralTestCase
+from Gthnk import Models
 
-sys.path.insert(0, '.')
-os.environ['SETTINGS'] = "../etc/testing.conf"
-from GT import app, db, user_datastore, Model
-
-class ModelTestCase(TestCase):
+class ModelEntryTestCase(GeneralTestCase):
     def setUp(self):
-        db.drop_all()
-        db.create_all()
-        db.session.commit()
+        self.db.drop_all()
+        self.db.create_all()
 
-    def tearDown(self):
-        db.session.remove()
+    def test_create(self):
+        """Models.Entry: object creation"""
+        obj = Models.Entry.create(content="empty", timestamp=datetime.now())
+        self.assertIsNotNone(obj, "object is created")
 
-    def test_user(self):
-        with app.app_context():
-            user_datastore.create_user(email='admin', password='aaa')
-            db.session.commit()
-        newuser = Model.User.find(email='admin')
-        assert newuser
-        assert newuser.email == 'admin'
+    def test_read(self):
+        """Models.Entry: object retrieval"""
+        # call test_create to make the object
+        self.test_create()
 
-    def test_asset(self):
-        with app.app_context():
-            user_datastore.create_user(email='admin', password='aaa')
-            db.session.commit()
-        user = Model.User.query.filter_by(email='admin').first()
-
-        a = Model.Asset(owner=user, name='something')
-        db.session.add(a)
-        db.session.commit()
-
-        something = Model.Asset.query.filter_by(name="something").first()
-        assert something
-        assert something.name == "something"
+        # test retrieval
+        entry = Models.Entry.find(content="empty")
+        self.assertIsNotNone(entry, "object can be retrieved")
+        self.assertEqual(entry.content, "empty", "contains correct value")
 
 if __name__ == '__main__':
     unittest.main()
