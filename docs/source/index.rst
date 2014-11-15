@@ -1,6 +1,6 @@
-.. greenthink-library documentation master file
+.. gthnk documentation master file
 
-Welcome to greenthink-library's documentation!
+Welcome to gthnk's documentation!
 =====================================
 
 Contents:
@@ -8,7 +8,7 @@ Contents:
 .. toctree::
    :maxdepth: 6
 
-   auto/greenthink-library/greenthink-library
+   auto/Gthnk/modules
 
 
 Indices and tables

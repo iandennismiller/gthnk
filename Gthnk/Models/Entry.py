@@ -9,20 +9,6 @@ from flask.ext.diamond.utils.mixins import CRUDMixin
 from flask.ext.diamond.models import User
 from Gthnk import db, security
 
-class Asset(db.Model, CRUDMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255))
-
-    # an asset has an owner
-    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    owner = db.relationship('User', backref=db.backref('asset', lazy='dynamic'))
-
-    def __repr__(self):
-        return '<Asset %r>' % self.name
-
-    def __str__(self):
-        return self.name
-
 class Entry(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)
     # an entry has a day, hour, and minute.  Seconds is always 0.

@@ -1,4 +1,4 @@
-# greenthink-library (c) 2013 Ian Dennis Miller
+# gthnk (c) 2014 Ian Dennis Miller
 
 SHELL=/bin/bash
 WWWROOT=/var/www/gthnk

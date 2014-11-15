@@ -1,7 +1,5 @@
-from __future__ import with_statement
 import re, json, datetime, os, shutil
 from collections import defaultdict
-from GT import app
 
 re_day = re.compile(r'^(\d\d\d\d-\d\d-\d\d)$')
 re_time = re.compile(r'^(\d\d\d\d)$')
@@ -10,6 +8,8 @@ re_newlines = re.compile(r'\n\n\n', re.MULTILINE)
 
 class Journal(object):
     def __init__(self, export_path):
+        from Gthnk import app
+        self.app = app
         self.export_path = export_path
         self.entries = defaultdict(lambda : defaultdict(str))
 
@@ -41,7 +41,7 @@ class Journal(object):
                 continue
             elif match_time:
                 if current_time and int(current_time[:4]) < int(match_time.group(1)):
-                    app.logger.warning("times appear to be out of order")
+                    self.app.logger.warning("times appear to be out of order")
                 current_time = match_time.group(1)
             elif match_time_tag:
                 current_time = match_time_tag.group(1)
@@ -127,7 +127,7 @@ class Journal(object):
         with open(journal_filename, 'w') as f:
             f.write(retained)
         message = "journal rotate: pruned %s, retained: %s" % (journal_filename, retained_list)
-        app.logger.debug(message)
+        self.app.logger.debug(message)
 
     def get_tag(self, tagname):
         results = []

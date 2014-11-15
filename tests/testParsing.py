@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# greenthink-library (c) 2013 Ian Dennis Miller
+# gthnk (c) 2014 Ian Dennis Miller
 
 from nose.plugins.attrib import attr
 from datetime import datetime
 import os, shutil, tempfile, sys, unittest, json
 from flask.ext.diamond.utils.testhelpers import GeneralTestCase
 from Gthnk import Models
-#from GT.journal import Journal
+from Gthnk.Adaptors.TextFile import Journal
 
 with open('tests/data/correct_output.txt', 'r') as f:
     correct_output = ''.join(f.readlines())
@@ -32,7 +32,6 @@ class TestParsing(GeneralTestCase):
         "tear down test fixtures"
         pass
 
-    @attr('skip')
     def test_no_date(self):
         "try a file that has no datestamp whatsoever"
         "skipped because I don't know what the correct behaviour is"
