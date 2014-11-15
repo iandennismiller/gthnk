@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+At 12:03 AM every day, scan the journal.txt and rotate out any old files.
+-->
 <plist version="1.0">
 <dict>
 	<key>Label</key>
 	<string>com.gthnk.librarian</string>
+	<key>EnvironmentVariables</key>
+    <dict>
+		<key>SETTINGS</key>
+		<string>/Users/idm/.gthnk/gthnk.conf</string>
+    </dict>
+    <key>StandardOutPath</key>
+    <string>/var/lib/gthnk/launchd.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/var/lib/gthnk/launchd.err.log</string>
 	<key>Program</key>
-	<string>/Users/idm/.virtualenvs/greenthink/bin/journal_rotate.py</string>
+	<string>/Users/idm/.virtualenvs/gthnk/bin/journal_rotate.py</string>
 	<key>StartCalendarInterval</key>
 	<dict>
 		<key>Hour</key>
@@ -13,14 +25,5 @@
 		<key>Minute</key>
 		<integer>3</integer>
 	</dict>
-	<key>EnvironmentVariables</key>
-    <dict>
-		<key>SETTINGS</key>
-		<string>/Users/idm/.gt/greenthink.conf</string>
-    </dict>
-    <key>StandardOutPath</key>
-    <string>/var/lib/greenthink-library/launchd.out.log</string>
-    <key>StandardErrorPath</key>
-    <string>/var/lib/greenthink-library/launchd.err.log</string>
 </dict>
 </plist>

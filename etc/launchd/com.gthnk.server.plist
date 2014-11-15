@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+At bootup, launch the Gthnk server to listen on http://127.0.0.1:1620/
+-->
 <plist version="1.0">
 <dict>
 	<key>Label</key>
@@ -7,17 +10,17 @@
     <key>EnvironmentVariables</key>
     <dict>
         <key>SETTINGS</key>
-        <string>/Users/idm/.gt/greenthink.conf</string>
+        <string>/Users/idm/.gthnk/gthnk.conf</string>
     </dict>
+    <key>StandardOutPath</key>
+    <string>/var/lib/gthnk/launchd.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/var/lib/gthnk/launchd.err.log</string>
     <key>Program</key>
-	<string>/Users/idm/.virtualenvs/greenthink/bin/runserver.py</string>
+	<string>/Users/idm/.virtualenvs/gthnk/bin/runserver.py</string>
     <key>KeepAlive</key>
     <true/>
     <key>RunAtLoad</key>
     <true/>
-    <key>StandardOutPath</key>
-    <string>/var/lib/greenthink-library/launchd.out.log</string>
-    <key>StandardErrorPath</key>
-    <string>/var/lib/greenthink-library/launchd.err.log</string>
 </dict>
 </plist>

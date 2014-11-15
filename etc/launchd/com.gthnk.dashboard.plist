@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+At 9:00 AM every day, the dashboard opens up in the default browser to provide an overview.
+-->
 <plist version="1.0">
 <dict>
 	<key>Label</key>
 	<string>com.gthnk.dashboard</string>
+	<key>EnvironmentVariables</key>
+    <dict>
+		<key>SETTINGS</key>
+		<string>/Users/idm/.gthnk/gthnk.conf</string>
+    </dict>
+    <key>StandardOutPath</key>
+    <string>/var/lib/gthnk/launchd.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/var/lib/gthnk/launchd.err.log</string>
     <key>ProgramArguments</key>
     <array>
         <string>/usr/bin/open</string>
-        <string>http://localhost:1620/static/dashboard.html</string>
+        <string>http://localhost:1620/dashboard/</string>
     </array>
 	<key>StartCalendarInterval</key>
 	<dict>
@@ -16,14 +28,5 @@
 		<key>Minute</key>
 		<integer>0</integer>
 	</dict>
-	<key>EnvironmentVariables</key>
-    <dict>
-		<key>SETTINGS</key>
-		<string>/Users/idm/.gt/greenthink.conf</string>
-    </dict>
-    <key>StandardOutPath</key>
-    <string>/var/lib/greenthink-library/launchd.out.log</string>
-    <key>StandardErrorPath</key>
-    <string>/var/lib/greenthink-library/launchd.err.log</string>
 </dict>
 </plist>
