@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) 2014 Ian Dennis Miller
 
+import os, shutil, tempfile, sys, unittest, json
 from nose.plugins.attrib import attr
 from datetime import datetime
-import os, shutil, tempfile, sys, unittest, json
 from flask.ext.diamond.utils.testhelpers import GeneralTestCase
 from Gthnk import Models, create_app, db
-from Gthnk.Parsers.JournalParser import JournalParser
-from Gthnk.Parsers.TextFileParser import TextFileParser
+import Gthnk.JournalBuffer
 
 class TestParsing(GeneralTestCase):
     def setUp(self):
@@ -31,6 +30,34 @@ class TestParsing(GeneralTestCase):
         with open('tests/data/2012-10-05.txt', 'r') as f:
             self.correct_05 = ''.join(f.readlines())
 
+    @attr("single")
+    def test_journal_parser(self):
+        "process string parsing"
+        journal_buffer = Gthnk.JournalBuffer.JournalBuffer()
+        with open("tests/data/source_a.txt", "r") as f:
+            journal_buffer.parse(f.read())
+        self.assertIsNotNone(journal_buffer.get_entries())
+
+    @attr("single")
+    def test_textfile_parser(self):
+        "process a single file"
+        journal_buffer = Gthnk.JournalBuffer.TextFileJournalBuffer()
+        journal_buffer.process_one("tests/data/source_a.txt")
+        self.assertIsNotNone(journal_buffer.get_entries(), "process file")
+
+    @attr("single")
+    def test_textfile_batch_parser(self):
+        "process several files"
+        journal_buffer = Gthnk.JournalBuffer.TextFileJournalBuffer()
+        journal_buffer.process_list(["tests/data/source_a.txt", "tests/data/source_b.txt"])
+
+        self.assertIsNotNone(journal_buffer.get_entries(), "contents parsed in a small batch")
+
+        comparison = Gthnk.JournalBuffer.TextFileJournalBuffer()
+        comparison.process_one("tests/data/source_a.txt")
+        comparison.process_one("tests/data/source_b.txt")
+        self.assertEqual(journal_buffer.dump(), comparison.dump(), "contents parsed individually")
+
     @attr('skip')
     def test_no_date(self):
         "try a file that has no datestamp whatsoever"
@@ -48,18 +75,6 @@ class TestParsing(GeneralTestCase):
         j.parse("tests/data/almost_nothing.txt")
         exported = j.export_week_old("/tmp")
         assert exported
-
-    @attr("single")
-    def test_parser(self):
-        journal_parser = JournalParser()
-        with open("tests/data/source_a.txt", "r") as f:
-            entries = journal_parser.parse(f.read())
-
-        print entries
-        assert False
-
-        #dumped = j.dump_day("2012-10-04")
-        #self.assertEqual(dumped, self.correct_merge)
 
     def test_timestamp_ordering(self):
         "timestamps are not in the correct order; should warn about this"
