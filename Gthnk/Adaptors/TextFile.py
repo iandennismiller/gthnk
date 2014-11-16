@@ -4,6 +4,9 @@
 import re, json, datetime, os, shutil
 from collections import defaultdict
 
+def parse_filename_list(filename_str):
+    [x.strip() for x in filename_str.split(',')]
+
 class FileBatch(object):
     def __init__(self):
         self.journal_parser = JournalParser()

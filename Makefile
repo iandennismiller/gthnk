@@ -5,6 +5,7 @@ MOD_NAME=Gthnk
 SHELL=/bin/bash
 WWWROOT=/var/www/gthnk
 TEST_CMD=SETTINGS=$$PWD/etc/testing.conf nosetests -c tests/nose/test.cfg
+TEST_SINGLE=SETTINGS=$$PWD/etc/testing.conf nosetests -c tests/nose/test-single.cfg
 
 install:
 	python setup.py install
@@ -40,7 +41,7 @@ shell:
 	SETTINGS=$$PWD/etc/dev.conf bin/manage.py shell
 
 watch:
-	watchmedo shell-command -R -p "*.py" -c 'echo \\n\\n\\n\\n; date; $(TEST_CMD); date' .
+	watchmedo shell-command -R -p "*.py" -c 'echo \\n\\n\\n\\n; date; $(TEST_SINGLE); date' .
 
 test:
 	$(TEST_CMD)

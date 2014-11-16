@@ -6,7 +6,7 @@ from datetime import datetime
 import os, shutil, tempfile, sys, unittest, json
 from flask.ext.diamond.utils.testhelpers import GeneralTestCase
 from Gthnk import Models, create_app, db
-from Gthnk.Adaptors.TextFile import Journal
+from Gthnk.Adaptors.TextFile import FileBatch, JournalParser
 
 class TestParsing(GeneralTestCase):
     def setUp(self):
@@ -47,6 +47,18 @@ class TestParsing(GeneralTestCase):
         j.parse("tests/data/almost_nothing.txt")
         exported = j.export_week_old("/tmp")
         assert exported
+
+    @attr("single")
+    def test_parser(self):
+        journal_parser = JournalParser()
+        with open("tests/data/source_a.txt", "r") as f:
+            entries = journal_parser.parse(f.read())
+
+        print entries
+        assert False
+
+        #dumped = j.dump_day("2012-10-04")
+        #self.assertEqual(dumped, self.correct_merge)
 
     def test_timestamp_ordering(self):
         "timestamps are not in the correct order; should warn about this"
