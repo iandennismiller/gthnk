@@ -1,59 +1,15 @@
 #!/usr/bin/env python
 
-from GT import app
-import GT.journal
-import datetime, os
+from Gthnk import app
+from Gthnk.Adaptors.TextFile import JournalFile
 
-app.logger.debug("START")
+# import any Journal Buffers that might have entries ready for importing
+# first the current Live Journal file.
+# also include dropbox files, etc
 
-now = datetime.datetime.utcnow()
-datestamp = "%s-%s-%s" % (now.year, now.month, now.day)
+# create a backup of the file in JOURNAL_PATH/backups
+# load and parse the file
+# for each entry in the hash buffer, create an Entry in the database
+# ... unless one with the same content and same timestamp already exists
 
-# set up filenames
-
-journal_path = "/Users/idm/Library/Journal"
-backup_path = os.path.join(journal_path, "backup")
-export_path = os.path.join(journal_path, "auto")
-dropbox_path = "/Users/idm/Dropbox/journal"
-
-http_file = os.path.join(journal_path, 'http/latest.txt')
-live_file = os.path.join(journal_path, 'journal.txt')
-dropbox_phone_file = os.path.join(dropbox_path, 'journal-phone.txt')
-dropbox_tablet_file = os.path.join(dropbox_path, 'journal-tablet.txt')
-
-# create backups
-
-os.system("cp %s %s/%s-journal.txt" % (live_file, backup_path, datestamp))
-os.system("cp %s %s/%s-dropbox-phone.txt" % (dropbox_phone_file, backup_path, datestamp))
-os.system("cp %s %s/%s-dropbox-tablet.txt" % (dropbox_tablet_file, backup_path, datestamp))
-
-# download HTTP and purge/rotate
-
-app.logger.debug("start web clipboard download")
-os.system("/Users/idm/.virtualenvs/greenthink/bin/journal_get.sh")
-app.logger.debug("finish web clipboard download")
-os.system("/Users/idm/.virtualenvs/greenthink/bin/journal_delete.sh")
-app.logger.debug("clear web clipboard")
-
-# now deal with the local journal
-
-app.logger.debug("start rotating journal")
-
-j = GT.journal.Journal(export_path)
-j.parse(live_file)
-j.parse(http_file)
-j.parse(dropbox_phone_file)
-j.parse(dropbox_tablet_file)
-
-exported = j.export_week_old()
-j.purge_week_old(live_file)
-
-app.logger.debug("finish rotating journal")
-
-# rotate out Dropbox file
-
-app.logger.debug("clear dropbox journal.txt")
-os.system("echo '' > %s" % dropbox_phone_file)
-os.system("echo '' > %s" % dropbox_tablet_file)
-
-app.logger.debug("DONE")
+# now reset the file size to 0.

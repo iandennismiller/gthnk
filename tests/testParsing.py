@@ -48,10 +48,9 @@ class TestParsing(GeneralTestCase):
         exported = j.export_week_old("/tmp")
         assert exported
 
-    @attr('skip')
     def test_timestamp_ordering(self):
         "timestamps are not in the correct order; should warn about this"
-        j = Journal("/tmp")
+        j = Journal("/tmp", self.app)
         j.parse("tests/data/out_of_order_times.txt")
         assert j.dump_day("2012-10-04")
 
