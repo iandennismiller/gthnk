@@ -105,9 +105,9 @@ class TestParsing(GeneralTestCase):
         self.assertEqual(8, Gthnk.Models.Entry.query.count(), "expected number of objects in DB")
 
         # now concatenate some days and verify that it matches
-        buf = str(Gthnk.Models.Day(2012, 10, 4)) + "\n" + \
-            str(Gthnk.Models.Day(2012, 10, 5)) + "\n" + \
-            str(Gthnk.Models.Day(2012, 10, 6)) + "\n" + \
+        buf = str(Gthnk.Models.Day(2012, 10, 4)) + \
+            str(Gthnk.Models.Day(2012, 10, 5)) + \
+            str(Gthnk.Models.Day(2012, 10, 6)) + \
             str(Gthnk.Models.Day(2012, 10, 7))
         self.assertEqual(buf, self.correct_twodays, "multiple days are output correctly")
 

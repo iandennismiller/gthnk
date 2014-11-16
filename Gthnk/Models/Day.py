@@ -32,7 +32,6 @@ class Day(object):
     def __str__(self):
         buf = datetime.datetime.strftime(self.startingTime, "%Y-%m-%d")
         for entry in self.entries.all():
-            buf += "\n\n%s\n\n" % datetime.datetime.strftime(entry.timestamp, "%H%M")
-            buf += entry.content
-        buf += "\n"
+            buf += str(entry)
+        buf += "\n\n"
         return buf

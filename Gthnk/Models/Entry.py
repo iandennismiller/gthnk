@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # greenthink-library (c) 2013 Ian Dennis Miller
 
-import json, os
+import json, os, datetime
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
 from flask.ext.security.utils import encrypt_password, verify_password
@@ -21,3 +21,6 @@ class Entry(db.Model, CRUDMixin):
 
     def __repr__(self):
         return '<Entry {} ({}) "{}">'.format(self.timestamp, self.tags, self.content)
+
+    def __str__(self):
+        return "\n\n{}\n\n{}".format(datetime.datetime.strftime(self.timestamp, "%H%M"), self.content)
