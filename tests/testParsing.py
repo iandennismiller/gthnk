@@ -6,7 +6,8 @@ from datetime import datetime
 import os, shutil, tempfile, sys, unittest, json
 from flask.ext.diamond.utils.testhelpers import GeneralTestCase
 from Gthnk import Models, create_app, db
-from Gthnk.Adaptors.TextFile import FileBatch, JournalParser
+from Gthnk.Parsers.JournalParser import JournalParser
+from Gthnk.Parsers.TextFileParser import TextFileParser
 
 class TestParsing(GeneralTestCase):
     def setUp(self):

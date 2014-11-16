@@ -4,35 +4,19 @@
 import re, json, datetime, os, shutil
 from collections import defaultdict
 
-def parse_filename_list(filename_str):
-    [x.strip() for x in filename_str.split(',')]
-
-class FileBatch(object):
-    def __init__(self):
-        self.journal_parser = JournalParser()
-
-    def process(self, filename_list, create=False):
-        for filename in filename_list:
-            with open(filename, "r") as f:
-                contents = f.read()
-            entries = self.journal_parser(contents)
-            if create:
-                for day in entries.keys():
-                    for timestamp in entries[day].keys():
-                        print "{} {}".format(day, timestamp)
-                        #Models.Entry.create(timestamp=None, content=None)
-
 class JournalParser(object):
+    """
+    parse a Journal-encoded text string; add content to an Entries dictionary, with timestamp.
+    """
     def __init__(self):
         #self.app = app
-        self.entries = None
+        self.entries = defaultdict(lambda : defaultdict(str))
         self.re_day = re.compile(r'^(\d\d\d\d-\d\d-\d\d)$')
         self.re_time = re.compile(r'^(\d\d\d\d)$')
         self.re_time_tag = re.compile(r'^(\d\d\d\d)\s(\w+)$')
         self.re_newlines = re.compile(r'\n\n\n', re.MULTILINE)
 
     def parse(self, raw_text):
-        self.entries = defaultdict(lambda : defaultdict(str))
         current_day = None
         current_time = None
 
@@ -70,4 +54,14 @@ class JournalParser(object):
             for timestamp in self.entries[day]:
                 self.entries[day][timestamp] = self.entries[day][timestamp].rstrip()
 
+    def get_entries(self):
         return self.entries
+
+    def save_entries(self):
+        """
+        add the current entries to the database
+        """
+        for day in entries.keys():
+            for timestamp in entries[day].keys():
+                print "{} {}".format(day, timestamp)
+                #Models.Entry.create(timestamp=None, content=None)
