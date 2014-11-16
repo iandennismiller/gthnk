@@ -10,20 +10,14 @@ from flask.ext.diamond.models import User
 from Gthnk import db, security
 
 class Entry(db.Model, CRUDMixin):
+    """
+    An entry is an individual chunk of content in the Journal.
+    An entry has a day, hour, and minute.  Seconds is always 0.
+    """
     id = db.Column(db.Integer, primary_key=True)
-    # an entry has a day, hour, and minute.  Seconds is always 0.
     timestamp = db.Column(db.DateTime, nullable=False)
     content = db.Column(db.String(2**32))
+    tags = db.Column(db.String(2**16))
 
     def __repr__(self):
-        return '<Entry {} "{}">'.format(self.timestamp, self.content)
-
-    def __str__(self):
-        return '<Entry {} "{}">'.format(self.timestamp, self.content)
-
-class Day(object):
-    """
-    a Day is a collection of Entry objects from a single day.
-    This is sortof a virtual object...  but it might become a real object.
-    """
-    pass
+        return '<Entry {} ({}) "{}">'.format(self.timestamp, self.tags, self.content)

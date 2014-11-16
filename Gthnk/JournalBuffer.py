@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 # greenthink-library (c) 2013 Ian Dennis Miller
 
-import json, os, re
+import json, os, re, datetime
 from collections import defaultdict
+import Gthnk.Models
 
 def split_filename_list(filename_str):
     [x.strip() for x in filename_str.split(',')]
@@ -50,7 +51,7 @@ class JournalBuffer(object):
             elif match_time_tag:
                 current_time = match_time_tag.group(1)
                 tag = match_time_tag.group(2)
-                current_time = "%s %s" % (current_time, tag)
+                #current_time = "%s %s" % (current_time, tag)
             else:
                 self.entries[current_day][current_time] += "%s\n" % line
 
@@ -65,10 +66,12 @@ class JournalBuffer(object):
         """
         add the current entries to the database
         """
-        for day in entries.keys():
-            for timestamp in entries[day].keys():
-                print "{} {}".format(day, timestamp)
-                #Models.Entry.create(timestamp=None, content=None)
+        for day in self.entries.keys():
+            for timestamp in self.entries[day].keys():
+                Gthnk.Models.Entry.create(
+                    timestamp=datetime.datetime.strptime("{} {}".format(day, timestamp), '%Y-%m-%d %H%M'),
+                    content=self.entries[day][timestamp]
+                    )
 
     def dump(self):
         buf = ""

@@ -1,6 +1,6 @@
 2012-10-04
 
-1046 academic
+1046
 
 mytacs or something like that. it is a Canadian business research grant. also connect Canada.
 
@@ -9,13 +9,13 @@ blah
 this is
 no newline
 
-1101 todo
+1101
 
 graduate management consulting association. check into the winner time mba thing
 
 2012-10-05
 
-1102 todo
+1102
 
 graduate management consulting association. check into the winner time mba thing
 
@@ -27,7 +27,7 @@ it is called the mini mba program
 
 2012-10-06
 
-1046 academic
+1046
 
 
 mytacs or something like that. it is a Canadian business research grant. also connect Canada.
@@ -37,14 +37,14 @@ blah
 this is
 no newline
 
-1101 todo
+1101
 
 graduate management consulting association. check into the winner time mba thing
 
 
 
 2012-10-07
-1102 todo
+1102
 
 graduate management consulting association. check into the winner time mba thing
 

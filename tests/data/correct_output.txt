@@ -1,6 +1,6 @@
 2012-10-04
 
-1046 academic
+1046
 
 mytacs or something like that. it is a Canadian business research grant. also connect Canada.
 
@@ -9,11 +9,11 @@ blah
 this is
 no newline
 
-1101 todo
+1101
 
 graduate management consulting association. check into the winner time mba thing
 
-1102 todo
+1102
 
 graduate management consulting association. check into the winner time mba thing
 
@@ -24,6 +24,6 @@ it is called the mini mba program
 
 and this is separated by a newline
 
-1107 blog
+1107
 
 life skills development.  these folks do some sort of networking events. I guess it is just for meeting with people from the private sector
