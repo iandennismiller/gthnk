@@ -16,11 +16,11 @@ class Entry(db.Model, CRUDMixin):
     """
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, nullable=False)
-    content = db.Column(db.String(2**32))
+    content = db.Column(db.Unicode(2**32))
     tags = db.Column(db.String(2**16))
 
     def __repr__(self):
         return '<Entry {} ({}) "{}">'.format(self.timestamp, self.tags, self.content)
 
-    def __str__(self):
+    def __unicode__(self):
         return "\n\n{}\n\n{}".format(datetime.datetime.strftime(self.timestamp, "%H%M"), self.content)

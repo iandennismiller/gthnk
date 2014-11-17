@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) 2014 Ian Dennis Miller
 
-import os, shutil, tempfile, sys, unittest, json, datetime
+import os, shutil, tempfile, sys, unittest, json, datetime, glob
 from nose.plugins.attrib import attr
 from flask.ext.diamond.utils.testhelpers import GeneralTestCase
 from Gthnk import Models, create_app, db
@@ -86,7 +86,7 @@ class TestParsing(GeneralTestCase):
         journal_buffer.process_list(["tests/data/source_a.txt", "tests/data/source_b.txt"])
         journal_buffer.save_entries()
         a_day = Gthnk.Models.Day(2012, 10, 4)
-        self.assertEqual(str(a_day), self.correct_merge)
+        self.assertEqual(unicode(a_day), self.correct_merge)
 
     def test_newlines(self):
         "see if a whole horde of weird newlines screws anything up"
@@ -94,9 +94,8 @@ class TestParsing(GeneralTestCase):
         journal_buffer.process_list(["tests/data/excessive_newlines.txt"])
         journal_buffer.save_entries()
         a_day = Gthnk.Models.Day(2012, 10, 4)
-        self.assertEqual(str(a_day), self.correct_output)
+        self.assertEqual(unicode(a_day), self.correct_output)
 
-    @attr("single")
     def test_twodays(self):
         "ensure journals with several days in them continue to work"
         journal_buffer = Gthnk.JournalBuffer.TextFileJournalBuffer()
@@ -105,11 +104,20 @@ class TestParsing(GeneralTestCase):
         self.assertEqual(8, Gthnk.Models.Entry.query.count(), "expected number of objects in DB")
 
         # now concatenate some days and verify that it matches
-        buf = str(Gthnk.Models.Day(2012, 10, 4)) + \
-            str(Gthnk.Models.Day(2012, 10, 5)) + \
-            str(Gthnk.Models.Day(2012, 10, 6)) + \
-            str(Gthnk.Models.Day(2012, 10, 7))
+        buf = unicode(Gthnk.Models.Day(2012, 10, 4)) + \
+            unicode(Gthnk.Models.Day(2012, 10, 5)) + \
+            unicode(Gthnk.Models.Day(2012, 10, 6)) + \
+            unicode(Gthnk.Models.Day(2012, 10, 7))
         self.assertEqual(buf, self.correct_twodays, "multiple days are output correctly")
+
+    @attr("single")
+    @attr("slow")
+    def test_load_archive(self):
+        "load the entire archive"
+        journal_buffer = Gthnk.JournalBuffer.TextFileJournalBuffer()
+        journal_buffer.process_list(glob.glob("/Users/idm/Library/Journal/auto/*.txt"))
+        journal_buffer.save_entries()
+        #self.assertEqual(8, Gthnk.Models.Entry.query.count(), "expected number of objects in DB")
 
     @attr('skip')
     def test_no_date(self):

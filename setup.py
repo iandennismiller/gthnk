@@ -8,8 +8,11 @@ setup(version=version,
       description = "greenthink",
       packages = [
             "Gthnk",
-            "Gthnk.Journal",
-            "Gthnk.Dashboard",
+            "Gthnk.Adaptors",
+            "Gthnk.Models",
+            "Gthnk.Views",
+            "Gthnk.Views.Frontend",
+            "Gthnk.Views.Administration",
             ],
       scripts = [
             "bin/runserver.py",
@@ -30,7 +33,8 @@ setup(version=version,
             ],
       install_requires = [
             ### app
-            "flask_diamond==0.1.7",
+            "watchdog==0.8.2",
+            #"flask_diamond==0.1.7",
             "mdx_linkify==0.5",
             #"Markdown>=2.3.1",
             "poodledo>=0.2",

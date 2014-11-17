@@ -14,10 +14,10 @@ class JournalBuffer(object):
     """
 
     def __init__(self):
-        self.entries = defaultdict(lambda : defaultdict(str))
-        self.re_day = re.compile(r'^(\d\d\d\d-\d\d-\d\d)$')
-        self.re_time = re.compile(r'^(\d\d\d\d)$')
-        self.re_time_tag = re.compile(r'^(\d\d\d\d)\s(\w+)$')
+        self.entries = defaultdict(lambda : defaultdict(unicode))
+        self.re_day = re.compile(r'^(\d\d\d\d-\d\d-\d\d)\s*$')
+        self.re_time = re.compile(r'^(\d\d\d\d)\s*$')
+        self.re_time_tag = re.compile(r'^(\d\d\d\d)\s(\w+)\s*$')
         self.re_newlines = re.compile(r'\n\n\n', re.MULTILINE)
 
     def parse(self, raw_text):
@@ -68,60 +68,16 @@ class JournalBuffer(object):
         """
         for day in self.entries.keys():
             for timestamp in self.entries[day].keys():
+                try:
+                    time_obj = datetime.datetime.strptime("{} {}".format(day, timestamp), '%Y-%m-%d %H%M')
+                except:
+                    print "'{}' '{}'".format(day, timestamp)
+                    continue
+
                 Gthnk.Models.Entry.create(
-                    timestamp=datetime.datetime.strptime("{} {}".format(day, timestamp), '%Y-%m-%d %H%M'),
+                    timestamp=time_obj,
                     content=self.entries[day][timestamp]
                     )
-
-    def dump(self):
-        buf = ""
-        for day in sorted(self.entries.keys()):
-            buf += self.dump_day(day)
-        return buf
-
-    def dump_day(self, day):
-        buf = "%s" % day
-        for timestamp in sorted(self.entries[day].keys()):
-            buf += "\n\n%s\n\n" % timestamp
-            buf += self.entries[day][timestamp]
-        buf += "\n"
-        return buf
-
-    def list_recent_days(self, num_days):
-        """
-        get a list of timestamps pertaining to [num_days] recent days
-        """
-        included = []
-        week_ago = datetime.date.today() - datetime.timedelta(days=num_days)
-        for day in sorted(self.entries.keys()):
-            date = datetime.datetime.strptime(day, '%Y-%m-%d').date()
-            if week_ago <= date:
-                included.append(day)
-        return included
-
-    def get_recent_days(self, num_days):
-        """
-        retrieve the text from [num_days] recent days
-        """
-        buf = ""
-        week_ago = datetime.date.today() - datetime.timedelta(days=num_days)
-        for day in sorted(self.entries.keys()):
-            date = datetime.datetime.strptime(day, '%Y-%m-%d').date()
-            if week_ago <= date:
-                if buf == "":
-                    buf += self.dump_day(day)
-                else:
-                    buf += "\n" + self.dump_day(day)
-        return buf
-
-    def get_tag(self, tagname):
-        results = []
-        for day in self.entries:
-            for timestamp in self.entries[day]:
-                match_time_tag = re_time_tag.match(timestamp)
-                if match_time_tag and match_time_tag.group(2) == tagname:
-                    results.append(self.entries[day][timestamp])
-        return results
 
 class TextFileJournalBuffer(JournalBuffer):
     """

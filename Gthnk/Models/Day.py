@@ -29,9 +29,9 @@ class Day(object):
             Gthnk.Models.Entry.timestamp>=self.startingTime,
             Gthnk.Models.Entry.timestamp<=self.endingTime)).order_by(Gthnk.Models.Entry.timestamp)
 
-    def __str__(self):
+    def __unicode__(self):
         buf = datetime.datetime.strftime(self.startingTime, "%Y-%m-%d")
         for entry in self.entries.all():
-            buf += str(entry)
+            buf += unicode(entry)
         buf += "\n\n"
         return buf

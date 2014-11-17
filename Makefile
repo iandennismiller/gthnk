@@ -6,6 +6,7 @@ SHELL=/bin/bash
 WWWROOT=/var/www/gthnk
 TEST_CMD=SETTINGS=$$PWD/etc/testing.conf nosetests -c tests/nose/test.cfg
 TEST_SINGLE=SETTINGS=$$PWD/etc/testing.conf nosetests -c tests/nose/test-single.cfg
+TEST_SINGLE_DUMP="./makesingle.log"
 
 install:
 	python setup.py install
@@ -46,6 +47,9 @@ watch:
 test:
 	$(TEST_CMD)
 
+single:
+	$(TEST_SINGLE) 2>&1 | tee -a $(TEST_SINGLE_DUMP)
+
 db:
 	SETTINGS=$$PWD/etc/dev.conf bin/manage.py init_db
 	SETTINGS=$$PWD/etc/dev.conf bin/manage.py populate_db
@@ -61,4 +65,4 @@ docs:
 	SETTINGS=$$PWD/etc/dev.conf sphinx-build -b text docs/source docs/build
 	open docs/build/index.html
 
-.PHONY: clean install test server watch lint www docs launchd paths all
+.PHONY: clean install test server watch lint www docs launchd paths all single
