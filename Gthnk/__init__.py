@@ -15,13 +15,10 @@ class Gthnk(Diamond):
         from flask.ext.diamond.administration import AdminModelView, AuthenticatedMenuLink
         admin = super(Gthnk, self).administration(app, db)
         admin.add_view(AdminModelView(Models.Entry, db.session, name="Entries", category="Journal"))
+        admin.add_view(AdminModelView(Models.Day, db.session, name="Days", category="Journal"))
 
         from .Views.Administration.EntryExplorer import EntryExplorer
         admin.add_view(EntryExplorer(db.session, name="Explorer", endpoint="explorer"))
-
-        #admin.add_view(adminViews.StatusView(name="Status"))
-        #admin.add_view(adminViews.UserAdmin(db.session))
-        #admin.add_view(adminViews.AssetAdmin(db.session))
 
 def create_app():
     gthnk = Gthnk(db, security, toolbar)

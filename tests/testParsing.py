@@ -6,6 +6,8 @@ from nose.plugins.attrib import attr
 from flask.ext.diamond.utils.testhelpers import GeneralTestCase
 from Gthnk import Models, create_app, db
 import Gthnk.JournalBuffer
+from Gthnk import create_app, db, security
+from flask.ext.diamond.utils import add_system_users
 
 class TestParsing(GeneralTestCase):
     def setUp(self):
@@ -17,6 +19,9 @@ class TestParsing(GeneralTestCase):
         self.db = db
         self.db.drop_all()
         self.db.create_all()
+
+        # make default users
+        add_system_users(security)
 
         # set up some text files
         shutil.copy("tests/data/tmp_journal.txt", "/tmp/journal.txt")
@@ -110,7 +115,6 @@ class TestParsing(GeneralTestCase):
             unicode(Gthnk.Models.Day(2012, 10, 7))
         self.assertEqual(buf, self.correct_twodays, "multiple days are output correctly")
 
-    @attr("single")
     @attr("slow")
     def test_load_archive(self):
         "load the entire archive"
@@ -118,6 +122,15 @@ class TestParsing(GeneralTestCase):
         journal_buffer.process_list(glob.glob("/Users/idm/Library/Journal/auto/*.txt"))
         journal_buffer.save_entries()
         #self.assertEqual(8, Gthnk.Models.Entry.query.count(), "expected number of objects in DB")
+
+    @attr("single")
+    def test_load_smaller_batch(self):
+        "load a smaller batch from the archive"
+        journal_buffer = Gthnk.JournalBuffer.TextFileJournalBuffer()
+        journal_buffer.process_list(glob.glob("/Users/idm/Library/Journal/auto/2007-02-0*.txt"))
+        journal_buffer.save_entries()
+        self.assertEqual(86, Gthnk.Models.Entry.query.count(), "expected number of entries in DB")
+        self.assertEqual(7, Gthnk.Models.Day.query.count(), "expected number of days in DB")
 
     @attr('skip')
     def test_no_date(self):
