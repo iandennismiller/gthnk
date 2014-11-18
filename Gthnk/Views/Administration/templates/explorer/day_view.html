@@ -1,0 +1,24 @@
+{% extends 'admin/model/edit.html' %}
+
+{% block body %}
+    {% block model_menu_bar %}
+    <ul class="nav nav-tabs">
+        <li>
+            <a href="{{ url_for('.index_view') }}"><i class="icon-list-alt"></i> {{ _gettext('List') }}</a>
+        </li>
+        <li class="active">
+            <a href="{{ url_for('.index_view') }}"><i class="icon-eye-open"></i> Day</a>
+        </li>
+    </ul>
+    {% endblock %}
+
+    {% block model_content %}
+<div style="width: 50em; margin: 0 auto;">
+{% filter markdown %}
+{{ day }}
+{% endfilter %}
+</div>
+
+    {% endblock %}
+
+{% endblock %}

@@ -35,6 +35,10 @@ class Entry(db.Model, CRUDMixin):
             self.day = this_day
         super(Entry, self).save()
 
+    def date_str(self):
+        this_date = datetime.date.fromordinal(self.timestamp.toordinal())
+        return datetime.datetime.strftime(this_date, "%Y-%m-%d")
+
     def __repr__(self):
         return '<Entry {} "{}">'.format(self.timestamp, self.content)
         #return '<Entry {} ({}) "{}">'.format(self.timestamp, self.tags, self.content)

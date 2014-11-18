@@ -94,7 +94,7 @@
                 {% endif %}
                 <td>
                     {% block list_row_actions scoped %}
-                        <a class="icon" href="{{ url_for('.day_view', date=row.date) }}" title="View">
+                        <a class="icon" href="{{ url_for('journal.day_view', date=row.date_str()) }}" title="View">
                             View
                             {#<i class="icon-eye-open"></i>#}
                         </a>

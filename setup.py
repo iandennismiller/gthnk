@@ -37,6 +37,7 @@ setup(version=version,
             #"flask_diamond==0.1.7",
             "mdx_linkify==0.5",
             #"Markdown>=2.3.1",
+            "Flask-Markdown==0.3",
             "poodledo>=0.2",
             "mdx_journal==0.1",
 
