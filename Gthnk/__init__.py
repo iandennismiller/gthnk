@@ -14,11 +14,18 @@ class Gthnk(Diamond):
     def administration(self, app, db):
         from flask.ext.diamond.administration import AdminModelView, AuthenticatedMenuLink
         admin = super(Gthnk, self).administration(app, db)
-        admin.add_view(AdminModelView(Models.Entry, db.session, name="Entries", category="Journal"))
-        admin.add_view(AdminModelView(Models.Day, db.session, name="Days", category="Journal"))
+        #admin.add_view(AdminModelView(Models.Entry, db.session, name="Entries", category="Journal"))
+        #admin.add_view(AdminModelView(Models.Day, db.session, name="Days", category="Journal"))
 
-        from .Views.Administration.EntryExplorer import EntryExplorer
-        admin.add_view(EntryExplorer(db.session, name="Explorer", endpoint="explorer"))
+        #from .Views.Administration.EntryExplorer import EntryExplorer
+        #admin.add_view(EntryExplorer(db.session, name="Explorer", endpoint="explorer"))
+
+        from .Views.Administration.DayExplorer import DayExplorer
+        admin.add_view(DayExplorer(db.session, name="Days", endpoint="days"))
+
+    def blueprints(self, app):
+        from .Views.Administration.Administration import adminbaseview
+        app.register_blueprint(adminbaseview, url_prefix="/")
 
 def create_app():
     gthnk = Gthnk(db, security, toolbar)
