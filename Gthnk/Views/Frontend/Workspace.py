@@ -6,6 +6,7 @@ import flask
 from flask.ext.security import login_required
 import json, sys, glob, csv, time, datetime, string, random, re, os, codecs
 from markdown import markdown
+from sqlalchemy import and_, desc
 from Gthnk import Models, security
 
 workspace = flask.Blueprint('workspace', __name__, template_folder='templates', static_folder='static')
@@ -19,8 +20,10 @@ def get_day(datestamp):
         flask.abort(404)
 
     day = Models.Day.find(date=date)
+    yesterday = Models.Day.query.filter(Models.Day.date < day.date).order_by(desc(Models.Day.date)).first()
+    tomorrow = Models.Day.query.filter(Models.Day.date > day.date).order_by(Models.Day.date).first()
     if day:
-        return flask.render_template('day_view.html', content=unicode(day))
+        return flask.render_template('day_view.html', content=unicode(day), yesterday=yesterday, tomorrow=tomorrow)
     else:
         flask.abort(404)
 

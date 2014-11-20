@@ -17,7 +17,7 @@ class Gthnk(Diamond):
         from flask.ext.diamond.administration import AdminModelView, AuthenticatedMenuLink
         from .Views.Administration import Administration as A
 
-        admin = super(Gthnk, self).administration(app, db, index_view=A.SearchView(name="Home"))
+        admin = super(Gthnk, self).administration(app, db, index_view=A.SearchView(name="Search"))
         #admin = super(Gthnk, self).administration(app, db)
         #admin.index_view=A.SearchView(name="Home")
 

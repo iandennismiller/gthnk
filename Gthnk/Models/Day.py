@@ -18,6 +18,16 @@ class Day(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date)
 
+    #def yesterday(self):
+        # query days for a timestamp "less than" the current date; order by date descending
+        # retrieve the first result; this is the previous day
+        # if there is no previous day, return None.
+        #return self.query.filter_by(date < self.date).order_by(self.date).first()
+        #return Models.Day.filter_by(Gthnk.Models.Day.date < self.date).order_by(Gthnk.Models.Day.date).first()
+
+    #def tomorrow(self):
+    #    pass
+
     def __unicode__(self):
         buf = datetime.datetime.strftime(self.date, "%Y-%m-%d")
         for entry in self.entries.order_by(Gthnk.Models.Entry.timestamp).all():

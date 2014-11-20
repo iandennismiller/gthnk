@@ -13,6 +13,15 @@
     {% endblock %}
 
     {% block content %}
+<a href="/">gthnk</a> |
+<a href="/day/{{ yesterday.date }}">&lt;&lt;&lt;</a> |
+<a href="/day/{{ tomorrow.date }}">&gt;&gt;&gt;</a> |
+<form method="GET" action="/admin/entryview/" style="display: inline;">
+    <input type="text" name="search" value="" placeholder="Search" autofocus>
+    <input type="hidden" name="sort" value="0">
+    <input type="hidden" name="desc" value="1">
+</form>
+
 <div style="width: 50em; margin: 0 auto; font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;">
 {% filter markdown %}
 {{ content }}
