@@ -30,6 +30,9 @@ class Gthnk(Diamond):
         from .Views.Administration.Administration import adminbaseview
         app.register_blueprint(adminbaseview, url_prefix="/")
 
+        from .Views.Frontend.workViews import api
+        app.register_blueprint(api, url_prefix="/api")
+
 def create_app():
     gthnk = Gthnk(db, security, toolbar)
     gthnk.init_app()

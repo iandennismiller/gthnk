@@ -1,8 +1,0 @@
-{% extends 'admin/master.html' %}
-{% block body %}
-    {% if current_user.is_authenticated() %}
-        Hi!
-    {% else %}
-        <a href="/login">login</a>
-    {% endif %}
-{% endblock %}
