@@ -3,28 +3,33 @@
 
 from __future__ import with_statement
 import flask
+from flask.ext.security import login_required
 import json, sys, glob, csv, time, datetime, string, random, re, os, codecs
-import markdown
+#from markdown import markdown
+from flaskext.markdown import Markdown
+from Gthnk import Models, security
 
 workspace = flask.Blueprint('workspace', __name__, template_folder='templates', static_folder='static')
 
-# @app.route('/')
-# @login_required
-# def index():
-#     return render_template('index.html')
-
 @workspace.route('/day/<datestamp>')
-def get_file(datestamp):
-    auto_path = "/Users/idm/Library/Journal/auto"
-    target_file = os.path.join(auto_path, "%s.txt" % datestamp)
-    if os.path.exists(target_file):
-        with open(target_file, "r") as f:
-            buf = f.read()
-        #buf = markdown.markdown(buf, ['linkify', 'journal'])
-        buf = markdown.markdown(buf, ['linkify', 'journal'])
-    return flask.render_template('article.html', buf=buf)
+@login_required
+def get_day(datestamp):
+    try:
+        date = datetime.datetime.strptime(datestamp, "%Y-%m-%d").date()
+    except:
+        flask.abort(404)
+
+    day = Models.Day.find(date=date)
+    if day:
+        #day_str = markdown.markdown(unicode(day), ['linkify', 'journal'])
+        #day_str = markdown.markdown(unicode(day), ['linkify'])
+        #day_str = Markdown(unicode(day), ['linkify'])
+        return flask.render_template('day_view.html', content=unicode(day))
+    else:
+        flask.abort(404)
 
 @workspace.route('/project/<name>')
+@login_required
 def get_project_readme(name):
     base_path = "/Users/idm/Work"
     target_file = os.path.join(base_path, name, "Readme.md")

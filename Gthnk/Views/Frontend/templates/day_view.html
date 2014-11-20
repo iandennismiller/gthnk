@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    {% block model_menu_bar %}
+    <ul class="nav nav-tabs">
+        <li>
+            <a href="{{ url_for('.index_view') }}"><i class="icon-list-alt"></i> {{ _gettext('List') }}</a>
+        </li>
+        <li class="active">
+            <a href="{{ url_for('.index_view') }}"><i class="icon-eye-open"></i> Day</a>
+        </li>
+    </ul>
+    {% endblock %}
+
+    {% block content %}
+<div style="width: 50em; margin: 0 auto; font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;">
+{% filter markdown %}
+{{ content }}
+{% endfilter %}
+</div>
+
+    {% endblock %}
+
+{% endblock %}

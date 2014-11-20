@@ -3,11 +3,15 @@
 
 import flask
 from flask.ext.admin import expose
+import flask.ext.security as security
 from flask.ext.diamond.administration import AuthModelView, AuthView, AdminIndexView
 
 adminbaseview = flask.Blueprint('adminbaseview', __name__, template_folder='templates', static_folder='static')
 
 class SearchView(AdminIndexView):
+    def is_accessible(self):
+        return security.current_user.is_authenticated()
+
     @expose('/')
     def index(self):
         return self.render("admin/search.html")

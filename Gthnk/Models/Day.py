@@ -4,7 +4,7 @@
 import json, os, datetime
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
-from sqlalchemy import and_
+from sqlalchemy import and_, desc
 from flask.ext.diamond.utils.mixins import CRUDMixin
 from Gthnk import db, security
 import Gthnk.Models
@@ -20,7 +20,7 @@ class Day(db.Model, CRUDMixin):
 
     def __unicode__(self):
         buf = datetime.datetime.strftime(self.date, "%Y-%m-%d")
-        for entry in self.entries.all():
+        for entry in self.entries.order_by(Gthnk.Models.Entry.timestamp).all():
             buf += unicode(entry)
         buf += "\n\n"
         return buf
