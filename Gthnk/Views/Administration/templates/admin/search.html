@@ -9,6 +9,9 @@
 	        <input type="hidden" name="sort" value="0">
 	        <input type="hidden" name="desc" value="1">
         </div>
+        <div style="text-align: center">
+	        <a href="{{ url_for('journal.day_view', date=latest.date) }}">Latest</a>
+        </div>
     </div>
 </form>
 

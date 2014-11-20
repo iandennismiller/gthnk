@@ -94,6 +94,11 @@
                 {% endif %}
                 <td>
                     {% block list_row_actions scoped %}
+                        <a class="icon" href="{{ url_for('.day_view', date=row.date) }}" title="View">
+                            ADMIN
+                            {#<i class="icon-eye-open"></i>#}
+                        </a>
+
                         <a class="icon" href="/day/{{ row.date }}" title="View">
                             View
                             {#<i class="icon-eye-open"></i>#}

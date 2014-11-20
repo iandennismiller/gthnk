@@ -3,17 +3,37 @@
 {% block body %}
     {% block model_menu_bar %}
     <ul class="nav nav-tabs">
-        <li>
+        <!--<li>
             <a href="{{ url_for('.index_view') }}"><i class="icon-list-alt"></i> {{ _gettext('List') }}</a>
-        </li>
+        </li>-->
         <li class="active">
             <a href="{{ url_for('.index_view') }}"><i class="icon-eye-open"></i> Day</a>
+        </li>
+        <li>
+            {% if day.yesterday() %}
+                <a href="{{ url_for('.day_view', date=day.yesterday().date) }}"><i class="icon-arrow-left"></i></a>
+            {% else %}
+                <a href="javascript:void(0)"><i class="icon-remove"></i></a>
+            {% endif %}
+        </li>
+        <li>
+            {% if day.tomorrow() %}
+                <a href="{{ url_for('.day_view', date=day.tomorrow().date) }}"><i class="icon-arrow-right"></i></a>
+            {% else %}
+                <a href="javascript:void(0)"><i class="icon-remove"></i></a>
+            {% endif %}
+        </li>
+        <li>
+            <a href="{{ url_for('.day_view', date=latest.date) }}"><i class="icon-calendar"></i> Latest</a>
+        </li>
+        <li>
+            <a href="/admin/entryview/?sort=0&amp;flt0_2={{day.date}}+00%3A00&amp;flt1_3={{day.date}}+23%3A59"><i class="icon-wrench"></i> Edit</a>
         </li>
     </ul>
     {% endblock %}
 
     {% block model_content %}
-<div style="width: 50em; margin: 0 auto; font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;">
+<div style="max-width: 50em; margin: 0 auto; font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;">
 {% filter markdown %}
 {{ day }}
 {% endfilter %}

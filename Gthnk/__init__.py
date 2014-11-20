@@ -35,8 +35,8 @@ class Gthnk(Diamond):
         from .Views.Administration.Administration import adminbaseview
         app.register_blueprint(adminbaseview)
 
-        from .Views.Frontend.Workspace import workspace
-        app.register_blueprint(workspace)
+        #from .Views.Frontend.Workspace import workspace
+        #app.register_blueprint(workspace)
 
 def create_app():
     gthnk = Gthnk(db, security, toolbar)

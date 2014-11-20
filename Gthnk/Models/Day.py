@@ -9,6 +9,9 @@ from flask.ext.diamond.utils.mixins import CRUDMixin
 from Gthnk import db, security
 import Gthnk.Models
 
+def latest():
+    return Day.query.order_by(desc(Day.date)).first()
+
 class Day(db.Model, CRUDMixin):
     """
     A Day consists of the Entry objects that were created on that day.
@@ -18,15 +21,15 @@ class Day(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date)
 
-    #def yesterday(self):
+    def yesterday(self):
         # query days for a timestamp "less than" the current date; order by date descending
         # retrieve the first result; this is the previous day
         # if there is no previous day, return None.
-        #return self.query.filter_by(date < self.date).order_by(self.date).first()
-        #return Models.Day.filter_by(Gthnk.Models.Day.date < self.date).order_by(Gthnk.Models.Day.date).first()
+        return self.query.filter(Day.date < self.date).order_by(desc(Day.date)).first()
 
-    #def tomorrow(self):
-    #    pass
+    def tomorrow(self):
+        #yesterday = Models.Day.query.filter(Models.Day.date < day.date).order_by(desc(Models.Day.date)).first()
+        return self.query.filter(Day.date > self.date).order_by(Day.date).first()
 
     def __unicode__(self):
         buf = datetime.datetime.strftime(self.date, "%Y-%m-%d")
