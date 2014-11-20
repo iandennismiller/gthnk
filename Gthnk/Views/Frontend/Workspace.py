@@ -8,24 +8,30 @@ import json, sys, glob, csv, time, datetime, string, random, re, os, codecs
 from markdown import markdown
 from sqlalchemy import and_, desc
 from Gthnk import Models, security
+from Gthnk.Models.Day import latest
 
 workspace = flask.Blueprint('workspace', __name__, template_folder='templates', static_folder='static')
 
-@workspace.route('/day/<datestamp>')
-@login_required
-def get_day(datestamp):
-    try:
-        date = datetime.datetime.strptime(datestamp, "%Y-%m-%d").date()
-    except:
-        flask.abort(404)
+# @workspace.route('/day/<datestamp>')
+# @login_required
+# def get_day(datestamp):
+#     try:
+#         date = datetime.datetime.strptime(datestamp, "%Y-%m-%d").date()
+#     except:
+#         flask.abort(404)
+#
+#     day = Models.Day.find(date=date)
+#     yesterday = Models.Day.query.filter(Models.Day.date < day.date).order_by(desc(Models.Day.date)).first()
+#     tomorrow = Models.Day.query.filter(Models.Day.date > day.date).order_by(Models.Day.date).first()
+#     if day:
+#         return flask.render_template('day_view.html', content=unicode(day), yesterday=yesterday, tomorrow=tomorrow)
+#     else:
+#         flask.abort(404)
 
-    day = Models.Day.find(date=date)
-    yesterday = Models.Day.query.filter(Models.Day.date < day.date).order_by(desc(Models.Day.date)).first()
-    tomorrow = Models.Day.query.filter(Models.Day.date > day.date).order_by(Models.Day.date).first()
-    if day:
-        return flask.render_template('day_view.html', content=unicode(day), yesterday=yesterday, tomorrow=tomorrow)
-    else:
-        flask.abort(404)
+@workspace.route('/latest')
+@login_required
+def redirect_latest():
+    return flask.redirect(flask.url_for('journal.day_view', date=latest().date))
 
 @workspace.route('/project/<name>')
 @login_required

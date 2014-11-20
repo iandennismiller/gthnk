@@ -33,6 +33,7 @@ class Entry(db.Model, CRUDMixin):
                 this_day = Gthnk.Models.Day.create(date=this_date)
             # now assign a value to this Entry's day
             self.day = this_day
+        # TODO: also see if this entry is a duplicate before creating it.
         super(Entry, self).save()
 
     def date_str(self):

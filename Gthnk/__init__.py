@@ -14,12 +14,14 @@ from flask.ext.markdown import Markdown
 
 class Gthnk(Diamond):
     def administration(self, app, db):
-        from flask.ext.diamond.administration import AdminModelView, AuthenticatedMenuLink
+        from flask.ext.diamond.administration import AdminModelView, AuthenticatedMenuLink, MenuLink
         from .Views.Administration import Administration as A
 
         admin = super(Gthnk, self).administration(app, db, index_view=A.SearchView(name="Search"))
         #admin = super(Gthnk, self).administration(app, db)
         #admin.index_view=A.SearchView(name="Home")
+
+        admin.add_link(MenuLink(name='Latest', url='/latest'))
 
         #admin.add_view(A.SearchView(name="Search"))
         admin.add_view(A.EntryAdmin(Models.Entry, db.session, name="Entries"))
@@ -31,17 +33,19 @@ class Gthnk(Diamond):
         from .Views.Administration.DayExplorer import DayExplorer
         admin.add_view(DayExplorer(db.session, name="Journal", endpoint="journal"))
 
+
     def blueprints(self, app):
+        from .Views.Frontend.Workspace import workspace
+        app.register_blueprint(workspace)
+
         from .Views.Administration.Administration import adminbaseview
         app.register_blueprint(adminbaseview)
-
-        #from .Views.Frontend.Workspace import workspace
-        #app.register_blueprint(workspace)
 
 def create_app():
     gthnk = Gthnk(db, security, toolbar)
     gthnk.init_app()
     gthnk.logger(gthnk.app)
+    gthnk.app.logger.info("starting gthnk server")
     gthnk.app.permanent_session_lifetime = timedelta(minutes=30)
     from mdx_linkify.mdx_linkify import LinkifyExtension
     from mdx_journal import JournalExtension

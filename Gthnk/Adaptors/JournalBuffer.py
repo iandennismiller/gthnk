@@ -6,7 +6,7 @@ from collections import defaultdict
 import Gthnk.Models
 
 def split_filename_list(filename_str):
-    [x.strip() for x in filename_str.split(',')]
+    return [x.strip() for x in filename_str.split(',')]
 
 class JournalBuffer(object):
     """
