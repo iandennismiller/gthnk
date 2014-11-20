@@ -5,8 +5,7 @@ from __future__ import with_statement
 import flask
 from flask.ext.security import login_required
 import json, sys, glob, csv, time, datetime, string, random, re, os, codecs
-#from markdown import markdown
-from flaskext.markdown import Markdown
+from markdown import markdown
 from Gthnk import Models, security
 
 workspace = flask.Blueprint('workspace', __name__, template_folder='templates', static_folder='static')
@@ -21,9 +20,6 @@ def get_day(datestamp):
 
     day = Models.Day.find(date=date)
     if day:
-        #day_str = markdown.markdown(unicode(day), ['linkify', 'journal'])
-        #day_str = markdown.markdown(unicode(day), ['linkify'])
-        #day_str = Markdown(unicode(day), ['linkify'])
         return flask.render_template('day_view.html', content=unicode(day))
     else:
         flask.abort(404)
