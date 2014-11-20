@@ -26,4 +26,4 @@ class Day(db.Model, CRUDMixin):
         return buf
 
     def __repr__(self):
-        return "{}".format(date)
+        return "{}".format(self.date)

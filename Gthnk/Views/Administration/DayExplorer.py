@@ -12,6 +12,9 @@ class DayExplorer(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated()
 
+    def is_visible(self):
+        return False
+
     can_create = False
     can_delete = False
     can_edit = False

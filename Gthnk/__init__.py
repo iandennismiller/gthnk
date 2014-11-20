@@ -14,9 +14,13 @@ from flask.ext.markdown import Markdown
 class Gthnk(Diamond):
     def administration(self, app, db):
         from flask.ext.diamond.administration import AdminModelView, AuthenticatedMenuLink
-        admin = super(Gthnk, self).administration(app, db)
         from .Views.Administration import Administration as A
 
+        admin = super(Gthnk, self).administration(app, db, index_view=A.SearchView(name="Home"))
+        #admin = super(Gthnk, self).administration(app, db)
+        #admin.index_view=A.SearchView(name="Home")
+
+        #admin.add_view(A.SearchView(name="Search"))
         admin.add_view(A.EntryAdmin(Models.Entry, db.session, name="Entries"))
         #admin.add_view(A.DayAdmin(Models.Day, db.session, name="Days", category="Model"))
 
@@ -30,8 +34,8 @@ class Gthnk(Diamond):
         from .Views.Administration.Administration import adminbaseview
         app.register_blueprint(adminbaseview, url_prefix="/")
 
-        from .Views.Frontend.workViews import api
-        app.register_blueprint(api, url_prefix="/api")
+        #from .Views.Frontend.Workspace import workspace
+        #app.register_blueprint(workspace, url_prefix="/workspace")
 
 def create_app():
     gthnk = Gthnk(db, security, toolbar)
