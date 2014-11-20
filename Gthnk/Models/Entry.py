@@ -9,6 +9,7 @@ from flask.ext.diamond.utils.mixins import CRUDMixin
 from flask.ext.diamond.models import User
 from Gthnk import db, security
 import Gthnk.Models
+import flask
 
 class Entry(db.Model, CRUDMixin):
     """
@@ -25,6 +26,12 @@ class Entry(db.Model, CRUDMixin):
     day = db.relationship('Day', backref=db.backref('entries', lazy='dynamic'))
 
     def save(self, _commit):
+        # see if this entry is a duplicate before creating it.
+        existing_entries = self.query.filter_by(timestamp=self.timestamp).filter_by(content=self.content).count()
+        if existing_entries and existing_entries > 0: # if it exists
+            flask.current_app.logger.info("skipping entry because entry already exists")
+            return
+
         if not self.day_id:
             # find the day if it exists
             this_date = datetime.date.fromordinal(self.timestamp.toordinal())
@@ -33,7 +40,7 @@ class Entry(db.Model, CRUDMixin):
                 this_day = Gthnk.Models.Day.create(date=this_date)
             # now assign a value to this Entry's day
             self.day = this_day
-        # TODO: also see if this entry is a duplicate before creating it.
+
         super(Entry, self).save()
 
     def date_str(self):

@@ -10,7 +10,8 @@ import Models
 from datetime import timedelta
 from flask.ext.mail import Mail
 from flask.ext.markdown import Markdown
-#import mdx_linkify
+from mdx_linkify.mdx_linkify import LinkifyExtension
+from mdx_journal import JournalExtension
 
 class Gthnk(Diamond):
     def administration(self, app, db):
@@ -47,8 +48,6 @@ def create_app():
     gthnk.logger(gthnk.app)
     gthnk.app.logger.info("starting gthnk server")
     gthnk.app.permanent_session_lifetime = timedelta(minutes=30)
-    from mdx_linkify.mdx_linkify import LinkifyExtension
-    from mdx_journal import JournalExtension
     gthnk.md = Markdown(gthnk.app,
         extensions=[LinkifyExtension(), JournalExtension()])
     return gthnk.app
