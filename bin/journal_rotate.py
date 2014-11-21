@@ -15,7 +15,7 @@ def main():
     file_list = Gthnk.Adaptors.JournalBuffer.split_filename_list(app.config["INPUT_FILES"])
     with app.app_context():
         # create a new backup path
-        todays_date = datetime.datetime.strftime(datetime.datetime.now().date(), "%Y-%m-%d")
+        todays_date = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H%M%S")
         backup_path = os.path.join(app.config["BACKUP_PATH"], todays_date)
         if not os.path.exists(backup_path):
             os.makedirs(backup_path)
