@@ -11,7 +11,7 @@ TEST_SINGLE_DUMP="./makesingle.log"
 install:
 	python setup.py install
 
-all: paths install www launchd
+all: paths install launchd
 	@echo Done
 
 clean:
@@ -20,10 +20,6 @@ clean:
 paths:
 	mkdir -p /var/lib/gthnk ~/.gthnk
 	cp etc/production.conf ~/.gthnk/gthnk.conf
-
-www:
-	rsync -a www/ $(WWWROOT)
-	rsync -a Gthnk/static/ $(WWWROOT)/static
 
 launchd:
 	@echo "Installing launchd agents to ~/Library/LaunchAgents"
@@ -65,4 +61,4 @@ docs:
 	SETTINGS=$$PWD/etc/dev.conf sphinx-build -b text docs/source docs/build
 	open docs/build/index.html
 
-.PHONY: clean install test server watch lint www docs launchd paths all single
+.PHONY: clean install test server watch lint docs launchd paths all single

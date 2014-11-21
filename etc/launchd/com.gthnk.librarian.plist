@@ -23,7 +23,7 @@ At 12:03 AM every day, scan the journal.txt and rotate out any old files.
 		<key>Hour</key>
 		<integer>0</integer>
 		<key>Minute</key>
-		<integer>3</integer>
+		<integer>1</integer>
 	</dict>
 </dict>
 </plist>
