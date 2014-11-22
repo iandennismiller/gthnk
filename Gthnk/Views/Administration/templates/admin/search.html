@@ -2,7 +2,7 @@
 {% block body %}
 
 <form method="GET" action="/admin/entryview/" class="search-form">
-    <div style="width: 27em; margin: 7em auto 5em auto;">
+    <div style="width: 27em; margin: 7em auto 0em auto;">
 	    <div style="font-size: 20pt; margin-bottom: 1em; text-align: center;">gthnk</div>
 	    <div style="margin-bottom: 1em;">
 	        <input type="text" name="search" value="" class="span4" placeholder="Search" autofocus>
@@ -10,9 +10,12 @@
 	        <input type="hidden" name="desc" value="1">
         </div>
         <div style="text-align: center">
-	        <a href="/latest">Latest</a>
+	        <a href="/admin/journal/latest">Latest</a>
         </div>
     </div>
 </form>
 
+{% endblock %}
+
+{% block footer %}
 {% endblock %}

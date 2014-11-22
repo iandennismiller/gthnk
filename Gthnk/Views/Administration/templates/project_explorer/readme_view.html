@@ -1,0 +1,27 @@
+{% extends 'admin/model/edit.html' %}
+
+{% block body %}
+    {% block model_menu_bar %}
+    <ul class="nav nav-tabs">
+        <li>
+            <a href="{{ url_for('.index_view') }}"><i class="icon-list-alt"></i> List</a>
+        </li>
+        <li class="active">
+            <a href="{{ url_for('.index_view') }}"><i class="icon-eye-open"></i> {{ project_name }}</a>
+        </li>
+        <li>
+        	<a href="http://oxford.saperea.com?Search={{project_name}}">GitLab</a>
+        </li>
+    </ul>
+    {% endblock %}
+
+    {% block model_content %}
+<div style="max-width: 50em; margin: 0 auto; font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;">
+{% filter markdown %}
+{{ buf|safe }}
+{% endfilter %}
+</div>
+
+    {% endblock %}
+
+{% endblock %}

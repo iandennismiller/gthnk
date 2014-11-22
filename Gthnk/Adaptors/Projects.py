@@ -1,10 +1,9 @@
 # (c) 2013 Ian Dennis Miller
 # -*- coding: utf-8 -*-
 
-import os, sys, time, json
+import os, sys, time, json, subprocess
 from stat import S_ISREG, ST_CTIME, ST_MODE
-from GT.dashboard import DashboardWidget
-import subprocess
+import flask
 
 def pipe(cmd):
     sp = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
@@ -24,8 +23,19 @@ def recently_modified_git(dirpath):
     files = list((time.ctime(cdate), os.path.basename(os.path.dirname(path))) for cdate, path in s_entries)
     return files
 
-class WorkWidget(DashboardWidget):
-    def render(self):
-        dirpath = "/Users/idm/Work"
-        files = recently_modified_git(dirpath)
+class ProjectList(object):
+    def __init__(self):
+        pass
+
+    def get_recent(self):
+        files = recently_modified_git(flask.current_app.config["PROJECT_PATH"])
         return files[:20]
+
+    def get_readme(self, project_name):
+        target_file = os.path.join(flask.current_app.config["PROJECT_PATH"], project_name, "Readme.md")
+        if os.path.exists(target_file):
+            with open(target_file, "r") as f:
+                buf = f.read()
+        else:
+            buf = "# Empty Readme"
+        return buf

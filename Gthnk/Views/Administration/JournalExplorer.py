@@ -23,7 +23,7 @@ class JournalExplorer(ModelView):
     column_filters = ['date']
     column_sortable_list = (('date', 'date'))
 
-    list_template = 'explorer/day_list.html'
+    list_template = 'journal_explorer/day_list.html'
 
     @expose("/day/")
     def day_view(self):
@@ -33,13 +33,13 @@ class JournalExplorer(ModelView):
 
         day = Models.Day.find(date=datetime.datetime.strptime(date_str, "%Y-%m-%d").date())
         if day:
-            return self.render('explorer/day_view.html', day=day)
+            return self.render('journal_explorer/day_view.html', day=day)
         else:
             return flask.redirect(flask.url_for('admin.index'))
 
     @expose("/latest")
     def latest_view(self):
-        return self.render('explorer/day_view.html', day=latest())
+        return self.render('journal_explorer/day_view.html', day=latest())
 
     def __init__(self, session, **kwds):
         super(JournalExplorer, self).__init__(Models.Day, session, **kwds)

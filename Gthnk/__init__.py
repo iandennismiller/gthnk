@@ -18,16 +18,16 @@ class Gthnk(Diamond):
         from flask.ext.diamond.administration import AdminModelView, AuthenticatedMenuLink, MenuLink
         from .Views.Administration import Administration as A
         from .Views.Administration.JournalExplorer import JournalExplorer
+        from .Views.Administration.ProjectExplorer import ProjectExplorer
 
         admin = super(Gthnk, self).administration(app, db, index_view=A.SearchView(name="Search"))
-        admin.add_link(MenuLink(name='Latest', url='/latest'))
         admin.add_view(A.EntryAdmin(Models.Entry, db.session, name="Entries"))
-        #admin.add_view(A.DayAdmin(Models.Day, db.session, name="Days", category="Model"))
         admin.add_view(JournalExplorer(db.session, name="Journal", endpoint="journal"))
+        admin.add_view(ProjectExplorer(name="Projects", endpoint="projects"))
 
     def blueprints(self, app):
-        from .Views.Frontend.Workspace import workspace
-        app.register_blueprint(workspace)
+        #from .Views.Frontend.Workspace import workspace
+        #app.register_blueprint(workspace)
 
         from .Views.Administration.Administration import adminbaseview
         app.register_blueprint(adminbaseview)

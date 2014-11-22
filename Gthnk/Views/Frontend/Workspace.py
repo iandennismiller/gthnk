@@ -8,39 +8,24 @@ import json, sys, glob, csv, time, datetime, string, random, re, os, codecs
 from markdown import markdown
 from sqlalchemy import and_, desc
 from Gthnk import Models, security
-from Gthnk.Models.Day import latest
+from Gthnk.Adaptors.Projects import ProjectList
 
 workspace = flask.Blueprint('workspace', __name__, template_folder='templates', static_folder='static')
 
-# @workspace.route('/day/<datestamp>')
+# @workspace.route('/projects')
 # @login_required
-# def get_day(datestamp):
-#     try:
-#         date = datetime.datetime.strptime(datestamp, "%Y-%m-%d").date()
-#     except:
-#         flask.abort(404)
-#
-#     day = Models.Day.find(date=date)
-#     yesterday = Models.Day.query.filter(Models.Day.date < day.date).order_by(desc(Models.Day.date)).first()
-#     tomorrow = Models.Day.query.filter(Models.Day.date > day.date).order_by(Models.Day.date).first()
-#     if day:
-#         return flask.render_template('day_view.html', content=unicode(day), yesterday=yesterday, tomorrow=tomorrow)
-#     else:
-#         flask.abort(404)
+# def get_project_list():
+#     project_list = ProjectList()
+#     return flask.render_template('results.html', results=project_list.get_recent_projects())
+#     # return flask.render_template('project_list.html', files=project_list.get_recent_projects())
 
-@workspace.route('/latest')
-@login_required
-def redirect_latest():
-    return flask.redirect(flask.url_for('journal.latest_view'))
-
-@workspace.route('/project/<name>')
-@login_required
-def get_project_readme(name):
-    base_path = "/Users/idm/Work"
-    target_file = os.path.join(base_path, name, "Readme.md")
-    if os.path.exists(target_file):
-        with open(target_file, "r") as f:
-            buf = f.read()
-        buf = markdown.markdown(buf, ['linkify', 'journal'])
-    #buf = re.sub(r"\n", "<br/>", buf)
-    return flask.render_template('article.html', buf=buf)
+# @workspace.route('/project/<name>')
+# @login_required
+# def get_project_readme(name):
+#     target_file = os.path.join(flask.current_app.config["PROJECT_PATH"], name, "Readme.md")
+#     if os.path.exists(target_file):
+#         with open(target_file, "r") as f:
+#             buf = f.read()
+#         buf = markdown.markdown(buf, ['linkify', 'journal'])
+#     #buf = re.sub(r"\n", "<br/>", buf)
+#     return flask.render_template('article.html', buf=buf)
