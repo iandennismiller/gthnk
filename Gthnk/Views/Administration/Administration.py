@@ -11,13 +11,13 @@ from wtforms.fields import TextAreaField
 
 adminbaseview = flask.Blueprint('adminbaseview', __name__, template_folder='templates', static_folder='static')
 
-class SearchView(AdminIndexView):
+class RedirectView(AdminIndexView):
     def is_accessible(self):
         return security.current_user.is_authenticated()
 
     @expose('/')
     def index(self):
-        return self.render("admin/search.html", latest=latest())
+        return flask.redirect(flask.url_for('journal.index_view'))
 
 class EntryAdmin(AuthModelView):
     def is_visible(self):
@@ -28,7 +28,7 @@ class EntryAdmin(AuthModelView):
     can_edit = True
     column_display_pk = True
 
-    list_template = 'explorer/entry_list.html'
+    list_template = 'journal_explorer/entry_list.html'
 
     column_list=["timestamp", "content"]
     column_filters = ['timestamp']

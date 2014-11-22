@@ -20,9 +20,9 @@ class Gthnk(Diamond):
         from .Views.Administration.JournalExplorer import JournalExplorer
         from .Views.Administration.ProjectExplorer import ProjectExplorer
 
-        admin = super(Gthnk, self).administration(app, db, index_view=A.SearchView(name="Search"))
+        admin = super(Gthnk, self).administration(app, db, index_view=A.RedirectView(name="Home"))
         admin.add_view(A.EntryAdmin(Models.Entry, db.session, name="Entries"))
-        admin.add_view(JournalExplorer(db.session, name="Journal", endpoint="journal"))
+        admin.add_view(JournalExplorer(name="Journal", endpoint="journal"))
         admin.add_view(ProjectExplorer(name="Projects", endpoint="projects"))
 
     def blueprints(self, app):

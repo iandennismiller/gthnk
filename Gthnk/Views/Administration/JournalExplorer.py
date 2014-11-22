@@ -5,25 +5,18 @@ from flask.ext.admin import expose
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.security import current_user
 from Gthnk import Models, security
+from flask.ext.diamond.administration import AuthModelView, AuthView, AdminIndexView
 from Gthnk.Models.Day import latest
 
 import flask
 
-class JournalExplorer(ModelView):
+class JournalExplorer(AuthView):
     def is_accessible(self):
         return current_user.is_authenticated()
 
-    def is_visible(self):
-        return False
-
-    can_create = False
-    can_delete = False
-    can_edit = False
-    column_list=["date"]#, "content"]
-    column_filters = ['date']
-    column_sortable_list = (('date', 'date'))
-
-    list_template = 'journal_explorer/day_list.html'
+    @expose('/')
+    def index_view(self):
+        return self.render("journal_explorer/search.html", latest=latest())
 
     @expose("/day/")
     def day_view(self):
@@ -40,6 +33,3 @@ class JournalExplorer(ModelView):
     @expose("/latest")
     def latest_view(self):
         return self.render('journal_explorer/day_view.html', day=latest())
-
-    def __init__(self, session, **kwds):
-        super(JournalExplorer, self).__init__(Models.Day, session, **kwds)
