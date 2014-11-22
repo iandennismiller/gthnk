@@ -9,7 +9,7 @@ from Gthnk.Models.Day import latest
 
 import flask
 
-class DayExplorer(ModelView):
+class JournalExplorer(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated()
 
@@ -33,9 +33,13 @@ class DayExplorer(ModelView):
 
         day = Models.Day.find(date=datetime.datetime.strptime(date_str, "%Y-%m-%d").date())
         if day:
-            return self.render('explorer/day_view.html',day=day, latest=latest())
+            return self.render('explorer/day_view.html', day=day)
         else:
             return flask.redirect(flask.url_for('admin.index'))
 
+    @expose("/latest")
+    def latest_view(self):
+        return self.render('explorer/day_view.html', day=latest())
+
     def __init__(self, session, **kwds):
-        super(DayExplorer, self).__init__(Models.Day, session, **kwds)
+        super(JournalExplorer, self).__init__(Models.Day, session, **kwds)

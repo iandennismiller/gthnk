@@ -31,7 +31,7 @@ workspace = flask.Blueprint('workspace', __name__, template_folder='templates', 
 @workspace.route('/latest')
 @login_required
 def redirect_latest():
-    return flask.redirect(flask.url_for('journal.day_view', date=latest().date))
+    return flask.redirect(flask.url_for('journal.latest_view'))
 
 @workspace.route('/project/<name>')
 @login_required

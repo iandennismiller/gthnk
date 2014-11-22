@@ -13,19 +13,16 @@
             {% if day.yesterday() %}
                 <a href="{{ url_for('.day_view', date=day.yesterday().date) }}"><i class="icon-arrow-left"></i> {{day.yesterday().date}}</a>
             {% else %}
-                <a href="javascript:void(0)"><i class="icon-remove"></i></a>
+                <a href="javascript:void(0)"><i class="icon-remove"></i> earliest</a>
             {% endif %}
         </li>
         <li>
             {% if day.tomorrow() %}
                 <a href="{{ url_for('.day_view', date=day.tomorrow().date) }}"><i class="icon-arrow-right"></i> {{day.tomorrow().date}}</a>
             {% else %}
-                <a href="javascript:void(0)"><i class="icon-remove"></i></a>
+                <a href="javascript:void(0)"><i class="icon-remove"></i> latest</a>
             {% endif %}
         </li>
-        <!--<li>
-            <a href="{{ url_for('.day_view', date=latest.date) }}"><i class="icon-calendar"></i> Latest</a>
-        </li>-->
         <li>
             <a href="/admin/entryview/?sort=0&amp;flt0_2={{day.date}}+00%3A00&amp;flt1_3={{day.date}}+23%3A59"><i class="icon-wrench"></i> Edit</a>
         </li>

@@ -22,13 +22,9 @@ class Day(db.Model, CRUDMixin):
     date = db.Column(db.Date)
 
     def yesterday(self):
-        # query days for a timestamp "less than" the current date; order by date descending
-        # retrieve the first result; this is the previous day
-        # if there is no previous day, return None.
         return self.query.filter(Day.date < self.date).order_by(desc(Day.date)).first()
 
     def tomorrow(self):
-        #yesterday = Models.Day.query.filter(Models.Day.date < day.date).order_by(desc(Models.Day.date)).first()
         return self.query.filter(Day.date > self.date).order_by(Day.date).first()
 
     def __unicode__(self):
