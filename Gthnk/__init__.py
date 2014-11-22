@@ -24,6 +24,7 @@ class Gthnk(Diamond):
         admin.add_view(A.EntryAdmin(Models.Entry, db.session, name="Entries"))
         admin.add_view(JournalExplorer(name="Journal", endpoint="journal"))
         admin.add_view(ProjectExplorer(name="Projects", endpoint="projects"))
+        admin.add_view(A.ItemListAdmin(Models.ItemList, db.session, name="Lists"))
 
     def blueprints(self, app):
         #from .Views.Frontend.Workspace import workspace

@@ -42,3 +42,11 @@ class EntryAdmin(AuthModelView):
             'rows': 15
         }
     }
+
+class ItemListAdmin(AuthModelView):
+    can_delete = False
+    can_edit = False
+    can_create = False
+    column_display_pk = True
+    #form_excluded_columns = ['articles', 'snapshot']
+
