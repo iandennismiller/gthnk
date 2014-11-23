@@ -1,14 +1,13 @@
-# (c) 2013 www.turkr.com
+# -*- coding: utf-8 -*-
+# gthnk (c) 2014 Ian Dennis Miller
 
 import json, datetime, os
 from flask.ext.admin import expose
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext.security import current_user
 from Gthnk import Models, security
-from Gthnk.Models.Day import latest
 from flask.ext.diamond.administration import AuthModelView, AuthView, AdminIndexView
 from Gthnk.Adaptors.Projects import ProjectList
-
 import flask
 
 class ProjectExplorer(AuthView):

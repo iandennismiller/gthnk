@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# topcolors (c) 2013 Ian Dennis Miller
+# gthnk (c) 2014 Ian Dennis Miller
 
 import flask
 from flask.ext.admin import expose
@@ -12,6 +12,9 @@ from wtforms.fields import TextAreaField
 adminbaseview = flask.Blueprint('adminbaseview', __name__, template_folder='templates', static_folder='static')
 
 class RedirectView(AdminIndexView):
+    def is_visible(self):
+        return False
+
     def is_accessible(self):
         return security.current_user.is_authenticated()
 

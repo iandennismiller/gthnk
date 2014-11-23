@@ -1,4 +1,5 @@
-# (c) 2013 www.turkr.com
+# -*- coding: utf-8 -*-
+# gthnk (c) 2014 Ian Dennis Miller
 
 import json, datetime
 from flask.ext.admin import expose
@@ -7,7 +8,6 @@ from flask.ext.security import current_user
 from Gthnk import Models, security
 from flask.ext.diamond.administration import AuthModelView, AuthView, AdminIndexView
 from Gthnk.Models.Day import latest
-
 import flask
 
 class ListExplorer(AuthView):

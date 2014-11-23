@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# greenthink-library (c) 2013 Ian Dennis Miller
+# gthnk (c) 2014 Ian Dennis Miller
 
 import json, os, datetime
 from flask.ext.sqlalchemy import SQLAlchemy

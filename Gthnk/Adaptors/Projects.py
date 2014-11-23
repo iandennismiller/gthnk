@@ -1,5 +1,5 @@
-# (c) 2013 Ian Dennis Miller
 # -*- coding: utf-8 -*-
+# Gthnk (c) 2014 Ian Dennis Miller
 
 import os, sys, time, json, subprocess
 from stat import S_ISREG, ST_CTIME, ST_MODE
