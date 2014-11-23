@@ -21,7 +21,10 @@ class RedirectView(AdminIndexView):
 
 class EntryAdmin(AuthModelView):
     def is_visible(self):
-        return False
+        return security.current_user.has_role('Admin')
+
+    #def is_visible(self):
+    #    return False
 
     can_create = False
     can_delete = False
@@ -44,9 +47,27 @@ class EntryAdmin(AuthModelView):
     }
 
 class ItemListAdmin(AuthModelView):
-    can_delete = False
-    can_edit = False
-    can_create = False
-    column_display_pk = True
-    #form_excluded_columns = ['articles', 'snapshot']
+    def is_visible(self):
+        return security.current_user.has_role('Admin')
 
+    can_delete = True
+    can_edit = True
+    can_create = True
+    column_display_pk = True
+    column_list = ['name', 'content']
+
+    form_overrides = dict(content=TextAreaField)
+    form_widget_args = {
+        'content':{
+            'rows': 15
+        }
+    }
+
+class DayAdmin(AuthModelView):
+    def is_visible(self):
+        return security.current_user.has_role('Admin')
+
+    can_create = False
+    can_delete = False
+    can_edit = True
+    column_display_pk = True
