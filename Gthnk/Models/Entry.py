@@ -47,6 +47,9 @@ class Entry(db.Model, CRUDMixin):
         this_date = datetime.date.fromordinal(self.timestamp.toordinal())
         return datetime.datetime.strftime(this_date, "%Y-%m-%d")
 
+    def hhmm(self):
+        return datetime.datetime.strftime(self.timestamp, "%H%M")
+
     def __repr__(self):
         return '<Entry {} "{}">'.format(self.timestamp, self.content)
         #return '<Entry {} ({}) "{}">'.format(self.timestamp, self.tags, self.content)

@@ -20,13 +20,8 @@ class ProjectExplorer(AuthView):
         list_columns=(('timestamp', 'timestamp'), ('name', 'name'))
         return self.render('project_explorer/project_list.html', data=project_list.get_recent(), list_columns=list_columns)
 
-    @expose("/readme")
-    def readme_view(self):
-        project_name = flask.request.args['name']
-        if project_name is None:
-            return flask.redirect(flask.url_for('admin.index'))
-
+    @expose("/<project_name>/readme")
+    def readme_view(self, project_name):
         project_list = ProjectList()
         buf = project_list.get_readme(project_name)
-
         return self.render('project_explorer/readme_view.html', buf=buf, project_name=project_name)

@@ -4,7 +4,7 @@
     {% block model_menu_bar %}
     <ul class="nav nav-tabs">
         <li class="active">
-            <a href="javascript:void(0)"><i class="icon-list-alt"></i> {{ _gettext('List') }}</a>
+            <a href="javascript:void(0)"><i class="icon-list-alt"></i> {{ _gettext('List') }} ({{ count }})</a>
         </li>
         {% if admin_view.can_create %}
         <li>
@@ -51,19 +51,17 @@
                     </th>
                     {% endif %}
                     {% block list_row_actions_header %}
-                    <th class="span1" style="width:50px">&nbsp;</th>
                     {% endblock %}
-                    {% set column = 0 %}
-                    {% for c, name in list_columns %}
-                    <th class="column-header">
-                        {{ name }}
+                    <th class="column-header" style="width: 9em;">
+                        timestamp
                     </th>
-                    {% set column = column + 1 %}
-                    {% endfor %}
+                    <th class="column-header">
+                        content
+                    </th>
                 {% endblock %}
             </tr>
         </thead>
-        {% for row in data %}
+        {% for row in data[:20] %}
         <tr>
             {% block list_row scoped %}
                 {% if actions %}
@@ -71,23 +69,24 @@
                     <input type="checkbox" name="rowid" class="action-checkbox" value="{{ get_pk_value(row) }}" title="{{ _gettext('Select record') }}" />
                 </td>
                 {% else %}
-                <td>&nbsp;</td>
                 {% endif %}
 
-                <td>
-                    <a href="/admin/projects/readme?name={{row[1]}}">{{row[1]}}</a>
+                <td style="font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;">
+                    <a href="/admin/journal/day/{{row.day.date}}#{{row.hhmm()}}">{{row.day.date}} <strong>{{row.hhmm()}}</strong></a>
                 </td>
 
-                <td>
-                    {{row[0]}}
-                </td>
+<td style="font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;">
+{% filter markdown %}
+{{row.content}}
+{% endfilter %}
+</td>
 
             {% endblock %}
         </tr>
         {% endfor %}
-
     </table>
-
+    {# {{ lib.pager(page, num_pages, pager_url) }} #}
     {% endblock %}
 
+    {#{ actionlib.form(actions, url_for('.action_view')) }#}
 {% endblock %}

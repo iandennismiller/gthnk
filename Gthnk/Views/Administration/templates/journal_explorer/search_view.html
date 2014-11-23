@@ -1,13 +1,11 @@
 {% extends 'admin/master.html' %}
 {% block body %}
 
-<form method="GET" action="/admin/entryview/" class="search-form">
+<form method="GET" action="/admin/journal/search" class="search-form">
     <div style="width: 27em; margin: 7em auto 0em auto;">
 	    <div style="font-size: 20pt; margin-bottom: 1em; text-align: center;">gthnk</div>
 	    <div style="margin-bottom: 1em;">
-	        <input type="text" name="search" value="" class="span4" placeholder="Search" autofocus>
-	        <input type="hidden" name="sort" value="0">
-	        <input type="hidden" name="desc" value="1">
+	        <input type="text" name="q" value="" class="span4" placeholder="Search" autofocus>
         </div>
         <div style="text-align: center">
 	        <a href="/admin/journal/latest">Latest</a>

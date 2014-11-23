@@ -45,7 +45,7 @@ class Gthnk(Diamond):
         ]
 
         for name in list_list:
-            admin.add_link(AuthenticatedMenuLink(name=name, url="/admin/lists/items?name={}".format(name), category="Lists"))
+            admin.add_link(AuthenticatedMenuLink(name=name, url="/admin/lists/{}/items".format(name), category="Lists"))
 
     def blueprints(self, app):
         #from .Views.Frontend.Workspace import workspace

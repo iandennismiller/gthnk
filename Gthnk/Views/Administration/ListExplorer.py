@@ -21,13 +21,9 @@ class ListExplorer(AuthView):
     def index_view(self):
         return flask.redirect(flask.url_for('admin.index'))
 
-    @expose("/items")
-    def items_view(self):
-        name_str = flask.request.args['name']
-        if name_str is None:
-            return flask.redirect(flask.url_for('admin.index'))
-
-        item_list = Models.ItemList.find(name=name_str)
+    @expose("/<list_name>/items")
+    def items_view(self, list_name):
+        item_list = Models.ItemList.find(name=list_name)
         if item_list:
             return self.render('itemlist_explorer/itemlist_view.html', item_list=item_list)
         else:

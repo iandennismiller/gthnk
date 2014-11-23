@@ -32,7 +32,7 @@
     {% block model_content %}
 <div style="max-width: 50em; margin: 0 auto; font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;">
 {% filter markdown %}
-{{ day }}
+{{ day_str|safe }}
 {% endfilter %}
 </div>
 
