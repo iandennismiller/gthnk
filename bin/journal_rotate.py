@@ -30,8 +30,8 @@ def main():
             journal_buffer.save_entries()
 
             # now reset the file size to 0.
-            #with open(filename, "w"):
-            #    pass
+            with open(filename, "w"):
+                pass
 
             app.logger.info("finish: {}".format(filename))
 
