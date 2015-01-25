@@ -5,4 +5,5 @@ dist/
 lib/poodledo
 docs/source/auto/
 make*.log
+*.sublime-workspace
 

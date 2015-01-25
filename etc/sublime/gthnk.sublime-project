@@ -1,0 +1,14 @@
+{
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": "/Users/idm/Work/gthnk"
+		}
+	],
+	"settings": {
+	    "pep8_ignore": ["E128"],
+	    "pep8_max_line_length": 100,
+	    "python_interpreter": "/Users/idm/.virtualenvs/gthnk/bin/python"
+	}
+}
