@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) 2014 Ian Dennis Miller
 
-import json, os, datetime
-from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
-from sqlalchemy import and_, desc
+import datetime
+from sqlalchemy import desc
+from sqlalchemy.ext.orderinglist import ordering_list
 from flask.ext.diamond.utils.mixins import CRUDMixin
-from Gthnk import db, security
+from Gthnk import db
 import Gthnk.Models
 
-def latest():
-    return Day.query.order_by(desc(Day.date)).first()
 
 class Day(db.Model, CRUDMixin):
     """
@@ -19,7 +16,10 @@ class Day(db.Model, CRUDMixin):
     This object is also capable of creating a string that is parsable by the JournalBuffer
     """
     id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date)
+    date = db.Column(db.Date, unique=True)
+
+    pages = db.relationship("Page", order_by="Page.sequence",
+        collection_class=ordering_list('sequence'), backref="day")
 
     def yesterday(self):
         return self.query.filter(Day.date < self.date).order_by(desc(Day.date)).first()
@@ -27,7 +27,7 @@ class Day(db.Model, CRUDMixin):
     def tomorrow(self):
         return self.query.filter(Day.date > self.date).order_by(Day.date).first()
 
-    def __unicode__(self):
+    def render(self):
         buf = datetime.datetime.strftime(self.date, "%Y-%m-%d")
         for entry in self.entries.order_by(Gthnk.Models.Entry.timestamp).all():
             buf += unicode(entry)
@@ -35,4 +35,11 @@ class Day(db.Model, CRUDMixin):
         return buf
 
     def __repr__(self):
-        return "{}".format(self.date)
+        return "<Day: {}>".format(self.date)
+
+    def __unicode__(self):
+        return repr(self)
+
+
+def latest():
+    return Day.query.order_by(desc(Day.date)).first()

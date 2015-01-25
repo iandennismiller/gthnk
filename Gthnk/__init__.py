@@ -41,6 +41,12 @@ class Gthnk(Diamond):
             name="ItemList",
             category="Admin"))
 
+        admin.add_view(A.PageAdmin(
+            Models.Page,
+            db.session,
+            name="Pages",
+            category="Admin"))
+
         admin.add_view(JournalExplorer(name="Journal", endpoint="journal"))
         admin.add_view(ProjectExplorer(name="Projects", endpoint="projects"))
         admin.add_view(ListExplorer(name="Lists", endpoint="lists"))

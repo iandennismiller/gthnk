@@ -74,3 +74,13 @@ class DayAdmin(AuthModelView):
     can_delete = False
     can_edit = True
     column_display_pk = True
+
+
+class PageAdmin(AuthModelView):
+    def is_visible(self):
+        return security.current_user.has_role('Admin')
+
+    can_create = True
+    can_delete = True
+    can_edit = True
+    column_display_pk = True
