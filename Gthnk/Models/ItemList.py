@@ -1,15 +1,9 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) 2014 Ian Dennis Miller
 
-import json, os, datetime
-from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
-from flask.ext.security.utils import encrypt_password, verify_password
 from flask.ext.diamond.utils.mixins import CRUDMixin
-from flask.ext.diamond.models import User
-from Gthnk import db, security
-import Gthnk.Models
-import flask
+from Gthnk import db
+
 
 class ItemList(db.Model, CRUDMixin):
     """
