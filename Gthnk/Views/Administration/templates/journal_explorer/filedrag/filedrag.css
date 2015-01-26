@@ -5,6 +5,7 @@
 
 #entries_holder {
     padding-top: 2em;
+    padding-bottom: 2em;
     display: table-cell;
     background-color: rgb(230, 230, 230);
     width: auto;
@@ -13,10 +14,11 @@
 
 #page_list {
     display: table-cell;
-    width: 200px;
-    border-left: 2px solid lightgray;
+    width: 13em;
+    border-left: 1px solid rgb(200, 200, 200);
     padding-left: 0.5em;
-    background: white;
+    padding-top: 1em;
+    background: rgb(250, 250, 250);
     vertical-align: top;
 }
 
@@ -53,6 +55,7 @@
     height: 3em;
     width: 12em;
     padding-top: 1em;
+    background: white;
 }
 
 #filedrag.hover
@@ -61,4 +64,16 @@
     border-color: #f00;
     border-style: solid;
     box-shadow: inset 0 3px 4px #888;
+}
+
+.navbar {
+    margin-bottom: 0 !important;
+}
+
+.nav-tabs {
+    border-bottom: none !important;
+}
+
+.nav {
+    border-right: 2px solid rgb(230, 230, 230);
 }
