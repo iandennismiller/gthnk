@@ -31,10 +31,34 @@
 
     {% block model_content %}
 
-<div id="page_list" style="width: 200px; float: right;">
-    <form action="{{ url_for('.upload_file', date=day.date) }}" method=post enctype=multipart/form-data>
-      <p><input type=file name=file></p>
-      <p><input type=submit value=Upload></p>
+<div id="main_content">
+
+<div id="entries_holder">
+<div id="entries">
+{% filter markdown %}
+{{ day_str|safe }}
+{% endfilter %}
+</div>
+</div>
+
+<div id="page_list">
+    <form id="upload" action="{{ url_for('.upload_file', date=day.date) }}" method=post enctype=multipart/form-data>
+
+        <fieldset>
+
+        <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="300000" />
+
+        <div>
+            <input type="file" id="fileselect" name="fileselect[]" multiple="multiple" />
+            <div id="filedrag">attachments</div>
+        </div>
+
+        <div id="submitbutton">
+            <button type="submit">Upload Files</button>
+        </div>
+
+        </fieldset>
+
     </form>
 
     <ul>
@@ -48,11 +72,15 @@
     </ul>
 </div>
 
-<div style="max-width: 50em; margin: 0 auto; font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;">
-{% filter markdown %}
-{{ day_str|safe }}
-{% endfilter %}
 </div>
+
+<style type="text/css">
+    {% include "journal_explorer/filedrag/filedrag.css" %}
+</style>
+
+<script>
+    {% include "journal_explorer/filedrag/filedrag.js" %}
+</script>
 
     {% endblock %}
 

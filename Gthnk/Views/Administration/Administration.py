@@ -2,8 +2,6 @@
 # gthnk (c) 2014 Ian Dennis Miller
 
 import flask
-import flask_wtf as wtf
-from wtforms import fields as wtff
 from flask.ext.admin import expose
 import flask.ext.security as security
 from flask.ext.diamond.administration import AuthModelView, AdminIndexView

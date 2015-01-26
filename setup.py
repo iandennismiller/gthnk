@@ -37,6 +37,7 @@ setup(version=version,
         "poodledo>=0.2",
         "mdx_journal==0.1",
         "Wand==0.3.9",
+        "Flask-Cache==0.13.1",
 
         ### other flask niceness
         "pyScss==1.2.0.post3",

@@ -8,7 +8,7 @@ from sqlalchemy import desc
 from flask.ext.admin import expose
 from flask.ext.security import current_user
 from flask.ext.diamond.administration import AuthView
-from Gthnk import Models, db
+from Gthnk import Models, db, cache
 from Gthnk.Models.Day import latest
 from wand.image import Image
 
@@ -52,7 +52,7 @@ class JournalExplorer(AuthView):
     @expose("/day/<date>/upload", methods=['POST'])
     def upload_file(self, date):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
-        file_handle = flask.request.files['file']  # [0]
+        file_handle = flask.request.files['file']
         if day and file_handle:
             f = file_handle.read()
             page = Models.Page.create(day=day, binary=f)
@@ -60,6 +60,7 @@ class JournalExplorer(AuthView):
             db.session.commit()
             return flask.redirect(flask.url_for('.day_view', date=date))
 
+    @cache.cached(timeout=300)
     @expose("/thumb/<date>-<sequence>.png")
     def thumb_pdf(self, date, sequence):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -68,9 +69,12 @@ class JournalExplorer(AuthView):
             img.transform(resize='150x200>')
             response = flask.make_response(img.make_blob())
             response.headers['Content-Type'] = 'image/png'
+            expiry_time = datetime.datetime.utcnow() + datetime.timedelta(100)
+            response.headers["Expires"] = expiry_time.strftime("%a, %d %b %Y %H:%M:%S GMT")
             #response.headers['Content-Disposition'] = 'attachment; filename=img.png'
             return response
 
+    @cache.cached(timeout=300)
     @expose("/full/<date>-<sequence>.png")
     def full_pdf(self, date, sequence):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -79,4 +83,6 @@ class JournalExplorer(AuthView):
             img.transform(resize='612x792>')
             response = flask.make_response(img.make_blob())
             response.headers['Content-Type'] = 'image/png'
+            expiry_time = datetime.datetime.utcnow() + datetime.timedelta(100)
+            response.headers["Expires"] = expiry_time.strftime("%a, %d %b %Y %H:%M:%S GMT")
             return response

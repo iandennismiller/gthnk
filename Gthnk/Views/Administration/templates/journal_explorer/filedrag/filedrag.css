@@ -1,0 +1,64 @@
+#main_content {
+    display: table;
+    width: 100%;
+}
+
+#entries_holder {
+    padding-top: 2em;
+    display: table-cell;
+    background-color: rgb(230, 230, 230);
+    width: auto;
+    overflow: hidden;
+}
+
+#page_list {
+    display: table-cell;
+    width: 200px;
+    border-left: 2px solid lightgray;
+    padding-left: 0.5em;
+    background: white;
+    vertical-align: top;
+}
+
+#page_list li {
+    list-style-type: none;
+    margin-left: -20px;
+}
+
+#page_list img {
+    margin: 0.5em;
+    border: 1px solid gray;
+}
+
+#entries {
+    background: white;
+    border: 1px solid gray;
+    padding: 1em;
+    max-width: 50em;
+    margin: 0 auto;
+    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+}
+
+#filedrag
+{
+    display: none;
+    font-weight: bold;
+    text-align: center;
+    /*padding: 1em 0;
+    margin: 1em 0;
+    color: #555;*/
+    border: 2px dashed #555;
+    border-radius: 7px;
+    cursor: default;
+    height: 3em;
+    width: 12em;
+    padding-top: 1em;
+}
+
+#filedrag.hover
+{
+    color: #f00;
+    border-color: #f00;
+    border-style: solid;
+    box-shadow: inset 0 3px 4px #888;
+}
