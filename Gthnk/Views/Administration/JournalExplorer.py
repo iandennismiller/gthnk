@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) 2014 Ian Dennis Miller
 
-import json, datetime, re
-from flask.ext.admin import expose
-from flask.ext.admin.contrib.sqla import ModelView
-from flask.ext.security import current_user
-from Gthnk import Models, security
-from flask.ext.diamond.administration import AuthModelView, AuthView, AdminIndexView
-from Gthnk.Models.Day import latest
-from sqlalchemy import and_, desc
+import datetime
+import re
 import flask
+from sqlalchemy import desc
+from flask.ext.admin import expose
+from flask.ext.security import current_user
+from flask.ext.diamond.administration import AuthView
+from Gthnk import Models, db
+from Gthnk.Models.Day import latest
+
 
 class JournalExplorer(AuthView):
     def is_accessible(self):
@@ -23,14 +24,15 @@ class JournalExplorer(AuthView):
     def day_view(self, date):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         if day:
-            day_str = re.sub(r'(\d\d\d\d)', '<a name="\g<1>"></a>\n\g<1>', unicode(day))
+            day_str = re.sub(r'(\d\d\d\d)', '<a name="\g<1>"></a>\n\g<1>', day.render())
             return self.render('journal_explorer/day_view.html', day=day, day_str=day_str)
         else:
             return flask.redirect(flask.url_for('admin.index'))
 
     @expose("/latest")
     def latest_view(self):
-        return self.render('journal_explorer/day_view.html', day=latest(), day_str=unicode(latest()))
+        return self.render('journal_explorer/day_view.html',
+            day=latest(), day_str=latest().render())
 
     @expose("/search")
     def results_view(self):
@@ -38,8 +40,21 @@ class JournalExplorer(AuthView):
         if query_str is None:
             return flask.redirect(flask.url_for('admin.index'))
 
-        query = Models.Entry.query.filter(Models.Entry.content.contains(query_str)).order_by(desc(Models.Entry.timestamp))
+        query = Models.Entry.query.filter(
+            Models.Entry.content.contains(query_str)).order_by(desc(Models.Entry.timestamp))
         results = query.all()[:20]
         for idx in range(0, len(results)):
-            results[idx].content = re.sub(query_str, "**{}**".format(query_str.upper()), results[idx].content, flags=re.I)
+            results[idx].content = re.sub(query_str, "**{}**".format(
+                query_str.upper()), results[idx].content, flags=re.I)
         return self.render('journal_explorer/results_list.html', data=results, count=query.count())
+
+    @expose("/day/<date>/upload", methods=['POST'])
+    def upload_file(self, date):
+        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+        file_handle = flask.request.files['file']  # [0]
+        if day and file_handle:
+            f = file_handle.read()
+            page = Models.Page.create(day=day, binary=f)
+            day.pages.append(page)
+            db.session.commit()
+            return flask.redirect(flask.url_for('.day_view', date=date))

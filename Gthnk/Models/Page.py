@@ -13,7 +13,10 @@ class Page(db.Model, CRUDMixin):
     title = db.Column(db.Unicode(1024))
 
     def __repr__(self):
-        return '<Page filename: %r-%d.pdf>' % (self.day, self.sequence)
+        if self.sequence is not None:
+            return '<Page filename: %r-%d.pdf>' % (self.day, self.sequence)
+        else:
+            return '<Page filename: %r-xxx.pdf>' % (self.day)
 
     def __unicode__(self):
         return repr(self)

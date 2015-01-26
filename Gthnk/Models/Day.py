@@ -19,7 +19,8 @@ class Day(db.Model, CRUDMixin):
     date = db.Column(db.Date, unique=True)
 
     pages = db.relationship("Page", order_by="Page.sequence",
-        collection_class=ordering_list('sequence'), backref="day")
+        collection_class=ordering_list('sequence', reorder_on_append=True),
+        backref=db.backref("day"))
 
     def yesterday(self):
         return self.query.filter(Day.date < self.date).order_by(desc(Day.date)).first()
