@@ -10,6 +10,7 @@ from flask.ext.security import current_user
 from flask.ext.diamond.administration import AuthView
 from Gthnk import Models, db
 from Gthnk.Models.Day import latest
+from wand.image import Image
 
 
 class JournalExplorer(AuthView):
@@ -58,3 +59,24 @@ class JournalExplorer(AuthView):
             day.pages.append(page)
             db.session.commit()
             return flask.redirect(flask.url_for('.day_view', date=date))
+
+    @expose("/thumb/<date>-<sequence>.png")
+    def thumb_pdf(self, date, sequence):
+        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+        with Image(blob=day.pages[int(sequence)].binary) as img:
+            img.format = 'png'
+            img.transform(resize='150x200>')
+            response = flask.make_response(img.make_blob())
+            response.headers['Content-Type'] = 'image/png'
+            #response.headers['Content-Disposition'] = 'attachment; filename=img.png'
+            return response
+
+    @expose("/full/<date>-<sequence>.png")
+    def full_pdf(self, date, sequence):
+        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+        with Image(blob=day.pages[int(sequence)].binary) as img:
+            img.format = 'png'
+            img.transform(resize='612x792>')
+            response = flask.make_response(img.make_blob())
+            response.headers['Content-Type'] = 'image/png'
+            return response

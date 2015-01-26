@@ -36,6 +36,7 @@ setup(version=version,
         "mdx_linkify==0.5",
         "poodledo>=0.2",
         "mdx_journal==0.1",
+        "Wand==0.3.9",
 
         ### other flask niceness
         "pyScss==1.2.0.post3",
