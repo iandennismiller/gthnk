@@ -7,18 +7,28 @@
     margin-right: auto;
 }
 
+#pages_scroller {
+    height: 644px;
+    overflow: scroll;
+}
+
+#entries_scroller {
+    padding-top: 2em;
+    padding-bottom: 2em;
+    height: 602px;
+    overflow: scroll;
+}
+
 #main_content {
     display: table;
     width: 100%;
 }
 
 #entries_holder {
-    padding-top: 2em;
-    padding-bottom: 2em;
     display: table-cell;
     background-color: rgb(230, 230, 230);
     width: auto;
-    overflow: hidden;
+    position: relative;
 }
 
 #page_list {
