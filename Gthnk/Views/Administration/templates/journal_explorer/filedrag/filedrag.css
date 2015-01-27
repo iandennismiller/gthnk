@@ -1,3 +1,12 @@
+.page_attachment img {
+    background: white;
+    margin: 2em 0em;
+    box-shadow: 1px 1px 5px #999;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 #main_content {
     display: table;
     width: 100%;
@@ -29,12 +38,14 @@
 
 #page_list img {
     margin: 0.5em;
-    border: 1px solid gray;
+    box-shadow: 1px 1px 3px #999;
+    /*border: 1px solid gray;*/
 }
 
 #entries {
     background: white;
-    border: 1px solid gray;
+    /*border: 1px solid gray;*/
+    box-shadow: 1px 1px 5px #999;
     padding: 1em;
     max-width: 50em;
     margin: 0 auto;

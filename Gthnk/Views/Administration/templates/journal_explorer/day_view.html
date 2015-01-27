@@ -42,6 +42,18 @@
 {{ day_str|safe }}
 {% endfilter %}
 </div>
+
+<div id="pages_inline">
+    {% for page in day.pages %}
+    <div class="page_attachment">
+        <a id="{{ page.sequence }}" name="{{ page.sequence }}"></a>
+        <a href="{{ url_for('.full_pdf', date=day.date, sequence=page.sequence) }}">
+            <img src="{{ url_for('.full_pdf', date=day.date, sequence=page.sequence) }}">
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
 </div>
 
 <div id="page_list">
@@ -67,7 +79,7 @@
     <ul>
     {% for page in day.pages %}
     <li>
-        <a href="{{ url_for('.full_pdf', date=day.date, sequence=page.sequence) }}">
+        <a class="scroll" href="#{{ page.sequence }}">
             <img src="{{ url_for('.thumb_pdf', date=day.date, sequence=page.sequence) }}">
         </a>
     </li>
@@ -77,16 +89,39 @@
 
 </div>
 
+    {% endblock %}
+
+{% endblock %}
+
+{% block head %}
+{{ super() }}
 <style type="text/css">
     {% include "journal_explorer/filedrag/filedrag.css" %}
 </style>
 
+{% endblock %}
+
+{% block tail %}
+{{ super() }}
 <script>
     {% include "journal_explorer/filedrag/filedrag.js" %}
 </script>
 
-    {% endblock %}
-
+<script>
+    // http://stackoverflow.com/questions/4198041/jquery-smooth-scroll-to-an-anchor/12714767#12714767
+    $(".scroll").click(function(event){
+         event.preventDefault();
+         //calculate destination place
+         var dest=0;
+         if($(this.hash).offset().top > $(document).height()-$(window).height()){
+              dest=$(document).height()-$(window).height();
+         }else{
+              dest=$(this.hash).offset().top-20;
+         }
+         //go to destination
+         $('html,body').animate({scrollTop:dest}, 500,'swing');
+     });
+</script>
 {% endblock %}
 
 {% block footer %}{% endblock %}
