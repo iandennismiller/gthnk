@@ -25,7 +25,7 @@
         {% endif %}
     </li>
     <li>
-        <a href="/admin/entryview/?sort=0&amp;flt0_2={{day.date}}+00%3A00&amp;flt1_3={{day.date}}+23%3A59"><i class="icon-wrench"></i> Edit</a>
+        <a id="edit_button" href="javascript:void(0)"><i class="icon-wrench"></i> Edit</a>
     </li>
 </ul>
 {% endblock %}
@@ -45,15 +45,36 @@
 {% filter markdown %}
 {{ day_str|safe }}
 {% endfilter %}
+    <div id="entries_control" class="controllable">
+        <div class="viewable">
+            <a href="javascript:void(0)"><i class="icon-download"></i></a>
+        </div>
+        <div class="editable off">
+            <a href="/admin/entryview/?sort=0&amp;flt0_2={{day.date}}+00%3A00&amp;flt1_3={{day.date}}+23%3A59"><i class="icon-wrench"></i></a>
+        </div>
+    </div>
 </div>
 
 <div id="pages_inline">
     {% for page in day.pages %}
     <div class="page_attachment">
         <a id="{{ page.sequence }}" name="{{ page.sequence }}"></a>
-        <a href="{{ url_for('.full_pdf', date=day.date, sequence=page.sequence) }}">
-            <img src="{{ url_for('.full_pdf', date=day.date, sequence=page.sequence) }}">
-        </a>
+        <div class="image_container">
+            <a href="{{ url_for('.full_pdf', date=day.date, sequence=page.sequence) }}">
+                <img src="{{ url_for('.full_pdf', date=day.date, sequence=page.sequence) }}">
+            </a>
+
+            <div class="controllable">
+                <div class="viewable">
+                    <a href="javascript:void(0)"><i class="icon-download"></i></a>
+                </div>
+                <div class="editable off">
+                    <a href='javascript:void(0)'><i class="icon-arrow-up"></i></a>
+                    <a href="javascript:void(0)"><i class="icon-arrow-down"></i></a>
+                    <a href="javascript:void(0)"><i class="icon-trash"></i></a>
+                </div>
+            </div>
+        </div>
     </div>
     {% endfor %}
 </div>
@@ -139,12 +160,33 @@
         $("#page_wrapper").css("height", $(window).height()+50);
     }
 
+    $("#edit_button").click(function() {
+        $(".controllable .viewable").toggleClass("off");
+        $(".controllable .editable").toggleClass("off");
+        $("#edit_button").toggleClass("active");
+    })
+
     $( window ).resize( set_height );
+
+    set_image_widths = function() {
+        // set image widths
+        var widths = $(".page_attachment a + div a img").map(function(){
+            return $(this).width();
+        }).get();
+
+        $(".image_container").each(function(index, value){
+            $(value).css("width", widths[index]);
+        });
+    }
 
     $( document ).ready( function() {
         set_height();
         $('#pages_scroller').scrollTop(100);
     } );
+
+    $(window).bind("load", function() {
+        set_image_widths();
+    });
 
 </script>
 {% endblock %}

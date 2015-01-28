@@ -1,3 +1,32 @@
+.controllable a {
+    background-color: white;
+    opacity: 0.75;
+    padding: 0.2em;
+}
+
+#entries_control {
+    margin-top: -1.5em;
+}
+
+.controllable {
+    display: none;
+    text-align: right;
+    margin-top: -3.5em;
+    margin-right: 1em;
+}
+
+#entries:hover .controllable, .image_container:hover .controllable {
+    display: block;
+}
+
+.off {
+    display: none;
+}
+
+#edit_button.active{
+    background-color: #e5e5e5;
+}
+
 #journal_scroll {
     display: block;
     padding-top: 30px;
@@ -6,6 +35,12 @@
     height: 50px;
     background: white;
     margin-bottom: 1.5em !important;
+}
+
+.image_container {
+    text-align: center;
+    display: inline-grid;
+    margin: 0 auto;
 }
 
 .page_attachment img {
@@ -67,6 +102,7 @@
     /*border: 1px solid gray;*/
     box-shadow: 1px 1px 5px #999;
     padding: 1em;
+    padding-bottom: 1em;
     max-width: 50em;
     margin: 0 auto;
     font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
