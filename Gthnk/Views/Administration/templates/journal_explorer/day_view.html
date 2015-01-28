@@ -39,6 +39,8 @@
 <div id="entries_holder">
 <div id="entries_scroller">
 
+<a id="entries_anchor" name="entries_anchor"></a>
+
 <div id="entries">
 {% filter markdown %}
 {{ day_str|safe }}
@@ -61,6 +63,10 @@
 
 <div id="page_list">
     <div id="pages_scroller">
+    <div id="page_wrapper">
+
+    <a class="scroll top_of_page" id="journal_scroll" href="#entries_anchor" >Journal</a>
+
     <form id="upload" action="{{ url_for('.upload_file', date=day.date) }}" method=post enctype=multipart/form-data>
 
         <fieldset>
@@ -81,15 +87,18 @@
     </form>
 
     <ul>
-    {% for page in day.pages %}
-    <li>
-        <a class="scroll" href="#{{ page.sequence }}">
-            <img src="{{ url_for('.thumb_pdf', date=day.date, sequence=page.sequence) }}">
-        </a>
-    </li>
-    {% endfor %}
+        {% for page in day.pages %}
+        <li>
+            <a class="scroll" href="#{{ page.sequence }}">
+                <img src="{{ url_for('.thumb_pdf', date=day.date, sequence=page.sequence) }}">
+            </a>
+        </li>
+        {% endfor %}
     </ul>
     </div>
+
+</div>
+
 </div>
 
 </div>
@@ -120,14 +129,22 @@
         $('#entries_scroller').animate({scrollTop:dest}, 300,'swing');
      });
 
+    $(".top_of_page").click(function(event){
+        $('#pages_scroller').animate({scrollTop:100}, 300,'swing');
+    })
+
     var set_height = function(){
         $("#entries_scroller").css("height", $(window).height()-99);
         $("#pages_scroller").css("height", $(window).height()-57);
+        $("#page_wrapper").css("height", $(window).height()+50);
     }
 
     $( window ).resize( set_height );
 
-    $( document ).ready( set_height );
+    $( document ).ready( function() {
+        set_height();
+        $('#pages_scroller').scrollTop(100);
+    } );
 
 </script>
 {% endblock %}
