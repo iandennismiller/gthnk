@@ -1,9 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import glob, shutil, os, datetime
-import Gthnk, logging, flask
+# import glob
+# import logging
+
+import shutil
+import os
+import datetime
+import flask
+import Gthnk
 import Gthnk.Adaptors.JournalBuffer
+
 
 def main():
     app = flask.Flask(__name__)
@@ -37,5 +44,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-

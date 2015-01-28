@@ -3,6 +3,7 @@
 
 from flask.ext.diamond.utils.mixins import CRUDMixin
 from Gthnk import db
+from wand.image import Image
 
 
 class Page(db.Model, CRUDMixin):
@@ -12,11 +13,18 @@ class Page(db.Model, CRUDMixin):
     binary = db.Column(db.Binary)
     title = db.Column(db.Unicode(1024))
 
+    def format(self):
+        with Image(blob=self.binary) as img:
+            return img.format
+
+    def filename(self):
+        return '{0}-{1}.{2}'.format(self.day.date, self.sequence, self.format().lower())
+
     def __repr__(self):
         if self.sequence is not None:
-            return '<Page filename: %r-%d.pdf>' % (self.day, self.sequence)
+            return '<Page filename: %s-%d.pdf>' % (self.day.date, self.sequence)
         else:
-            return '<Page filename: %r-xxx.pdf>' % (self.day)
+            return '<Page filename: %s-xxx.pdf>' % (self.day.date)
 
     def __unicode__(self):
         return repr(self)
