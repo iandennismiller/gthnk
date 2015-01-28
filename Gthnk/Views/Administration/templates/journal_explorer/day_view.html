@@ -47,7 +47,8 @@
 {% endfilter %}
     <div id="entries_control" class="controllable">
         <div class="viewable">
-            <a href="javascript:void(0)"><i class="icon-download"></i></a>
+            <!--<a href="javascript:void(0)"><i class="icon-download"></i></a>-->
+            &nbsp;
         </div>
         <div class="editable off">
             <a href="/admin/entryview/?sort=0&amp;flt0_2={{day.date}}+00%3A00&amp;flt1_3={{day.date}}+23%3A59"><i class="icon-wrench"></i></a>
@@ -60,18 +61,16 @@
     <div class="page_attachment">
         <a id="{{ page.sequence }}" name="{{ page.sequence }}"></a>
         <div class="image_container">
-            <a href="{{ url_for('.full_pdf', date=day.date, sequence=page.sequence) }}">
-                <img src="{{ url_for('.full_pdf', date=day.date, sequence=page.sequence) }}">
-            </a>
+            <img src="{{ url_for('.full_pdf', date=day.date, sequence=page.sequence) }}">
 
             <div class="controllable">
                 <div class="viewable">
-                    <a href="javascript:void(0)"><i class="icon-download"></i></a>
+                    <a href="{{ url_for('.raw_binary', date=day.date, sequence=page.sequence) }}"><i class="icon-download"></i></a>
                 </div>
                 <div class="editable off">
-                    <a href='javascript:void(0)'><i class="icon-arrow-up"></i></a>
-                    <a href="javascript:void(0)"><i class="icon-arrow-down"></i></a>
-                    <a href="javascript:void(0)"><i class="icon-trash"></i></a>
+                    <a href="{{ url_for('.move_page_up', date=day.date, sequence=page.sequence) }}"><i class="icon-arrow-up"></i></a>
+                    <a href="{{ url_for('.move_page_down', date=day.date, sequence=page.sequence) }}"><i class="icon-arrow-down"></i></a>
+                    <a href="{{ url_for('.delete_page', date=day.date, sequence=page.sequence) }}"><i class="icon-trash"></i></a>
                 </div>
             </div>
         </div>
@@ -163,6 +162,7 @@
     $("#edit_button").click(function() {
         $(".controllable .viewable").toggleClass("off");
         $(".controllable .editable").toggleClass("off");
+        $(".controllable").toggleClass("visible");
         $("#edit_button").toggleClass("active");
     })
 
@@ -170,7 +170,7 @@
 
     set_image_widths = function() {
         // set image widths
-        var widths = $(".page_attachment a + div a img").map(function(){
+        var widths = $(".page_attachment a + div img").map(function(){
             return $(this).width();
         }).get();
 

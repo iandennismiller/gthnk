@@ -72,7 +72,9 @@
                 {% endif %}
 
                 <td style="font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;">
-                    <a href="/admin/journal/day/{{row.day.date}}#{{row.hhmm()}}">{{row.day.date}} <strong>{{row.hhmm()}}</strong></a>
+                    <a href="{{ url_for('journal.day_view', date=row.day.date) }}#{{ row.hhmm() }}">
+                        {{row.day.date}} <strong>{{row.hhmm()}}</strong>
+                    </a>
                 </td>
 
 <td style="font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;">
