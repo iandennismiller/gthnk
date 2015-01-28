@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) 2014 Ian Dennis Miller
-
 import datetime
+
+from flask.ext.diamond.utils.mixins import CRUDMixin
 from sqlalchemy import desc
 from sqlalchemy.ext.orderinglist import ordering_list
-from flask.ext.diamond.utils.mixins import CRUDMixin
-from Gthnk import db
+
 import Gthnk.Models
+from Gthnk import db
 
 
 class Day(db.Model, CRUDMixin):

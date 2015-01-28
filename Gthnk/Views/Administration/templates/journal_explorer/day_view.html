@@ -116,16 +116,8 @@
     // http://stackoverflow.com/questions/4198041/jquery-smooth-scroll-to-an-anchor/12714767#12714767
     $(".scroll").click(function(event){
         event.preventDefault();
-        //calculate destination place
-        var dest=$(this.hash).offset().top-20;
-        /*if($(this.hash).offset().top > $(document).height()-$(window).height()){
-             dest=$(document).height()-$(window).height();
-        }else{
-             
-        }*/
-        //go to destination
-        $('#entries_scroller').animate({scrollTop:dest}, 500,'swing');
-        //$("#entries_scroller").animate({scrollTop: $("#1").offset().top})
+        var dest=$('#entries_scroller').scrollTop()+($(this.hash).offset().top)-60;
+        $('#entries_scroller').animate({scrollTop:dest}, 300,'swing');
      });
 
     var set_height = function(){
