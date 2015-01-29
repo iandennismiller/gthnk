@@ -12,20 +12,23 @@
     </li>-->
     <li>
         {% if day.yesterday() %}
-            <a href="{{ url_for('.day_view', date=day.yesterday().date) }}"><i class="icon-arrow-left"></i> {{day.yesterday().date}}</a>
+            <a href="{{ url_for('.day_view', date=day.yesterday().date) }}"><i class="icon-arrow-left"></i></a>
         {% else %}
-            <a href="javascript:void(0)"><i class="icon-remove"></i> earliest</a>
+            <a href="javascript:void(0)"><i class="icon-stop"></i> earliest</a>
         {% endif %}
     </li>
     <li>
         {% if day.tomorrow() %}
-            <a href="{{ url_for('.day_view', date=day.tomorrow().date) }}"><i class="icon-arrow-right"></i> {{day.tomorrow().date}}</a>
+            <a href="{{ url_for('.day_view', date=day.tomorrow().date) }}"><i class="icon-arrow-right"></i></a>
         {% else %}
-            <a href="javascript:void(0)"><i class="icon-remove"></i> latest</a>
+            <a href="javascript:void(0)"><i class="icon-stop"></i></a>
         {% endif %}
     </li>
     <li>
-        <a id="edit_button" href="javascript:void(0)"><i class="icon-wrench"></i> Edit</a>
+        <a href="{{ url_for('.latest_view') }}"><i class="icon-certificate"></i></a>
+    </li>
+    <li>
+        <a id="edit_button" href="javascript:void(0)"><i class="icon-wrench"></i></a>
     </li>
 </ul>
 {% endblock %}
@@ -70,7 +73,13 @@
                 <div class="editable off">
                     <a href="{{ url_for('.move_page_up', date=day.date, sequence=page.sequence) }}"><i class="icon-arrow-up"></i></a>
                     <a href="{{ url_for('.move_page_down', date=day.date, sequence=page.sequence) }}"><i class="icon-arrow-down"></i></a>
-                    <a href="{{ url_for('.delete_page', date=day.date, sequence=page.sequence) }}"><i class="icon-trash"></i></a>
+                    <span class="delete_widget">
+                        <a class="delete_button" href="javascript:void(0);"><i class="icon-trash"></i></a>
+                        <span class="confirm_widget">
+                            <a href="{{ url_for('.delete_page', date=day.date, sequence=page.sequence) }}"><i class="icon-thumbs-up"></i></a>
+                            <a class="cancel_button" href="javascript:void(0);"><i class="icon-thumbs-down"></i></a>
+                        </span>
+                    </span>
                 </div>
             </div>
         </div>
@@ -168,6 +177,18 @@
 
     $( window ).resize( set_height );
 
+    reveal_confirm_widget = function() {
+        var container = $(this).parent().children()[1];
+        console.log(container);
+        $(container).toggle("slide");
+    }
+
+    hide_confirm_widget = function() {
+        var container = $(this).parent();
+        console.log(container);
+        $(container).toggle("slide");
+    }
+
     set_image_widths = function() {
         // set image widths
         var widths = $(".page_attachment a + div img").map(function(){
@@ -182,6 +203,8 @@
     $( document ).ready( function() {
         set_height();
         $('#pages_scroller').scrollTop(100);
+        $(".delete_button").click(reveal_confirm_widget);
+        $(".cancel_button").click(hide_confirm_widget);
     } );
 
     $(window).bind("load", function() {
