@@ -24,6 +24,7 @@ paths:
 launchd:
 	@echo "Installing launchd agents to ~/Library/LaunchAgents"
 	cp etc/launchd/* ~/Library/LaunchAgents
+	-launchctl stop com.gthnk.server
 	-launchctl unload ~/Library/LaunchAgents/com.gthnk.server.plist \
 		~/Library/LaunchAgents/com.gthnk.librarian.plist \
 		~/Library/LaunchAgents/com.gthnk.dashboard.plist

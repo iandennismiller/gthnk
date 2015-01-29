@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# greenthink-library (c) 2013 Ian Dennis Miller
+# gthnk (c) 2014 Ian Dennis Miller
 
-import Gthnk, logging
-app = Gthnk.create_app()
-#logging.getLogger("gthnk").info("runserver.py starting")
+from Gthnk import create_app
+app = create_app()
 app.run(port=app.config['PORT'])
