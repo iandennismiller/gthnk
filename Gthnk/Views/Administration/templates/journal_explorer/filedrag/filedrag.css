@@ -9,23 +9,24 @@
 }
 
 #entries_control {
-    margin-top: -1.5em;
+    margin-top: -1em !important;
+    height: 2em !important;
 }
 
 .controllable {
-    display: none;
     text-align: right;
-    margin-top: -3.5em;
+    margin-top: -4em;
     margin-right: 1em;
+    height: 3em;
 }
 
 .visible {
     display: block;
 }
 
-#entries:hover .controllable, .image_container:hover .controllable {
+/*#entries:hover .controllable, .image_container:hover .controllable {
     display: block;
-}
+}*/
 
 .off {
     display: none;

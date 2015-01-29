@@ -53,7 +53,7 @@
             <!--<a href="javascript:void(0)"><i class="icon-download"></i></a>-->
             &nbsp;
         </div>
-        <div class="editable off">
+        <div class="editable">
             <a href="/admin/entryview/?sort=0&amp;flt0_2={{day.date}}+00%3A00&amp;flt1_3={{day.date}}+23%3A59"><i class="icon-wrench"></i></a>
         </div>
     </div>
@@ -61,7 +61,7 @@
 
 <div id="pages_inline">
     {% for page in day.pages %}
-    <div class="page_attachment">
+    <div class="page_attachment" id="page{{ page.sequence }}">
         <a id="{{ page.sequence }}" name="{{ page.sequence }}"></a>
         <div class="image_container">
             <img src="{{ url_for('.full_pdf', date=day.date, sequence=page.sequence) }}">
@@ -70,7 +70,7 @@
                 <div class="viewable">
                     <a href="{{ url_for('.raw_binary', date=day.date, sequence=page.sequence) }}"><i class="icon-download"></i></a>
                 </div>
-                <div class="editable off">
+                <div class="editable">
                     <a href="{{ url_for('.move_page_up', date=day.date, sequence=page.sequence) }}"><i class="icon-arrow-up"></i></a>
                     <a href="{{ url_for('.move_page_down', date=day.date, sequence=page.sequence) }}"><i class="icon-arrow-down"></i></a>
                     <span class="delete_widget">
@@ -169,10 +169,23 @@
     }
 
     $("#edit_button").click(function() {
-        $(".controllable .viewable").toggleClass("off");
-        $(".controllable .editable").toggleClass("off");
-        $(".controllable").toggleClass("visible");
+        $("body").toggleClass("editing");
+        //$(".controllable .viewable").toggleClass("off");
+        //$(".controllable .editable").toggleClass("off");
+        //$(".controllable").toggleClass("visible");
         $("#edit_button").toggleClass("active");
+
+        if ($("body").hasClass("editing")) {
+            $('.controllable .editable').fadeIn();
+            //$('.controllable').fadeIn();
+        }
+        else {
+            //$('.controllable .viewable').css("opacity", 0);
+            //$('.controllable').fadeOut();
+            $('.controllable .editable').fadeOut();
+            //$('.controllable').fadeOut();
+        }
+
     })
 
     $( window ).resize( set_height );
@@ -205,11 +218,27 @@
         $('#pages_scroller').scrollTop(100);
         $(".delete_button").click(reveal_confirm_widget);
         $(".cancel_button").click(hide_confirm_widget);
+        $('.controllable .editable').hide();
+        $('.controllable .viewable').hide();
     } );
 
     $(window).bind("load", function() {
         set_image_widths();
     });
+
+    $("#entries, .image_container").hover(
+        function() {
+            if (!$("body").hasClass("editing")) {
+                $(this).find('.controllable .viewable').fadeIn();
+            }
+        },
+        function() {
+            if (!$("body").hasClass("editing")) {
+                $(this).find('.controllable .viewable').fadeOut();
+            }
+        }
+    );
+
 
 </script>
 {% endblock %}
