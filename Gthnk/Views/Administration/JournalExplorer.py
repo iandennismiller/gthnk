@@ -10,6 +10,7 @@ from flask.ext.security import current_user
 from flask.ext.diamond.administration import AuthView
 from Gthnk import Models, db, cache
 from Gthnk.Models.Day import latest
+from Gthnk.Librarian import Librarian
 from wand.image import Image
 
 
@@ -20,6 +21,12 @@ class JournalExplorer(AuthView):
     @expose('/')
     def index_view(self):
         return self.render("journal_explorer/search_view.html")
+
+    @expose("/refresh")
+    def refresh(self):
+        librarian = Librarian(flask.current_app)
+        librarian.rotate_buffers()
+        return flask.redirect(flask.url_for('.latest_view'))
 
     @expose("/day/<date>.html")
     def day_view(self, date):
