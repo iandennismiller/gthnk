@@ -14,6 +14,8 @@ def main():
     with app.app_context():
         librarian = Librarian(app)
         librarian.rotate_buffers()
+        # also export the journal for safe-keeping
+        librarian.export_journal()
 
 if __name__ == "__main__":
     main()

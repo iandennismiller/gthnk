@@ -12,7 +12,6 @@ from Gthnk import Models, db, cache
 from Gthnk.Models.Day import latest
 from Gthnk.Librarian import Librarian
 from wand.image import Image
-from wand.color import Color
 
 
 class JournalExplorer(AuthView):
@@ -70,6 +69,7 @@ class JournalExplorer(AuthView):
                 thumbnail.transform(resize='150x200>')
 
                 preview = img.clone()
+                preview.gaussian_blur(radius=2, sigma=0.5)
                 preview.transform(resize='612x792>')
 
                 page = Models.Page.create(
