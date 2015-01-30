@@ -8,7 +8,7 @@ from sqlalchemy import desc
 from flask.ext.admin import expose
 from flask.ext.security import current_user
 from flask.ext.diamond.administration import AuthView
-from Gthnk import Models, db, cache
+from Gthnk import Models, db
 from Gthnk.Models.Day import latest
 from Gthnk.Librarian import Librarian
 from wand.image import Image
@@ -82,7 +82,6 @@ class JournalExplorer(AuthView):
             db.session.commit()
             return flask.redirect(flask.url_for('.day_view', date=date))
 
-    @cache.cached(timeout=300)
     @expose("/attachment/thumb/<date>-<sequence>.png")
     def thumb_pdf(self, date, sequence):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -99,7 +98,6 @@ class JournalExplorer(AuthView):
         response.headers['Content-Type'] = 'image/png'
         return response
 
-    @cache.cached(timeout=300)
     @expose("/attachment/full/<date>-<sequence>.png")
     def full_pdf(self, date, sequence):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -116,7 +114,6 @@ class JournalExplorer(AuthView):
         response.headers['Content-Type'] = 'image/png'
         return response
 
-    @cache.cached(timeout=300)
     @expose("/attachment/<date>-<sequence>.pdf")
     def raw_pdf(self, date, sequence):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -127,7 +124,6 @@ class JournalExplorer(AuthView):
         response.headers['Content-Disposition'] = disposition_str.format(date, sequence)
         return response
 
-    @cache.cached(timeout=300)
     @expose("/attachment/<date>-<sequence>.jpg")
     def raw_jpeg(self, date, sequence):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -138,7 +134,6 @@ class JournalExplorer(AuthView):
         response.headers['Content-Disposition'] = disposition_str.format(date, sequence)
         return response
 
-    @cache.cached(timeout=300)
     @expose("/attachment/<date>-<sequence>.png")
     def raw_png(self, date, sequence):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -149,7 +144,6 @@ class JournalExplorer(AuthView):
         response.headers['Content-Disposition'] = disposition_str.format(date, sequence)
         return response
 
-    @cache.cached(timeout=300)
     @expose("/attachment/raw/<date>-<sequence>")
     def raw_binary(self, date, sequence):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -171,7 +165,6 @@ class JournalExplorer(AuthView):
             day.pages.insert(int(sequence)-1, active_page)
             day.pages.reorder()
             db.session.commit()
-            cache.clear()
         return flask.redirect(flask.url_for('.day_view', date=date))
 
     @expose("/day/<date>/attachment/<sequence>/move_down")
@@ -183,7 +176,6 @@ class JournalExplorer(AuthView):
             day.pages.insert(int(sequence)+1, active_page)
             day.pages.reorder()
             db.session.commit()
-            cache.clear()
         return flask.redirect(flask.url_for('.day_view', date=date))
 
     @expose("/day/<date>/attachment/<sequence>/delete")
@@ -192,5 +184,4 @@ class JournalExplorer(AuthView):
         active_page = day.pages.pop(int(sequence))
         active_page.delete()
         db.session.commit()
-        cache.clear()
         return flask.redirect(flask.url_for('.day_view', date=date))

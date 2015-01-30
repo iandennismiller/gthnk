@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) 2014 Ian Dennis Miller
-
-import json, datetime, os
 from flask.ext.admin import expose
-from flask.ext.admin.contrib.sqla import ModelView
+from flask.ext.diamond.administration import AuthView
 from flask.ext.security import current_user
-from Gthnk import Models, security
-from flask.ext.diamond.administration import AuthModelView, AuthView, AdminIndexView
+
+from Gthnk import cache
 from Gthnk.Adaptors.Projects import ProjectList
-import flask
+
 
 class ProjectExplorer(AuthView):
     def is_accessible(self):
@@ -17,9 +15,11 @@ class ProjectExplorer(AuthView):
     @expose("/")
     def index_view(self):
         project_list = ProjectList()
-        list_columns=(('timestamp', 'timestamp'), ('name', 'name'))
-        return self.render('project_explorer/project_list.html', data=project_list.get_recent(), list_columns=list_columns)
+        list_columns = (('timestamp', 'timestamp'), ('name', 'name'))
+        return self.render('project_explorer/project_list.html',
+            data=project_list.get_recent(), list_columns=list_columns)
 
+    @cache.cached(timeout=300)
     @expose("/<project_name>/readme")
     def readme_view(self, project_name):
         project_list = ProjectList()

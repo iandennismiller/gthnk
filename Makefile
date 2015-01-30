@@ -15,7 +15,7 @@ all: paths install launchd
 clean:
 	rm -rf build dist *.egg-info *.pyc
 
-paths:
+conf:
 	mkdir -p /var/lib/gthnk ~/.gthnk
 	cp etc/production.conf ~/.gthnk/gthnk.conf
 
