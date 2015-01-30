@@ -1,17 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# greenthink-library (c) 2013 Ian Dennis Miller
+# gthnk (c) 2014 Ian Dennis Miller
 
-import sys, traceback
+import sys
+import traceback
 sys.path.insert(0, '.')
 
 from flask.ext.script import Manager, Shell, Server
 from flask.ext.dbshell import DbShell
 from flask.ext.migrate import Migrate, MigrateCommand
-import alembic, alembic.config
+import alembic
+import alembic.config
 
 from Gthnk import create_app, db, security
 app = create_app()
+
 
 def _make_context():
     return dict(app=app, db=db, user_datastore=security.datastore)
@@ -24,12 +27,14 @@ manager.add_command("runserver", Server(port=app.config['PORT']))
 manager.add_command("publicserver", Server(port=app.config['PORT'], host="0.0.0.0"))
 manager.add_command('db', MigrateCommand)
 
+
 @manager.option('-e', '--email', help='email address')
 @manager.option('-p', '--password', help='password')
 def create_user(email, password):
     "add a user to the database"
     from Gthnk import Models
     Models.User.create(email=email, password=password)
+
 
 @manager.command
 def init_db():
@@ -39,6 +44,7 @@ def init_db():
     db.session.commit()
     cfg = alembic.config.Config("migrations/alembic.ini")
     alembic.command.stamp(cfg, "head")
+
 
 @manager.command
 def populate_db():

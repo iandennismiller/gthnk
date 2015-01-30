@@ -3,8 +3,27 @@
 import datetime
 import os
 import shutil
+import hashlib
 
 import Gthnk.Adaptors.JournalBuffer
+
+
+def overwrite_if_different(filename, new_content):
+    # see whether the file exists
+    if os.path.isfile(filename):
+        # if so, gather the md5 checksums
+        with open(filename, "r") as f:
+            existing_checksum = hashlib.md5(f.read()).hexdigest()
+        generated_checksum = hashlib.md5(new_content).hexdigest()
+
+        # compare to md5 checksum of generated file.
+        # if different, then overwrite.
+        if generated_checksum == existing_checksum:
+            return False
+
+    with open(filename, "w") as f:
+        f.write(new_content)
+    return True
 
 
 class Librarian(object):
@@ -36,3 +55,31 @@ class Librarian(object):
                 pass
 
             self.app.logger.info("finish: {}".format(filename))
+
+    def export_journal(self):
+        app = self.app
+        app.logger.info("start")
+
+        # create export path if necessary
+        if not os.path.exists(app.config["EXPORT_PATH"]):
+            os.makedirs(app.config["EXPORT_PATH"])
+            os.makedirs(os.path.join(app.config["EXPORT_PATH"], "day"))
+            os.makedirs(os.path.join(app.config["EXPORT_PATH"], "attachment"))
+
+        # export all days
+        for day in Gthnk.Models.Day.query.order_by(Gthnk.Models.Day.date).all():
+            app.logger.info(day)
+            output_filename = os.path.join(app.config["EXPORT_PATH"], "day",
+                "{0}.txt".format(day.date))
+            if not overwrite_if_different(output_filename, day.render()):
+                app.logger.info("skipping; generated file identical to existing export")
+
+        # export all pages
+        for page in Gthnk.Models.Page.query.order_by(Gthnk.Models.Page.id).all():
+            app.logger.info(page)
+            output_filename = os.path.join(app.config["EXPORT_PATH"], "attachment",
+                page.filename())
+            if not overwrite_if_different(output_filename, page.binary):
+                app.logger.info("skipping; generated file identical to existing export")
+
+        app.logger.info("finish")
