@@ -9,11 +9,15 @@ from flask.ext.diamond import Diamond, db, toolbar, security
 import Models
 from datetime import timedelta
 from flask.ext.markdown import Markdown
+from flask.ext.cache import Cache
 from mdx_linkify.mdx_linkify import LinkifyExtension
 from mdx_journal import JournalExtension
 
+cache = Cache(config={'CACHE_TYPE': 'simple'})
+
 
 class Gthnk(Diamond):
+
     def administration(self, app, db):
         from flask.ext.diamond.administration import AuthenticatedMenuLink
         from .Views.Administration import Administration as A
@@ -39,6 +43,12 @@ class Gthnk(Diamond):
             Models.ItemList,
             db.session,
             name="ItemList",
+            category="Admin"))
+
+        admin.add_view(A.PageAdmin(
+            Models.Page,
+            db.session,
+            name="Pages",
             category="Admin"))
 
         admin.add_view(JournalExplorer(name="Journal", endpoint="journal"))
@@ -79,4 +89,5 @@ def create_app():
     gthnk.app.permanent_session_lifetime = timedelta(minutes=30)
     gthnk.md = Markdown(gthnk.app,
         extensions=[LinkifyExtension(), JournalExtension()])
+    cache.init_app(gthnk.app)
     return gthnk.app

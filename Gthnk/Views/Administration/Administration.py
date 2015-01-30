@@ -6,6 +6,7 @@ from flask.ext.admin import expose
 import flask.ext.security as security
 from flask.ext.diamond.administration import AuthModelView, AdminIndexView
 from wtforms.fields import TextAreaField
+from flask_admin.form.upload import FileUploadField
 
 adminbaseview = flask.Blueprint('adminbaseview', __name__,
     template_folder='templates', static_folder='static')
@@ -74,3 +75,29 @@ class DayAdmin(AuthModelView):
     can_delete = False
     can_edit = True
     column_display_pk = True
+
+
+class PageAdmin(AuthModelView):
+    def is_visible(self):
+        return security.current_user.has_role('Admin')
+
+    can_create = True
+    can_delete = True
+    can_edit = True
+    column_display_pk = True
+
+    form_excluded_columns = ['binary']
+    column_list = ["day", "sequence", "title"]
+
+    form_overrides = {
+        "binary": FileUploadField
+    }
+
+    form_args = {
+        'binary': {
+            'label': 'File',
+            'base_path': "/tmp",
+            #"validators": [binary_validation]
+        }
+    }
+    #form = PageForm

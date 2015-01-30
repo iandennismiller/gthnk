@@ -1,0 +1,99 @@
+# -*- coding: utf-8 -*-
+# gthnk (c) 2014 Ian Dennis Miller
+import datetime
+import os
+import shutil
+import hashlib
+
+import Gthnk.Adaptors.JournalBuffer
+
+
+def overwrite_if_different(filename, new_content):
+    # see whether the file exists
+    if os.path.isfile(filename):
+        # if so, gather the md5 checksums
+        with open(filename, "r") as f:
+            existing_checksum = hashlib.md5(f.read()).hexdigest()
+        generated_checksum = hashlib.md5(new_content).hexdigest()
+
+        # compare to md5 checksum of generated file.
+        # if different, then overwrite.
+        if generated_checksum == existing_checksum:
+            return False
+
+    with open(filename, "w") as f:
+        f.write(new_content)
+    return True
+
+
+class Librarian(object):
+    def __init__(self, app):
+        self.app = app
+
+    def rotate_buffers(self):
+        # import any Journal Buffers that might have entries ready for importing
+        self.app.logger.info("processing list: {}".format(self.app.config["INPUT_FILES"]))
+        file_list = Gthnk.Adaptors.JournalBuffer.split_filename_list(self.app.config["INPUT_FILES"])
+
+        # create a new backup path
+        todays_date = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H%M%S")
+        backup_path = os.path.join(self.app.config["BACKUP_PATH"], todays_date)
+        if not os.path.exists(backup_path):
+            os.makedirs(backup_path)
+
+        for filename in file_list:
+            self.app.logger.info("begin: {}".format(filename))
+            shutil.copy2(filename, backup_path)
+
+            # load and parse the file
+            journal_buffer = Gthnk.Adaptors.JournalBuffer.TextFileJournalBuffer()
+            journal_buffer.process_one(filename)
+            journal_buffer.save_entries()
+
+            # now reset the file size to 0.
+            with open(filename, "w"):
+                pass
+
+            self.app.logger.info("finish: {}".format(filename))
+
+    def export_journal(self):
+        app = self.app
+        app.logger.info("start")
+
+        # create export path if necessary
+        if not os.path.exists(app.config["EXPORT_PATH"]):
+            os.makedirs(app.config["EXPORT_PATH"])
+            os.makedirs(os.path.join(app.config["EXPORT_PATH"], "day"))
+            os.makedirs(os.path.join(app.config["EXPORT_PATH"], "attachment"))
+            os.makedirs(os.path.join(app.config["EXPORT_PATH"], "thumbnail"))
+            os.makedirs(os.path.join(app.config["EXPORT_PATH"], "preview"))
+
+        # export all days
+        for day in Gthnk.Models.Day.query.order_by(Gthnk.Models.Day.date).all():
+            app.logger.info(day)
+            output_filename = os.path.join(app.config["EXPORT_PATH"], "day",
+                "{0}.txt".format(day.date))
+            if not overwrite_if_different(output_filename, day.render()):
+                app.logger.info("skipping; generated file identical to existing export")
+
+        # export all pages
+        for page in Gthnk.Models.Page.query.order_by(Gthnk.Models.Page.id).all():
+            app.logger.info(page)
+
+            # write raw file
+            output_filename = os.path.join(app.config["EXPORT_PATH"], "attachment",
+                page.filename())
+            if not overwrite_if_different(output_filename, page.binary):
+                app.logger.info("skipping; generated file identical to existing export")
+            else:
+                # write thumbnail
+                output_filename = os.path.join(app.config["EXPORT_PATH"], "thumbnail",
+                    page.png_filename())
+                overwrite_if_different(output_filename, page.thumbnail)
+
+                # write preview
+                output_filename = os.path.join(app.config["EXPORT_PATH"], "preview",
+                    page.png_filename())
+                overwrite_if_different(output_filename, page.preview)
+
+        app.logger.info("finish")

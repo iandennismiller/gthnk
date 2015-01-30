@@ -1,41 +1,161 @@
 {% extends 'admin/model/edit.html' %}
 
+{% block main_menu %}
+{{ super() }}
+
+<ul class="nav nav-tabs">
+    <!--<li>
+        <a href="{{ url_for('.index_view') }}"><i class="icon-list-alt"></i> {{ _gettext('List') }}</a>
+    </li>-->
+    <!--<li class="active">
+        <a href="{{ url_for('.index_view') }}"><i class="icon-eye-open"></i> Day</a>
+    </li>-->
+    <li>
+        {% if day.yesterday() %}
+            <a href="{{ url_for('.day_view', date=day.yesterday().date) }}" title="previous"><i class="icon-arrow-left"></i></a>
+        {% else %}
+            <a href="javascript:void(0)" title="no past days"><i class="icon-stop"></i> earliest</a>
+        {% endif %}
+    </li>
+    <li>
+        {% if day.tomorrow() %}
+            <a href="{{ url_for('.day_view', date=day.tomorrow().date) }}" title="next"><i class="icon-arrow-right"></i></a>
+        {% else %}
+            <a href="javascript:void(0)" title="no future days"><i class="icon-stop"></i></a>
+        {% endif %}
+    </li>
+    <li>
+        <a href="{{ url_for('.latest_view') }}" title="latest"><i class="icon-certificate"></i></a>
+    </li>
+    <li>
+        <a href="{{ url_for('.index_view') }}" title="search"><i class="icon-search"></i></a>
+    </li>
+    <li>
+        <a id="edit_button" href="javascript:void(0)" title="edit"><i class="icon-wrench"></i></a>
+    </li>
+    <li>
+        <a href="{{ url_for('.refresh') }}" title="refresh"><i class="icon-refresh"></i></a>
+    </li>
+</ul>
+{% endblock %}
+
 {% block body %}
-    {% block model_menu_bar %}
-    <ul class="nav nav-tabs">
-        <!--<li>
-            <a href="{{ url_for('.index_view') }}"><i class="icon-list-alt"></i> {{ _gettext('List') }}</a>
-        </li>-->
-        <!--<li class="active">
-            <a href="{{ url_for('.index_view') }}"><i class="icon-eye-open"></i> Day</a>
-        </li>-->
-        <li>
-            {% if day.yesterday() %}
-                <a href="{{ url_for('.day_view', date=day.yesterday().date) }}"><i class="icon-arrow-left"></i> {{day.yesterday().date}}</a>
-            {% else %}
-                <a href="javascript:void(0)"><i class="icon-remove"></i> earliest</a>
-            {% endif %}
-        </li>
-        <li>
-            {% if day.tomorrow() %}
-                <a href="{{ url_for('.day_view', date=day.tomorrow().date) }}"><i class="icon-arrow-right"></i> {{day.tomorrow().date}}</a>
-            {% else %}
-                <a href="javascript:void(0)"><i class="icon-remove"></i> latest</a>
-            {% endif %}
-        </li>
-        <li>
-            <a href="/admin/entryview/?sort=0&amp;flt0_2={{day.date}}+00%3A00&amp;flt1_3={{day.date}}+23%3A59"><i class="icon-wrench"></i> Edit</a>
-        </li>
-    </ul>
-    {% endblock %}
 
     {% block model_content %}
-<div style="max-width: 50em; margin: 0 auto; font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;">
+
+<div id="main_content">
+
+<div id="entries_holder">
+<div id="entries_scroller">
+
+<a id="entries_anchor" name="entries_anchor"></a>
+
+<div id="entries">
 {% filter markdown %}
 {{ day_str|safe }}
 {% endfilter %}
+    <div id="entries_control" class="controllable">
+        <div class="viewable">
+            <!--<a href="javascript:void(0)"><i class="icon-download"></i></a>-->
+            &nbsp;
+        </div>
+        <div class="editable">
+            <a href="/admin/entryview/?sort=0&amp;flt0_2={{day.date}}+00%3A00&amp;flt1_3={{day.date}}+23%3A59" title="edit"><i class="icon-wrench"></i></a>
+        </div>
+    </div>
+</div>
+
+<div id="pages_inline">
+    {% for page in day.pages %}
+    <div class="page_attachment" id="page{{ page.sequence }}">
+        <a id="{{ page.sequence }}" name="{{ page.sequence }}"></a>
+        <div class="image_container">
+            <img src="{{ url_for('.full_pdf', date=day.date, sequence=page.sequence) }}">
+
+            <div class="controllable">
+                <div class="viewable">
+                    <a href="{{ url_for('.raw_binary', date=day.date, sequence=page.sequence) }}" title="download"><i class="icon-download"></i></a>
+                </div>
+                <div class="editable">
+                    <a href="{{ url_for('.move_page_up', date=day.date, sequence=page.sequence) }}" title="move up"><i class="icon-arrow-up"></i></a>
+                    <a href="{{ url_for('.move_page_down', date=day.date, sequence=page.sequence) }}" title="move down"><i class="icon-arrow-down"></i></a>
+                    <span class="delete_widget">
+                        <a class="delete_button" href="javascript:void(0);" title="delete"><i class="icon-trash"></i></a>
+                        <span class="confirm_widget">
+                            <a href="{{ url_for('.delete_page', date=day.date, sequence=page.sequence) }}" title="yes delete"><i class="icon-thumbs-up"></i></a>
+                            <a class="cancel_button" href="javascript:void(0);" title="do not delete"><i class="icon-thumbs-down"></i></a>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+</div>
+</div>
+
+<div id="page_list">
+    <div id="pages_scroller">
+    <div id="page_wrapper">
+
+    <a class="scroll top_of_page" id="journal_scroll" href="#entries_anchor" >Journal</a>
+
+    <form id="upload" action="{{ url_for('.upload_file', date=day.date) }}" method=post enctype=multipart/form-data>
+
+        <fieldset>
+
+        <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="300000" />
+
+        <div>
+            <input type="file" id="fileselect" name="fileselect[]" multiple="multiple" />
+            <div id="filedrag">attachments</div>
+        </div>
+
+        <div id="submitbutton">
+            <button type="submit">Upload Files</button>
+        </div>
+
+        </fieldset>
+
+    </form>
+
+    <ul>
+        {% for page in day.pages %}
+        <li>
+            <a class="scroll" href="#{{ page.sequence }}">
+                <img src="{{ url_for('.thumb_pdf', date=day.date, sequence=page.sequence) }}">
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    </div>
+
+</div>
+
+</div>
+
 </div>
 
     {% endblock %}
 
 {% endblock %}
+
+{% block head %}
+{{ super() }}
+<style type="text/css">
+    {% include "journal_explorer/filedrag/filedrag.css" %}
+</style>
+
+{% endblock %}
+
+{% block tail %}
+{{ super() }}
+<script>
+    {% include "journal_explorer/filedrag/filedrag.js" %}
+    {% include "journal_explorer/journal_browser.js" %}
+</script>
+{% endblock %}
+
+{% block footer %}{% endblock %}
