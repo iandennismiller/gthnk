@@ -15,6 +15,7 @@ from mdx_journal import JournalExtension
 
 cache = Cache(config={'CACHE_TYPE': 'simple'})
 
+
 class Gthnk(Diamond):
 
     def administration(self, app, db):

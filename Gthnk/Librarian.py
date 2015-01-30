@@ -65,6 +65,8 @@ class Librarian(object):
             os.makedirs(app.config["EXPORT_PATH"])
             os.makedirs(os.path.join(app.config["EXPORT_PATH"], "day"))
             os.makedirs(os.path.join(app.config["EXPORT_PATH"], "attachment"))
+            os.makedirs(os.path.join(app.config["EXPORT_PATH"], "thumbnail"))
+            os.makedirs(os.path.join(app.config["EXPORT_PATH"], "preview"))
 
         # export all days
         for day in Gthnk.Models.Day.query.order_by(Gthnk.Models.Day.date).all():
@@ -77,9 +79,21 @@ class Librarian(object):
         # export all pages
         for page in Gthnk.Models.Page.query.order_by(Gthnk.Models.Page.id).all():
             app.logger.info(page)
+
+            # write raw file
             output_filename = os.path.join(app.config["EXPORT_PATH"], "attachment",
                 page.filename())
             if not overwrite_if_different(output_filename, page.binary):
                 app.logger.info("skipping; generated file identical to existing export")
+            else:
+                # write thumbnail
+                output_filename = os.path.join(app.config["EXPORT_PATH"], "thumbnail",
+                    page.png_filename())
+                overwrite_if_different(output_filename, page.thumbnail)
+
+                # write preview
+                output_filename = os.path.join(app.config["EXPORT_PATH"], "preview",
+                    page.png_filename())
+                overwrite_if_different(output_filename, page.preview)
 
         app.logger.info("finish")

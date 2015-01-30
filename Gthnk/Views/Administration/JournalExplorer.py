@@ -12,6 +12,7 @@ from Gthnk import Models, db, cache
 from Gthnk.Models.Day import latest
 from Gthnk.Librarian import Librarian
 from wand.image import Image
+from wand.color import Color
 
 
 class JournalExplorer(AuthView):
@@ -62,7 +63,21 @@ class JournalExplorer(AuthView):
         file_handle = flask.request.files['file']
         if day and file_handle:
             f = file_handle.read()
-            page = Models.Page.create(day=day, binary=f)
+            with Image(blob=f) as img:
+                img.format = 'png'
+
+                thumbnail = img.clone()
+                thumbnail.transform(resize='150x200>')
+
+                preview = img.clone()
+                preview.transform(resize='612x792>')
+
+                page = Models.Page.create(
+                    day=day,
+                    binary=f,
+                    thumbnail=thumbnail.make_blob(),
+                    preview=preview.make_blob(),
+                )
             day.pages.append(page)
             db.session.commit()
             return flask.redirect(flask.url_for('.day_view', date=date))
@@ -71,23 +86,35 @@ class JournalExplorer(AuthView):
     @expose("/attachment/thumb/<date>-<sequence>.png")
     def thumb_pdf(self, date, sequence):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
-        with Image(blob=day.pages[int(sequence)].binary) as img:
-            img.format = 'png'
-            img.transform(resize='150x200>')
-            response = flask.make_response(img.make_blob())
-            response.headers['Content-Type'] = 'image/png'
-            return response
+        page = day.pages[int(sequence)]
+        if page.thumbnail:
+            response = flask.make_response(page.thumbnail)
+        else:
+            with Image(blob=page.binary) as img:
+                img.format = 'png'
+                img.transform(resize='150x200>')
+                page.thumbnail = img.make_blob()
+                page.save()
+                response = flask.make_response(page.thumbnail)
+        response.headers['Content-Type'] = 'image/png'
+        return response
 
     @cache.cached(timeout=300)
     @expose("/attachment/full/<date>-<sequence>.png")
     def full_pdf(self, date, sequence):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
-        with Image(blob=day.pages[int(sequence)].binary) as img:
-            img.format = 'png'
-            img.transform(resize='612x792>')
-            response = flask.make_response(img.make_blob())
-            response.headers['Content-Type'] = 'image/png'
-            return response
+        page = day.pages[int(sequence)]
+        if page.preview:
+            response = flask.make_response(page.preview)
+        else:
+            with Image(blob=day.pages[int(sequence)].binary) as img:
+                img.format = 'png'
+                img.transform(resize='612x792>')
+                page.preview = img.make_blob()
+                page.save()
+                response = flask.make_response(page.preview)
+        response.headers['Content-Type'] = 'image/png'
+        return response
 
     @cache.cached(timeout=300)
     @expose("/attachment/<date>-<sequence>.pdf")

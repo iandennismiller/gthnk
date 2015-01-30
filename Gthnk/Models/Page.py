@@ -12,6 +12,8 @@ class Page(db.Model, CRUDMixin):
     sequence = db.Column(db.Integer)
     binary = db.Column(db.Binary)
     title = db.Column(db.Unicode(1024))
+    thumbnail = db.Column(db.Binary)
+    preview = db.Column(db.Binary)
 
     def format(self):
         with Image(blob=self.binary) as img:
@@ -19,6 +21,9 @@ class Page(db.Model, CRUDMixin):
 
     def filename(self):
         return '{0}-{1}.{2}'.format(self.day.date, self.sequence, self.format().lower())
+
+    def png_filename(self):
+        return '{0}-{1}.{2}'.format(self.day.date, self.sequence, "png")
 
     def __repr__(self):
         if self.sequence is not None:
