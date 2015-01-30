@@ -4,9 +4,7 @@ PROJECT_NAME=gthnk
 MOD_NAME=Gthnk
 SHELL=/bin/bash
 WWWROOT=/var/www/gthnk
-TEST_CMD=SETTINGS=$$PWD/etc/testing.conf nosetests -c tests/nose/test.cfg
-TEST_SINGLE=SETTINGS=$$PWD/etc/testing.conf nosetests -c tests/nose/test-single.cfg
-TEST_SINGLE_DUMP="./makesingle.log"
+TEST_CMD=SETTINGS=$$PWD/etc/testing.conf nosetests
 
 install:
 	python setup.py install
@@ -39,13 +37,16 @@ shell:
 	SETTINGS=$$PWD/etc/dev.conf bin/manage.py shell
 
 watch:
-	watchmedo shell-command -R -p "*.py" -c 'echo \\n\\n\\n\\n; date; $(TEST_SINGLE); date' .
+	watchmedo shell-command -R -p "*.py" -c 'echo \\n\\n\\n\\n; date; $(TEST_CMD) -c tests/nose/test-single.cfg; date' .
 
 test:
-	$(TEST_CMD)
+	$(TEST_CMD) -c tests/nose/test.cfg
+
+xunit:
+	$(TEST_CMD) --with-xunit -c tests/nose/test.cfg
 
 single:
-	$(TEST_SINGLE) 2>&1 | tee -a $(TEST_SINGLE_DUMP)
+	$(TEST_CMD) -c tests/nose/test-single.cfg 2>&1 | tee -a ./makesingle.log
 
 db:
 	SETTINGS=$$PWD/etc/dev.conf bin/manage.py init_db
