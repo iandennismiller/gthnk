@@ -144,6 +144,16 @@ class JournalExplorer(AuthView):
         response.headers['Content-Disposition'] = disposition_str.format(date, sequence)
         return response
 
+    @expose("/attachment/<date>-<sequence>.gif")
+    def raw_gif(self, date, sequence):
+        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+        raw = day.pages[int(sequence)].binary
+        response = flask.make_response(raw)
+        response.headers['Content-Type'] = 'image/gif'
+        disposition_str = 'inline; filename="{0}-{1}.gif"'
+        response.headers['Content-Disposition'] = disposition_str.format(date, sequence)
+        return response
+
     @expose("/attachment/raw/<date>-<sequence>")
     def raw_binary(self, date, sequence):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -155,6 +165,8 @@ class JournalExplorer(AuthView):
                 return flask.redirect(flask.url_for('.raw_pdf', date=date, sequence=sequence))
             elif img.format == "PNG":
                 return flask.redirect(flask.url_for('.raw_png', date=date, sequence=sequence))
+            elif img.format == "GIF":
+                return flask.redirect(flask.url_for('.raw_gif', date=date, sequence=sequence))
 
     @expose("/day/<date>/attachment/<sequence>/move_up")
     def move_page_up(self, date, sequence):
