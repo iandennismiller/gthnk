@@ -1,6 +1,10 @@
 {% extends 'admin/model/edit.html' %}
 
 {% block main_menu %}
+
+<div class="datepicker">
+</div>
+
 {{ super() }}
 
 <ul class="nav nav-tabs">
@@ -26,6 +30,9 @@
     </li>
     <li>
         <a href="{{ url_for('.latest_view') }}" title="latest"><i class="icon-certificate"></i></a>
+    </li>
+    <li>
+        <a id="calendar_button" href="javascript:void(0)" title="search"><i class="icon-calendar"></i></a>
     </li>
     <li>
         <a href="{{ url_for('.index_view') }}" title="search"><i class="icon-search"></i></a>

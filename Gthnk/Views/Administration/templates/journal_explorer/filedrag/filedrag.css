@@ -1,3 +1,12 @@
+.datepicker {
+    position: absolute;
+    z-index: 99;
+    background: white;
+    top: 3em;
+    left: 33em;
+    border: 1px solid lightgray;
+}
+
 .confirm_widget {
     display: none;
 }

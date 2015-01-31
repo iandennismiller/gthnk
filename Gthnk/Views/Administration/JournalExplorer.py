@@ -35,7 +35,12 @@ class JournalExplorer(AuthView):
             day_str = re.sub(r'(\d\d\d\d)', '<a name="\g<1>"></a>\n\g<1>', day.render())
             return self.render('journal_explorer/day_view.html', day=day, day_str=day_str)
         else:
-            return flask.redirect(flask.url_for('admin.index'))
+            day = Models.Day.query.filter(Models.Day.date > date).first()
+            if day:
+                day_str = re.sub(r'(\d\d\d\d)', '<a name="\g<1>"></a>\n\g<1>', day.render())
+                return self.render('journal_explorer/day_view.html', day=day, day_str=day_str)
+
+        return flask.redirect(flask.url_for('admin.index'))
 
     @expose("/text/<date>.txt")
     def text_view(self, date):
