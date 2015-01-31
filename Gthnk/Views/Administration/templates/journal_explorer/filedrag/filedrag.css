@@ -32,7 +32,7 @@
     display: none;
 }
 
-#edit_button.active{
+#edit_button.active, #calendar_button.active{
     background-color: #e5e5e5;
 }
 
