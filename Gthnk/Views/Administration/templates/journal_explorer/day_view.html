@@ -1,6 +1,10 @@
 {% extends 'admin/model/edit.html' %}
 
 {% block main_menu %}
+
+<div class="datepicker">
+</div>
+
 {{ super() }}
 
 <ul class="nav nav-tabs">
@@ -26,6 +30,9 @@
     </li>
     <li>
         <a href="{{ url_for('.latest_view') }}" title="latest"><i class="icon-certificate"></i></a>
+    </li>
+    <li>
+        <a id="calendar_button" href="javascript:void(0)" title="search"><i class="icon-calendar"></i></a>
     </li>
     <li>
         <a href="{{ url_for('.index_view') }}" title="search"><i class="icon-search"></i></a>
@@ -70,11 +77,11 @@
     <div class="page_attachment" id="page{{ page.sequence }}">
         <a id="{{ page.sequence }}" name="{{ page.sequence }}"></a>
         <div class="image_container">
-            <img src="{{ url_for('.full_pdf', date=day.date, sequence=page.sequence) }}">
+            <img src="{{ url_for('.preview', date=day.date, sequence=page.sequence) }}">
 
             <div class="controllable">
                 <div class="viewable">
-                    <a href="{{ url_for('.raw_binary', date=day.date, sequence=page.sequence) }}" title="download"><i class="icon-download"></i></a>
+                    <a href="{{ url_for('.attachment', date=day.date, sequence=page.sequence, extension=page.extension) }}" title="download"><i class="icon-download"></i></a>
                 </div>
                 <div class="editable">
                     <a href="{{ url_for('.move_page_up', date=day.date, sequence=page.sequence) }}" title="move up"><i class="icon-arrow-up"></i></a>
@@ -125,7 +132,7 @@
         {% for page in day.pages %}
         <li>
             <a class="scroll" href="#{{ page.sequence }}">
-                <img src="{{ url_for('.thumb_pdf', date=day.date, sequence=page.sequence) }}">
+                <img src="{{ url_for('.thumbnail', date=day.date, sequence=page.sequence) }}">
             </a>
         </li>
         {% endfor %}

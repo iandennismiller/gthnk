@@ -87,7 +87,7 @@ def create_app():
     gthnk.logger(gthnk.app)
     gthnk.app.logger.info("starting gthnk server")
     gthnk.app.permanent_session_lifetime = timedelta(minutes=30)
-    gthnk.md = Markdown(gthnk.app,
+    gthnk.app.md = Markdown(gthnk.app,
         extensions=[LinkifyExtension(), JournalExtension()])
     cache.init_app(gthnk.app)
     return gthnk.app
