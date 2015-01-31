@@ -49,7 +49,7 @@ class Day(db.Model, CRUDMixin):
             for page in self.pages:
                 buf += img_fmt.format(
                     sequence=page.sequence,
-                    thumbnail=page.png_filename(),
+                    thumbnail=page.cache_filename(),
                     attachment=page.filename()
                 )
 

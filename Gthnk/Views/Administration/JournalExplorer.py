@@ -3,6 +3,7 @@
 
 import datetime
 import re
+import StringIO
 import flask
 from sqlalchemy import desc
 from flask.ext.admin import expose
@@ -12,6 +13,7 @@ from Gthnk import Models, db
 from Gthnk.Models.Day import latest
 from Gthnk.Librarian import Librarian
 from wand.image import Image
+from PyPDF2 import PdfFileReader, PdfFileWriter
 
 
 class JournalExplorer(AuthView):
@@ -79,47 +81,55 @@ class JournalExplorer(AuthView):
 
     @expose("/inbox/<date>", methods=['POST'])
     def upload_file(self, date):
-        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
-        file_handle = flask.request.files['file']
-        if day and file_handle:
+        def add_page(day, binary):
             page = Models.Page.create(day=day)
-            page.set_image(binary=file_handle.read())
+            page.set_image(binary=binary)
             day.pages.append(page)
             day.pages.reorder()
             db.session.commit()
 
+        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+        file_handle = flask.request.files['file']
+        if day and file_handle:
+            binary = file_handle.read()
+
+            # determine the format of the file
+            binary_format = Image(blob=binary).format
+            if binary_format == "PDF":
+                # use PyPDF2 to read the stream
+                pdf = PdfFileReader(StringIO.StringIO(binary))
+                if pdf.getNumPages() > 1:  # if it is a multi-page PDF
+                    for pdf_page in pdf.pages:  # add the pages individually
+                        output = PdfFileWriter()
+                        output.addPage(pdf_page)
+
+                        pdf_page_buf = StringIO.StringIO()
+                        output.write(pdf_page_buf)
+                        add_page(day, pdf_page_buf.getvalue())
+                else:  # if it is just a single page PDF
+                    # then add the original bytestream
+                    add_page(day, binary)
+            elif binary_format:
+                add_page(day, binary)
+            else:  # could not recognize file
+                pass
+
         return flask.redirect(flask.url_for('.day_view', date=date))
 
-    @expose("/thumbnail/<date>-<sequence>.png")
+    @expose("/thumbnail/<date>-<sequence>.jpg")
     def thumbnail(self, date, sequence):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         page = day.pages[int(sequence)]
-        if page.thumbnail:
-            response = flask.make_response(page.thumbnail)
-        else:
-            with Image(blob=page.binary) as img:
-                img.format = 'png'
-                img.transform(resize='150x200>')
-                page.thumbnail = img.make_blob()
-                page.save()
-                response = flask.make_response(page.thumbnail)
-        response.headers['Content-Type'] = 'image/png'
+        response = flask.make_response(page.thumbnail)
+        response.headers['Content-Type'] = 'image/jpeg'
         return response
 
-    @expose("/preview/<date>-<sequence>.png")
+    @expose("/preview/<date>-<sequence>.jpg")
     def preview(self, date, sequence):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         page = day.pages[int(sequence)]
-        if page.preview:
-            response = flask.make_response(page.preview)
-        else:
-            with Image(blob=day.pages[int(sequence)].binary) as img:
-                img.format = 'png'
-                img.transform(resize='612x792>')
-                page.preview = img.make_blob()
-                page.save()
-                response = flask.make_response(page.preview)
-        response.headers['Content-Type'] = 'image/png'
+        response = flask.make_response(page.preview)
+        response.headers['Content-Type'] = 'image/jpeg'
         return response
 
     @expose("/attachment/<date>-<sequence>.<extension>")

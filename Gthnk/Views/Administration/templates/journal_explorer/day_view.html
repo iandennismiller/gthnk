@@ -81,7 +81,7 @@
 
             <div class="controllable">
                 <div class="viewable">
-                    <a href="{{ url_for('.attachment', date=day.date, sequence=page.sequence, extension=page.extension) }}" title="download"><i class="icon-download"></i></a>
+                    <a anchorid="{{page.sequence}}" href="{{ url_for('.attachment', date=day.date, sequence=page.sequence, extension=page.extension) }}" title="download"><i class="icon-download"></i></a>
                 </div>
                 <div class="editable">
                     <a href="{{ url_for('.move_page_up', date=day.date, sequence=page.sequence) }}" title="move up"><i class="icon-arrow-up"></i></a>

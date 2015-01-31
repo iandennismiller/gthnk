@@ -1,6 +1,7 @@
     // http://stackoverflow.com/questions/4198041/jquery-smooth-scroll-to-an-anchor/12714767#12714767
     $(".scroll").click(function(event){
         event.preventDefault();
+        window.history.replaceState(null, this.title, url=this.hash);
         var dest=$('#entries_scroller').scrollTop()+($(this.hash).offset().top)-60;
         $('#entries_scroller').animate({scrollTop:dest}, 300,'swing');
      });
@@ -110,4 +111,8 @@
             }
         }
     );
+
+    $(".viewable a").click(function(){
+        window.history.replaceState(null, this.title, url="#"+$(this).attr("anchorid"));
+    });
 

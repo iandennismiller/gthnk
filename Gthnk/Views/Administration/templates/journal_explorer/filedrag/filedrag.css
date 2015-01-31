@@ -1,3 +1,7 @@
+.image_container img {
+    max-height: 600px;
+}
+
 .datepicker {
     position: absolute;
     z-index: 99;
