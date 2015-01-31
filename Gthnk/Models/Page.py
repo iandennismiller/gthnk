@@ -4,6 +4,7 @@
 from flask.ext.diamond.utils.mixins import CRUDMixin
 from Gthnk import db
 from wand.image import Image
+from wand.color import Color
 
 
 class Page(db.Model, CRUDMixin):
@@ -18,25 +19,38 @@ class Page(db.Model, CRUDMixin):
 
     def set_image(self, binary):
         self.binary = binary
-        with Image(blob=self.binary) as img:
+        with Image(blob=self.binary, resolution=150) as img:
             self.extension = img.format.lower()
-            img.format = 'png'
+            flattened = Image(background=Color("white"),
+                height=img.height, width=img.width)
+            flattened.composite(img, left=0, top=0)
+            flattened.format = "jpeg"
+            flattened.compression_quality = 50
 
-            thumbnail = img.clone()
+            thumbnail = flattened.clone()
             thumbnail.transform(resize='150x200>')
             self.thumbnail = thumbnail.make_blob()
 
-            preview = img.clone()
-            preview.gaussian_blur(radius=2, sigma=0.5)
+            preview = flattened.clone()
+            preview.gaussian_blur(radius=1, sigma=0.5)
             preview.transform(resize='612x792>')
             self.preview = preview.make_blob()
         self.save()
 
-    def filename(self):
-        return '{0}-{1}.{2}'.format(self.day.date, self.sequence, self.extension)
+    def filename(self, extension=None):
+        if not extension:
+            extension = self.extension
+        return '{0}-{1}.{2}'.format(self.day.date, self.sequence, extension)
 
-    def png_filename(self):
-        return '{0}-{1}.{2}'.format(self.day.date, self.sequence, "png")
+    def content_type(self):
+        if self.extension == 'pdf':
+            return 'application/pdf'
+        elif self.extension == 'gif':
+            return 'image/gif'
+        elif self.extension == 'png':
+            return 'image/png'
+        elif self.extension == 'jpg':
+            return 'image/jpeg'
 
     def __repr__(self):
         if self.sequence is not None:

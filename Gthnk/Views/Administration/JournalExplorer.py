@@ -11,7 +11,6 @@ from flask.ext.diamond.administration import AuthView
 from Gthnk import Models, db
 from Gthnk.Models.Day import latest
 from Gthnk.Librarian import Librarian
-from wand.image import Image
 
 
 class JournalExplorer(AuthView):
@@ -82,64 +81,44 @@ class JournalExplorer(AuthView):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         file_handle = flask.request.files['file']
         if day and file_handle:
-            page = Models.Page.create(day=day)
-            page.set_image(binary=file_handle.read())
-            day.pages.append(page)
-            day.pages.reorder()
-            db.session.commit()
-
+            day.attach(file_handle.read())
         return flask.redirect(flask.url_for('.day_view', date=date))
 
-    @expose("/thumbnail/<date>-<sequence>.png")
+    @expose("/download/<date>.pdf")
+    def download(self, date):
+        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+        if day:
+            response = flask.make_response(day.render_pdf())
+            response.headers['Content-Type'] = 'application/pdf'
+            disposition_str = 'attachment; filename="{0}.pdf"'.format(day.date)
+            response.headers['Content-Disposition'] = disposition_str
+            return response
+        else:
+            return flask.redirect(flask.url_for('.day_view', date=date))
+
+    @expose("/thumbnail/<date>-<sequence>.jpg")
     def thumbnail(self, date, sequence):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         page = day.pages[int(sequence)]
-        if page.thumbnail:
-            response = flask.make_response(page.thumbnail)
-        else:
-            with Image(blob=page.binary) as img:
-                img.format = 'png'
-                img.transform(resize='150x200>')
-                page.thumbnail = img.make_blob()
-                page.save()
-                response = flask.make_response(page.thumbnail)
-        response.headers['Content-Type'] = 'image/png'
+        response = flask.make_response(page.thumbnail)
+        response.headers['Content-Type'] = 'image/jpeg'
         return response
 
-    @expose("/preview/<date>-<sequence>.png")
+    @expose("/preview/<date>-<sequence>.jpg")
     def preview(self, date, sequence):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         page = day.pages[int(sequence)]
-        if page.preview:
-            response = flask.make_response(page.preview)
-        else:
-            with Image(blob=day.pages[int(sequence)].binary) as img:
-                img.format = 'png'
-                img.transform(resize='612x792>')
-                page.preview = img.make_blob()
-                page.save()
-                response = flask.make_response(page.preview)
-        response.headers['Content-Type'] = 'image/png'
+        response = flask.make_response(page.preview)
+        response.headers['Content-Type'] = 'image/jpeg'
         return response
 
     @expose("/attachment/<date>-<sequence>.<extension>")
     def attachment(self, date, sequence, extension):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         page = day.pages[int(sequence)]
-        raw = page.binary
-        response = flask.make_response(raw)
-        if page.extension == 'pdf':
-            response.headers['Content-Type'] = 'application/pdf'
-        elif page.extension == 'gif':
-            response.headers['Content-Type'] = 'image/gif'
-        elif page.extension == 'png':
-            response.headers['Content-Type'] = 'image/png'
-        elif page.extension == 'jpg':
-            response.headers['Content-Type'] = 'image/jpeg'
-
-        disposition_str = 'inline; filename="{0}-{1}.{2}"'
-        response.headers['Content-Disposition'] = disposition_str.format(
-            date, sequence, page.extension)
+        response = flask.make_response(page.binary)
+        response.headers['Content-Type'] = page.content_type()
+        response.headers['Content-Disposition'] = 'inline; filename="{0}"'.format(page.filename())
         return response
 
     @expose("/day/<date>/attachment/<sequence>/move_up")
