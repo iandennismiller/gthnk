@@ -14,13 +14,26 @@ class Page(db.Model, CRUDMixin):
     title = db.Column(db.Unicode(1024))
     thumbnail = db.Column(db.Binary)
     preview = db.Column(db.Binary)
+    extension = db.Column(db.String(32))
 
-    def format(self):
+    def set_image(self, binary):
+        self.binary = binary
         with Image(blob=self.binary) as img:
-            return img.format
+            self.extension = img.format.lower()
+            img.format = 'png'
+
+            thumbnail = img.clone()
+            thumbnail.transform(resize='150x200>')
+            self.thumbnail = thumbnail.make_blob()
+
+            preview = img.clone()
+            preview.gaussian_blur(radius=2, sigma=0.5)
+            preview.transform(resize='612x792>')
+            self.preview = preview.make_blob()
+        self.save()
 
     def filename(self):
-        return '{0}-{1}.{2}'.format(self.day.date, self.sequence, self.format().lower())
+        return '{0}-{1}.{2}'.format(self.day.date, self.sequence, self.extension)
 
     def png_filename(self):
         return '{0}-{1}.{2}'.format(self.day.date, self.sequence, "png")

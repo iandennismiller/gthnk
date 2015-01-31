@@ -17,23 +17,44 @@
 
     $("#edit_button").click(function() {
         $("body").toggleClass("editing");
-        //$(".controllable .viewable").toggleClass("off");
-        //$(".controllable .editable").toggleClass("off");
-        //$(".controllable").toggleClass("visible");
         $("#edit_button").toggleClass("active");
 
         if ($("body").hasClass("editing")) {
             $('.controllable .editable').fadeIn();
-            //$('.controllable').fadeIn();
         }
         else {
-            //$('.controllable .viewable').css("opacity", 0);
-            //$('.controllable').fadeOut();
             $('.controllable .editable').fadeOut();
-            //$('.controllable').fadeOut();
         }
+    });
 
-    })
+    $("#calendar_button").click(function() {
+        $("#calendar_button").toggleClass("active");
+        if ($("#calendar_button").hasClass("active")) {
+            $('.datepicker').show();
+            $('.datepicker').datetimepicker({
+                autoclose: true,
+                format: 'yyyy-mm-dd',
+                minView: 2
+            });
+        }
+        else {
+            $('.datepicker').hide();
+        }
+    });
+
+    $('.datepicker').on('changeDate', function(ev){
+        var month = ev.date.getMonth() + 1;
+        var day = ev.date.getDate() + 1;
+        var year = ev.date.getFullYear();
+        if (day < 10) {
+            day = "0" + day;
+        }
+        if (month < 10) {
+            month = "0" + month;
+        }
+        var date = year + "-" + month + "-" + day;
+        window.location = "/admin/journal/day/" + date + ".html";
+    });
 
     $( window ).resize( set_height );
 

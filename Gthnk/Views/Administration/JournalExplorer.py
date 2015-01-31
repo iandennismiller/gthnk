@@ -35,6 +35,27 @@ class JournalExplorer(AuthView):
             day_str = re.sub(r'(\d\d\d\d)', '<a name="\g<1>"></a>\n\g<1>', day.render())
             return self.render('journal_explorer/day_view.html', day=day, day_str=day_str)
         else:
+            day = Models.Day.query.filter(Models.Day.date > date).first()
+            if day:
+                day_str = re.sub(r'(\d\d\d\d)', '<a name="\g<1>"></a>\n\g<1>', day.render())
+                return self.render('journal_explorer/day_view.html', day=day, day_str=day_str)
+
+        return flask.redirect(flask.url_for('admin.index'))
+
+    @expose("/text/<date>.txt")
+    def text_view(self, date):
+        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+        if day:
+            return day.render()
+        else:
+            return flask.redirect(flask.url_for('admin.index'))
+
+    @expose("/markdown/<date>.md")
+    def markdown_view(self, date):
+        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+        if day:
+            return day.render_markdown()
+        else:
             return flask.redirect(flask.url_for('admin.index'))
 
     @expose("/latest.html")
@@ -61,29 +82,16 @@ class JournalExplorer(AuthView):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         file_handle = flask.request.files['file']
         if day and file_handle:
-            f = file_handle.read()
-            with Image(blob=f) as img:
-                img.format = 'png'
-
-                thumbnail = img.clone()
-                thumbnail.transform(resize='150x200>')
-
-                preview = img.clone()
-                preview.gaussian_blur(radius=2, sigma=0.5)
-                preview.transform(resize='612x792>')
-
-                page = Models.Page.create(
-                    day=day,
-                    binary=f,
-                    thumbnail=thumbnail.make_blob(),
-                    preview=preview.make_blob(),
-                )
+            page = Models.Page.create(day=day)
+            page.set_image(binary=file_handle.read())
             day.pages.append(page)
+            day.pages.reorder()
             db.session.commit()
-            return flask.redirect(flask.url_for('.day_view', date=date))
 
-    @expose("/attachment/thumb/<date>-<sequence>.png")
-    def thumb_pdf(self, date, sequence):
+        return flask.redirect(flask.url_for('.day_view', date=date))
+
+    @expose("/thumbnail/<date>-<sequence>.png")
+    def thumbnail(self, date, sequence):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         page = day.pages[int(sequence)]
         if page.thumbnail:
@@ -98,8 +106,8 @@ class JournalExplorer(AuthView):
         response.headers['Content-Type'] = 'image/png'
         return response
 
-    @expose("/attachment/full/<date>-<sequence>.png")
-    def full_pdf(self, date, sequence):
+    @expose("/preview/<date>-<sequence>.png")
+    def preview(self, date, sequence):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         page = day.pages[int(sequence)]
         if page.preview:
@@ -114,59 +122,25 @@ class JournalExplorer(AuthView):
         response.headers['Content-Type'] = 'image/png'
         return response
 
-    @expose("/attachment/<date>-<sequence>.pdf")
-    def raw_pdf(self, date, sequence):
+    @expose("/attachment/<date>-<sequence>.<extension>")
+    def attachment(self, date, sequence, extension):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
-        raw = day.pages[int(sequence)].binary
+        page = day.pages[int(sequence)]
+        raw = page.binary
         response = flask.make_response(raw)
-        response.headers['Content-Type'] = 'application/pdf'
-        disposition_str = 'inline; filename="{0}-{1}.pdf"'
-        response.headers['Content-Disposition'] = disposition_str.format(date, sequence)
-        return response
+        if page.extension == 'pdf':
+            response.headers['Content-Type'] = 'application/pdf'
+        elif page.extension == 'gif':
+            response.headers['Content-Type'] = 'image/gif'
+        elif page.extension == 'png':
+            response.headers['Content-Type'] = 'image/png'
+        elif page.extension == 'jpg':
+            response.headers['Content-Type'] = 'image/jpeg'
 
-    @expose("/attachment/<date>-<sequence>.jpg")
-    def raw_jpeg(self, date, sequence):
-        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
-        raw = day.pages[int(sequence)].binary
-        response = flask.make_response(raw)
-        response.headers['Content-Type'] = 'image/jpeg'
-        disposition_str = 'inline; filename="{0}-{1}.jpg"'
-        response.headers['Content-Disposition'] = disposition_str.format(date, sequence)
+        disposition_str = 'inline; filename="{0}-{1}.{2}"'
+        response.headers['Content-Disposition'] = disposition_str.format(
+            date, sequence, page.extension)
         return response
-
-    @expose("/attachment/<date>-<sequence>.png")
-    def raw_png(self, date, sequence):
-        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
-        raw = day.pages[int(sequence)].binary
-        response = flask.make_response(raw)
-        response.headers['Content-Type'] = 'image/png'
-        disposition_str = 'inline; filename="{0}-{1}.png"'
-        response.headers['Content-Disposition'] = disposition_str.format(date, sequence)
-        return response
-
-    @expose("/attachment/<date>-<sequence>.gif")
-    def raw_gif(self, date, sequence):
-        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
-        raw = day.pages[int(sequence)].binary
-        response = flask.make_response(raw)
-        response.headers['Content-Type'] = 'image/gif'
-        disposition_str = 'inline; filename="{0}-{1}.gif"'
-        response.headers['Content-Disposition'] = disposition_str.format(date, sequence)
-        return response
-
-    @expose("/attachment/raw/<date>-<sequence>")
-    def raw_binary(self, date, sequence):
-        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
-        raw = day.pages[int(sequence)].binary
-        with Image(blob=raw) as img:
-            if img.format == "JPEG":
-                return flask.redirect(flask.url_for('.raw_jpeg', date=date, sequence=sequence))
-            elif img.format == "PDF":
-                return flask.redirect(flask.url_for('.raw_pdf', date=date, sequence=sequence))
-            elif img.format == "PNG":
-                return flask.redirect(flask.url_for('.raw_png', date=date, sequence=sequence))
-            elif img.format == "GIF":
-                return flask.redirect(flask.url_for('.raw_gif', date=date, sequence=sequence))
 
     @expose("/day/<date>/attachment/<sequence>/move_up")
     def move_page_up(self, date, sequence):

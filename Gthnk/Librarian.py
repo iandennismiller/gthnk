@@ -64,6 +64,8 @@ class Librarian(object):
         if not os.path.exists(app.config["EXPORT_PATH"]):
             os.makedirs(app.config["EXPORT_PATH"])
             os.makedirs(os.path.join(app.config["EXPORT_PATH"], "day"))
+            os.makedirs(os.path.join(app.config["EXPORT_PATH"], "text"))
+            os.makedirs(os.path.join(app.config["EXPORT_PATH"], "markdown"))
             os.makedirs(os.path.join(app.config["EXPORT_PATH"], "attachment"))
             os.makedirs(os.path.join(app.config["EXPORT_PATH"], "thumbnail"))
             os.makedirs(os.path.join(app.config["EXPORT_PATH"], "preview"))
@@ -71,9 +73,17 @@ class Librarian(object):
         # export all days
         for day in Gthnk.Models.Day.query.order_by(Gthnk.Models.Day.date).all():
             app.logger.info(day)
-            output_filename = os.path.join(app.config["EXPORT_PATH"], "day",
+
+            # write text representation
+            output_filename = os.path.join(app.config["EXPORT_PATH"], "text",
                 "{0}.txt".format(day.date))
             if not overwrite_if_different(output_filename, day.render()):
+                app.logger.info("skipping; generated file identical to existing export")
+
+            # write markdown representation
+            output_filename = os.path.join(app.config["EXPORT_PATH"], "markdown",
+                "{0}.md".format(day.date))
+            if not overwrite_if_different(output_filename, day.render_markdown()):
                 app.logger.info("skipping; generated file identical to existing export")
 
         # export all pages
