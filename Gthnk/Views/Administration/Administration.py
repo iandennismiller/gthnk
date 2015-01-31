@@ -87,7 +87,7 @@ class PageAdmin(AuthModelView):
     column_display_pk = True
 
     form_excluded_columns = ['binary']
-    column_list = ["day", "sequence", "title"]
+    column_list = ["day", "sequence", "extension", "title"]
 
     form_overrides = {
         "binary": FileUploadField

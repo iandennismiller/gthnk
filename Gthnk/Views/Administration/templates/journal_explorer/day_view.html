@@ -70,11 +70,11 @@
     <div class="page_attachment" id="page{{ page.sequence }}">
         <a id="{{ page.sequence }}" name="{{ page.sequence }}"></a>
         <div class="image_container">
-            <img src="{{ url_for('.full_pdf', date=day.date, sequence=page.sequence) }}">
+            <img src="{{ url_for('.preview', date=day.date, sequence=page.sequence) }}">
 
             <div class="controllable">
                 <div class="viewable">
-                    <a href="{{ url_for('.raw_binary', date=day.date, sequence=page.sequence) }}" title="download"><i class="icon-download"></i></a>
+                    <a href="{{ url_for('.attachment', date=day.date, sequence=page.sequence, extension=page.extension) }}" title="download"><i class="icon-download"></i></a>
                 </div>
                 <div class="editable">
                     <a href="{{ url_for('.move_page_up', date=day.date, sequence=page.sequence) }}" title="move up"><i class="icon-arrow-up"></i></a>
@@ -125,7 +125,7 @@
         {% for page in day.pages %}
         <li>
             <a class="scroll" href="#{{ page.sequence }}">
-                <img src="{{ url_for('.thumb_pdf', date=day.date, sequence=page.sequence) }}">
+                <img src="{{ url_for('.thumbnail', date=day.date, sequence=page.sequence) }}">
             </a>
         </li>
         {% endfor %}

@@ -2,12 +2,12 @@
 # gthnk (c) 2014 Ian Dennis Miller
 
 import datetime
+import re
 from sqlalchemy import desc
 from sqlalchemy.ext.orderinglist import ordering_list
 from flask.ext.diamond.utils.mixins import CRUDMixin
 from Gthnk import db
 import Gthnk.Models
-
 
 class Day(db.Model, CRUDMixin):
     """
@@ -33,6 +33,24 @@ class Day(db.Model, CRUDMixin):
         for entry in self.entries.order_by(Gthnk.Models.Entry.timestamp).all():
             buf += unicode(entry)
         buf += "\n\n"
+        return buf
+
+    def render_markdown(self):
+        buf = self.render()
+        buf = re.sub(r'(\d\d\d\d-\d\d-\d\d)\n', '# \g<1>\n', buf)
+        buf = re.sub(r'(\d\d\d\d)\n', '## \g<1>\n', buf)
+
+        img_fmt = "[![{sequence}](../thumbnail/{attachment})](../attachment/{attachment})\n"
+
+        if len(self.pages) > 0:
+            buf += "# Attachments\n\n"
+            for page in self.pages:
+                buf += img_fmt.format(
+                    sequence=page.sequence,
+                    thumbnail=page.png_filename(),
+                    attachment=page.filename()
+                )
+
         return buf
 
     def __repr__(self):
