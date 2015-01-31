@@ -98,12 +98,12 @@ class Librarian(object):
             else:
                 # write thumbnail
                 output_filename = os.path.join(app.config["EXPORT_PATH"], "thumbnail",
-                    page.cache_filename())
+                    page.filename(extension="jpg"))
                 overwrite_if_different(output_filename, page.thumbnail)
 
                 # write preview
                 output_filename = os.path.join(app.config["EXPORT_PATH"], "preview",
-                    page.cache_filename())
+                    page.filename(extension="jpg"))
                 overwrite_if_different(output_filename, page.preview)
 
         app.logger.info("finish")

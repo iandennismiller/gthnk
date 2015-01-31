@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) 2014 Ian Dennis Miller
+import StringIO
 import datetime
 import re
 
+from PyPDF2 import PdfFileReader, PdfFileWriter
 from flask.ext.diamond.utils.mixins import CRUDMixin
 from sqlalchemy import desc
 from sqlalchemy.ext.orderinglist import ordering_list
+from wand.image import Image
 
 import Gthnk.Models
 from Gthnk import db
@@ -23,6 +26,50 @@ class Day(db.Model, CRUDMixin):
     pages = db.relationship("Page", order_by="Page.sequence",
         collection_class=ordering_list('sequence', reorder_on_append=True),
         backref=db.backref("day"))
+
+    def add_page(self, binary):
+        page = Gthnk.Models.Page.create(day=self)
+        page.set_image(binary=binary)
+        self.pages.append(page)
+        self.pages.reorder()
+        db.session.commit()
+
+    def attach(self, binary):
+        # determine the format of the file
+        binary_format = Image(blob=binary).format
+        if binary_format == "PDF":
+            # use PyPDF2 to read the stream
+            pdf = PdfFileReader(StringIO.StringIO(binary))
+            if pdf.getNumPages() > 1:  # if it is a multi-page PDF
+                for pdf_page in pdf.pages:  # add the pages individually
+                    output = PdfFileWriter()
+                    output.addPage(pdf_page)
+
+                    pdf_page_buf = StringIO.StringIO()
+                    output.write(pdf_page_buf)
+                    self.add_page(pdf_page_buf.getvalue())
+            else:  # if it is just a single page PDF
+                # then add the original bytestream
+                self.add_page(binary)
+        elif binary_format:
+            self.add_page(binary)
+        else:  # could not recognize file
+            pass
+
+    def render_pdf(self):
+        outpdf = PdfFileWriter()
+        for page in self.pages:
+            if page.extension == "pdf":
+                outpdf.addPage(PdfFileReader(StringIO.StringIO(page.binary)).getPage(0))
+            else:
+                img = Image(blob=page.binary, resolution=72)
+                img.format = "jpg"
+                img.format = "pdf"
+                outpdf.addPage(PdfFileReader(StringIO.StringIO(img.make_blob())).getPage(0))
+
+        pdf_page_buf = StringIO.StringIO()
+        outpdf.write(pdf_page_buf)
+        return pdf_page_buf.getvalue()
 
     def yesterday(self):
         return self.query.filter(Day.date < self.date).order_by(desc(Day.date)).first()
@@ -49,7 +96,7 @@ class Day(db.Model, CRUDMixin):
             for page in self.pages:
                 buf += img_fmt.format(
                     sequence=page.sequence,
-                    thumbnail=page.cache_filename(),
+                    thumbnail=page.filename(extension="jpg"),
                     attachment=page.filename()
                 )
 

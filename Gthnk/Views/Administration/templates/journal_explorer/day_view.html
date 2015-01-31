@@ -16,14 +16,14 @@
     </li>-->
     <li>
         {% if day.yesterday() %}
-            <a href="{{ url_for('.day_view', date=day.yesterday().date) }}" title="previous"><i class="icon-arrow-left"></i></a>
+            <a href="{{ url_for('.day_view', date=day.yesterday().date) }}" title="previous"><i class="icon-chevron-left"></i></a>
         {% else %}
             <a href="javascript:void(0)" title="no past days"><i class="icon-stop"></i> earliest</a>
         {% endif %}
     </li>
     <li>
         {% if day.tomorrow() %}
-            <a href="{{ url_for('.day_view', date=day.tomorrow().date) }}" title="next"><i class="icon-arrow-right"></i></a>
+            <a href="{{ url_for('.day_view', date=day.tomorrow().date) }}" title="next"><i class="icon-chevron-right"></i></a>
         {% else %}
             <a href="javascript:void(0)" title="no future days"><i class="icon-stop"></i></a>
         {% endif %}
@@ -36,6 +36,9 @@
     </li>
     <li>
         <a href="{{ url_for('.index_view') }}" title="search"><i class="icon-search"></i></a>
+    </li>
+    <li>
+        <a href="{{ url_for('.download', date=day.date) }}" title="download"><i class="icon-download-alt"></i></a>
     </li>
     <li>
         <a id="edit_button" href="javascript:void(0)" title="edit"><i class="icon-wrench"></i></a>
@@ -81,7 +84,7 @@
 
             <div class="controllable">
                 <div class="viewable">
-                    <a anchorid="{{page.sequence}}" href="{{ url_for('.attachment', date=day.date, sequence=page.sequence, extension=page.extension) }}" title="download"><i class="icon-download"></i></a>
+                    <a anchorid="{{page.sequence}}" href="{{ url_for('.attachment', date=day.date, sequence=page.sequence, extension=page.extension) }}" title="download"><i class="icon-download-alt"></i></a>
                 </div>
                 <div class="editable">
                     <a href="{{ url_for('.move_page_up', date=day.date, sequence=page.sequence) }}" title="move up"><i class="icon-arrow-up"></i></a>
@@ -89,8 +92,8 @@
                     <span class="delete_widget">
                         <a class="delete_button" href="javascript:void(0);" title="delete"><i class="icon-trash"></i></a>
                         <span class="confirm_widget">
-                            <a href="{{ url_for('.delete_page', date=day.date, sequence=page.sequence) }}" title="yes delete"><i class="icon-thumbs-up"></i></a>
-                            <a class="cancel_button" href="javascript:void(0);" title="do not delete"><i class="icon-thumbs-down"></i></a>
+                            <a href="{{ url_for('.delete_page', date=day.date, sequence=page.sequence) }}" title="yes delete"><i class="icon-ok"></i></a>
+                            <a class="cancel_button" href="javascript:void(0);" title="do not delete"><i class="icon-remove"></i></a>
                         </span>
                     </span>
                 </div>

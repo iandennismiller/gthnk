@@ -20,8 +20,6 @@ class Page(db.Model, CRUDMixin):
     def set_image(self, binary):
         self.binary = binary
         with Image(blob=self.binary, resolution=150) as img:
-            if img.format == "pdf":
-                pass
             self.extension = img.format.lower()
             flattened = Image(background=Color("white"),
                 height=img.height, width=img.width)
@@ -39,11 +37,20 @@ class Page(db.Model, CRUDMixin):
             self.preview = preview.make_blob()
         self.save()
 
-    def filename(self):
-        return '{0}-{1}.{2}'.format(self.day.date, self.sequence, self.extension)
+    def filename(self, extension=None):
+        if not extension:
+            extension = self.extension
+        return '{0}-{1}.{2}'.format(self.day.date, self.sequence, extension)
 
-    def cache_filename(self):
-        return '{0}-{1}.{2}'.format(self.day.date, self.sequence, "jpg")
+    def content_type(self):
+        if self.extension == 'pdf':
+            return 'application/pdf'
+        elif self.extension == 'gif':
+            return 'image/gif'
+        elif self.extension == 'png':
+            return 'image/png'
+        elif self.extension == 'jpg':
+            return 'image/jpeg'
 
     def __repr__(self):
         if self.sequence is not None:

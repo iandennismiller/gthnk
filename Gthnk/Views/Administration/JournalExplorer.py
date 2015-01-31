@@ -3,7 +3,6 @@
 
 import datetime
 import re
-import StringIO
 import flask
 from sqlalchemy import desc
 from flask.ext.admin import expose
@@ -12,8 +11,6 @@ from flask.ext.diamond.administration import AuthView
 from Gthnk import Models, db
 from Gthnk.Models.Day import latest
 from Gthnk.Librarian import Librarian
-from wand.image import Image
-from PyPDF2 import PdfFileReader, PdfFileWriter
 
 
 class JournalExplorer(AuthView):
@@ -81,40 +78,23 @@ class JournalExplorer(AuthView):
 
     @expose("/inbox/<date>", methods=['POST'])
     def upload_file(self, date):
-        def add_page(day, binary):
-            page = Models.Page.create(day=day)
-            page.set_image(binary=binary)
-            day.pages.append(page)
-            day.pages.reorder()
-            db.session.commit()
-
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         file_handle = flask.request.files['file']
         if day and file_handle:
-            binary = file_handle.read()
-
-            # determine the format of the file
-            binary_format = Image(blob=binary).format
-            if binary_format == "PDF":
-                # use PyPDF2 to read the stream
-                pdf = PdfFileReader(StringIO.StringIO(binary))
-                if pdf.getNumPages() > 1:  # if it is a multi-page PDF
-                    for pdf_page in pdf.pages:  # add the pages individually
-                        output = PdfFileWriter()
-                        output.addPage(pdf_page)
-
-                        pdf_page_buf = StringIO.StringIO()
-                        output.write(pdf_page_buf)
-                        add_page(day, pdf_page_buf.getvalue())
-                else:  # if it is just a single page PDF
-                    # then add the original bytestream
-                    add_page(day, binary)
-            elif binary_format:
-                add_page(day, binary)
-            else:  # could not recognize file
-                pass
-
+            day.attach(file_handle.read())
         return flask.redirect(flask.url_for('.day_view', date=date))
+
+    @expose("/download/<date>.pdf")
+    def download(self, date):
+        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+        if day:
+            response = flask.make_response(day.render_pdf())
+            response.headers['Content-Type'] = 'application/pdf'
+            disposition_str = 'attachment; filename="{0}.pdf"'.format(day.date)
+            response.headers['Content-Disposition'] = disposition_str
+            return response
+        else:
+            return flask.redirect(flask.url_for('.day_view', date=date))
 
     @expose("/thumbnail/<date>-<sequence>.jpg")
     def thumbnail(self, date, sequence):
@@ -136,20 +116,9 @@ class JournalExplorer(AuthView):
     def attachment(self, date, sequence, extension):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         page = day.pages[int(sequence)]
-        raw = page.binary
-        response = flask.make_response(raw)
-        if page.extension == 'pdf':
-            response.headers['Content-Type'] = 'application/pdf'
-        elif page.extension == 'gif':
-            response.headers['Content-Type'] = 'image/gif'
-        elif page.extension == 'png':
-            response.headers['Content-Type'] = 'image/png'
-        elif page.extension == 'jpg':
-            response.headers['Content-Type'] = 'image/jpeg'
-
-        disposition_str = 'inline; filename="{0}-{1}.{2}"'
-        response.headers['Content-Disposition'] = disposition_str.format(
-            date, sequence, page.extension)
+        response = flask.make_response(page.binary)
+        response.headers['Content-Type'] = page.content_type()
+        response.headers['Content-Disposition'] = 'inline; filename="{0}"'.format(page.filename())
         return response
 
     @expose("/day/<date>/attachment/<sequence>/move_up")
