@@ -31,9 +31,15 @@
     $("#calendar_button").click(function() {
         $("#calendar_button").toggleClass("active");
         if ($("#calendar_button").hasClass("active")) {
+            //var midnight_today = new Date();
+            var parts = "{{day.date}}".split('-');
+            var calendar_date = new Date(parts[0], parts[1]-1, parts[2]);
+            // 5 hours compensates for the offset from GMT
+            // midnight_today.setHours(5, 0, 0, 0);
             $('.datepicker').show();
             $('.datepicker').datetimepicker({
                 autoclose: true,
+                initialDate: calendar_date,
                 format: 'yyyy-mm-dd',
                 minView: 2
             });
@@ -54,7 +60,7 @@
             month = "0" + month;
         }
         var date = year + "-" + month + "-" + day;
-        window.location = "/admin/journal/day/" + date + ".html";
+        window.location = "/admin/journal/nearest/" + date;
     });
 
     $( window ).resize( set_height );

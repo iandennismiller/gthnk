@@ -27,6 +27,18 @@ class JournalExplorer(AuthView):
         librarian.rotate_buffers()
         return flask.redirect(flask.url_for('.latest_view'))
 
+    @expose("/nearest/<date>")
+    def nearest_day_view(self, date):
+        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+        if day:
+            return flask.redirect(flask.url_for('.day_view', date=day.date))
+        else:
+            day = Models.Day.query.order_by(Models.Day.date).filter(Models.Day.date > date).first()
+            if day:
+                return flask.redirect(flask.url_for('.day_view', date=day.date))
+        # if no dates are found, redirect to home page
+        return flask.redirect(flask.url_for('admin.index'))
+
     @expose("/day/<date>.html")
     def day_view(self, date):
         day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -34,12 +46,7 @@ class JournalExplorer(AuthView):
             day_str = re.sub(r'(\d\d\d\d)', '<a name="\g<1>"></a>\n\g<1>', day.render())
             return self.render('journal_explorer/day_view.html', day=day, day_str=day_str)
         else:
-            day = Models.Day.query.filter(Models.Day.date > date).first()
-            if day:
-                day_str = re.sub(r'(\d\d\d\d)', '<a name="\g<1>"></a>\n\g<1>', day.render())
-                return self.render('journal_explorer/day_view.html', day=day, day_str=day_str)
-
-        return flask.redirect(flask.url_for('admin.index'))
+            return flask.redirect(flask.url_for('admin.index'))
 
     @expose("/text/<date>.txt")
     def text_view(self, date):
