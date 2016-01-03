@@ -56,11 +56,7 @@ lint:
 	pylint Gthnk
 
 docs:
-	rm -rf docs/source/auto
-	mkdir -p docs/source/auto/$(MOD_NAME)
-	sphinx-apidoc -o docs/source/auto/$(MOD_NAME) $(MOD_NAME)
-	SETTINGS=$$PWD/etc/dev.conf sphinx-build -b html docs/source docs/build
-	SETTINGS=$$PWD/etc/dev.conf sphinx-build -b text docs/source docs/build
-	open docs/build/index.html
+	rm -rf var/sphinx/build
+	sphinx-build -b html docs var/sphinx/build
 
 .PHONY: clean install test server watch lint docs launchd paths all single

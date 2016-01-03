@@ -1,0 +1,18 @@
+{
+  "name": "gthnk",
+  "description": "personal knowledge management system",
+  "version": "0.3",
+  "manifest_version": 2,
+  "app": {
+    "urls": [
+      "http://localhost:1620/"
+    ],
+    "launch": {
+      "web_url": "http://localhost:1620/admin/journal/latest.html",
+      "container": "panel",
+      "width": 1000,
+      "height": 650
+    }
+  },
+  "icons": { "16": "icon-16.png", "128": "icon-128.png" }
+}
