@@ -10,16 +10,16 @@ At bootup, launch the Gthnk server to listen on http://127.0.0.1:1620/
     <key>EnvironmentVariables</key>
         <dict>
             <key>SETTINGS</key>
-                <string>/Users/idm/.gthnk/gthnk.conf</string>
+                <string>{{{ home_directory }}}/.gthnk/gthnk.conf</string>
             <key>PATH</key>
                 <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
         </dict>
     <key>StandardOutPath</key>
-        <string>/var/lib/gthnk/launchd.out.log</string>
+        <string>{{{ home_directory }}}/Library/Gthnk/launchd.out.log</string>
     <key>StandardErrorPath</key>
-        <string>/var/lib/gthnk/launchd.err.log</string>
+        <string>{{{ home_directory }}}/Library/Gthnk/launchd.err.log</string>
     <key>Program</key>
-	   <string>/Users/idm/.virtualenvs/gthnk/bin/runserver.py</string>
+	   <string>{{{ home_directory }}}/.virtualenvs/gthnk/bin/runserver.py</string>
     <key>KeepAlive</key>
         <true/>
     <key>RunAtLoad</key>

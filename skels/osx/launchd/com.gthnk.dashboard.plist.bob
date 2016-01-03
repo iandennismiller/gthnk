@@ -10,12 +10,12 @@ At 9:00 AM every day, the dashboard opens up in the default browser to provide a
 	<key>EnvironmentVariables</key>
     <dict>
 		<key>SETTINGS</key>
-		<string>/Users/idm/.gthnk/gthnk.conf</string>
+		<string>{{{ home_directory }}}/Library/Gthnk/gthnk.conf</string>
     </dict>
     <key>StandardOutPath</key>
-    <string>/var/lib/gthnk/launchd.out.log</string>
+    <string>{{{ home_directory }}}/Library/Gthnk/launchd.out.log</string>
     <key>StandardErrorPath</key>
-    <string>/var/lib/gthnk/launchd.err.log</string>
+    <string>{{{ home_directory }}}/Library/Gthnk/launchd.err.log</string>
     <key>ProgramArguments</key>
     <array>
         <string>/usr/bin/open</string>

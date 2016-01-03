@@ -10,14 +10,14 @@ At 12:03 AM every day, scan the journal.txt and rotate out any old files.
 	<key>EnvironmentVariables</key>
     <dict>
 		<key>SETTINGS</key>
-		<string>/Users/idm/.gthnk/gthnk.conf</string>
+		<string>{{{ home_directory }}}/.gthnk/gthnk.conf</string>
     </dict>
     <key>StandardOutPath</key>
-    <string>/var/lib/gthnk/launchd.out.log</string>
+    <string>{{{ home_directory }}}/Library/Gthnk/launchd.out.log</string>
     <key>StandardErrorPath</key>
-    <string>/var/lib/gthnk/launchd.err.log</string>
+    <string>{{{ home_directory }}}/Library/Gthnk/launchd.err.log</string>
 	<key>Program</key>
-	<string>/Users/idm/.virtualenvs/gthnk/bin/journal_rotate.py</string>
+	<string>{{{ home_directory }}}/.virtualenvs/gthnk/bin/journal_rotate.py</string>
 	<key>StartCalendarInterval</key>
 	<dict>
 		<key>Hour</key>
