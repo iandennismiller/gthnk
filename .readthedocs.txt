@@ -1,2 +1,1 @@
-flask-diamond==0.2.14
 GitPython==1.0.1
