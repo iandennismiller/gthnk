@@ -13,6 +13,7 @@
 
 import sys
 import os
+import datetime
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -23,6 +24,20 @@ sys.path.insert(0, os.path.abspath('..'))
 
 # If your documentation needs a minimal Sphinx version, state it here.
 #needs_sphinx = '1.0'
+
+this_path = os.path.dirname(os.path.abspath(__file__))
+git_path = os.path.join(this_path, "..")
+
+from git import Repo
+repo = Repo(git_path)
+
+hc = repo.head.commit
+git_checksum = str(hc)[:8]
+
+html_context = {
+    "git_checksum": git_checksum,
+    "today": datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d"),
+}
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
@@ -97,37 +112,26 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 
-import alabaster
+sys.path.append(os.path.abspath('_themes'))
+html_theme_path = ['_themes']
+html_theme = 'flask'
 
-html_theme_path = [alabaster.get_path()]
-html_theme = 'alabaster'
 html_sidebars = {
+    'index': [
+        'sidebarlogo.html',
+        'sidebarintro.html',
+        'localtoc.html',
+        'searchbox.html',
+        'version.html'
+    ],
     '**': [
-        'about.html',
-        'navigation.html',
+        'sidebarlogo.html',
+        'localtoc.html',
         'relations.html',
         'searchbox.html',
-        'donate.html',
+        'version.html'
     ]
 }
-
-# from collections import OrderedDict
-
-html_theme_options = {
-    'logo': 'icon-128.png',
-    'github_button': False,
-    'show_powered_by': False,
-    # 'analytics_id': "UA-70449362-1",
-    # 'extra_nav_links': OrderedDict(
-    #     (
-    #         ("Diamond Methods", "http://diamond-methods.org"),
-    #         ("Python Project on PyPI", "https://pypi.python.org/pypi/Puppet-Diamond"),
-    #         ("GitHub Project Page", "http://github.com/diamond-org/puppet-diamond"),
-    #         ("Issue Tracker", "http://github.com/diamond-org/puppet-diamond/issues"),
-    #     )
-    # )
-}
-
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

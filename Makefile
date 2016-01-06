@@ -14,7 +14,7 @@ install:
 
 clean:
 	rm -rf build dist *.egg-info
-	find . -name "*.pyc" -exec rm -rf {} \;
+	find . -name '*.pyc' -delete
 
 server:
 	SETTINGS=$$PWD/etc/dev.conf bin/manage.py runserver

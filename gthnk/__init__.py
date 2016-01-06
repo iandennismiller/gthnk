@@ -57,8 +57,8 @@ class Gthnk(Diamond):
             category="Admin"))
 
         admin.add_view(JournalExplorer(name="Journal", endpoint="journal"))
-        admin.add_view(ProjectExplorer(name="Projects", endpoint="projects"))
-        admin.add_view(ListExplorer(name="Lists", endpoint="lists"))
+        # admin.add_view(ProjectExplorer(name="Projects", endpoint="projects"))
+        # admin.add_view(ListExplorer(name="Lists", endpoint="lists"))
 
         list_list = [
             "domain-list",
