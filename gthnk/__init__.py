@@ -79,9 +79,6 @@ class Gthnk(Diamond):
                 category="Lists"))
 
     def blueprints(self):
-        #from .Views.Frontend.Workspace import workspace
-        #app.register_blueprint(workspace)
-
         from flask_diamond.views.diamond import diamond_blueprint
         self.app.register_blueprint(diamond_blueprint)
 

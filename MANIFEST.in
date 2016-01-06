@@ -1,4 +1,5 @@
-recursive-include Gthnk/Views/Administration/templates *
-recursive-include Gthnk/Views/Administration/static *
-recursive-include Gthnk/Views/Frontend/templates *
-recursive-include Gthnk/Views/Frontend/static *
+recursive-include gthnk/views/administration/templates *
+recursive-include gthnk/views/administration/static *
+recursive-include skels *
+include Readme.rst
+include requirements.txt

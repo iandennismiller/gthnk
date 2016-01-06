@@ -13,7 +13,8 @@ install:
 	python setup.py install
 
 clean:
-	rm -rf build dist *.egg-info *.pyc
+	rm -rf build dist *.egg-info
+	find . -name "*.pyc" -exec rm -rf {} \;
 
 server:
 	SETTINGS=$$PWD/etc/dev.conf bin/manage.py runserver

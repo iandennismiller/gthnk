@@ -3,6 +3,8 @@
 # gthnk (c) 2014 Ian Dennis Miller
 
 import sys
+import os
+import glob
 import traceback
 sys.path.insert(0, '.')
 
@@ -74,6 +76,24 @@ def populate_db():
         confirmed=True,
         roles=["User", "Admin"],
     )
+
+
+@manager.command
+def import_archive(directory):
+    from gthnk.adaptors.journal_buffer import JournalBuffer
+    with app.app_context():
+        journal_buffer = JournalBuffer.TextFileJournalBuffer()
+        match_str = os.path.join(directory, "*.txt")
+        journal_buffer.process_list(glob.glob(match_str))
+        journal_buffer.save_entries()
+
+
+@manager.command
+def journal_export():
+    from gthnk.librarian import Librarian
+    with app.app_context():
+        librarian = Librarian(app)
+        librarian.export_journal()
 
 if __name__ == "__main__":
     try:

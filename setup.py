@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+# gthnk (c) 2014-2016 Ian Dennis Miller
+
 from setuptools import setup
 from distutils.dir_util import copy_tree
 import os
@@ -31,14 +34,12 @@ setup(
         "gthnk.adaptors",
         "gthnk.models",
         "gthnk.views",
-        "gthnk.views.frontend",
         "gthnk.views.administration",
     ],
     scripts=[
         "bin/runserver.py",
         "bin/manage.py",
         "bin/journal_rotate.py",
-        "bin/journal_export.py",
         "bin/install_osx.sh",
         #"bin/journal_actions.py",
     ],
