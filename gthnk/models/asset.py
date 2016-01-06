@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) 2014 Ian Dennis Miller
 
-import json, os
-from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
-from flask.ext.security.utils import encrypt_password, verify_password
 from flask.ext.diamond.utils.mixins import CRUDMixin
-from flask.ext.diamond.models import User
-from Gthnk import db, security
+from .. import db
+
 
 class Asset(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)

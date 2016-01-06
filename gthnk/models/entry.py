@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) 2014 Ian Dennis Miller
 
-import json, os, datetime
-from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
-from flask.ext.security.utils import encrypt_password, verify_password
+import datetime
 from flask.ext.diamond.utils.mixins import CRUDMixin
-from flask.ext.diamond.models import User
-from Gthnk import db, security
-import Gthnk.Models
+from .. import db
 import flask
+
 
 class Entry(db.Model, CRUDMixin):
     """
@@ -27,17 +23,19 @@ class Entry(db.Model, CRUDMixin):
 
     def save(self, _commit):
         # see if this entry is a duplicate before creating it.
-        existing_entries = self.query.filter_by(timestamp=self.timestamp).filter_by(content=self.content).count()
-        if existing_entries and existing_entries > 0: # if it exists
+        existing_entries = self.query.filter_by(timestamp=self.timestamp)\
+            .filter_by(content=self.content).count()
+        if existing_entries and existing_entries > 0:  # if it exists
             flask.current_app.logger.info("skipping entry because entry already exists")
             return
 
         if not self.day_id:
             # find the day if it exists
+            from day import Day
             this_date = datetime.date.fromordinal(self.timestamp.toordinal())
-            this_day = Gthnk.Models.Day.find(date=this_date)
-            if not this_day: # else create the day right now
-                this_day = Gthnk.Models.Day.create(date=this_date)
+            this_day = Day.find(date=this_date)
+            if not this_day:  # else create the day right now
+                this_day = Day.create(date=this_date)
             # now assign a value to this Entry's day
             self.day = this_day
 
@@ -55,4 +53,6 @@ class Entry(db.Model, CRUDMixin):
         #return '<Entry {} ({}) "{}">'.format(self.timestamp, self.tags, self.content)
 
     def __unicode__(self):
-        return "\n\n{}\n\n{}".format(datetime.datetime.strftime(self.timestamp, "%H%M"), self.content)
+        return "\n\n{}\n\n{}".format(
+            datetime.datetime.strftime(self.timestamp, "%H%M"), self.content
+        )

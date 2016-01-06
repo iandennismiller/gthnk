@@ -10,8 +10,7 @@ from sqlalchemy import desc
 from sqlalchemy.ext.orderinglist import ordering_list
 from wand.image import Image
 
-import Gthnk.Models
-from Gthnk import db
+from .. import db
 
 
 class Day(db.Model, CRUDMixin):
@@ -28,7 +27,8 @@ class Day(db.Model, CRUDMixin):
         backref=db.backref("day"))
 
     def add_page(self, binary):
-        page = Gthnk.Models.Page.create(day=self)
+        from page import Page
+        page = Page.create(day=self)
         page.set_image(binary=binary)
         self.pages.append(page)
         self.pages.reorder()
@@ -78,8 +78,9 @@ class Day(db.Model, CRUDMixin):
         return self.query.filter(Day.date > self.date).order_by(Day.date).first()
 
     def render(self):
+        from entry import Entry
         buf = datetime.datetime.strftime(self.date, "%Y-%m-%d")
-        for entry in self.entries.order_by(Gthnk.Models.Entry.timestamp).all():
+        for entry in self.entries.order_by(Entry.timestamp).all():
             buf += unicode(entry)
         buf += "\n\n"
         return buf

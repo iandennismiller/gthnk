@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 # greenthink-library (c) 2013 Ian Dennis Miller
 
-import json, os, re, datetime
+import re
+import datetime
 from collections import defaultdict
-import Gthnk.Models
+from gthnk import models
+
 
 def split_filename_list(filename_str):
     return [x.strip() for x in filename_str.split(',')]
+
 
 class JournalBuffer(object):
     """
@@ -14,7 +17,7 @@ class JournalBuffer(object):
     """
 
     def __init__(self):
-        self.entries = defaultdict(lambda : defaultdict(unicode))
+        self.entries = defaultdict(lambda: defaultdict(unicode))
         self.re_day = re.compile(r'^(\d\d\d\d-\d\d-\d\d)\s*$')
         self.re_time = re.compile(r'^(\d\d\d\d)\s*$')
         self.re_time_tag = re.compile(r'^(\d\d\d\d)\s(\w+)\s*$')
@@ -69,15 +72,17 @@ class JournalBuffer(object):
         for day in self.entries.keys():
             for timestamp in self.entries[day].keys():
                 try:
-                    time_obj = datetime.datetime.strptime("{} {}".format(day, timestamp), '%Y-%m-%d %H%M')
+                    time_obj = datetime.datetime.strptime(
+                        "{} {}".format(day, timestamp), '%Y-%m-%d %H%M')
                 except:
                     print "'{}' '{}'".format(day, timestamp)
                     continue
 
-                Gthnk.Models.Entry.create(
+                models.Entry.create(
                     timestamp=time_obj,
                     content=self.entries[day][timestamp]
-                    )
+                )
+
 
 class TextFileJournalBuffer(JournalBuffer):
     """

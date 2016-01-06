@@ -2,15 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import flask
-import Gthnk
-import Gthnk.Adaptors.JournalBuffer
-from Gthnk.Librarian import Librarian
+import gthnk
+from gthnk.librarian import Librarian
 
 
 def main():
     app = flask.Flask(__name__)
     app.config.from_envvar('SETTINGS')
-    Gthnk.db.init_app(app)
+    gthnk.db.init_app(app)
     with app.app_context():
         librarian = Librarian(app)
         librarian.rotate_buffers()

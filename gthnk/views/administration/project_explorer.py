@@ -4,8 +4,8 @@ from flask.ext.admin import expose
 from flask.ext.diamond.administration import AuthView
 from flask.ext.security import current_user
 
-from Gthnk import cache
-from Gthnk.Adaptors.Projects import ProjectList
+from gthnk import cache
+from gthnk.adaptors.projects import ProjectList
 
 
 class ProjectExplorer(AuthView):

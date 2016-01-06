@@ -2,17 +2,16 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import with_statement
-import re, json, datetime, os, shutil, urllib2, logging
-from collections import defaultdict
-import poodledo
-from poodledo.apiclient import ApiClient, PoodledoError
-from poodledo.cli import do_login
+import json
+import os
+import urllib2
 from poodledo.apiclient import ApiClient, PoodledoError, ToodledoError
+from poodledo.cli import do_login
 
-from GT.dashboard import DashboardWidget
 
 class Action(object):
     pass
+
 
 class Todo(Action):
     def __init__(self, debug=False):
@@ -21,6 +20,7 @@ class Todo(Action):
         except PoodledoError as e:
             print e
             exit(1)
+
 
 class Shopping(Action):
     def __init__(self, debug=False):
@@ -47,7 +47,8 @@ class Shopping(Action):
                 print t
 
     def addItem(self, title):
-        self.client.addTask(title=title, folder = self.folder_name)
+        self.client.addTask(title=title, folder=self.folder_name)
+
 
 class TodoWidget(object):
     def do_login(self, credential_file):

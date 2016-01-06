@@ -7,19 +7,18 @@ import traceback
 sys.path.insert(0, '.')
 
 from flask.ext.script import Manager, Shell, Server
-from flask.ext.dbshell import DbShell
 from flask.ext.migrate import Migrate, MigrateCommand
 import alembic
 import alembic.config
 
-from Gthnk import create_app, db, security
+from gthnk import create_app, db, security
 app = create_app()
 
 
 def _make_context():
     return dict(app=app, db=db, user_datastore=security.datastore)
 
-migrate = Migrate(app, db)
+migrate = Migrate(app, db, directory="gthnk/migrations")
 
 manager = Manager(app)
 manager.add_command("shell", Shell(make_context=_make_context))

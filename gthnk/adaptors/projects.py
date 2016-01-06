@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 # Gthnk (c) 2014 Ian Dennis Miller
 
-import os, sys, time, json, subprocess
-from stat import S_ISREG, ST_CTIME, ST_MODE
+import os
+import time
+import subprocess
 import flask
+
 
 def pipe(cmd):
     sp = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
@@ -11,6 +13,7 @@ def pipe(cmd):
     sp.stdout.close()
     sp.wait()
     return output
+
 
 def recently_modified_git(dirpath):
     cmd = "find %s -name '.git' -depth 2" % dirpath
@@ -20,8 +23,11 @@ def recently_modified_git(dirpath):
     s_entries = sorted(timestamped)
     s_entries.reverse()
 
-    files = list((time.ctime(cdate), os.path.basename(os.path.dirname(path))) for cdate, path in s_entries)
+    files = list(
+        (time.ctime(cdate), os.path.basename(os.path.dirname(path))) for cdate, path in s_entries
+    )
     return files
+
 
 class ProjectList(object):
     def __init__(self):
@@ -32,7 +38,9 @@ class ProjectList(object):
         return files[:20]
 
     def get_readme(self, project_name):
-        target_file = os.path.join(flask.current_app.config["PROJECT_PATH"], project_name, "Readme.md")
+        target_file = os.path.join(
+            flask.current_app.config["PROJECT_PATH"], project_name, "Readme.md"
+        )
         if os.path.exists(target_file):
             with open(target_file, "r") as f:
                 buf = f.read()

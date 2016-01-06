@@ -5,48 +5,53 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-from flask.ext.diamond import Diamond, db, toolbar, security
-import Models
+from flask.ext.diamond import Diamond, db, security
 from datetime import timedelta
 from flask.ext.markdown import Markdown
 from flask.ext.cache import Cache
 from mdx_linkify.mdx_linkify import LinkifyExtension
 from mdx_journal import JournalExtension
 
+app_instance = None
 cache = Cache(config={'CACHE_TYPE': 'simple'})
+
+assert security
 
 
 class Gthnk(Diamond):
-
-    def administration(self, app, db):
+    def administration(self):
         from flask.ext.diamond.administration import AuthenticatedMenuLink
-        from .Views.Administration import Administration as A
-        from .Views.Administration.JournalExplorer import JournalExplorer
-        from .Views.Administration.ProjectExplorer import ProjectExplorer
-        from .Views.Administration.ListExplorer import ListExplorer
+        from .views.administration import administration as A
+        from .views.administration.journal_explorer import JournalExplorer
+        from .views.administration.project_explorer import ProjectExplorer
+        from .views.administration.list_explorer import ListExplorer
 
-        admin = super(Gthnk, self).administration(app, db, index_view=A.RedirectView(name="Home"))
+        admin = super(Gthnk, self).administration()
 
+        from models.entry import Entry
         admin.add_view(A.EntryAdmin(
-            Models.Entry,
+            Entry,
             db.session,
             name="Entries",
             category="Admin"))
 
+        from models.day import Day
         admin.add_view(A.DayAdmin(
-            Models.Day,
+            Day,
             db.session,
             name="Days",
             category="Admin"))
 
+        from models.item_list import ItemList
         admin.add_view(A.ItemListAdmin(
-            Models.ItemList,
+            ItemList,
             db.session,
             name="ItemList",
             category="Admin"))
 
+        from models.page import Page
         admin.add_view(A.PageAdmin(
-            Models.Page,
+            Page,
             db.session,
             name="Pages",
             category="Admin"))
@@ -73,21 +78,24 @@ class Gthnk(Diamond):
                 url="/admin/lists/{}/items".format(name),
                 category="Lists"))
 
-    def blueprints(self, app):
+    def blueprints(self):
         #from .Views.Frontend.Workspace import workspace
         #app.register_blueprint(workspace)
 
-        from .Views.Administration.Administration import adminbaseview
-        app.register_blueprint(adminbaseview)
+        from .views.administration.administration import adminbaseview
+        self.app.register_blueprint(adminbaseview)
 
 
 def create_app():
-    gthnk = Gthnk(db, security, toolbar)
-    gthnk.init_app()
-    gthnk.logger(gthnk.app)
-    gthnk.app.logger.info("starting gthnk server")
-    gthnk.app.permanent_session_lifetime = timedelta(minutes=30)
-    gthnk.app.md = Markdown(gthnk.app,
-        extensions=[LinkifyExtension(), JournalExtension()])
-    cache.init_app(gthnk.app)
-    return gthnk.app
+    global app_instance
+    if not app_instance:
+        app_instance = Gthnk()
+        app_instance.init_app(email=False, request_handlers=False)
+        app_instance.app.permanent_session_lifetime = timedelta(minutes=30)
+        app_instance.app.logger.info("starting gthnk server")
+        app_instance.app.md = Markdown(app_instance.app,
+            extensions=[LinkifyExtension(), JournalExtension()])
+        cache.init_app(app_instance.app)
+
+    # print app_instance.app.url_map
+    return app_instance.app

@@ -1,0 +1,14 @@
+flask-diamond==0.2.14
+mdx_linkify==0.5
+poodledo>=0.2
+mdx_journal==0.1
+Wand==0.3.9
+Flask-Cache==0.13.1
+pyScss==1.2.0.post3
+lxml==3.4.0
+requests==2.4.1
+cssselect==0.9.1
+distribute==0.7.3
+GitPython==1.0.1
+alabaster==0.7.6
+PyPDF2==1.24

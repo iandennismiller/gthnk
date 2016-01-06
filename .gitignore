@@ -1,9 +1,8 @@
-build/
-sphinx/build/
-dist/
+/build
+/dist
 *.egg-info
-lib/poodledo
-docs/source/auto/
-make*.log
+/lib/poodledo
+/docs/source/auto/
+/make*.log
 *.sublime-workspace
-
+/var/sphinx

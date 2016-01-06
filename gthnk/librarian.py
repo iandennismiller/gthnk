@@ -5,7 +5,7 @@ import os
 import shutil
 import hashlib
 
-import Gthnk.Adaptors.JournalBuffer
+import gthnk.adaptors.journal_buffer
 
 
 def overwrite_if_different(filename, new_content):
@@ -33,7 +33,7 @@ class Librarian(object):
     def rotate_buffers(self):
         # import any Journal Buffers that might have entries ready for importing
         self.app.logger.info("processing list: {}".format(self.app.config["INPUT_FILES"]))
-        file_list = Gthnk.Adaptors.JournalBuffer.split_filename_list(self.app.config["INPUT_FILES"])
+        file_list = gthnk.adaptors.journal_buffer.split_filename_list(self.app.config["INPUT_FILES"])
 
         # create a new backup path
         todays_date = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H%M%S")
@@ -46,7 +46,7 @@ class Librarian(object):
             shutil.copy2(filename, backup_path)
 
             # load and parse the file
-            journal_buffer = Gthnk.Adaptors.JournalBuffer.TextFileJournalBuffer()
+            journal_buffer = gthnk.adaptors.journal_buffer.TextFileJournalBuffer()
             journal_buffer.process_one(filename)
             journal_buffer.save_entries()
 

@@ -2,7 +2,7 @@
 # gthnk (c) 2014 Ian Dennis Miller
 
 from flask.ext.diamond.utils.mixins import CRUDMixin
-from Gthnk import db
+from .. import db
 
 
 class ItemList(db.Model, CRUDMixin):

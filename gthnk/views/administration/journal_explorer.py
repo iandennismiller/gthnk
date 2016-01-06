@@ -8,9 +8,10 @@ from sqlalchemy import desc
 from flask.ext.admin import expose
 from flask.ext.security import current_user
 from flask.ext.diamond.administration import AuthView
-from Gthnk import Models, db
-from Gthnk.Models.Day import latest
-from Gthnk.Librarian import Librarian
+from gthnk import db
+from gthnk.models.day import Day, latest
+from gthnk.models.entry import Entry
+from gthnk.librarian import Librarian
 
 
 class JournalExplorer(AuthView):
@@ -29,11 +30,11 @@ class JournalExplorer(AuthView):
 
     @expose("/nearest/<date>")
     def nearest_day_view(self, date):
-        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+        day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         if day:
             return flask.redirect(flask.url_for('.day_view', date=day.date))
         else:
-            day = Models.Day.query.order_by(Models.Day.date).filter(Models.Day.date > date).first()
+            day = Day.query.order_by(Day.date).filter(Day.date > date).first()
             if day:
                 return flask.redirect(flask.url_for('.day_view', date=day.date))
         # if no dates are found, redirect to home page
@@ -41,7 +42,7 @@ class JournalExplorer(AuthView):
 
     @expose("/day/<date>.html")
     def day_view(self, date):
-        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+        day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         if day:
             day_str = re.sub(r'(\d\d\d\d)', '<a name="\g<1>"></a>\n\g<1>', day.render())
             return self.render('journal_explorer/day_view.html', day=day, day_str=day_str)
@@ -50,7 +51,7 @@ class JournalExplorer(AuthView):
 
     @expose("/text/<date>.txt")
     def text_view(self, date):
-        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+        day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         if day:
             return day.render()
         else:
@@ -58,7 +59,7 @@ class JournalExplorer(AuthView):
 
     @expose("/markdown/<date>.md")
     def markdown_view(self, date):
-        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+        day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         if day:
             return day.render_markdown()
         else:
@@ -75,8 +76,8 @@ class JournalExplorer(AuthView):
         if query_str is None:
             return flask.redirect(flask.url_for('admin.index'))
 
-        query = Models.Entry.query.filter(
-            Models.Entry.content.contains(query_str)).order_by(desc(Models.Entry.timestamp))
+        query = Entry.query.filter(
+            Entry.content.contains(query_str)).order_by(desc(Entry.timestamp))
         results = query.all()[:20]
         for idx in range(0, len(results)):
             results[idx].content = re.sub(query_str, "**{}**".format(
@@ -85,7 +86,7 @@ class JournalExplorer(AuthView):
 
     @expose("/inbox/<date>", methods=['POST'])
     def upload_file(self, date):
-        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+        day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         file_handle = flask.request.files['file']
         if day and file_handle:
             day.attach(file_handle.read())
@@ -93,7 +94,7 @@ class JournalExplorer(AuthView):
 
     @expose("/download/<date>.pdf")
     def download(self, date):
-        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+        day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         if day:
             response = flask.make_response(day.render_pdf())
             response.headers['Content-Type'] = 'application/pdf'
@@ -105,7 +106,7 @@ class JournalExplorer(AuthView):
 
     @expose("/thumbnail/<date>-<sequence>.jpg")
     def thumbnail(self, date, sequence):
-        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+        day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         page = day.pages[int(sequence)]
         response = flask.make_response(page.thumbnail)
         response.headers['Content-Type'] = 'image/jpeg'
@@ -113,7 +114,7 @@ class JournalExplorer(AuthView):
 
     @expose("/preview/<date>-<sequence>.jpg")
     def preview(self, date, sequence):
-        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+        day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         page = day.pages[int(sequence)]
         response = flask.make_response(page.preview)
         response.headers['Content-Type'] = 'image/jpeg'
@@ -121,7 +122,7 @@ class JournalExplorer(AuthView):
 
     @expose("/attachment/<date>-<sequence>.<extension>")
     def attachment(self, date, sequence, extension):
-        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+        day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         page = day.pages[int(sequence)]
         response = flask.make_response(page.binary)
         response.headers['Content-Type'] = page.content_type()
@@ -131,7 +132,7 @@ class JournalExplorer(AuthView):
     @expose("/day/<date>/attachment/<sequence>/move_up")
     def move_page_up(self, date, sequence):
         if int(sequence) > 0:
-            day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+            day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
             active_page = day.pages.pop(int(sequence))
             day.pages.reorder()
             day.pages.insert(int(sequence)-1, active_page)
@@ -141,7 +142,7 @@ class JournalExplorer(AuthView):
 
     @expose("/day/<date>/attachment/<sequence>/move_down")
     def move_page_down(self, date, sequence):
-        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+        day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         if int(sequence) < len(day.pages)-1:
             active_page = day.pages.pop(int(sequence))
             day.pages.reorder()
@@ -152,7 +153,7 @@ class JournalExplorer(AuthView):
 
     @expose("/day/<date>/attachment/<sequence>/delete")
     def delete_page(self, date, sequence):
-        day = Models.Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+        day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
         active_page = day.pages.pop(int(sequence))
         active_page.delete()
         db.session.commit()

@@ -1,13 +1,14 @@
 # (c) 2013 Ian Dennis Miller
 # -*- coding: utf-8 -*-
 
-import os, sys, time, json, re
+import os
 from GT.dashboard import DashboardWidget
 from itertools import islice
 import GT.journal
 import markdown
 
-# http://stackoverflow.com/questions/260273/most-efficient-way-to-search-the-last-x-lines-of-a-file-in-python
+
+# http://stackoverflow.com/questions/260273
 def reversed_lines(file):
     "Generate the lines of file in reverse order."
     part = ''
@@ -17,7 +18,9 @@ def reversed_lines(file):
                 yield part[::-1]
                 part = ''
             part += c
-    if part: yield part[::-1]
+    if part:
+        yield part[::-1]
+
 
 def reversed_blocks(file, blocksize=4096):
     "Generate blocks of file's contents in reverse order."
@@ -29,8 +32,9 @@ def reversed_blocks(file, blocksize=4096):
         file.seek(here, os.SEEK_SET)
         yield file.read(delta)
 
+
 class IdeaListsWidget(DashboardWidget):
-    # http://stackoverflow.com/questions/168409/how-do-you-get-a-directory-listing-sorted-by-creation-date-in-python
+    # http://stackoverflow.com/questions/168409
 
     def render(self):
         lists = {}
