@@ -1,4 +1,5 @@
 #!/bin/bash
+# gthnk (c) 2014-2016 Ian Dennis Miller
 
 echo "Initialize configuration"
 mrbob "${VIRTUAL_ENV}/share/skels/osx" -O /tmp/gthnk_osx

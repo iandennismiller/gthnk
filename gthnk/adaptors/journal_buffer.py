@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# greenthink-library (c) 2013 Ian Dennis Miller
+# gthnk (c) 2014-2016 Ian Dennis Miller
 
 import re
 import datetime

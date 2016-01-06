@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# gthnk (c) 2016 Ian Dennis Miller
+# gthnk (c) 2014-2016 Ian Dennis Miller
 
 from flask.ext.diamond.models import User, Role
 from asset import Asset

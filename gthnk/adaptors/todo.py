@@ -1,5 +1,5 @@
-# (c) 2013 Ian Dennis Miller
 # -*- coding: utf-8 -*-
+# gthnk (c) 2014-2016 Ian Dennis Miller
 
 from __future__ import with_statement
 import json
