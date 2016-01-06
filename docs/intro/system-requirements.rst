@@ -1,7 +1,7 @@
 System Requirements
 ===================
 
-Puppet-Diamond requires some software to be installed in order to function.  Once you have installed these requirements, you can follow the :doc:`quick-start` to start your first project.  The following packages should be installed globally, as the superuser, for all users on the system to access.
+gthnk requires some software to be installed in order to function.  Once you have installed these requirements, you can follow the :doc:`quick-start` to start your first project.  The following packages should be installed globally, as the superuser, for all users on the system to access.
 
 - `Python 2.7.x <https://www.python.org/download/releases/2.7/>`_.
 - Python development libraries (i.e. header files for compiling C code)
@@ -16,7 +16,7 @@ If you do not have root access, then refer to the section :ref:`unprivileged-ins
 Debian/Ubuntu
 -------------
 
-Puppet-Diamond installs cleanly on Debian and Ubuntu systems released after 2011.
+gthnk installs cleanly on Debian and Ubuntu systems released after 2011.  *However, there are currently no startup scripts for Linux.*
 
 ::
 
@@ -29,7 +29,7 @@ Puppet-Diamond installs cleanly on Debian and Ubuntu systems released after 2011
 Redhat
 ------
 
-Puppet-Diamond can be installed on RedHat, but ensure your package manager is installing Python 2.7; as of August 2015, RHEL provides an older version.
+gthnk can be installed on RedHat, but ensure your package manager is installing Python 2.7; as of August 2015, RHEL provides an older version. *However, there are currently no startup scripts for Linux.*
 
 ::
 
@@ -42,7 +42,7 @@ Puppet-Diamond can be installed on RedHat, but ensure your package manager is in
 OSX with Homebrew
 -----------------
 
-Puppet-Diamond installs pretty easily on OSX with Homebrew.  Make sure you are using the *admin* user for this process, just like a normal Homebrew operation.
+gthnk installs pretty easily on OSX with Homebrew.  Make sure you are using the *admin* user for this process, just like a normal Homebrew operation.
 
 ::
 
@@ -69,11 +69,11 @@ Here are a few resources to get you started:
 Unprivileged Installation
 -------------------------
 
-Sometimes, you do not have root access to the system.  It is still possible to use Puppet-Diamond, but the installation process is slightly different because it does not use virtualenvwrapper.  Instead, you will create your virtualenv directly and use the `activate` macro to work on it.
+Sometimes, you do not have root access to the system.  It is still possible to use gthnk, but the installation process is slightly different because it does not use virtualenvwrapper.  Instead, you will create your virtualenv directly and use the `activate` macro to work on it.
 
 ::
 
     curl -O https://raw.github.com/pypa/virtualenv/master/virtualenv.py
     python virtualenv.py my-diamond-app
     . my-diamond-app/bin/activate
-    pip install Puppet-Diamond
+    pip install gthnk
