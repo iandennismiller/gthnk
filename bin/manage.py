@@ -29,10 +29,29 @@ manager.add_command('db', MigrateCommand)
 
 @manager.option('-e', '--email', help='email address')
 @manager.option('-p', '--password', help='password')
-def create_user(email, password):
+@manager.option('-a', '--admin', help='make user an admin user', action='store_true', default=None)
+def useradd(email, password, admin):
     "add a user to the database"
-    from Gthnk import Models
-    Models.User.create(email=email, password=password)
+    if admin:
+        roles = ["Admin"]
+    else:
+        roles = ["User"]
+
+    from gthnk import models
+    models.User.register(
+        email=email,
+        password=password,
+        confirmed=True,
+        roles=roles
+    )
+
+
+@manager.option('-e', '--email', help='email address')
+def userdel(email):
+    "delete a user from the database"
+    from gthnk import models
+    obj = models.User.find(email=email)
+    obj.delete()
 
 
 @manager.command
@@ -41,18 +60,20 @@ def init_db():
     db.drop_all()
     db.create_all()
     db.session.commit()
-    cfg = alembic.config.Config("migrations/alembic.ini")
+    cfg = alembic.config.Config("gthnk/migrations/alembic.ini")
     alembic.command.stamp(cfg, "head")
 
 
 @manager.command
 def populate_db():
     "insert a default set of objects"
-    from flask.ext.diamond.utils import add_system_users
-    add_system_users(security)
-
-    #import Gthnk.importing as importing
-    #importing.typical_workflow()
+    from gthnk import models
+    models.User.register(
+        email='admin',
+        password='aaa',
+        confirmed=True,
+        roles=["User", "Admin"],
+    )
 
 if __name__ == "__main__":
     try:

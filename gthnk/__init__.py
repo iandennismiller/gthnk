@@ -82,6 +82,9 @@ class Gthnk(Diamond):
         #from .Views.Frontend.Workspace import workspace
         #app.register_blueprint(workspace)
 
+        from flask_diamond.views.diamond import diamond_blueprint
+        self.app.register_blueprint(diamond_blueprint)
+
         from .views.administration.administration import adminbaseview
         self.app.register_blueprint(adminbaseview)
 

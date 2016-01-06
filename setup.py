@@ -25,7 +25,7 @@ def grep(attrname):
 setup(
     version=grep('__version__'),
     name='gthnk',
-    description="gthnk",
+    description="gthnk is a Personal Knowledge Management System",
     packages=[
         "gthnk",
         "gthnk.adaptors",
@@ -42,7 +42,7 @@ setup(
         "bin/install_osx.sh",
         #"bin/journal_actions.py",
     ],
-    long_description="""gthnk""",
+    long_description=read('Readme.rst'),
     classifiers=[],
     include_package_data=True,
     keywords='',

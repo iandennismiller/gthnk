@@ -3,17 +3,13 @@
 Welcome to gthnk's documentation!
 =====================================
 
-Contents:
+.. include:: ../Readme.rst
+
+Introduction
+------------
 
 .. toctree::
-   :maxdepth: 6
+    :maxdepth: 1
 
-   auto/Gthnk/modules
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+    intro/quick-start
+    intro/system-requirements
