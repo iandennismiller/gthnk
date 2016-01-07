@@ -7,6 +7,7 @@ import shutil
 import hashlib
 
 import gthnk.adaptors.journal_buffer
+from gthnk.models import Day, Page
 
 
 def overwrite_if_different(filename, new_content):
@@ -72,7 +73,7 @@ class Librarian(object):
             os.makedirs(os.path.join(app.config["EXPORT_PATH"], "preview"))
 
         # export all days
-        for day in Gthnk.Models.Day.query.order_by(Gthnk.Models.Day.date).all():
+        for day in Day.query.order_by(Day.date).all():
             app.logger.info(day)
 
             # write text representation
@@ -88,7 +89,7 @@ class Librarian(object):
                 app.logger.info("skipping; generated file identical to existing export")
 
         # export all pages
-        for page in Gthnk.Models.Page.query.order_by(Gthnk.Models.Page.id).all():
+        for page in Page.query.order_by(Page.id).all():
             app.logger.info(page)
 
             # write raw file
