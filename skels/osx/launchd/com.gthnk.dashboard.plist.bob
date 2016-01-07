@@ -16,17 +16,17 @@ At 9:00 AM every day, the dashboard opens up in the default browser to provide a
     <string>{{{ home_directory }}}/Library/Gthnk/launchd.out.log</string>
     <key>StandardErrorPath</key>
     <string>{{{ home_directory }}}/Library/Gthnk/launchd.err.log</string>
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>9</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
     <key>ProgramArguments</key>
     <array>
         <string>/usr/bin/open</string>
         <string>http://local.gthnk.com:1620/admin/journal/latest.html</string>
     </array>
-	<key>StartCalendarInterval</key>
-	<dict>
-		<key>Hour</key>
-		<integer>9</integer>
-		<key>Minute</key>
-		<integer>0</integer>
-	</dict>
 </dict>
 </plist>

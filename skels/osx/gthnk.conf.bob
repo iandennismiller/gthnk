@@ -2,9 +2,9 @@ PROJECT_NAME = "gthnk"
 PORT = 1620
 DEBUG = False
 # WWWROOT = "/var/www/gthnk"
-LOG = "{{{ home_directory }}}/Library/Gthnk/debug.log"
+LOG = "{{{ home_directory }}}/Library/Gthnk/gthnk.log"
 # LOG_LEVEL = "DEBUG"
-SQLALCHEMY_DATABASE_URI = "sqlite:///{{{ home_directory }}}/Library/Gthnk/main.db"
+SQLALCHEMY_DATABASE_URI = "sqlite:///{{{ home_directory }}}/Library/Gthnk/gthnk.db"
 SECRET_KEY = "|\x8b\xa9\xfe\xad_|f\xfd\"\xcfk\xc0\xf7\x12\xa9X\xff\xed{\xf7|)V"
 
 BASE_URL = "http://localhost"
