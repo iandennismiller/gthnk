@@ -4,14 +4,17 @@
 echo "Scan environment"
 rm -f /tmp/gthnk_mrbob.ini
 echo "[variables]" > /tmp/gthnk_mrbob.ini
-echo "home_directory = ${HOME}" >> /tmp/gthnk_mrbob.ini && echo "OK"
+echo "home_directory = ${HOME}" >> /tmp/gthnk_mrbob.ini
+echo "secret_key = `python -c 'import os; print(repr(os.urandom(24)))'`"  >> /tmp/gthnk_mrbob.ini
+echo "hash_salt = `python -c 'import string as s, random as r; print repr("".join(r.choice(s.letters+s.digits) for _ in range(16)))'`"  >> /tmp/gthnk_mrbob.ini
+echo "OK"
 
 echo "Initialize configuration"
 rm -rf /tmp/gthnk_osx
 mrbob "${VIRTUAL_ENV}/share/skels/osx" -c /tmp/gthnk_mrbob.ini -O /tmp/gthnk_osx && echo "OK"
 
 echo "Create gthnk directory: $HOME/Library/Gthnk"
-mkdir -v $HOME/Library/Gthnk && echo "OK"
+mkdir -v $HOME/Library/Gthnk $HOME/Library/Gthnk/backup && echo "OK"
 
 echo "Install configuration"
 cp -v /tmp/gthnk_osx/gthnk.conf $HOME/Library/Gthnk/gthnk.conf && echo "OK"

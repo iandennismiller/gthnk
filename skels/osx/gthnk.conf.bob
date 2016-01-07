@@ -1,15 +1,13 @@
 PROJECT_NAME = "gthnk"
 PORT = 1620
-DEBUG = False
-# WWWROOT = "/var/www/gthnk"
 LOG = "{{{ home_directory }}}/Library/Gthnk/gthnk.log"
 # LOG_LEVEL = "DEBUG"
 SQLALCHEMY_DATABASE_URI = "sqlite:///{{{ home_directory }}}/Library/Gthnk/gthnk.db"
-SECRET_KEY = "|\x8b\xa9\xfe\xad_|f\xfd\"\xcfk\xc0\xf7\x12\xa9X\xff\xed{\xf7|)V"
+SECRET_KEY = {{{ secret_key }}}
 
 BASE_URL = "http://localhost"
 
-SECURITY_PASSWORD_SALT = "/2aX16zPnnIgfMwkOjGX4Z"
+SECURITY_PASSWORD_SALT = {{{ hash_salt }}}
 SECURITY_POST_LOGIN_VIEW = "/admin"
 SECURITY_PASSWORD_HASH = 'sha256_crypt'
 SECURITY_URL_PREFIX = '/user'
@@ -28,3 +26,8 @@ MAIL_PASSWORD = None
 
 CELERY_BROKER_URL = 'sqla+sqlite:///{{{ home_directory }}}/Library/Gthnk/celery-db.sqlite'
 CELERY_RESULT_BACKEND = 'db+sqlite:///{{{ home_directory }}}/Library/Gthnk/celery-results.sqlite'
+
+BACKUP_PATH = "{{{ home_directory }}}/Library/Gthnk/backup"
+INPUT_FILES = "{{{ home_directory }}}/Library/Gthnk/journal.txt"
+PROJECT_PATH = "{{{ home_directory }}}/Work"
+EXPORT_PATH = "{{{ home_directory }}}/Backup/gthnk"
