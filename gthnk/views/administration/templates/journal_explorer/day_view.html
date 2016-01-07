@@ -15,14 +15,14 @@
         <a href="{{ url_for('.index_view') }}"><i class="icon-eye-open"></i> Day</a>
     </li>-->
     <li>
-        {% if day.yesterday() %}
+        {% if day and day.yesterday() %}
             <a href="{{ url_for('.day_view', date=day.yesterday().date) }}" title="previous"><i class="icon-chevron-left"></i></a>
         {% else %}
             <a href="javascript:void(0)" title="no past days"><i class="icon-stop"></i> earliest</a>
         {% endif %}
     </li>
     <li>
-        {% if day.tomorrow() %}
+        {% if day and day.tomorrow() %}
             <a href="{{ url_for('.day_view', date=day.tomorrow().date) }}" title="next"><i class="icon-chevron-right"></i></a>
         {% else %}
             <a href="javascript:void(0)" title="no future days"><i class="icon-stop"></i></a>

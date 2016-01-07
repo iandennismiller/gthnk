@@ -51,4 +51,7 @@ docs:
 	rm -rf var/sphinx/build
 	sphinx-build -b html docs var/sphinx/build
 
-.PHONY: clean install test server watch lint docs all single
+release:
+	python setup.py sdist upload -r https://pypi.python.org/pypi
+
+.PHONY: clean install test server watch lint docs all single release

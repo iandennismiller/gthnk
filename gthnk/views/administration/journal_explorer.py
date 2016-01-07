@@ -67,8 +67,13 @@ class JournalExplorer(AuthView):
 
     @expose("/latest.html")
     def latest_view(self):
-        return self.render('journal_explorer/day_view.html',
-            day=latest(), day_str=latest().render())
+        latest_day = latest()
+        if latest_day:
+            return self.render('journal_explorer/day_view.html',
+                day=latest_day, day_str=latest_day.render())
+        else:
+            return self.render('journal_explorer/day_view.html',
+                day=None, day_str="No entries yet")
 
     @expose("/search")
     def results_view(self):

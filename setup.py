@@ -59,10 +59,6 @@ setup(
     author=grep('__author__'),
     author_email=grep('__email__'),
     url=grep('__url__'),
-    dependency_links=[
-        ('https://github.com/iandennismiller'
-            '/mdx_journal/archive/0.1.tar.gz#egg=mdx_journal-0.1'),
-    ],
     install_requires=read('requirements.txt'),
     license='MIT',
     zip_safe=False,
