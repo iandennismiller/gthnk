@@ -5,7 +5,6 @@ mdx-journal>=0.1.4
 Wand==0.3.9
 Flask-Cache==0.13.1
 pyScss==1.2.0.post3
-lxml==3.4.0
 requests==2.4.1
 cssselect==0.9.1
 distribute==0.7.3
