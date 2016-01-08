@@ -6,7 +6,7 @@ Installation
 
 Make sure you have the :doc:`system-requirements` installed.  You will need Python, pip, virtualenv, and virtualenvwrapper.
 
-To install **gthnk**, open a terminal and type the following:
+**gthnk** currently installs on OSX systems.  Open a terminal and type the following:
 
 ::
 

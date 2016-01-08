@@ -6,7 +6,7 @@ Make sure you have the :doc:`system-requirements` installed.  You will need Pyth
 Installation
 ------------
 
-There are three steps to installing **gthnk**:
+**gthnk** currently installs on OSX systems. There are three steps to installing **gthnk**:
 
 1. create a Python virtual environment called `gthnk`
 2. install `gthnk` from PyPI
