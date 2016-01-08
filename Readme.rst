@@ -1,7 +1,7 @@
 gthnk
 =====
 
-`gthnk <http://gthnk.com>`_ is a personal knowledge management system.  Securely record your thoughts without depending upon cloud services.
+`gthnk <http://gthnk.com>`_ is a personal knowledge management system.  Capture your ideas and notes without depending upon cloud services.
 
 Read the `Quick Start <http://gthnk.readthedocs.org/en/latest/intro/quick-start.html>`_ to try it yourself.
 
