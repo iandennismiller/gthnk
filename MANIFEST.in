@@ -3,3 +3,5 @@ recursive-include gthnk/views/administration/static *
 recursive-include skels *
 include Readme.rst
 include requirements.txt
+include gthnk/migrations/alembic.ini
+include gthnk/migrations/script.py.mako

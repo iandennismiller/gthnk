@@ -33,6 +33,8 @@ setup(
         "gthnk",
         "gthnk.adaptors",
         "gthnk.models",
+        "gthnk.migrations",
+        "gthnk.migrations.versions",
         "gthnk.views",
         "gthnk.views.administration",
     ],
@@ -41,6 +43,7 @@ setup(
         "bin/manage.py",
         "bin/journal_rotate.py",
         "bin/install_osx.sh",
+        "bin/uninstall_osx.sh",
         #"bin/journal_actions.py",
     ],
     long_description=read('Readme.rst'),
@@ -67,6 +70,7 @@ setup(
 venv_path = os.environ.get("VIRTUAL_ENV")
 if venv_path:
     copy_tree("skels", os.path.join(venv_path, "share/skels"))
+    copy_tree("gthnk/migrations", os.path.join(venv_path, "share/gthnk/migrations"))
 else:
     print("This was not installed in a virtual environment")
     print("So, I won't install the skel files.")

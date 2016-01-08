@@ -14,13 +14,15 @@ rm -rf /tmp/gthnk_osx
 mrbob "${VIRTUAL_ENV}/share/skels/osx" -c /tmp/gthnk_mrbob.ini -O /tmp/gthnk_osx && echo "OK"
 
 echo "Create gthnk directory: $HOME/Library/Gthnk"
-mkdir -v $HOME/Library/Gthnk $HOME/Library/Gthnk/backup && echo "OK"
+mkdir -v $HOME/Library/Gthnk $HOME/Library/Gthnk/backup $HOME/Library/Gthnk/export && echo "OK"
 
 echo "Install configuration"
 cp -v /tmp/gthnk_osx/gthnk.conf $HOME/Library/Gthnk/gthnk.conf && echo "OK"
 
 echo "Create database"
-SETTINGS=$HOME/Library/Gthnk/gthnk.conf manage.py init_db && echo "OK"
+pushd ${VIRTUAL_ENV}/share
+SETTINGS=$HOME/Library/Gthnk/gthnk.conf manage.py db upgrade && echo "OK"
+popd
 
 echo "Create a User Account"
 echo -n "username: "

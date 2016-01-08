@@ -1,4 +1,4 @@
-flask-diamond==0.2.14
+flask-diamond==0.2.15.dev1
 mdx-linkify==0.5
 poodledo>=0.2
 mdx-journal>=0.1.4
