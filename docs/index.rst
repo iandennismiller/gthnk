@@ -28,14 +28,15 @@ User Guide
 About
 -----
 
-.. .. toctree::
-..     :maxdepth: 1
+.. toctree::
+    :maxdepth: 1
+
+    about/history
+    about/license
 
 ..     about/credits-and-attributions
 ..     about/how_to_contribute_to_the_project
 ..     about/philosophy
-..     about/history
-..     about/license
 
 
 Flask-Diamond

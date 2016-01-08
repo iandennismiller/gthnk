@@ -65,3 +65,8 @@ Here are a few resources to get you started:
 - http://stackoverflow.com/questions/2173963/how-do-i-get-virtualenvwrapper-and-cygwin-to-co-operate
 
 **Note**: Have you done this install successfully?  Let us know!
+
+Next Steps
+----------
+
+Now that you have the system requirements installed, read :doc:`installation` to put **gthnk** on your computer.

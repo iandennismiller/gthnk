@@ -47,3 +47,8 @@ Uninstallation
 
     workon gthnk
     uninstall_osx.sh
+
+Next Steps
+----------
+
+Now check out :doc:`/user/using-the-journal` to learn techniques for actually getting stuff done with **gthnk**.
