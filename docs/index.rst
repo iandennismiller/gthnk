@@ -23,8 +23,7 @@ User Guide
     user/handwritten-notes-on-paper
     user/browser-integration
     user/mobile-devices
-
-.. user/data-storage
+    user/text-file-format
 
 About
 -----

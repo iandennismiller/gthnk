@@ -19,6 +19,8 @@ This will install **gthnk** on your system and make the **gthnk** server start a
 Use the Journal
 ---------------
 
+**gthnk** uses a basic :doc:`/user/text-file-format` because anything more complicated isn't reliable enough for something as important as your thoughts.
+
 Create a file on your desktop called ``journal.txt`` and use a text editor to paste the following into it:
 
 ::

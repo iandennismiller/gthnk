@@ -1,9 +1,9 @@
 Using the Journal
 =================
 
-Create a file on your desktop called ``journal.txt`` and open it with a text editor.  This file is called a "journal buffer" and anything you write in it will be added to the journal once per day.  You can change this file by editing ``INPUT_FILES`` in the configuration file ``~/Library/Gthnk/gthnk.conf``.
+An *entry* is denoted by a *timestamp*, which is written using hours and minutes, like ``0815`` for 8:15am and ``1425`` for 2:25pm.  A *day* is denoted by a *datestamp*, which is written using year-month-day, like ``2016-01-08`` for January 8, 2016.  Usually, :doc:`/user/text-editor-macros` will do this for you, so you really don't need to worry about it.  Read more about the :doc:`text-file-format` to learn other tricks.
 
-An *entry* is denoted by a *timestamp*, which is written using hours and minutes, like ``0815`` for 8:15am and ``1425`` for 2:25pm.  A *day* is denoted by a *datestamp*, which is written using year-month-day, like ``2016-01-08`` for January 8, 2016.  Usually, :doc:`/user/text-editor-macros` will do this for you, so you really don't need to worry about it.
+The default **gthnk** installation will create a file on your desktop called ``journal.txt``.  This file is called a "journal buffer" and anything you write in it will be added to the journal once per day.  You can change the location of this file by editing ``~/Library/Gthnk/gthnk.conf`` and changing the ``INPUT_FILES`` entry.
 
 Example
 ^^^^^^^
@@ -58,3 +58,4 @@ Read the following to learn more about **gthnk**:
 - :doc:`/user/handwritten-notes-on-paper`
 - :doc:`/user/browser-integration`
 - :doc:`/user/mobile-devices`
+- :doc:`/user/text-file-format`
