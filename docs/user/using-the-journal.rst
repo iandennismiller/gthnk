@@ -49,3 +49,12 @@ Attachments
 
 Archive images and PDFs in the journal by dragging those files onto the "Attachments" target in the GUI.  Use this to attach :doc:`/user/handwritten-notes-on-paper` to your digital entries, bridging the gap with the writing/drawing experience.
 
+Next Steps
+----------
+
+Read the following to learn more about **gthnk**:
+
+- :doc:`/user/text-editor-macros`
+- :doc:`/user/handwritten-notes-on-paper`
+- :doc:`/user/browser-integration`
+- :doc:`/user/mobile-devices`
