@@ -28,7 +28,7 @@ def grep(attrname):
 setup(
     version=grep('__version__'),
     name='gthnk',
-    description="gthnk is a Personal Knowledge Management System",
+    description="gthnk is a personal knowledge management system",
     packages=[
         "gthnk",
         "gthnk.adaptors",

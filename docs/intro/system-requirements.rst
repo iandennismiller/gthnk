@@ -11,12 +11,25 @@ gthnk requires some software to be installed in order to function.  Once you hav
 
 The following sections describe the process for installing these requirements on various systems.  In each of the following examples, it is assumed you will be using a root account (or some other privileged account).
 
-If you do not have root access, then refer to the section :ref:`unprivileged-installation` for information about creating a virtualenv in your user account.
+OSX
+---
+
+gthnk installs pretty easily on OSX with Homebrew.  Make sure you are using the *admin* user for this process, just like a normal Homebrew operation.
+
+::
+
+    brew install python --universal --framework
+    brew install pyenv-virtualenv
+    brew install pyenv-virtualenvwrapper
+    brew install sqlite
+    pip install --upgrade pip
 
 Debian/Ubuntu
 -------------
 
-gthnk installs cleanly on Debian and Ubuntu systems released after 2011.  *However, there are currently no startup scripts for Linux.*
+*NB: there are currently no startup scripts for Linux.*
+
+gthnk installs cleanly on Debian and Ubuntu systems released after 2011.
 
 ::
 
@@ -29,7 +42,9 @@ gthnk installs cleanly on Debian and Ubuntu systems released after 2011.  *Howev
 Redhat
 ------
 
-gthnk can be installed on RedHat, but ensure your package manager is installing Python 2.7; as of August 2015, RHEL provides an older version. *However, there are currently no startup scripts for Linux.*
+*NB: there are currently no startup scripts for Linux.*
+
+gthnk can be installed on RedHat, but ensure your package manager is installing Python 2.7; as of August 2015, RHEL provides an older version.
 
 ::
 
@@ -38,19 +53,6 @@ gthnk can be installed on RedHat, but ensure your package manager is installing 
     pip install --upgrade pip
     pip install --upgrade virtualenv
     pip install virtualenvwrapper
-
-OSX with Homebrew
------------------
-
-gthnk installs pretty easily on OSX with Homebrew.  Make sure you are using the *admin* user for this process, just like a normal Homebrew operation.
-
-::
-
-    brew install python --universal --framework
-    brew install pyenv-virtualenv
-    brew install pyenv-virtualenvwrapper
-    brew install sqlite
-    pip install --upgrade pip
 
 Windows with Cygwin
 -------------------
@@ -63,17 +65,3 @@ Here are a few resources to get you started:
 - http://stackoverflow.com/questions/2173963/how-do-i-get-virtualenvwrapper-and-cygwin-to-co-operate
 
 **Note**: Have you done this install successfully?  Let us know!
-
-.. _unprivileged-installation:
-
-Unprivileged Installation
--------------------------
-
-Sometimes, you do not have root access to the system.  It is still possible to use gthnk, but the installation process is slightly different because it does not use virtualenvwrapper.  Instead, you will create your virtualenv directly and use the `activate` macro to work on it.
-
-::
-
-    curl -O https://raw.github.com/pypa/virtualenv/master/virtualenv.py
-    python virtualenv.py my-diamond-app
-    . my-diamond-app/bin/activate
-    pip install gthnk
