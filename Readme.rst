@@ -5,6 +5,22 @@ gthnk
 
 Read the `Quick Start <http://gthnk.readthedocs.org/en/latest/intro/quick-start.html>`_ to try it yourself.
 
+.. image:: https://img.shields.io/github/stars/iandennismiller/gthnk.svg?style=social&label=GitHub
+    :target: https://github.com/iandennismiller/gthnk
+
+.. image:: https://img.shields.io/pypi/v/gthnk.svg
+    :target: https://pypi.python.org/pypi/gthnk
+
+.. image:: https://readthedocs.org/projects/gthnk/badge/?version=latest
+    :target: http://gthnk.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
+.. image:: https://travis-ci.org/iandennismiller/gthnk.svg?branch=master
+    :target: https://travis-ci.org/iandennismiller/gthnk
+
+.. image:: https://coveralls.io/repos/github/iandennismiller/gthnk/badge.svg?branch=master
+    :target: https://coveralls.io/github/iandennismiller/gthnk?branch=master
+
 Overview
 --------
 

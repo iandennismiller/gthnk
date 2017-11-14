@@ -5,7 +5,7 @@ echo "Scan environment"
 rm -f /tmp/gthnk_mrbob.ini
 echo "[variables]" > /tmp/gthnk_mrbob.ini
 echo "home_directory = ${HOME}" >> /tmp/gthnk_mrbob.ini
-echo "secret_key = `python -c 'import os; print(repr(os.urandom(24)))'`"  >> /tmp/gthnk_mrbob.ini
+echo "secret_key = \"`python -c 'import os, re; print(re.escape(repr(os.urandom(24))[1:-1]))'`\""  >> /tmp/gthnk_mrbob.ini
 echo "hash_salt = `python -c 'import string as s, random as r; print repr("".join(r.choice(s.letters+s.digits) for _ in range(16)))'`"  >> /tmp/gthnk_mrbob.ini
 echo "OK"
 
@@ -50,3 +50,9 @@ echo "Installing new launchd configurations"
 launchctl load $HOME/Library/LaunchAgents/com.gthnk.server.plist \
     $HOME/Library/LaunchAgents/com.gthnk.librarian.plist \
     $HOME/Library/LaunchAgents/com.gthnk.dashboard.plist && echo "OK"
+
+# test whether gthnk is in /etc/hosts
+if [[ -z $(grep gthnk /etc/hosts) ]]; then
+    # put it there if not
+    cat /tmp/gthnk_osx/hosts.snip >> /etc/hosts;
+fi

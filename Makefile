@@ -4,17 +4,18 @@ PROJECT_NAME=gthnk
 MOD_NAME=gthnk
 SHELL=/bin/bash
 WWWROOT=/var/www/gthnk
-TEST_CMD=SETTINGS=$$PWD/etc/testing.conf nosetests
-
-all: install
-	@echo Done
+TEST_CMD=SETTINGS=$$PWD/etc/testing.conf nosetests --with-coverage --cover-package=$(MOD_NAME)
 
 install:
 	python setup.py install
 
+dev:
+	pip install -r requirements-dev.txt
+
 clean:
 	rm -rf build dist *.egg-info
 	find . -name '*.pyc' -delete
+	find . -name __pycache__ -delete
 
 server:
 	SETTINGS=$$PWD/etc/dev.conf bin/manage.py runserver
@@ -48,10 +49,15 @@ migratedb:
 	SETTINGS=$$PWD/etc/dev.conf bin/manage.py db migrate
 
 docs:
-	rm -rf var/sphinx/build
-	sphinx-build -b html docs var/sphinx/build
+	rm -rf build/sphinx
+	sphinx-build -b html docs build/sphinx
 
 release:
-	python setup.py sdist upload -r https://pypi.python.org/pypi
+	python setup.py sdist upload
 
-.PHONY: clean install test server watch lint docs all single release
+# create a homebrew install script
+homebrew:
+	bin/poet-homebrew.sh
+	cp /tmp/gthnk.rb etc/gthnk.rb
+
+.PHONY: clean install test server watch lint docs all single release homebrew
