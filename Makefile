@@ -1,4 +1,4 @@
-# gthnk (c) 2014-2016 Ian Dennis Miller
+# gthnk (c) 2014-2017 Ian Dennis Miller
 
 PROJECT_NAME=gthnk
 MOD_NAME=gthnk
