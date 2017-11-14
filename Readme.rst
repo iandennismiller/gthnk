@@ -31,6 +31,15 @@ Installation
 
 **gthnk** currently installs on OSX systems. See the `Installation document <http://gthnk.readthedocs.org/en/latest/intro/installation.html>`_ for more details.
 
+First install ImageMagick 6.
+
+::
+
+    brew install imagemagick@6
+    brew link --force --overwrite imagemagick@6
+
+Then install gthnk.
+
 ::
 
     mkvirtualenv gthnk

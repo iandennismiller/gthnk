@@ -9,6 +9,9 @@ TEST_CMD=SETTINGS=$$PWD/etc/testing.conf nosetests --with-coverage --cover-packa
 install:
 	python setup.py install
 
+requirements:
+	pip install -r requirements.txt
+
 dev:
 	pip install -r requirements-dev.txt
 
