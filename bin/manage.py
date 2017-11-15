@@ -99,10 +99,4 @@ def journal_export():
         librarian.export_journal()
 
 if __name__ == "__main__":
-    try:
-        manager.run()
-    except Exception, e:
-        ex_type, ex, tb = sys.exc_info()
-        traceback.print_tb(tb)
-        print "Error: %s" % e
-        print "Line: %d" % sys.exc_traceback.tb_lineno
+    manager.run()

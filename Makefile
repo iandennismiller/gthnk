@@ -30,10 +30,9 @@ server-win:
 
 db-win:
 	set SETTINGS=%cd%\etc\conf\dev-win.conf
-	bin/manage.py init_db
-	bin/manage.py user_add --email "guest@example.com" --password "guest"
-	bin/manage.py user_add --email "admin@example.com" --password "aaa" --admin
-
+	%VIRTUAL_ENV%\scripts\python.exe bin/manage.py init_db
+	%VIRTUAL_ENV%\scripts\python.exe bin/manage.py user_add --email "guest@example.com" --password "guest"
+	%VIRTUAL_ENV%\scripts\python.exe bin/manage.py user_add --email "admin@example.com" --password "aaa" --admin
 
 shell:
 	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py shell

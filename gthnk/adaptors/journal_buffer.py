@@ -83,7 +83,7 @@ class JournalBuffer(object):
                     time_obj = datetime.datetime.strptime(
                         "{} {}".format(day, timestamp), '%Y-%m-%d %H%M')
                 except:
-                    print "'{}' '{}'".format(day, timestamp)
+                    print("'{}' '{}'".format(day, timestamp))
                     continue
 
                 models.Entry.create(
