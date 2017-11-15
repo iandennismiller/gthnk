@@ -32,18 +32,16 @@ manager.add_command("publicserver", Server(port=app.config['PORT'], host="0.0.0.
 manager.add_command('db', MigrateCommand)
 
 
-@manager.option('-e', '--email', help='email address')
-@manager.option('-p', '--password', help='password')
+@manager.option('-e', '--email', help='email address', required=True)
+@manager.option('-p', '--password', help='password', required=True)
 @manager.option('-a', '--admin', help='make user an admin user', action='store_true', default=None)
-def useradd(email, password, admin):
+def user_add(email, password, admin=False):
     "add a user to the database"
     if admin:
         roles = ["Admin"]
     else:
         roles = ["User"]
-
-    from gthnk import models
-    models.User.register(
+    User.register(
         email=email,
         password=password,
         confirmed=True,
@@ -51,34 +49,42 @@ def useradd(email, password, admin):
     )
 
 
-@manager.option('-e', '--email', help='email address')
-def userdel(email):
+@manager.option('-e', '--email', help='email address', required=True)
+def user_del(email):
     "delete a user from the database"
-    from gthnk import models
-    obj = models.User.find(email=email)
-    obj.delete()
+    obj = User.find(email=email)
+    if obj:
+        obj.delete()
+        print("Deleted")
+    else:
+        print("User not found")
 
 
 @manager.command
-def init_db():
+def drop_db():
+    "drop all databases, instantiate schemas"
+    db.reflect()
+    db.drop_all()
+
+
+@manager.option('-m', '--migration',
+    help='create database from migrations',
+    action='store_true', default=None)
+def init_db(migration):
     "drop all databases, instantiate schemas"
     db.drop_all()
-    db.create_all()
-    db.session.commit()
-    cfg = alembic.config.Config("gthnk/migrations/alembic.ini")
-    alembic.command.stamp(cfg, "head")
 
-
-@manager.command
-def populate_db():
-    "insert a default set of objects"
-    from gthnk import models
-    models.User.register(
-        email='admin',
-        password='aaa',
-        confirmed=True,
-        roles=["User", "Admin"],
-    )
+    if migration:
+        # create database using migrations
+        print("applying migration")
+        upgrade()
+    else:
+        # create database from model schema directly
+        db.create_all()
+        db.session.commit()
+        cfg = alembic.config.Config("{{{ application.module }}}/migrations/alembic.ini")
+        alembic.command.stamp(cfg, "head")
+    Role.add_default_roles()
 
 
 @manager.command
