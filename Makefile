@@ -26,13 +26,13 @@ server:
 
 server-win:
 	set SETTINGS=%cd%\etc\conf\dev-win.conf
-	%VIRTUAL_ENV%\scripts\python.exe bin\manage.py runserver
+	python bin\manage.py runserver
 
 db-win:
 	set SETTINGS=%cd%\etc\conf\dev-win.conf
-	%VIRTUAL_ENV%\scripts\python.exe bin/manage.py init_db
-	%VIRTUAL_ENV%\scripts\python.exe bin/manage.py user_add --email "guest@example.com" --password "guest"
-	%VIRTUAL_ENV%\scripts\python.exe bin/manage.py user_add --email "admin@example.com" --password "aaa" --admin
+	python bin\manage.py init_db
+	python bin\manage.py user_add --email "guest@example.com" --password "guest"
+	python bin\manage.py user_add --email "admin@example.com" --password "aaa" --admin
 
 shell:
 	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py shell
