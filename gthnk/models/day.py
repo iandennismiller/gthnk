@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) 2014-2016 Ian Dennis Miller
 
+import puremagic
 import StringIO
 import datetime
 import re
@@ -9,7 +10,7 @@ from PyPDF2 import PdfFileReader, PdfFileWriter
 from flask.ext.diamond.utils.mixins import CRUDMixin
 from sqlalchemy import desc
 from sqlalchemy.ext.orderinglist import ordering_list
-from wand.image import Image
+from PIL import Image
 
 from .. import db
 
@@ -37,36 +38,46 @@ class Day(db.Model, CRUDMixin):
 
     def attach(self, binary):
         # determine the format of the file
-        binary_format = Image(blob=binary).format
-        if binary_format == "PDF":
+        ext = puremagic.from_string(binary)
+
+        # if the attachment is a PDF
+        if ext == ".pdf":
             # use PyPDF2 to read the stream
             pdf = PdfFileReader(StringIO.StringIO(binary))
-            if pdf.getNumPages() > 1:  # if it is a multi-page PDF
-                for pdf_page in pdf.pages:  # add the pages individually
+            # if it is a multi-page PDF
+            if pdf.getNumPages() > 1:
+                # add the pages individually
+                for pdf_page in pdf.pages:
                     output = PdfFileWriter()
                     output.addPage(pdf_page)
 
                     pdf_page_buf = StringIO.StringIO()
                     output.write(pdf_page_buf)
                     self.add_page(pdf_page_buf.getvalue())
-            else:  # if it is just a single page PDF
+            # if it is just a single page PDF
+            else:
                 # then add the original bytestream
                 self.add_page(binary)
-        elif binary_format:
+        # if the attachment is a recognized image
+        elif ext in [".png", ".jfif", ".gif", ".jpeg", ".jpg"]:
             self.add_page(binary)
-        else:  # could not recognize file
+        # could not recognize file
+        else:
             pass
 
     def render_pdf(self):
         outpdf = PdfFileWriter()
         for page in self.pages:
             if page.extension == "pdf":
+                # the page is already a PDF so append directly
                 outpdf.addPage(PdfFileReader(StringIO.StringIO(page.binary)).getPage(0))
             else:
-                img = Image(blob=page.binary, resolution=72)
-                img.format = "jpg"
-                img.format = "pdf"
-                outpdf.addPage(PdfFileReader(StringIO.StringIO(img.make_blob())).getPage(0))
+                # otherwise, the page is an image that needs to be converted to PDF first
+                buf = StringIO.StringIO()
+                img = Image.open(StringIO.StringIO(page.binary))
+                img.convert("RGB").save(buf, format="pdf")
+                # once image is PDF, it can be appended
+                outpdf.addPage(PdfFileReader(buf).getPage(0))
 
         pdf_page_buf = StringIO.StringIO()
         outpdf.write(pdf_page_buf)

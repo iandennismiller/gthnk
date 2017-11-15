@@ -3,7 +3,6 @@ flask-diamond==0.2.15.dev1
 mdx-linkify==1.0
 poodledo>=0.2
 mdx-journal>=0.1.4
-Wand==0.4.4
 Flask-Cache==0.13.1
 pyScss==1.2.0.post3
 requests==2.4.1
@@ -12,4 +11,4 @@ distribute==0.7.3
 GitPython==1.0.1
 alabaster==0.7.6
 PyPDF2==1.24
-html5lib==0.999999999
+Pillow==4.3.0
