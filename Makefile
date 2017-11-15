@@ -24,6 +24,17 @@ clean:
 server:
 	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py runserver
 
+server-win:
+	set SETTINGS=%cd%\etc\conf\dev-win.conf
+	%VIRTUAL_ENV%\scripts\python.exe bin\manage.py runserver
+
+db-win:
+	set SETTINGS=%cd%\etc\conf\dev-win.conf
+	bin/manage.py init_db
+	bin/manage.py user_add --email "guest@example.com" --password "guest"
+	bin/manage.py user_add --email "admin@example.com" --password "{{{ simple_password }}}" --admin
+
+
 shell:
 	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py shell
 
