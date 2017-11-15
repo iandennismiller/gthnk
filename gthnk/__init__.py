@@ -23,8 +23,6 @@ class Gthnk(Diamond):
         from flask.ext.diamond.administration import AuthenticatedMenuLink
         from .views.administration import administration as A
         from .views.administration.journal_explorer import JournalExplorer
-        from .views.administration.project_explorer import ProjectExplorer
-        from .views.administration.list_explorer import ListExplorer
 
         admin = super(Gthnk, self).administration()
 
@@ -42,13 +40,6 @@ class Gthnk(Diamond):
             name="Days",
             category="Admin"))
 
-        from models.item_list import ItemList
-        admin.add_view(A.ItemListAdmin(
-            ItemList,
-            db.session,
-            name="ItemList",
-            category="Admin"))
-
         from models.page import Page
         admin.add_view(A.PageAdmin(
             Page,
@@ -57,26 +48,6 @@ class Gthnk(Diamond):
             category="Admin"))
 
         admin.add_view(JournalExplorer(name="Journal", endpoint="journal"))
-        # admin.add_view(ProjectExplorer(name="Projects", endpoint="projects"))
-        # admin.add_view(ListExplorer(name="Lists", endpoint="lists"))
-
-        list_list = [
-            "domain-list",
-            "gifts",
-            "media",
-            "org-chart",
-            "radar",
-            "someday",
-            "tech-to-research",
-            "themes",
-            "wanna"
-        ]
-
-        # for name in list_list:
-        #     admin.add_link(AuthenticatedMenuLink(
-        #         name=name,
-        #         url="/admin/lists/{}/items".format(name),
-        #         category="Lists"))
 
     def blueprints(self):
         from flask_diamond.views.diamond import diamond_blueprint

@@ -4,6 +4,7 @@
 from flask.ext.diamond.utils.mixins import CRUDMixin
 from .. import db
 from PIL import Image
+import StringIO
 
 
 class Page(db.Model, CRUDMixin):
@@ -18,17 +19,11 @@ class Page(db.Model, CRUDMixin):
 
     def set_image(self, binary):
         self.binary = binary
-        with Image(self.binary) as img:
+        with Image.open(StringIO.StringIO(self.binary)) as img:
             self.extension = img.format.lower()
 
             # flatten image
             flattened = img.copy().convert("RGB")
-
-            # flattened = Image(background=Color("white"),
-            #     height=img.height, width=img.width)
-            # flattened.composite(img, left=0, top=0)
-            # flattened.format = "jpeg"
-            # flattened.compression_quality = 50
 
             # create 150x200 thumbnail
             size = (150, 200)
@@ -38,10 +33,6 @@ class Page(db.Model, CRUDMixin):
             thumb.save(thumb_buf, "JPEG")
             self.thumbnail = thumb_buf.getvalue()
 
-            # thumbnail = flattened.clone()
-            # thumbnail.transform(resize='150x200>')
-            # self.thumbnail = thumbnail.make_blob()
-
             # create preview
             size = (612, 792)
             preview = flattened.copy()
@@ -49,11 +40,6 @@ class Page(db.Model, CRUDMixin):
             preview_buf = StringIO.StringIO()
             preview.save(preview_buf, "JPEG")
             self.preview = preview_buf.getvalue()
-
-            # preview = flattened.clone()
-            # preview.gaussian_blur(radius=1, sigma=0.5)
-            # preview.transform(resize='612x792>')
-            # self.preview = preview.make_blob()
 
         # write to DB
         self.save()
