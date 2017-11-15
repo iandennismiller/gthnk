@@ -3,9 +3,9 @@
 
 from flask_diamond.models.user import User
 from flask_diamond.models.role import Role
-from day import Day
-from entry import Entry
-from page import Page
+from .day import Day
+from .entry import Entry
+from .page import Page
 
 assert User
 assert Role
