@@ -82,7 +82,7 @@ def init_db(migration):
         # create database from model schema directly
         db.create_all()
         db.session.commit()
-        cfg = alembic.config.Config("{{{ application.module }}}/migrations/alembic.ini")
+        cfg = alembic.config.Config("gthnk/migrations/alembic.ini")
         alembic.command.stamp(cfg, "head")
     Role.add_default_roles()
 
