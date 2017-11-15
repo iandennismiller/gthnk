@@ -2,7 +2,7 @@
 # gthnk (c) 2014-2016 Ian Dennis Miller
 
 import datetime
-from flask.ext.diamond.utils.mixins import CRUDMixin
+from flask_diamond.mixins.crud import CRUDMixin
 from .. import db
 import flask
 

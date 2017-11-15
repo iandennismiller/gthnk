@@ -2,9 +2,9 @@
 # gthnk (c) 2014-2016 Ian Dennis Miller
 
 import flask
-from flask.ext.admin import expose
-import flask.ext.security as security
-from flask.ext.diamond.administration import AuthModelView, AdminIndexView
+import flask_security as security
+from flask_admin import expose
+from flask_diamond.facets.administration import AuthModelView, AdminIndexView
 from wtforms.fields import TextAreaField
 from flask_admin.form.upload import FileUploadField
 
@@ -42,24 +42,6 @@ class EntryAdmin(AuthModelView):
 
     form_overrides = dict(content=TextAreaField)
     form_excluded_columns = 'day'
-    form_widget_args = {
-        'content': {
-            'rows': 15
-        }
-    }
-
-
-class ItemListAdmin(AuthModelView):
-    def is_visible(self):
-        return security.current_user.has_role('Admin')
-
-    can_delete = True
-    can_edit = True
-    can_create = True
-    column_display_pk = True
-    column_list = ['name', 'content']
-
-    form_overrides = dict(content=TextAreaField)
     form_widget_args = {
         'content': {
             'rows': 15

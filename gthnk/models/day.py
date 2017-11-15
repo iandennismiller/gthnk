@@ -7,7 +7,7 @@ import datetime
 import re
 
 from PyPDF2 import PdfFileReader, PdfFileWriter
-from flask.ext.diamond.utils.mixins import CRUDMixin
+from flask_diamond.mixins.crud import CRUDMixin
 from sqlalchemy import desc
 from sqlalchemy.ext.orderinglist import ordering_list
 from PIL import Image

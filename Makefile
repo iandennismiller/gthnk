@@ -37,7 +37,7 @@ xunit:
 	$(TEST_CMD) --with-xunit -c etc/nose/test.cfg
 
 single:
-	$(TEST_CMD) -c etc/nose/test-single.cfg 2>&1 | tee -a ./makesingle.log
+	$(TEST_CMD) -c etc/nose/test-single.cfg
 
 db:
 	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py init_db

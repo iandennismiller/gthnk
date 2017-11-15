@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) 2014-2016 Ian Dennis Miller
 
-from setuptools import setup
+from setuptools import setup, find_packages
 from distutils.dir_util import copy_tree
 import os
 import re
@@ -29,15 +29,7 @@ setup(
     version=grep('__version__'),
     name='gthnk',
     description="gthnk is a personal knowledge management system",
-    packages=[
-        "gthnk",
-        "gthnk.adaptors",
-        "gthnk.models",
-        "gthnk.migrations",
-        "gthnk.migrations.versions",
-        "gthnk.views",
-        "gthnk.views.administration",
-    ],
+    packages=find_packages(),
     scripts=[
         "bin/runserver.py",
         "bin/manage.py",
@@ -69,7 +61,7 @@ setup(
 
 venv_path = os.environ.get("VIRTUAL_ENV")
 if venv_path:
-    copy_tree("skels", os.path.join(venv_path, "share/skels"))
+    # copy_tree("skels", os.path.join(venv_path, "share/skels"))
     copy_tree("gthnk/migrations", os.path.join(venv_path, "share/gthnk/migrations"))
 else:
     print("This was not installed in a virtual environment")

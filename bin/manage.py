@@ -3,24 +3,27 @@
 # gthnk (c) 2014-2016 Ian Dennis Miller
 
 import sys
-import os
-import glob
 import traceback
 sys.path.insert(0, '.')
 
-from flask.ext.script import Manager, Shell, Server
-from flask.ext.migrate import Migrate, MigrateCommand
+import os
+import glob
+
+from flask_script import Manager, Shell, Server
+from flask_migrate import Migrate, MigrateCommand
 import alembic
 import alembic.config
+from gthnk import create_app, db
+from gthnk.models import User, Role
 
-from gthnk import create_app, db, security
 app = create_app()
-
+migrate = Migrate(app, db, directory="gthnk/migrations")
 
 def _make_context():
-    return dict(app=app, db=db, user_datastore=security.datastore)
-
-migrate = Migrate(app, db, directory="gthnk/migrations")
+    return {
+        "app": app,
+        "db": db,
+    }
 
 manager = Manager(app)
 manager.add_command("shell", Shell(make_context=_make_context))

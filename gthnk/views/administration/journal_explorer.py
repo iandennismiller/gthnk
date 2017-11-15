@@ -5,9 +5,9 @@ import datetime
 import re
 import flask
 from sqlalchemy import desc
-from flask.ext.admin import expose
-from flask.ext.security import current_user
-from flask.ext.diamond.administration import AuthView
+from flask_admin import expose
+from flask_security import current_user
+from flask_diamond.facets.administration import AuthView
 from gthnk import db
 from gthnk.models.day import Day, latest
 from gthnk.models.entry import Entry
@@ -16,7 +16,7 @@ from gthnk.librarian import Librarian
 
 class JournalExplorer(AuthView):
     def is_accessible(self):
-        return current_user.is_authenticated()
+        return(current_user.is_authenticated)
 
     @expose('/')
     def index_view(self):

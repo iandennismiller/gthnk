@@ -1,72 +1,86 @@
 # -*- coding: utf-8 -*-
-# gthnk (c) 2014-2016 Ian Dennis Miller
+# gthnk (c) 2014-2017 Ian Dennis Miller
 
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
-
-from flask.ext.diamond import Diamond, db, security
 from datetime import timedelta
+from flask_diamond import Diamond
+from flask_diamond.facets.administration import AdminModelView
+from flask_diamond.facets.database import db
 from flask.ext.markdown import Markdown
-from flask.ext.cache import Cache
+from flask_cache import Cache
 from mdx_linkify.mdx_linkify import LinkifyExtension
 from mdx_journal import JournalExtension
 
-app_instance = None
+from .models import User, Role, Entry, Day, Page
+
 cache = Cache(config={'CACHE_TYPE': 'simple'})
 
-assert security
+application = None
 
 
 class Gthnk(Diamond):
-    def administration(self):
-        from flask.ext.diamond.administration import AuthenticatedMenuLink
-        from .views.administration import administration as A
+    def init_administration(self):
         from .views.administration.journal_explorer import JournalExplorer
+        from .views.administration import administration as A
 
-        admin = super(Gthnk, self).administration()
+        admin = self.super("administration", user=User, role=Role)
 
-        from models.entry import Entry
-        admin.add_view(A.EntryAdmin(
-            Entry,
-            db.session,
-            name="Entries",
-            category="Admin"))
-
-        from models.day import Day
         admin.add_view(A.DayAdmin(
             Day,
             db.session,
             name="Days",
             category="Admin"))
 
-        from models.page import Page
         admin.add_view(A.PageAdmin(
             Page,
             db.session,
             name="Pages",
             category="Admin"))
 
+        admin.add_view(A.EntryAdmin(
+            Entry,
+            db.session,
+            name="Entries",
+            category="Admin"))
+
         admin.add_view(JournalExplorer(name="Journal", endpoint="journal"))
 
-    def blueprints(self):
-        from flask_diamond.views.diamond import diamond_blueprint
-        self.app.register_blueprint(diamond_blueprint)
+    def init_blueprints(self):
+        self.super("blueprints")
 
+        # administration blueprint is custom to this application
         from .views.administration.administration import adminbaseview
         self.app.register_blueprint(adminbaseview)
 
+        from .views.diamond import diamond_blueprint
+        self.app.register_blueprint(diamond_blueprint)
+
 
 def create_app():
-    global app_instance
-    if not app_instance:
-        app_instance = Gthnk()
-        app_instance.init_app(email=False, request_handlers=False)
-        app_instance.app.permanent_session_lifetime = timedelta(minutes=30)
-        app_instance.app.logger.info("starting gthnk server")
-        app_instance.app.md = Markdown(app_instance.app,
-            extensions=[LinkifyExtension(), JournalExtension()])
-        cache.init_app(app_instance.app)
+    global application
+    if not application:
+        application = Gthnk()
+        application.facet("configuration")
+        application.facet("logs")
+        application.facet("database")
+        application.facet("marshalling")
+        application.facet("blueprints")
+        application.facet("accounts")
+        application.facet("signals")
+        application.facet("forms")
+        application.facet("error_handlers")
+        application.facet("request_handlers")
+        application.facet("administration")
+        # application.facet("rest", api_map=api_map)
+        # application.facet("webassets")
+        # application.facet("email")
+        # application.facet("debugger")
+        # application.facet("task_queue")
 
-    # print app_instance.app.url_map
-    return app_instance.app
+        application.app.permanent_session_lifetime = timedelta(minutes=30)
+        application.app.logger.info("starting gthnk server")
+        application.app.md = Markdown(application.app,
+            extensions=[LinkifyExtension(), JournalExtension()])
+        cache.init_app(application.app)
+
+    # print application.app.url_map
+    return(application.app)

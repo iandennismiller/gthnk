@@ -1,7 +1,2 @@
-recursive-include gthnk/views/administration/templates *
-recursive-include gthnk/views/administration/static *
-recursive-include skels *
-include Readme.rst
-include requirements.txt
-include gthnk/migrations/alembic.ini
-include gthnk/migrations/script.py.mako
+graft gthnk
+include *.cfg *.rst *.in *.txt *.ini *.mako *.html *.js *.css *.jpg *.gif
