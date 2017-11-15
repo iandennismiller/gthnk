@@ -36,7 +36,6 @@ class EntryAdmin(AuthModelView):
     list_template = 'journal_explorer/entry_list.html'
 
     column_list = ["timestamp", "content"]
-    column_filters = ['timestamp']
     column_sortable_list = (('timestamp', 'timestamp'))
     column_searchable_list = ['content']
 
