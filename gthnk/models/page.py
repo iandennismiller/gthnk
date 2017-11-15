@@ -4,7 +4,11 @@
 from flask_diamond.mixins.crud import CRUDMixin
 from .. import db
 from PIL import Image
-import StringIO
+
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 
 class Page(db.Model, CRUDMixin):
@@ -19,7 +23,7 @@ class Page(db.Model, CRUDMixin):
 
     def set_image(self, binary):
         self.binary = binary
-        with Image.open(StringIO.StringIO(self.binary)) as img:
+        with Image.open(StringIO(self.binary)) as img:
             self.extension = img.format.lower()
 
             # flatten image
@@ -29,7 +33,7 @@ class Page(db.Model, CRUDMixin):
             size = (150, 200)
             thumb = flattened.copy()
             thumb.thumbnail(size)
-            thumb_buf = StringIO.StringIO()
+            thumb_buf = StringIO()
             thumb.save(thumb_buf, "JPEG")
             self.thumbnail = thumb_buf.getvalue()
 
@@ -37,7 +41,7 @@ class Page(db.Model, CRUDMixin):
             size = (612, 792)
             preview = flattened.copy()
             preview.thumbnail(size)
-            preview_buf = StringIO.StringIO()
+            preview_buf = StringIO()
             preview.save(preview_buf, "JPEG")
             self.preview = preview_buf.getvalue()
 

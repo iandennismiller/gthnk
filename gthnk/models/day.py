@@ -2,7 +2,6 @@
 # gthnk (c) 2014-2017 Ian Dennis Miller
 
 import puremagic
-import StringIO
 import datetime
 import re
 
@@ -14,6 +13,10 @@ from PIL import Image
 
 from .. import db
 
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 class Day(db.Model, CRUDMixin):
     """
@@ -43,7 +46,7 @@ class Day(db.Model, CRUDMixin):
         # if the attachment is a PDF
         if ext == ".pdf":
             # use PyPDF2 to read the stream
-            pdf = PdfFileReader(StringIO.StringIO(binary))
+            pdf = PdfFileReader(StringIO(binary))
             # if it is a multi-page PDF
             if pdf.getNumPages() > 1:
                 # add the pages individually
@@ -51,7 +54,7 @@ class Day(db.Model, CRUDMixin):
                     output = PdfFileWriter()
                     output.addPage(pdf_page)
 
-                    pdf_page_buf = StringIO.StringIO()
+                    pdf_page_buf = StringIO()
                     output.write(pdf_page_buf)
                     self.add_page(pdf_page_buf.getvalue())
             # if it is just a single page PDF
@@ -70,16 +73,16 @@ class Day(db.Model, CRUDMixin):
         for page in self.pages:
             if page.extension == "pdf":
                 # the page is already a PDF so append directly
-                outpdf.addPage(PdfFileReader(StringIO.StringIO(page.binary)).getPage(0))
+                outpdf.addPage(PdfFileReader(StringIO(page.binary)).getPage(0))
             else:
                 # otherwise, the page is an image that needs to be converted to PDF first
-                buf = StringIO.StringIO()
-                img = Image.open(StringIO.StringIO(page.binary))
+                buf = StringIO()
+                img = Image.open(StringIO(page.binary))
                 img.convert("RGB").save(buf, format="pdf")
                 # once image is PDF, it can be appended
                 outpdf.addPage(PdfFileReader(buf).getPage(0))
 
-        pdf_page_buf = StringIO.StringIO()
+        pdf_page_buf = StringIO()
         outpdf.write(pdf_page_buf)
         return pdf_page_buf.getvalue()
 
