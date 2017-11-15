@@ -5,6 +5,4 @@ Pillow==4.3.0
 Flask-Cache==0.13.1
 mdx-linkify==1.0
 mdx-journal>=0.1.4
-pyScss==1.2.0.post3
-cssselect==0.9.1
 puremagic==1.3
