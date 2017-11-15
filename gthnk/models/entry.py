@@ -39,6 +39,9 @@ class Entry(db.Model, CRUDMixin):
             # now assign a value to this Entry's day
             self.day = this_day
 
+        flask.current_app.logger.debug("saving")
+        flask.current_app.logger.debug(self)
+
         super(Entry, self).save()
 
     def date_str(self):
@@ -49,7 +52,7 @@ class Entry(db.Model, CRUDMixin):
         return datetime.datetime.strftime(self.timestamp, "%H%M")
 
     def __repr__(self):
-        return '<Entry {} "{}">'.format(self.timestamp, self.content)
+        return('<Entry {} "{}">'.format(self.timestamp, self.content))
         #return '<Entry {} ({}) "{}">'.format(self.timestamp, self.tags, self.content)
 
     def __unicode__(self):

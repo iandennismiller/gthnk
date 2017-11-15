@@ -1,10 +1,11 @@
 # gthnk (c) 2014-2017 Ian Dennis Miller
 
+SHELL=/bin/bash
 PROJECT_NAME=gthnk
 MOD_NAME=gthnk
-SHELL=/bin/bash
-WWWROOT=/var/www/gthnk
-TEST_CMD=SETTINGS=$$PWD/etc/testing.conf nosetests --with-coverage --cover-package=$(MOD_NAME)
+WATCHMEDO_PATH=$$(which watchmedo)
+NOSETESTS_PATH=$$(which nosetests)
+TEST_CMD=SETTINGS=$$PWD/etc/conf/testing.conf $(NOSETESTS_PATH) $(MOD_NAME)
 
 install:
 	python setup.py install
@@ -21,39 +22,39 @@ clean:
 	find . -name __pycache__ -delete
 
 server:
-	SETTINGS=$$PWD/etc/dev.conf bin/manage.py runserver
+	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py runserver
 
 shell:
-	SETTINGS=$$PWD/etc/dev.conf bin/manage.py shell
+	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py shell
 
 watch:
-	watchmedo shell-command -R -p "*.py" -c 'echo \\n\\n\\n\\n; date; $(TEST_CMD) -c tests/nose/test-single.cfg; date' .
+	watchmedo shell-command -R -p "*.py" -c 'echo \\n\\n\\n\\nSTART; date; $(TEST_CMD) -c etc/nose/test-single.cfg; date' .
 
 test:
-	$(TEST_CMD) -c gthnk/tests/nose/test.cfg
+	$(TEST_CMD) -c etc/nose/test.cfg
 
 xunit:
-	$(TEST_CMD) --with-xunit -c tests/nose/test.cfg
+	$(TEST_CMD) --with-xunit -c etc/nose/test.cfg
 
 single:
-	$(TEST_CMD) -c tests/nose/test-single.cfg 2>&1 | tee -a ./makesingle.log
+	$(TEST_CMD) -c etc/nose/test-single.cfg 2>&1 | tee -a ./makesingle.log
 
 db:
-	SETTINGS=$$PWD/etc/dev.conf bin/manage.py init_db
-	SETTINGS=$$PWD/etc/dev.conf bin/manage.py populate_db
+	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py init_db
+	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py populate_db
 
 lint:
 	pylint gthnk
 
 upgradedb:
-	SETTINGS=$$PWD/etc/dev.conf bin/manage.py db upgrade
+	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py db upgrade
 
 migratedb:
-	SETTINGS=$$PWD/etc/dev.conf bin/manage.py db migrate
+	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py db migrate
 
 docs:
 	rm -rf build/sphinx
-	sphinx-build -b html docs build/sphinx
+	SETTINGS=$$PWD/etc/conf/testing.conf sphinx-build -b html docs build/sphinx
 
 release:
 	python setup.py sdist upload
@@ -61,6 +62,6 @@ release:
 # create a homebrew install script
 homebrew:
 	bin/poet-homebrew.sh
-	cp /tmp/gthnk.rb etc/gthnk.rb
+	cp /tmp/gthnk.rb integrations/homebrew/gthnk.rb
 
 .PHONY: clean install test server watch lint docs all single release homebrew

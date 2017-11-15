@@ -4,23 +4,9 @@
 from nose.plugins.attrib import attr
 from datetime import datetime
 import os, shutil, tempfile, sys, unittest, json
-from flask.ext.diamond.utils.testhelpers import GeneralTestCase
-from Gthnk import Models
+from .mixins import DiamondTestCase
 
-class ViewTestCase(GeneralTestCase):
-    def setUp(self):
-        # fresh testing database
-        db.drop_all()
-        db.create_all()
-
-        # here, load some data
-        with app.app_context():
-            user_datastore.create_user(email='admin', password='aaa')
-            db.session.commit()
-
-    def tearDown(self):
-        db.session.remove()
-
+class ViewTestCase(DiamondTestCase):
     @attr('skip')
     def test_index(self):
         with app.test_client() as c:
@@ -38,6 +24,3 @@ class ViewTestCase(GeneralTestCase):
     @attr('online')
     def test_recruit_post(self):
         pass
-
-if __name__ == '__main__':
-    unittest.main()

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# gthnk (c) 2014-2016 Ian Dennis Miller
+# gthnk (c) 2014-2017 Ian Dennis Miller
 
 import re
 import datetime
@@ -8,7 +8,9 @@ from gthnk import models
 
 
 def split_filename_list(filename_str):
-    return [x.strip() for x in filename_str.split(',')]
+    """
+    """
+    return([x.strip() for x in filename_str.split(',')])
 
 
 class JournalBuffer(object):
@@ -17,6 +19,8 @@ class JournalBuffer(object):
     """
 
     def __init__(self):
+        """
+        """
         self.entries = defaultdict(lambda: defaultdict(unicode))
         self.re_day = re.compile(r'^(\d\d\d\d-\d\d-\d\d)\s*$')
         self.re_time = re.compile(r'^(\d\d\d\d)\s*$')
@@ -24,7 +28,9 @@ class JournalBuffer(object):
         self.re_newlines = re.compile(r'\n\n\n', re.MULTILINE)
 
     def parse(self, raw_text):
-        "parse a Journal-encoded text string; add content to an Entries dictionary, with timestamp."
+        """
+        parse a Journal-encoded text string; add content to an Entries dictionary, with timestamp.
+        """
         current_day = None
         current_time = None
 
@@ -63,7 +69,9 @@ class JournalBuffer(object):
                 self.entries[day][timestamp] = self.entries[day][timestamp].rstrip()
 
     def get_entries(self):
-        return self.entries
+        """
+        """
+        return(self.entries)
 
     def save_entries(self):
         """
@@ -83,6 +91,11 @@ class JournalBuffer(object):
                     content=self.entries[day][timestamp]
                 )
 
+    def dump(self):
+        """
+        """
+        import json
+        return(json.dumps(self.get_entries()))
 
 class TextFileJournalBuffer(JournalBuffer):
     """
