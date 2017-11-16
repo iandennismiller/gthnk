@@ -1,7 +1,14 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) 2014 Ian Dennis Miller
 
-import os, shutil, tempfile, sys, unittest, json, datetime, glob
+import os
+import shutil
+import tempfile
+import sys
+import unittest
+import json
+import datetime
+import glob
 import flask
 from nose.plugins.attrib import attr
 from .mixins import DiamondTestCase
@@ -14,7 +21,7 @@ class TestParsing(DiamondTestCase):
         # put an example journal in place
         shutil.copy(
             "gthnk/tests/data/tmp_journal.txt",
-            flask.current_app.config["INPUT_FILES"][0]
+            flask.current_app.config["INPUT_FILES"]
         )
 
         # load some known-correct files

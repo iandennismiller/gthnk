@@ -4,6 +4,7 @@
 import re
 import io
 import datetime
+import sys
 from collections import defaultdict
 from gthnk import models
 
@@ -22,7 +23,11 @@ class JournalBuffer(object):
     def __init__(self):
         """
         """
-        self.entries = defaultdict(lambda: defaultdict(unicode))
+        PY3 = sys.version_info[0] > 2
+        if PY3:
+            self.entries = defaultdict(lambda: defaultdict(str))
+        else:
+            self.entries = defaultdict(lambda: defaultdict(unicode))
         self.re_day = re.compile(r'^(\d\d\d\d-\d\d-\d\d)\s*$')
         self.re_time = re.compile(r'^(\d\d\d\d)\s*$')
         self.re_time_tag = re.compile(r'^(\d\d\d\d)\s(\w+)\s*$')
