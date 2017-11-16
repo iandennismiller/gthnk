@@ -2,6 +2,7 @@
 # gthnk (c) 2014-2017 Ian Dennis Miller
 
 import re
+import io
 import datetime
 from collections import defaultdict
 from gthnk import models
@@ -62,7 +63,7 @@ class JournalBuffer(object):
                 tag = match_time_tag.group(2)
                 #current_time = "%s %s" % (current_time, tag)
             else:
-                self.entries[current_day][current_time] += "%s\n" % line
+                self.entries[current_day][current_time] += unicode("{0}\n").format(line)
 
         for day in self.entries:
             for timestamp in self.entries[day]:
@@ -83,7 +84,8 @@ class JournalBuffer(object):
                     time_obj = datetime.datetime.strptime(
                         "{} {}".format(day, timestamp), '%Y-%m-%d %H%M')
                 except:
-                    print("'{}' '{}'".format(day, timestamp))
+                    import flask
+                    flask.current_app.logger.warn("Cannot determine day for '{}' '{}'".format(day, timestamp))
                     continue
 
                 models.Entry.create(
@@ -102,7 +104,7 @@ class TextFileJournalBuffer(JournalBuffer):
     provide functions for loading content from a text file
     """
     def process_one(self, filename):
-        with open(filename, "r") as f:
+        with io.open(filename, "r", encoding="utf-8") as f:
             contents = f.read()
         self.parse(contents)
 

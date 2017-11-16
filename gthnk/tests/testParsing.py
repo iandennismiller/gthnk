@@ -60,19 +60,22 @@ class TestParsing(DiamondTestCase):
     def test_textfile_batch_create(self):
         "create objects in the database"
         journal_buffer = TextFileJournalBuffer()
-        journal_buffer.process_list(["gthnk/tests/data/source_a.txt", "gthnk/tests/data/source_b.txt"])
+        journal_buffer.process_list([
+            "gthnk/tests/data/source_a.txt",
+            "gthnk/tests/data/source_b.txt"
+        ])
 
         # create objects
         journal_buffer.save_entries()
         self.assertEqual(8, Entry.query.count(), "expected number of objects in DB")
 
         # use Journal Model to verify that objects were created
-        a_day = Day(date="2012-10-04")
+        a_day = Day.find(date="2012-10-04")
         self.assertEqual(8, a_day.entries.count(), "expected number of entries returned")
 
         # and this should not exist
-        a_day = Day(date="2012-10-05")
-        self.assertEqual(0, a_day.entries.count(), "there are no entries for the 5th")
+        a_day = Day.find(date="2012-10-05")
+        self.assertIsNone(a_day, "there are no entries for the 5th")
 
     def test_timestamp_ordering(self):
         "timestamps are not in the correct order; should warn about this"
@@ -86,7 +89,7 @@ class TestParsing(DiamondTestCase):
         journal_buffer = TextFileJournalBuffer()
         journal_buffer.process_list(["gthnk/tests/data/source_a.txt", "gthnk/tests/data/source_b.txt"])
         journal_buffer.save_entries()
-        a_day = Day(date="2012-10-04")
+        a_day = Day.find(date="2012-10-04")
         self.assertEqual(unicode(a_day), self.correct_merge)
 
     def test_newlines(self):
@@ -94,10 +97,9 @@ class TestParsing(DiamondTestCase):
         journal_buffer = TextFileJournalBuffer()
         journal_buffer.process_list(["gthnk/tests/data/excessive_newlines.txt"])
         journal_buffer.save_entries()
-        a_day = Day(date="2012-10-04")
+        a_day = Day.find(date="2012-10-04")
         self.assertEqual(unicode(a_day), self.correct_output)
 
-    @attr("single")
     def test_twodays(self):
         "ensure journals with several days in them continue to work"
         journal_buffer = TextFileJournalBuffer()
@@ -106,26 +108,36 @@ class TestParsing(DiamondTestCase):
         self.assertEqual(8, Entry.query.count(), "expected number of objects in DB")
 
         # now concatenate some days and verify that it matches
-        buf = unicode(Day(date="2012-10-04")) + \
-            unicode(Day(date="2012-10-05")) + \
-            unicode(Day(date="2012-10-06")) + \
-            unicode(Day(date="2012-10-07"))
+        buf = unicode(Day.find(date="2012-10-04")) + \
+            unicode(Day.find(date="2012-10-05")) + \
+            unicode(Day.find(date="2012-10-06")) + \
+            unicode(Day.find(date="2012-10-07"))
+
         self.assertEqual(buf, self.correct_twodays, "multiple days are output correctly")
 
-    @attr("slow")
-    def test_load_archive(self):
+    @attr("single")
+    def test_load_smaller_batch(self):
+        "load a smaller batch from the archive"
+        journal_buffer = TextFileJournalBuffer()
+        journal_buffer.process_list(glob.glob("gthnk/tests/data/*.txt"))
+        journal_buffer.save_entries()
+        self.assertEqual(18, Entry.query.count(), "expected number of entries in DB")
+        self.assertEqual(5, Day.query.count(), "expected number of days in DB")
+
+    @attr("skip")
+    def test_load_entire_personal_archive(self):
         "load the entire archive"
         journal_buffer = TextFileJournalBuffer()
         journal_buffer.process_list(glob.glob("/Users/idm/Library/Journal/auto/*.txt"))
         journal_buffer.save_entries()
         #self.assertEqual(8, Entry.query.count(), "expected number of objects in DB")
 
-    def test_load_smaller_batch(self):
+    @attr("skip")
+    def test_personal(self):
         "load a smaller batch from the archive"
         journal_buffer = TextFileJournalBuffer()
         journal_buffer.process_list(glob.glob("/Users/idm/Library/Journal/auto/2007-02-0*.txt"))
         journal_buffer.save_entries()
-        print("WHAH")
         self.assertEqual(86, Entry.query.count(), "expected number of entries in DB")
         self.assertEqual(7, Day.query.count(), "expected number of days in DB")
 

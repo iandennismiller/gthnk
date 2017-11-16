@@ -84,21 +84,21 @@ class Day(db.Model, CRUDMixin):
 
         pdf_page_buf = StringIO()
         outpdf.write(pdf_page_buf)
-        return pdf_page_buf.getvalue()
+        return(pdf_page_buf.getvalue())
 
     def yesterday(self):
-        return self.query.filter(Day.date < self.date).order_by(desc(Day.date)).first()
+        return(self.query.filter(Day.date < self.date).order_by(desc(Day.date)).first())
 
     def tomorrow(self):
-        return self.query.filter(Day.date > self.date).order_by(Day.date).first()
+        return(self.query.filter(Day.date > self.date).order_by(Day.date).first())
 
     def render(self):
         from entry import Entry
-        buf = datetime.datetime.strftime(self.date, "%Y-%m-%d")
+        buf = self.date.strftime(unicode("%Y-%m-%d"))
         for entry in self.entries.order_by(Entry.timestamp).all():
             buf += unicode(entry)
-        buf += "\n\n"
-        return buf
+        buf += unicode("\n\n")
+        return(buf)
 
     def render_markdown(self):
         buf = self.render()
@@ -119,11 +119,11 @@ class Day(db.Model, CRUDMixin):
         return buf
 
     def __repr__(self):
-        return "<Day: {}>".format(self.date)
+        return("<Day: {}>".format(self.date))
 
     def __unicode__(self):
-        return repr(self)
+        return(self.render())
 
 
 def latest():
-    return Day.query.order_by(desc(Day.date)).first()
+    return(Day.query.order_by(desc(Day.date)).first())

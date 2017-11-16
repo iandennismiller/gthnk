@@ -23,11 +23,12 @@ class Entry(db.Model, CRUDMixin):
 
     def save(self, _commit):
         # see if this entry is a duplicate before creating it.
-        existing_entries = self.query.filter_by(timestamp=self.timestamp)\
-            .filter_by(content=self.content).count()
-        if existing_entries and existing_entries > 0:  # if it exists
-            flask.current_app.logger.info("skipping entry because entry already exists")
-            return
+        # existing_entries = self.query.filter_by(timestamp=self.timestamp)\
+        #     .filter_by(content=self.content).count()
+        # print(existing_entries)
+        # if existing_entries and existing_entries > 0:  # if it exists
+        #     flask.current_app.logger.info("skipping entry because entry already exists")
+        #     return
 
         if not self.day_id:
             # find the day if it exists
@@ -42,7 +43,8 @@ class Entry(db.Model, CRUDMixin):
         flask.current_app.logger.debug("saving")
         flask.current_app.logger.debug(self)
 
-        super(Entry, self).save()
+        obj = super(Entry, self).save(_commit)
+        return(obj)
 
     def date_str(self):
         this_date = datetime.date.fromordinal(self.timestamp.toordinal())
@@ -52,10 +54,9 @@ class Entry(db.Model, CRUDMixin):
         return datetime.datetime.strftime(self.timestamp, "%H%M")
 
     def __repr__(self):
-        return('<Entry {} "{}">'.format(self.timestamp, self.content))
-        #return '<Entry {} ({}) "{}">'.format(self.timestamp, self.tags, self.content)
+        return('<Entry {}>'.format(self.timestamp))
 
     def __unicode__(self):
-        return "\n\n{}\n\n{}".format(
+        return unicode("\n\n{}\n\n{}").format(
             datetime.datetime.strftime(self.timestamp, "%H%M"), self.content
         )
