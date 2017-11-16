@@ -3,9 +3,7 @@
 SHELL=/bin/bash
 PROJECT_NAME=gthnk
 MOD_NAME=gthnk
-WATCHMEDO_PATH=$$(which watchmedo)
-NOSETESTS_PATH=$$(which nosetests)
-TEST_CMD=SETTINGS=$$PWD/etc/conf/testing.conf $(NOSETESTS_PATH) $(MOD_NAME)
+TEST_CMD=SETTINGS=$$PWD/etc/conf/testing.conf nosetests $(MOD_NAME)
 
 install:
 	python setup.py install
@@ -42,6 +40,10 @@ watch:
 
 test:
 	$(TEST_CMD) -c etc/nose/test.cfg
+
+test-win:
+	set SETTINGS=%cd%\etc\conf\testing-win.conf
+	nosetests $(MOD_NAME) -c etc\nose\test.cfg
 
 xunit:
 	$(TEST_CMD) --with-xunit -c etc/nose/test.cfg
