@@ -1,4 +1,4 @@
-# gthnk (c) 2014-2017 Ian Dennis Miller
+# gthnk (c) Ian Dennis Miller
 
 SHELL=/bin/bash
 PROJECT_NAME=gthnk
@@ -8,9 +8,12 @@ install:
 	python setup.py install
 
 requirements:
+ifeq ($(OS),Windows_NT)
+	easy_install -U mr.bob==0.1.2
+endif
 	pip install -r requirements.txt
 
-dev:
+develop:
 	pip install -r .requirements-dev.txt
 
 clean:
@@ -111,4 +114,4 @@ else
 	cp /tmp/gthnk.rb integrations/homebrew/gthnk.rb
 endif
 
-.PHONY: clean install test server watch lint docs all single release homebrew
+.PHONY: clean install test server watch lint docs all single release homebrew develop

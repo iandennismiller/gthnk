@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# gthnk (c) 2014-2016 Ian Dennis Miller
+# gthnk (c) Ian Dennis Miller
 
 import datetime
 from flask_diamond.mixins.crud import CRUDMixin

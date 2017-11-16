@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# gthnk (c) 2014-2016 Ian Dennis Miller
+# gthnk (c) Ian Dennis Miller
 
 from setuptools import setup, find_packages
 from distutils.dir_util import copy_tree
@@ -34,9 +34,7 @@ setup(
         "bin/runserver.py",
         "bin/manage.py",
         "bin/journal_rotate.py",
-        # "bin/install_osx.sh",
-        # "bin/uninstall_osx.sh",
-        #"bin/journal_actions.py",
+        "bin/integration.py",
     ],
     long_description=read('Readme.rst'),
     classifiers=[
@@ -59,10 +57,10 @@ setup(
     zip_safe=False,
 )
 
-venv_path = os.environ.get("VIRTUAL_ENV")
-if venv_path:
-    # copy_tree("skels", os.path.join(venv_path, "share/skels"))
-    copy_tree("gthnk/migrations", os.path.join(venv_path, "share/gthnk/migrations"))
-else:
-    print("This was not installed in a virtual environment")
-    print("So, I won't install the skel files.")
+# venv_path = os.environ.get("VIRTUAL_ENV")
+# if venv_path:
+#     # copy_tree("skels", os.path.join(venv_path, "share/skels"))
+#     copy_tree("gthnk/migrations", os.path.join(venv_path, "share/gthnk/migrations"))
+# else:
+#     print("This was not installed in a virtual environment")
+#     print("So, I won't install the skel files.")

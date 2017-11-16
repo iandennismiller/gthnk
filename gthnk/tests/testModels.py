@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# greenthink-library (c) 2013 Ian Dennis Miller
+# gthnk (c) Ian Dennis Miller
 
 from nose.plugins.attrib import attr
 from datetime import datetime
@@ -9,7 +9,7 @@ from ..models import Entry, Day
 
 class ModelEntryTestCase(DiamondTestCase):
 
-    def test_createread(self):
+    def test_create_read(self):
         a_day = Day.create(date=datetime.now())
         obj = Entry.create(day=a_day, content="empty", timestamp=datetime.now())
         print(obj)

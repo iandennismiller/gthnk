@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# gthnk (c) 2014-2017 Ian Dennis Miller
+# gthnk (c) Ian Dennis Miller
 
 from datetime import timedelta
 from flask_diamond import Diamond

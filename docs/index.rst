@@ -32,7 +32,7 @@ About
     :maxdepth: 1
 
     about/history
-    about/license
+    License
 
 ..     about/credits-and-attributions
 ..     about/how_to_contribute_to_the_project

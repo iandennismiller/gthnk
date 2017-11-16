@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# gthnk (c) 2017 Ian Dennis Miller
+# gthnk (c) Ian Dennis Miller
 
 from flask import current_app
 from .. import create_app, db

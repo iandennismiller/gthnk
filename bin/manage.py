@@ -1,10 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# gthnk (c) 2014-2016 Ian Dennis Miller
+# gthnk (c) Ian Dennis Miller
 
 import sys
 import traceback
 sys.path.insert(0, '.')
+
+import warnings
+from flask.exthook import ExtDeprecationWarning
+warnings.simplefilter('ignore', ExtDeprecationWarning)
 
 import os
 import glob

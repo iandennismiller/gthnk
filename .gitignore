@@ -1,8 +1,3 @@
 /build
 /dist
 *.egg-info
-/lib/poodledo
-/docs/source/auto/
-/make*.log
-*.sublime-workspace
-/var/sphinx

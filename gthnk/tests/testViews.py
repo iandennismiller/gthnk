@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# greenthink-library (c) 2013 Ian Dennis Miller
+# gthnk (c) Ian Dennis Miller
 
 from nose.plugins.attrib import attr
 from datetime import datetime
