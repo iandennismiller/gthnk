@@ -14,7 +14,7 @@ requirements:
 	pip install -r requirements.txt
 
 dev:
-	pip install -r requirements-dev.txt
+	pip install -r .requirements-dev.txt
 
 clean:
 	rm -rf build dist *.egg-info
