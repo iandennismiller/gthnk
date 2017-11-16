@@ -2,6 +2,7 @@
 # gthnk (c) 2014 Ian Dennis Miller
 
 import os, shutil, tempfile, sys, unittest, json, datetime, glob
+import flask
 from nose.plugins.attrib import attr
 from .mixins import DiamondTestCase
 from ..models import User, Day, Entry, Page
@@ -10,8 +11,13 @@ from ..adaptors.journal_buffer import JournalBuffer, TextFileJournalBuffer
 
 class TestParsing(DiamondTestCase):
     def setUp(self):
-        # set up some text files
-        shutil.copy("gthnk/tests/data/tmp_journal.txt", "/tmp/journal.txt")
+        # put an example journal in place
+        shutil.copy(
+            "gthnk/tests/data/tmp_journal.txt",
+            flask.current_app.config["INPUT_FILES"][0]
+        )
+
+        # load some known-correct files
         with open('gthnk/tests/data/correct_output.txt', 'r') as f:
             self.correct_output = ''.join(f.readlines())
         with open('gthnk/tests/data/correct_merge.txt', 'r') as f:
