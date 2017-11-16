@@ -43,14 +43,14 @@ ifeq ($(OS),Windows_NT)
 	set SETTINGS=%cd%\etc\conf\testing-win.conf
 	nosetests $(MOD_NAME) -c etc\nose\test.cfg
 else
-	nosetests $(MOD_NAME) -c etc/nose/test.cfg
+	SETTINGS=$$PWD/etc/conf/testing.conf nosetests $(MOD_NAME) -c etc/nose/test.cfg
 endif
 
 single:
 ifeq ($(OS),Windows_NT)
 	nosetests $(MOD_NAME) -c etc\nose\test-single.cfg
 else
-	nosetests $(MOD_NAME) -c etc/nose/test-single.cfg
+	SETTINGS=$$PWD/etc/conf/testing.conf nosetests $(MOD_NAME) -c etc/nose/test-single.cfg
 endif
 
 db:
