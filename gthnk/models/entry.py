@@ -32,7 +32,7 @@ class Entry(db.Model, CRUDMixin):
 
         if not self.day_id:
             # find the day if it exists
-            from day import Day
+            from .day import Day
             this_date = datetime.date.fromordinal(self.timestamp.toordinal())
             this_day = Day.find(date=this_date)
             if not this_day:  # else create the day right now
