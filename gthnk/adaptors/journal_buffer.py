@@ -68,7 +68,7 @@ class JournalBuffer(object):
                 tag = match_time_tag.group(2)
                 #current_time = "%s %s" % (current_time, tag)
             else:
-                self.entries[current_day][current_time] += unicode("{0}\n").format(line)
+                self.entries[current_day][current_time] += "{0}\n".format(line)
 
         for day in self.entries:
             for timestamp in self.entries[day]:

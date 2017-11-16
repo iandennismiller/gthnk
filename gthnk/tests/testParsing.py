@@ -103,7 +103,7 @@ class TestParsing(DiamondTestCase):
         journal_buffer.process_list(["gthnk/tests/data/source_a.txt", "gthnk/tests/data/source_b.txt"])
         journal_buffer.save_entries()
         a_day = Day.find(date="2012-10-04")
-        self.assertEqual(unicode(a_day), self.correct_merge)
+        self.assertEqual(a_day.render(), self.correct_merge)
 
     def test_newlines(self):
         "see if a whole horde of weird newlines screws anything up"
@@ -111,7 +111,7 @@ class TestParsing(DiamondTestCase):
         journal_buffer.process_list(["gthnk/tests/data/excessive_newlines.txt"])
         journal_buffer.save_entries()
         a_day = Day.find(date="2012-10-04")
-        self.assertEqual(unicode(a_day), self.correct_output)
+        self.assertEqual(a_day.render(), self.correct_output)
 
     def test_twodays(self):
         "ensure journals with several days in them continue to work"
@@ -121,10 +121,10 @@ class TestParsing(DiamondTestCase):
         self.assertEqual(8, Entry.query.count(), "expected number of objects in DB")
 
         # now concatenate some days and verify that it matches
-        buf = unicode(Day.find(date="2012-10-04")) + \
-            unicode(Day.find(date="2012-10-05")) + \
-            unicode(Day.find(date="2012-10-06")) + \
-            unicode(Day.find(date="2012-10-07"))
+        buf = Day.find(date="2012-10-04").render() + \
+            Day.find(date="2012-10-05").render() + \
+            Day.find(date="2012-10-06").render() + \
+            Day.find(date="2012-10-07").render()
 
         self.assertEqual(buf, self.correct_twodays, "multiple days are output correctly")
 

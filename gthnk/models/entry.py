@@ -57,6 +57,9 @@ class Entry(db.Model, CRUDMixin):
         return('<Entry {}>'.format(self.timestamp))
 
     def __unicode__(self):
-        return unicode("\n\n{}\n\n{}").format(
+        return "\n\n{}\n\n{}".format(
             datetime.datetime.strftime(self.timestamp, "%H%M"), self.content
         )
+
+    def __str__(self):
+        return(self.__unicode__())

@@ -94,10 +94,10 @@ class Day(db.Model, CRUDMixin):
 
     def render(self):
         from entry import Entry
-        buf = self.date.strftime(unicode("%Y-%m-%d"))
+        buf = self.date.strftime("%Y-%m-%d")
         for entry in self.entries.order_by(Entry.timestamp).all():
-            buf += unicode(entry)
-        buf += unicode("\n\n")
+            buf += str(entry)
+        buf += "\n\n"
         return(buf)
 
     def render_markdown(self):
@@ -124,6 +124,8 @@ class Day(db.Model, CRUDMixin):
     def __unicode__(self):
         return(self.render())
 
+    def __str__(self):
+        return(self.__unicode__())
 
 def latest():
     return(Day.query.order_by(desc(Day.date)).first())
