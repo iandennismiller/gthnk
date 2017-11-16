@@ -6,13 +6,10 @@ from flask_diamond import Diamond
 from flask_diamond.facets.administration import AdminModelView
 from flask_diamond.facets.database import db
 from flask.ext.markdown import Markdown
-from flask_cache import Cache
 from mdx_linkify.mdx_linkify import LinkifyExtension
 from mdx_journal import JournalExtension
 
 from .models import User, Role, Entry, Day, Page
-
-cache = Cache(config={'CACHE_TYPE': 'simple'})
 
 application = None
 
@@ -80,7 +77,6 @@ def create_app():
         application.app.logger.info("starting gthnk server")
         application.app.md = Markdown(application.app,
             extensions=[LinkifyExtension(), JournalExtension()])
-        cache.init_app(application.app)
 
     # print application.app.url_map
     return(application.app)
