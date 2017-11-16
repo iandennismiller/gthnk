@@ -93,7 +93,7 @@ class Day(db.Model, CRUDMixin):
         return(self.query.filter(Day.date > self.date).order_by(Day.date).first())
 
     def render(self):
-        from entry import Entry
+        from .entry import Entry
         buf = self.date.strftime("%Y-%m-%d")
         for entry in self.entries.order_by(Entry.timestamp).all():
             buf += str(entry)
