@@ -27,6 +27,23 @@ That would search **gthnk** for anything matching *http*, which would hopefully 
 App Launcher
 ^^^^^^^^^^^^
 
+1. Enable the necessary Chrome flags
+    1. chrome://flags
+    2. chrome://flags/#bookmark-apps - Enable
+    3. chrome://flags/#disable-hosted-apps-in-windows - Enable
+2. Add Gthnk as an App
+    1. Navigate to http://localhost:1620/admin/journal/latest.html
+    2. Click the 3-dot "more" tool button
+    3. Click "More Tools"
+    4. Click "Add to Applications"
+    5. Call it "Gthnk"
+3. Done
+
+Chrome Extension
+^^^^^^^^^^^^^^^^
+
+This method has been replaced by the App Launcher, which is better...
+
 The **gthnk** Google Chrome extension enables **gthnk** to be launched from the menu bar using the Chrome Launcher.
 
 1. Download the extension code from github
@@ -42,6 +59,29 @@ The **gthnk** Google Chrome extension enables **gthnk** to be launched from the 
 6. Click *OK*
 
 Now, you have an icon that will launch **gthnk**.
+
+Hotkey
+^^^^^^
+
+I use Spark.app to create a hotkey pattern for launching the Gthnk app.
+
+- https://github.com/Jean-Daniel/Spark
+- https://www.shadowlab.org/softwares/spark.php
+
+Many launchers will work, but the important part is that you must create an "App Launcher" for Gthnk before the hotkey can be created.
+
+Steps for adding a Gthnk hotkey:
+
+1. Click the gear icon to drop down the list of things to create
+2. Choose `Application`
+3. Set a unique shortcut key combination
+4. name it `Gthnk`
+5. Action: `Launch`
+6. Choose: locate the gthnk chrome app
+    1. Navigate to wherever your apps are and looks for `Chrome Apps`
+    2. On OS X, this is probably `/Applications/Chrome Apps`
+    3. Select `Gthnk` in the `Chrome Apps` folder
+7. Done
 
 Other Browsers
 --------------
