@@ -19,7 +19,8 @@ warnings.simplefilter('ignore', ExtDeprecationWarning)
 import click
 import os
 from gthnk.__meta__ import __version__
-from gthnk.integration import install_windows, install_osx, uninstall_windows, uninstall_osx
+from gthnk.integration.osx import install_osx, uninstall_osx
+from gthnk.integration.windows import install_windows, uninstall_windows
 
 @click.group()
 @click.version_option(__version__)
