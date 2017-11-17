@@ -2,6 +2,12 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
+"""
+integration.py
+
+Manage the integration of Gthnk into various operating systems.
+"""
+
 import sys
 import traceback
 sys.path.insert(0, '.')
@@ -10,16 +16,10 @@ import warnings
 from flask.exthook import ExtDeprecationWarning
 warnings.simplefilter('ignore', ExtDeprecationWarning)
 
-"""
-integration.py
-
-Manage the integration of Gthnk into various operating systems.
-"""
-
 import click
 import os
 from gthnk.__meta__ import __version__
-from gthnk.integration import install_windows, install_osx
+from gthnk.integration import install_windows, install_osx, uninstall_windows, uninstall_osx
 
 @click.group()
 @click.version_option(__version__)
@@ -35,7 +35,10 @@ def do_install():
 
 @cli.command('uninstall', short_help='remove Gthnk installation')
 def do_uninstall():
-    pass
+    if os.name == 'nt':
+        uninstall_windows()
+    else:
+        uninstall_osx()
 
 if __name__ == '__main__':
     cli()

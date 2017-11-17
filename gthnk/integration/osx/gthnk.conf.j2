@@ -1,0 +1,50 @@
+############
+# gthnk configuration file
+############
+
+############
+# The following settings may be changed to match your system
+############
+
+# INPUT_FILES is a list of text files to read journal entries from.
+# This can be a comma-separated list of files (no spaces between commas)
+INPUT_FILES = "{{ home_directory }}/Desktop/journal.txt"
+
+# BACKUP_PATH specifies where to store a copy of each text file imported.
+BACKUP_PATH = "{{ home_directory }}/Library/Gthnk/backup"
+
+# EXPORT_PATH specifies where to write a static files for long-term storage.
+EXPORT_PATH = "{{ home_directory }}/Library/Gthnk/export"
+
+############
+# The rest of this file does not need to change
+############
+
+PROJECT_NAME = "gthnk"
+PORT = 1620
+LOG = "{{ home_directory }}/Library/Gthnk/gthnk.log"
+SQLALCHEMY_DATABASE_URI = "sqlite:///{{ home_directory }}/Library/Gthnk/gthnk.db"
+SECRET_KEY = {{ secret_key }}
+
+BASE_URL = "http://localhost"
+
+SECURITY_PASSWORD_SALT = '{{ hash_salt }}'
+SECURITY_POST_LOGIN_VIEW = "/admin"
+SECURITY_PASSWORD_HASH = 'sha256_crypt'
+SECURITY_URL_PREFIX = '/user'
+SECURITY_CHANGEABLE = True
+SECURITY_SEND_PASSWORD_CHANGE_EMAIL = False
+
+# LOG_LEVEL = "DEBUG"
+DEBUG = False
+DEBUG_TOOLBAR = False
+DEBUG_TB_INTERCEPT_REDIRECTS = False
+
+MAIL_SERVER = 'localhost'
+MAIL_PORT = 25
+MAIL_USE_TLS = False
+MAIL_USERNAME = None
+MAIL_PASSWORD = None
+
+CELERY_BROKER_URL = 'sqla+sqlite:///{{ home_directory }}/Library/Gthnk/celery-db.sqlite'
+CELERY_RESULT_BACKEND = 'db+sqlite:///{{ home_directory }}/Library/Gthnk/celery-results.sqlite'
