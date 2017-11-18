@@ -8,13 +8,13 @@
 
 # INPUT_FILES is a list of text files to read journal entries from.
 # This can be a comma-separated list of files (no spaces between commas)
-INPUT_FILES = "{{ home_directory }}\\Desktop\\journal.txt"
+INPUT_FILES = "{{ home_directory|replace("\\", "\\\\") }}\\Desktop\\journal.txt"
 
 # BACKUP_PATH specifies where to store a copy of each text file imported.
-BACKUP_PATH = "{{ app_data }}\\Gthnk\\backup"
+BACKUP_PATH = "{{ app_data|replace("\\", "\\\\") }}\\Gthnk\\backup"
 
 # EXPORT_PATH specifies where to write a static files for long-term storage.
-EXPORT_PATH = "{{ app_data }}\\Gthnk\\export"
+EXPORT_PATH = "{{ app_data|replace("\\", "\\\\") }}\\Gthnk\\export"
 
 ############
 # The rest of this file does not need to change
@@ -22,8 +22,8 @@ EXPORT_PATH = "{{ app_data }}\\Gthnk\\export"
 
 PROJECT_NAME = "gthnk"
 PORT = 1620
-LOG = "{{ app_data }}\\Gthnk\\gthnk.log"
-SQLALCHEMY_DATABASE_URI = "sqlite:///{{ app_data }}\\Gthnk\\gthnk.db"
+LOG = "{{ app_data|replace("\\", "\\\\") }}\\Gthnk\\gthnk.log"
+SQLALCHEMY_DATABASE_URI = "sqlite:///{{ app_data|replace("\\", "\\\\") }}\\Gthnk\\gthnk.db"
 SECRET_KEY = {{ secret_key }}
 
 BASE_URL = "http://localhost"
@@ -46,5 +46,5 @@ MAIL_USE_TLS = False
 MAIL_USERNAME = None
 MAIL_PASSWORD = None
 
-CELERY_BROKER_URL = 'sqla+sqlite:///{{ app_data }}\\Gthnk\\celery-db.sqlite'
-CELERY_RESULT_BACKEND = 'db+sqlite:///{{ app_data }}\\Gthnk\\celery-results.sqlite'
+CELERY_BROKER_URL = 'sqla+sqlite:///{{ app_data|replace("\\", "\\\\") }}\\Gthnk\\celery-db.sqlite'
+CELERY_RESULT_BACKEND = 'db+sqlite:///{{ app_data|replace("\\", "\\\\") }}\\Gthnk\\celery-results.sqlite'
