@@ -62,6 +62,8 @@ def install_windows():
 
     # create folders
     md(os.path.join(config['app_data'], "Gthnk"))
+    md(os.path.join(config['app_data'], "Gthnk", "backup"))
+    md(os.path.join(config['app_data'], "Gthnk", "export"))
 
     # create files
     render(config, 'windows/gthnk.conf.j2',

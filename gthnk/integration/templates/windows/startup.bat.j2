@@ -1,12 +1,11 @@
 @echo off
 REM Gthnk (c) Ian Dennis Miller
 REM This is a Windows batch file for launching Gthnk.
-REM The script assumes you are using a python virtualenv called 'gthnk'.
 
 echo "Starting Gthnk"
-
-workon gthnk
-cd "{{ home_directory }}\Envs\gthnk\Scripts"
-
 set SETTINGS={{ app_data }}\Gthnk\gthnk.conf
-python runserver.py
+
+REM The script assumes you are using a python virtualenv called 'gthnk'.
+REM This script also assumes virtualenvs are in ~/Envs
+cd "{{ home_directory }}\Envs\gthnk\Scripts"
+.\python runserver.py
