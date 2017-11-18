@@ -7,34 +7,17 @@ import os
 import string
 import random
 import subprocess
+from . import md, launchd, render
+
 
 def osx_paths(config):
-    # create directories
-    def md(directory):
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-            print("created:\t{0}".format(directory))
-        else:
-            print("exists:\t{0}".format(directory))
 
     md(os.path.join(config["home_directory"], "Library", "Gthnk"))
     md(os.path.join(config["home_directory"], "Library", "Gthnk", "backup"))
     md(os.path.join(config["home_directory"], "Library", "Gthnk", "export"))
 
-def osx_files(config):
-    # render templates as files
-    env = Environment(
-        loader=PackageLoader('gthnk.integration', 'templates')
-    )
 
-    def render(src, dst):
-        if not os.path.isfile(dst):
-            with open(dst, "w") as f:
-                template = env.get_template(src)
-                f.write(template.render(**config))
-                print("created:\t{0}".format(dst))
-        else:
-            print("exists:\t{0}".format(dst))
+def osx_files(config):
 
     render('osx/gthnk.conf.j2',
         os.path.join(config['home_directory'], "Library", "Gthnk", "gthnk.conf"))
@@ -45,14 +28,8 @@ def osx_files(config):
     render('osx/com.gthnk.librarian.plist.j2',
         os.path.join(config['home_directory'], "Library", "LaunchAgents", "com.gthnk.librarian.plist"))
 
-def osx_launchd(config):
-    def launchd(cmd, target):
-        print("exec:\tlaunchctl {0} {1}".format(cmd, target))
-        res = subprocess.check_output([ "/bin/launchctl", cmd, target ])
-        if not res:
-            res = "OK"
-        print("result:\t{0}".format(res))
 
+def osx_launchd(config):
     # stop any server process
     launchd("stop", "com.gthnk.server")
 
@@ -68,6 +45,7 @@ def osx_launchd(config):
 
     # start the server process
     launchd("start", "com.gthnk.server")
+
 
 def osx_database(config):
     filename = os.path.join(config["home_directory"], "Library", "Gthnk", "gthnk.db")
@@ -107,6 +85,7 @@ def osx_database(config):
     else:
         print("exists:\t{0}".format(filename))
 
+
 def install_osx():
     print("Performing install on UNIX")
 
@@ -124,6 +103,7 @@ def install_osx():
     osx_database(config)
     osx_launchd(config)
     print("OK")
+
 
 def uninstall_osx():
     print("Performing uninstall on OSX")
