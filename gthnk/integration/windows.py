@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
-from jinja2 import Environment, PackageLoader
-from os.path import expanduser
+import os
+import random
+import string
+
 from . import md, render
 
 
@@ -12,33 +14,34 @@ def create_database(config):
         # pushd ${VIRTUAL_ENV}/share
         # SETTINGS=$HOME/Library/Gthnk/gthnk.conf manage.py db upgrade
 
-        if migration:
-            # create database using migrations
-            print("applying migration")
-            upgrade()
-        else:
-            # create database from model schema directly
-            db.create_all()
-            db.session.commit()
-            cfg = alembic.config.Config("gthnk/migrations/alembic.ini")
-            alembic.command.stamp(cfg, "head")
-        # Role.add_default_roles()
+        # if migration:
+        #     # create database using migrations
+        #     print("applying migration")
+        #     upgrade()
+        # else:
+        #     # create database from model schema directly
+        #     db.create_all()
+        #     db.session.commit()
+        #     cfg = alembic.config.Config("gthnk/migrations/alembic.ini")
+        #     alembic.command.stamp(cfg, "head")
+        # # Role.add_default_roles()
 
-        """
-        echo "Create a User Account"
-        SETTINGS=$HOME/Library/Gthnk/gthnk.conf manage.py useradd -e ${email} -p ${password} && echo "OK"
-        """
+        # """
+        # echo "Create a User Account"
+        # SETTINGS=$HOME/Library/Gthnk/gthnk.conf manage.py useradd -e ${email}
+        #     -p ${password} && echo "OK"
+        # """
 
-        if admin:
-            roles = ["Admin"]
-        else:
-            roles = ["User"]
-        User.register(
-            email=email,
-            password=password,
-            confirmed=True,
-            roles=roles
-        )
+        # if admin:
+        #     roles = ["Admin"]
+        # else:
+        #     roles = ["User"]
+        # User.register(
+        #     email=email,
+        #     password=password,
+        #     confirmed=True,
+        #     roles=roles
+        # )
 
         pass
     else:
@@ -61,10 +64,21 @@ def install_windows():
     md(os.path.join(config['app_data'], "Gthnk"))
 
     # create files
-    render('windows/gthnk.conf.j2',
+    render(config, 'windows/gthnk.conf.j2',
         os.path.join(config['app_data'], "Gthnk", "gthnk.conf"))
-    render('windows/startup.bat.j2',
-        os.path.join(config['home_directory'], "Start Menu", "Programs", "Startup", "gthnk-startup.bat"))
+    render(config, 'windows/startup.bat.j2',
+        os.path.join(config['home_directory'], "Start Menu", "Programs",
+            "Startup", "gthnk-startup.bat"))
+
+    # schedule daily journal rotation task
+    # https://technet.microsoft.com/en-us/library/cc725744.aspx
+    # schtasks.exe
+    # schtasks /create /tn "My App" /tr c:\apps\myapp.exe /sc daily /st 08:00 /ed 31/12/2002
+    # It also uses the /it parameter to specify that the task runs only when the user under whose
+    # account the task runs is logged onto the computer
+
+    # schedule daily review task
+    # start "" "http://localhost:1621"
 
     # create_database(config)
 

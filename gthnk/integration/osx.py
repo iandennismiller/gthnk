@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
-from jinja2 import Environment, PackageLoader
-from os.path import expanduser
 import os
-import string
 import random
-import subprocess
-from . import md, launchd, render
+import string
+
+from os.path import expanduser
+
+from . import launchd, md, render
 
 
 def osx_paths(config):
@@ -19,14 +19,17 @@ def osx_paths(config):
 
 def osx_files(config):
 
-    render('osx/gthnk.conf.j2',
+    render(config, 'osx/gthnk.conf.j2',
         os.path.join(config['home_directory'], "Library", "Gthnk", "gthnk.conf"))
-    render('osx/com.gthnk.dashboard.plist.j2',
-        os.path.join(config['home_directory'], "Library", "LaunchAgents", "com.gthnk.dashboard.plist"))
-    render('osx/com.gthnk.server.plist.j2',
-        os.path.join(config['home_directory'], "Library", "LaunchAgents", "com.gthnk.server.plist"))
-    render('osx/com.gthnk.librarian.plist.j2',
-        os.path.join(config['home_directory'], "Library", "LaunchAgents", "com.gthnk.librarian.plist"))
+    render(config, 'osx/com.gthnk.dashboard.plist.j2',
+        os.path.join(config['home_directory'], "Library", "LaunchAgents",
+            "com.gthnk.dashboard.plist"))
+    render(config, 'osx/com.gthnk.server.plist.j2',
+        os.path.join(config['home_directory'], "Library", "LaunchAgents",
+            "com.gthnk.server.plist"))
+    render(config, 'osx/com.gthnk.librarian.plist.j2',
+        os.path.join(config['home_directory'], "Library", "LaunchAgents",
+            "com.gthnk.librarian.plist"))
 
 
 def osx_launchd(config):
@@ -34,14 +37,20 @@ def osx_launchd(config):
     launchd("stop", "com.gthnk.server")
 
     # unload any existing launch agents
-    launchd("unload",os.path.join(config['home_directory'], "Library", "LaunchAgents", "com.gthnk.dashboard.plist"))
-    launchd("unload", os.path.join(config['home_directory'], "Library", "LaunchAgents", "com.gthnk.librarian.plist"))
-    launchd("unload", os.path.join(config['home_directory'], "Library", "LaunchAgents", "com.gthnk.server.plist"))
+    launchd("unload", os.path.join(config['home_directory'], "Library", "LaunchAgents",
+        "com.gthnk.dashboard.plist"))
+    launchd("unload", os.path.join(config['home_directory'], "Library", "LaunchAgents",
+        "com.gthnk.librarian.plist"))
+    launchd("unload", os.path.join(config['home_directory'], "Library", "LaunchAgents",
+        "com.gthnk.server.plist"))
 
     # load the launch agents
-    launchd("load", os.path.join(config['home_directory'], "Library", "LaunchAgents", "com.gthnk.dashboard.plist"))
-    launchd("load", os.path.join(config['home_directory'], "Library", "LaunchAgents", "com.gthnk.librarian.plist"))
-    launchd("load", os.path.join(config['home_directory'], "Library", "LaunchAgents", "com.gthnk.server.plist"))
+    launchd("load", os.path.join(config['home_directory'], "Library", "LaunchAgents",
+        "com.gthnk.dashboard.plist"))
+    launchd("load", os.path.join(config['home_directory'], "Library", "LaunchAgents",
+        "com.gthnk.librarian.plist"))
+    launchd("load", os.path.join(config['home_directory'], "Library", "LaunchAgents",
+        "com.gthnk.server.plist"))
 
     # start the server process
     launchd("start", "com.gthnk.server")
@@ -53,33 +62,34 @@ def osx_database(config):
         # pushd ${VIRTUAL_ENV}/share
         # SETTINGS=$HOME/Library/Gthnk/gthnk.conf manage.py db upgrade
 
-        if migration:
-            # create database using migrations
-            print("applying migration")
-            upgrade()
-        else:
-            # create database from model schema directly
-            db.create_all()
-            db.session.commit()
-            cfg = alembic.config.Config("gthnk/migrations/alembic.ini")
-            alembic.command.stamp(cfg, "head")
-        # Role.add_default_roles()
+        # if migration:
+        #     # create database using migrations
+        #     print("applying migration")
+        #     upgrade()
+        # else:
+        #     # create database from model schema directly
+        #     db.create_all()
+        #     db.session.commit()
+        #     cfg = alembic.config.Config("gthnk/migrations/alembic.ini")
+        #     alembic.command.stamp(cfg, "head")
+        # # Role.add_default_roles()
 
-        """
-        echo "Create a User Account"
-        SETTINGS=$HOME/Library/Gthnk/gthnk.conf manage.py useradd -e ${email} -p ${password} && echo "OK"
-        """
+        # """
+        # echo "Create a User Account"
+        # SETTINGS=$HOME/Library/Gthnk/gthnk.conf manage.py useradd -e ${email} -p ${password} \
+        # && echo "OK"
+        # """
 
-        if admin:
-            roles = ["Admin"]
-        else:
-            roles = ["User"]
-        User.register(
-            email=email,
-            password=password,
-            confirmed=True,
-            roles=roles
-        )
+        # if admin:
+        #     roles = ["Admin"]
+        # else:
+        #     roles = ["User"]
+        # User.register(
+        #     email=email,
+        #     password=password,
+        #     confirmed=True,
+        #     roles=roles
+        # )
 
         pass
     else:

@@ -2,6 +2,10 @@
 # gthnk (c) Ian Dennis Miller
 
 import os
+import subprocess
+
+from jinja2 import Environment, PackageLoader
+
 
 # create directories
 def md(directory):
@@ -11,9 +15,10 @@ def md(directory):
     else:
         print("exists:\t{0}".format(directory))
 
+
 def launchd(cmd, target):
     print("exec:\tlaunchctl {0} {1}".format(cmd, target))
-    res = subprocess.check_output([ "/bin/launchctl", cmd, target ])
+    res = subprocess.check_output(["/bin/launchctl", cmd, target])
     if not res:
         res = "OK"
     print("result:\t{0}".format(res))
@@ -23,7 +28,8 @@ env = Environment(
     loader=PackageLoader('gthnk.integration', 'templates')
 )
 
-def render(src, dst):
+
+def render(config, src, dst):
     if not os.path.isfile(dst):
         with open(dst, "w") as f:
             template = env.get_template(src)
