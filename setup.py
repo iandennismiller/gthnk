@@ -2,7 +2,7 @@
 # gthnk (c) Ian Dennis Miller
 
 from setuptools import setup, find_packages
-from distutils.dir_util import copy_tree
+# from distutils.dir_util import copy_tree
 import os
 import re
 
@@ -35,6 +35,7 @@ setup(
         "bin/manage.py",
         "bin/journal_rotate.py",
         "bin/integration.py",
+        "bin/gthnk.cmd",
     ],
     long_description=read('Readme.rst'),
     classifiers=[

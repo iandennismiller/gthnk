@@ -16,25 +16,23 @@ from gthnk.__meta__ import __version__
 from gthnk.integration.osx import install_osx, uninstall_osx
 from gthnk.integration.windows import install_windows, uninstall_windows
 
-r"""
-integration.py.
-
-Manage the integration of Gthnk into various operating systems.
-
-Windows invocation:
-    workon gthnk
-    python %virtual_env%\Scripts\integration.py
-
-UNIX invocation:
-    workon gthnk
-    integration.py
-"""
-
 
 @click.group()
 @click.version_option(__version__)
 def cli():
-    "Gthnk Integration."
+    r"""
+    Gthnk integration.
+
+    Manage the integration of Gthnk into various operating systems.
+
+    Windows invocation:
+        workon gthnk
+        python %virtual_env%\Scripts\integration.py
+
+    UNIX invocation:
+        workon gthnk
+        integration.py
+    """
 
 
 @cli.command('install', short_help='integrate Gthnk with the operating system')

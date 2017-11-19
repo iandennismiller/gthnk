@@ -7,6 +7,12 @@ import subprocess
 from jinja2 import Environment, PackageLoader
 
 
+# render templates as files
+env = Environment(
+    loader=PackageLoader('gthnk.integration', 'templates')
+)
+
+
 # create directories
 def md(directory):
     if not os.path.exists(directory):
@@ -23,11 +29,6 @@ def launchd(cmd, target):
         res = "OK"
     print("result:\t{0}".format(res))
 
-# render templates as files
-env = Environment(
-    loader=PackageLoader('gthnk.integration', 'templates')
-)
-
 
 def render(config, src, dst):
     if not os.path.isfile(dst):
@@ -37,3 +38,11 @@ def render(config, src, dst):
             print("created:\t{0}".format(dst))
     else:
         print("exists:\t{0}".format(dst))
+
+
+def launchd(cmd, target):
+    print("exec:\tlaunchctl {0} {1}".format(cmd, target))
+    res = subprocess.check_output(["/bin/launchctl", cmd, target])
+    if not res:
+        res = "OK"
+    print("result:\t{0}".format(res))

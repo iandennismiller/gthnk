@@ -4,6 +4,7 @@
 import os
 import random
 import string
+import subprocess
 
 from . import md, render
 
@@ -78,6 +79,16 @@ def install_windows():
     # schtasks /create /tn "My App" /tr c:\apps\myapp.exe /sc daily /st 08:00 /ed 31/12/2002
     # It also uses the /it parameter to specify that the task runs only when the user under whose
     # account the task runs is logged onto the computer
+
+    print("exec:\tschtasks.exe")
+    filename = os.path.join(config['home_directory'], "Envs", "Gthnk",
+        "Scripts", "gthnk.cmd")
+    res = subprocess.check_output(['C:\Windows\System32\schtasks.exe',
+        "/create", "/tn", "Gthnk Review", "/tr", filename, '/sc', 'daily',
+        '/st', '09:00', '/it'])
+    if not res:
+        res = "OK"
+    print("result:\t{0}".format(res))
 
     # schedule daily review task
     # start "" "http://localhost:1621"
