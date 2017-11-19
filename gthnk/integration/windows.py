@@ -26,7 +26,7 @@ def create_database(config):
 
         username = input("Choose a username for accessing Gthnk: ")
         password = getpass("Choose a password:")
-        res = subprocess.check_output([python_path, manage_path, "useradd",
+        res = subprocess.check_output([python_path, manage_path, "user_add",
             "-e", username, "-p", password])
         if not res:
             res = "OK"
