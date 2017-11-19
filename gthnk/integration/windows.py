@@ -66,14 +66,14 @@ def schedule(name, filename, when):
 def unschedule(name):
     try:
         res = subprocess.check_output(['schtasks', "/query", "/v", "/fo", "list", "/tn", name])
-        print("skip:\tunschedule\t{0}".format(name))
-    except subprocess.CalledProcessError:
         print("exec:\tschtasks.exe\t{0}".format(name))
         res = subprocess.check_output(['C:\Windows\System32\schtasks.exe', "/delete", "/f", "/tn",
             name])
         if not res:
             res = "OK"
         print("result:\t{0}".format(res))
+    except subprocess.CalledProcessError:
+        print("skip:\tunschedule\t{0}".format(name))
 
 
 def install_windows(config):
