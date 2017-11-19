@@ -6,6 +6,8 @@ import sys
 
 import click
 import os
+import random
+import string
 import warnings
 
 from flask.exthook import ExtDeprecationWarning
@@ -15,6 +17,31 @@ sys.path.insert(0, '.')
 from gthnk.__meta__ import __version__
 from gthnk.integration.osx import install_osx, uninstall_osx
 from gthnk.integration.windows import install_windows, uninstall_windows
+
+
+def make_config():
+    # variables for installation
+    chars = string.ascii_letters + string.digits + '^!$&=?+~#-_.:,;'
+
+    if os.name == 'nt':
+        config = {
+            'secret_key': repr(os.urandom(24)),
+            'hash_salt': "".join([random.choice(chars) for _ in range(24)]),
+            'home_directory': os.environ["USERPROFILE"],
+            "app_data": os.environ["APPDATA"],
+            'do_install': install_windows,
+            'do_ininstall': uninstall_windows,
+        }
+    else:
+        config = {
+            'secret_key': repr(os.urandom(24)),
+            'hash_salt': "".join([random.choice(chars) for _ in range(24)]),
+            'home_directory': os.path.expanduser("~"),
+            'do_install': install_osx,
+            'do_ininstall': uninstall_osx,
+        }
+
+    return(config)
 
 
 @click.group()
@@ -37,18 +64,14 @@ def cli():
 
 @cli.command('install', short_help='integrate Gthnk with the operating system')
 def do_install():
-    if os.name == 'nt':
-        install_windows()
-    else:
-        install_osx()
+    config = make_config()
+    config.do_install()
 
 
 @cli.command('uninstall', short_help='remove Gthnk installation')
 def do_uninstall():
-    if os.name == 'nt':
-        uninstall_windows()
-    else:
-        uninstall_osx()
+    config = make_config()
+    config.do_uninstall()
 
 if __name__ == '__main__':
     cli()

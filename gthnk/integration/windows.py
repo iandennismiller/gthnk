@@ -2,11 +2,9 @@
 # gthnk (c) Ian Dennis Miller
 
 import os
-import random
-import string
 import subprocess
 
-from . import md, render
+from . import md, render, rm
 
 
 def create_database(config):
@@ -49,17 +47,27 @@ def create_database(config):
         print("exists:\t{0}".format(filename))
 
 
-def install_windows():
-    print("Performing install on Windows")
+def schedule(name, filename, when):
+    # https://technet.microsoft.com/en-us/library/cc725744.aspx
+    # It also uses the /it parameter to specify that the task runs only when the user under whose
+    # account the task runs is logged onto the computer
+    try:
+        # schtasks /query /v /fo list /tn "Gthnk Rotate"
+        res = subprocess.check_output(['schtasks', "/query", "/v", "/fo", "list", "/tn",
+            "Gthnk Rotate"])
+        print("skip:\tschtasks.exe\t{0}".format(name))
+    except subprocess.CalledProcessError:
+        print("exec:\tschtasks.exe\t{0}".format(name))
+        res = subprocess.check_output(['C:\Windows\System32\schtasks.exe',
+            "/create", "/tn", name, "/tr", filename, '/sc', 'daily',
+            '/st', '00:03', '/it'])
+        if not res:
+            res = "OK"
+        print("result:\t{0}".format(res))
 
-    # variables for installation
-    chars = string.ascii_letters + string.digits + '^!$&=?+~#-_.:,;'
-    config = {
-        'secret_key': repr(os.urandom(24)),
-        'hash_salt': "".join([random.choice(chars) for _ in range(24)]),
-        'home_directory': os.environ["USERPROFILE"],
-        "app_data": os.environ["APPDATA"],
-    }
+
+def install_windows(config):
+    print("Performing install on Windows")
 
     # create folders
     md(os.path.join(config['app_data'], "Gthnk"))
@@ -74,33 +82,28 @@ def install_windows():
             "Startup", "gthnk-startup.bat"))
 
     # schedule daily journal rotation task
-    # https://technet.microsoft.com/en-us/library/cc725744.aspx
-    # schtasks.exe
-    # schtasks /create /tn "My App" /tr c:\apps\myapp.exe /sc daily /st 08:00 /ed 31/12/2002
-    # It also uses the /it parameter to specify that the task runs only when the user under whose
-    # account the task runs is logged onto the computer
-
-    print("exec:\tschtasks.exe")
-    filename = os.path.join(config['home_directory'], "Envs", "Gthnk",
-        "Scripts", "gthnk.cmd")
-    res = subprocess.check_output(['C:\Windows\System32\schtasks.exe',
-        "/create", "/tn", "Gthnk Review", "/tr", filename, '/sc', 'daily',
-        '/st', '09:00', '/it'])
-    if not res:
-        res = "OK"
-    print("result:\t{0}".format(res))
+    filename = os.path.join(config['home_directory'], "Envs", "Gthnk", "Scripts",
+        "gthnk-rotate.cmd")
+    schedule("Gthnk Rotate", filename, '00:03')
 
     # schedule daily review task
-    # start "" "http://localhost:1621"
+    filename = os.path.join(config['home_directory'], "Envs", "Gthnk", "Scripts",
+        "gthnk.cmd")
+    schedule("Gthnk Review", filename, '09:00')
 
     # create_database(config)
 
 
-def uninstall_windows():
+def uninstall_windows(config):
     print("Performing uninstall on Windows")
 
     # remove startup.bat
+    rm(os.path.join(config['home_directory'], "Start Menu", "Programs",
+        "Startup", "gthnk-startup.bat"))
 
     # remove gthnk.conf
+    rm(os.path.join(config['app_data'], "Gthnk", "gthnk.conf"))
+
+    # remove schtasks.exe Gthnk Review
 
     # leave APPDATA/Gthnk for the database

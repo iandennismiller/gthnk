@@ -40,9 +40,9 @@ def render(config, src, dst):
         print("exists:\t{0}".format(dst))
 
 
-def launchd(cmd, target):
-    print("exec:\tlaunchctl {0} {1}".format(cmd, target))
-    res = subprocess.check_output(["/bin/launchctl", cmd, target])
-    if not res:
-        res = "OK"
-    print("result:\t{0}".format(res))
+def rm(target):
+    if target and os.path.isfile(target):
+        # delete that file
+        os.remove(target)
+    else:
+        print("gone:\t{0}".format(target))

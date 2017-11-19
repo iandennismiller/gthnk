@@ -36,6 +36,7 @@ setup(
         "bin/journal_rotate.py",
         "bin/integration.py",
         "bin/gthnk.cmd",
+        "bin/gthnk-rotate.cmd",
     ],
     long_description=read('Readme.rst'),
     classifiers=[

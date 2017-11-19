@@ -2,10 +2,6 @@
 # gthnk (c) Ian Dennis Miller
 
 import os
-import random
-import string
-
-from os.path import expanduser
 
 from . import launchd, md, render
 
@@ -96,18 +92,8 @@ def osx_database(config):
         print("exists:\t{0}".format(filename))
 
 
-def install_osx():
+def install_osx(config):
     print("Performing install on UNIX")
-
-    # variables for installation
-    chars = string.ascii_letters + string.digits + '^!$&=?+~#-_.:,;'
-    home_directory = expanduser("~")
-    config = {
-        'secret_key': repr(os.urandom(24)),
-        'hash_salt': "".join([random.choice(chars) for _ in range(24)]),
-        'home_directory': home_directory,
-    }
-
     osx_paths(config)
     osx_files(config)
     osx_database(config)
@@ -115,5 +101,5 @@ def install_osx():
     print("OK")
 
 
-def uninstall_osx():
+def uninstall_osx(config):
     print("Performing uninstall on OSX")
