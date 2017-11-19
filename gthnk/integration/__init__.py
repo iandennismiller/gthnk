@@ -3,6 +3,8 @@
 
 import os
 import subprocess
+from six.moves import input
+from getpass import getpass
 
 from jinja2 import Environment, PackageLoader
 
@@ -46,3 +48,23 @@ def rm(target):
         os.remove(target)
     else:
         print("gone:\t{0}".format(target))
+
+
+def create_db(db_filename, conf_filename, python_path, manage_path):
+    if not os.path.isfile(db_filename):
+        print("create:\tdb\t{0}".format(db_filename))
+        os.environ["SETTINGS"] = conf_filename
+        res = subprocess.check_output([python_path, manage_path, "db", "upgrade"])
+        if not res:
+            res = "OK"
+        print("result:\t{0}".format(res))
+
+        username = input("Choose a username for accessing Gthnk: ")
+        password = getpass("Choose a password:")
+        res = subprocess.check_output([python_path, manage_path, "user_add",
+            "-e", username, "-p", password])
+        if not res:
+            res = "OK"
+        print("result:\t{0}".format(res))
+    else:
+        print("exists:\t{0}".format(db_filename))

@@ -3,7 +3,7 @@
 
 import os
 
-from . import launchd, md, render
+from . import launchd, md, render, create_db, rm
 
 
 def osx_paths(config):
@@ -53,43 +53,12 @@ def osx_launchd(config):
 
 
 def osx_database(config):
-    filename = os.path.join(config["home_directory"], "Library", "Gthnk", "gthnk.db")
-    if not os.path.isfile(filename):
-        # pushd ${VIRTUAL_ENV}/share
-        # SETTINGS=$HOME/Library/Gthnk/gthnk.conf manage.py db upgrade
-
-        # if migration:
-        #     # create database using migrations
-        #     print("applying migration")
-        #     upgrade()
-        # else:
-        #     # create database from model schema directly
-        #     db.create_all()
-        #     db.session.commit()
-        #     cfg = alembic.config.Config("gthnk/migrations/alembic.ini")
-        #     alembic.command.stamp(cfg, "head")
-        # # Role.add_default_roles()
-
-        # """
-        # echo "Create a User Account"
-        # SETTINGS=$HOME/Library/Gthnk/gthnk.conf manage.py useradd -e ${email} -p ${password} \
-        # && echo "OK"
-        # """
-
-        # if admin:
-        #     roles = ["Admin"]
-        # else:
-        #     roles = ["User"]
-        # User.register(
-        #     email=email,
-        #     password=password,
-        #     confirmed=True,
-        #     roles=roles
-        # )
-
-        pass
-    else:
-        print("exists:\t{0}".format(filename))
+    db_filename = os.path.join(config["home_directory"], "Library", "Gthnk", "gthnk.db")
+    conf_filename = os.path.join(config["home_directory"], "Library", "Gthnk", "gthnk.conf")
+    venv_path = os.environ["VIRTUAL_ENV"]
+    python_path = os.path.join(venv_path, "bin", "python")
+    manage_path = os.path.join(venv_path, "bin", "manage.py")
+    create_db(db_filename, conf_filename, python_path, manage_path)
 
 
 def install_osx(config):
@@ -103,3 +72,24 @@ def install_osx(config):
 
 def uninstall_osx(config):
     print("Performing uninstall on OSX")
+
+    # Stopping any existing gthnk server processes
+    launchd("stop", "com.gthnk.server")
+
+    # unload any existing launch agents
+    launchd("unload", os.path.join(config['home_directory'], "Library", "LaunchAgents",
+        "com.gthnk.dashboard.plist"))
+    launchd("unload", os.path.join(config['home_directory'], "Library", "LaunchAgents",
+        "com.gthnk.librarian.plist"))
+    launchd("unload", os.path.join(config['home_directory'], "Library", "LaunchAgents",
+        "com.gthnk.server.plist"))
+
+    rm(os.path.join(config['home_directory'], "Library", "LaunchAgents",
+        "com.gthnk.server.plist"))
+    rm(os.path.join(config['home_directory'], "Library", "LaunchAgents",
+        "com.gthnk.librarian.plist"))
+    rm(os.path.join(config['home_directory'], "Library", "LaunchAgents",
+        "com.gthnk.dashboard.plist"))
+
+    # remove gthnk.conf
+    # rm(os.path.join(config['home_directory'], "Library", "Gthnk", "gthnk.com"))
