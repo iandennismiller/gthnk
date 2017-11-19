@@ -24,6 +24,7 @@ User Guide
     user/browser-integration
     user/mobile-devices
     user/text-file-format
+    about/uninstallation
 
 About
 -----
@@ -32,14 +33,9 @@ About
     :maxdepth: 1
 
     about/history
+    about/flask-diamond
     License
 
 ..     about/credits-and-attributions
 ..     about/how_to_contribute_to_the_project
 ..     about/philosophy
-
-
-Flask-Diamond
--------------
-
-**gthnk** serves as the `Flask-Diamond <http://flask-diamond.readthedocs.org>`_ reference application.  One of the purposes of **gthnk** is to demonstrate a real-world use for `Flask-Diamond <http://flask-diamond.readthedocs.org>`_.

@@ -4,7 +4,6 @@
 
 - [ ] testing for View components
 - [ ] testing for Model components
-- [ ] refresh documentation with new installation procedures
 - [ ] bug: fix date picker
 - [ ] bug: image attachments not centering
 
@@ -24,3 +23,4 @@
 ## Done
 
 - [x] integration for Windows
+- [x] refresh documentation with new installation procedures

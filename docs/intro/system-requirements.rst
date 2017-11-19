@@ -1,20 +1,40 @@
 System Requirements
 ===================
 
-gthnk requires some software to be installed in order to function.  Once you have installed these requirements, you can follow the :doc:`quick-start` to start your first project.  The following packages should be installed globally, as the superuser, for all users on the system to access.
+Gthnk requires some software to be installed in order to function.
+The following packages should be installed globally, as the superuser, for all users on the system to access.
 
-- `Python 2.7.x <https://www.python.org/download/releases/2.7/>`_.
+- Python 3.6, Python 3.5, Python 3.4, or Python 2.7.
 - Python development libraries (i.e. header files for compiling C code)
 - `pip <http://pip.readthedocs.org/en/latest/>`_
 - `virtualenv <http://virtualenv.readthedocs.org/en/latest/>`_
 - `virtualenvwrapper <http://virtualenvwrapper.readthedocs.org/en/latest/>`_
 
-The following sections describe the process for installing these requirements on various systems.  In each of the following examples, it is assumed you will be using a root account (or some other privileged account).
+The following sections describe the process for installing these requirements on various systems.
+In each of the following examples, it is assumed you will be using a root account (or some other privileged account).
+
+Windows
+-------
+
+First, install Python 3.6 for Windows from https://www.python.org/downloads/windows/.
+Then, launch PowerShell and gain administrative privileges.
+Finally, use `pip` to perform a site-wide install of several core libraries.
+
+::
+
+    start-process powershell –verb runAs
+    pip install virtualenv
+    pip install virtualenvwrapper
+    pip install virtualenvwrapper-win
+
+Now you have everything needed to install Gthnk on a Windows system.
+Read :doc:`installation` to continue.
 
 OSX
 ---
 
-gthnk installs pretty easily on OSX with Homebrew.  Make sure you are using the *admin* user for this process, just like a normal Homebrew operation.
+Gthnk installs pretty easily on OSX with Homebrew.
+Make sure you are using the *admin* user for this process, just like a normal Homebrew operation.
 
 ::
 
@@ -29,7 +49,7 @@ Debian/Ubuntu
 
 *NB: there are currently no startup scripts for Linux.*
 
-gthnk installs cleanly on Debian and Ubuntu systems released after 2011.
+gthnk installs cleanly on Debian and Ubuntu systems.
 
 ::
 
@@ -53,18 +73,6 @@ gthnk can be installed on RedHat, but ensure your package manager is installing 
     pip install --upgrade pip
     pip install --upgrade virtualenv
     pip install virtualenvwrapper
-
-Windows with Cygwin
--------------------
-
-Here are a few resources to get you started:
-
-- http://www.pdxpixel.com/blog/setting-up-python-and-virtualenv-windows-cygwin/
-- http://atbrox.com/2009/09/21/how-to-get-pipvirtualenvfabric-working-on-cygwin/
-- http://anythingsimple.blogspot.ca/2010/04/using-pip-virtualenv-and.html
-- http://stackoverflow.com/questions/2173963/how-do-i-get-virtualenvwrapper-and-cygwin-to-co-operate
-
-**Note**: Have you done this install successfully?  Let us know!
 
 Next Steps
 ----------
