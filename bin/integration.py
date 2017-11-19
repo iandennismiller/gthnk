@@ -65,13 +65,13 @@ def cli():
 @cli.command('install', short_help='integrate Gthnk with the operating system')
 def do_install():
     config = make_config()
-    config["do_install"]()
+    config["do_install"](config)
 
 
 @cli.command('uninstall', short_help='remove Gthnk installation')
 def do_uninstall():
     config = make_config()
-    config["do_uninstall"]()
+    config["do_uninstall"](config)
 
 if __name__ == '__main__':
     cli()
