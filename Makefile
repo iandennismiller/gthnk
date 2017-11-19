@@ -27,41 +27,37 @@ endif
 
 server:
 ifeq ($(OS),Windows_NT)
-	set SETTINGS=%cd%\etc\conf\dev-win.conf
-	python bin\manage.py runserver
+	set SETTINGS=%cd%\etc\conf\dev-win.conf & python bin\manage.py runserver
 else
 	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py runserver
 endif
 
 shell:
 ifeq ($(OS),Windows_NT)
-	set SETTINGS=%cd%\etc\conf\dev-win.conf
-	python bin\manage.py shell
+	set SETTINGS=%cd%\etc\conf\dev-win.conf & python bin\manage.py shell
 else
 	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py shell
 endif
 
 test:
 ifeq ($(OS),Windows_NT)
-	set SETTINGS=%cd%\etc\conf\testing-win.conf
-	nosetests $(MOD_NAME) -c etc\nose\test.cfg
+	set SETTINGS=%cd%\etc\conf\testing-win.conf & nosetests $(MOD_NAME) -c etc\nose\test.cfg
 else
 	SETTINGS=$$PWD/etc/conf/testing.conf nosetests $(MOD_NAME) -c etc/nose/test.cfg
 endif
 
 single:
 ifeq ($(OS),Windows_NT)
-	nosetests $(MOD_NAME) -c etc\nose\test-single.cfg
+	set SETTINGS=%cd%\etc\conf\testing-win.conf & nosetests $(MOD_NAME) -c etc\nose\test-single.cfg
 else
 	SETTINGS=$$PWD/etc/conf/testing.conf nosetests $(MOD_NAME) -c etc/nose/test-single.cfg
 endif
 
 db:
 ifeq ($(OS),Windows_NT)
-	set SETTINGS=%cd%\etc\conf\dev-win.conf
-	python bin\manage.py init_db
-	python bin\manage.py user_add --email "guest@example.com" --password "guest"
-	python bin\manage.py user_add --email "admin@example.com" --password "aaa" --admin
+	set SETTINGS=%cd%\etc\conf\dev-win.conf & python bin\manage.py init_db
+	set SETTINGS=%cd%\etc\conf\dev-win.conf & python bin\manage.py user_add --email "guest@example.com" --password "guest"
+	set SETTINGS=%cd%\etc\conf\dev-win.conf & python bin\manage.py user_add --email "admin@example.com" --password "aaa" --admin
 else
 	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py init_db
 	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py user_add --email "guest@example.com" --password "guest"
