@@ -30,7 +30,7 @@ def make_config():
             'home_directory': os.environ["USERPROFILE"],
             "app_data": os.environ["APPDATA"],
             'do_install': install_windows,
-            'do_ininstall': uninstall_windows,
+            'do_uninstall': uninstall_windows,
         }
     else:
         config = {
@@ -38,7 +38,7 @@ def make_config():
             'hash_salt': "".join([random.choice(chars) for _ in range(24)]),
             'home_directory': os.path.expanduser("~"),
             'do_install': install_osx,
-            'do_ininstall': uninstall_osx,
+            'do_uninstall': uninstall_osx,
         }
 
     return(config)
