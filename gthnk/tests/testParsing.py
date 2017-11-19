@@ -1,18 +1,12 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
-import os
 import shutil
-import tempfile
-import sys
-import unittest
-import json
-import datetime
 import glob
 import flask
 from nose.plugins.attrib import attr
 from .mixins import DiamondTestCase
-from ..models import User, Day, Entry, Page
+from ..models import Day, Entry
 from ..adaptors.journal_buffer import JournalBuffer, TextFileJournalBuffer
 
 
@@ -39,22 +33,23 @@ class TestParsing(DiamondTestCase):
         super(TestParsing, self).setUp()
 
     def test_journal_parser(self):
-        "process string parsing"
+        "Process string parsing."
         journal_buffer = JournalBuffer()
         with open("gthnk/tests/data/source_a.txt", "r") as f:
             journal_buffer.parse(f.read())
         self.assertIsNotNone(journal_buffer.get_entries())
 
     def test_textfile_parser(self):
-        "process a single file"
+        "Process a single file."
         journal_buffer = TextFileJournalBuffer()
         journal_buffer.process_one("gthnk/tests/data/source_a.txt")
         self.assertIsNotNone(journal_buffer.get_entries(), "process file")
 
     def test_textfile_batch_parser(self):
-        "process several files"
+        "Process several files."
         journal_buffer = TextFileJournalBuffer()
-        journal_buffer.process_list(["gthnk/tests/data/source_a.txt", "gthnk/tests/data/source_b.txt"])
+        journal_buffer.process_list(["gthnk/tests/data/source_a.txt",
+            "gthnk/tests/data/source_b.txt"])
 
         self.assertIsNotNone(journal_buffer.get_entries(), "contents parsed in a small batch")
 
@@ -71,7 +66,7 @@ class TestParsing(DiamondTestCase):
         )
 
     def test_textfile_batch_create(self):
-        "create objects in the database"
+        "Create objects in the database."
         journal_buffer = TextFileJournalBuffer()
         journal_buffer.process_list([
             "gthnk/tests/data/source_a.txt",
@@ -100,7 +95,8 @@ class TestParsing(DiamondTestCase):
     def test_merge(self):
         "combine two files with interwoven timestamps"
         journal_buffer = TextFileJournalBuffer()
-        journal_buffer.process_list(["gthnk/tests/data/source_a.txt", "gthnk/tests/data/source_b.txt"])
+        journal_buffer.process_list(["gthnk/tests/data/source_a.txt",
+            "gthnk/tests/data/source_b.txt"])
         journal_buffer.save_entries()
         a_day = Day.find(date="2012-10-04")
         self.assertEqual(a_day.render(), self.correct_merge)
@@ -128,7 +124,6 @@ class TestParsing(DiamondTestCase):
 
         self.assertEqual(buf, self.correct_twodays, "multiple days are output correctly")
 
-    @attr("single")
     def test_load_smaller_batch(self):
         "load a smaller batch from the archive"
         journal_buffer = TextFileJournalBuffer()
@@ -143,7 +138,7 @@ class TestParsing(DiamondTestCase):
         journal_buffer = TextFileJournalBuffer()
         journal_buffer.process_list(glob.glob("/Users/idm/Library/Journal/auto/*.txt"))
         journal_buffer.save_entries()
-        #self.assertEqual(8, Entry.query.count(), "expected number of objects in DB")
+        # self.assertEqual(8, Entry.query.count(), "expected number of objects in DB")
 
     @attr("skip")
     def test_personal(self):
@@ -158,16 +153,18 @@ class TestParsing(DiamondTestCase):
     def test_no_date(self):
         "try a file that has no datestamp whatsoever"
         "skipped because I don't know what the correct behaviour is"
-        j = Journal("/tmp", self.app)
-        j.parse("gthnk/tests/data/no_date.txt")
-        exported = j.export_week_old()
-        assert exported
+        assert False
+        # j = Journal("/tmp", self.app)
+        # j.parse("gthnk/tests/data/no_date.txt")
+        # exported = j.export_week_old()
+        # assert exported
 
     @attr('skip')
     def test_almost_nothing(self):
         "test a file with almost nothing in it"
         "skipped because I don't know what the correct behaviour is"
-        j = Journal("/tmp")
-        j.parse("gthnk/tests/data/almost_nothing.txt")
-        exported = j.export_week_old("/tmp")
-        assert exported
+        assert False
+        # j = Journal("/tmp")
+        # j.parse("gthnk/tests/data/almost_nothing.txt")
+        # exported = j.export_week_old("/tmp")
+        # assert exported
