@@ -8,43 +8,30 @@ from . import md, render, rm
 
 
 def create_database(config):
-    filename = os.path.join(config["app_data"], "Gthnk", "gthnk.db")
-    if not os.path.isfile(filename):
+    db_filename = os.path.join(config["app_data"], "Gthnk", "gthnk.db")
+    conf_filename = os.path.join(config["app_data"], "Gthnk", "gthnk.conf")
+    venv_path = os.environ["VIRTUAL_ENV"]
+    python_path = os.path.join(venv_path, "Scripts", "python.exe")
+    manage_path = os.path.join(venv_path, "Scripts", "manage.py")
+
+    if not os.path.isfile(db_filename):
+        print("create:\tdb\t{0}".format(db_filename))
+        os.environ["SETTINGS"] = conf_filename
+        res = subprocess.check_output([python_path, manage_path, "db", "upgrade"])
+        if not res:
+            res = "OK"
+        print("result:\t{0}".format(res))
+
         # pushd ${VIRTUAL_ENV}/share
         # SETTINGS=$HOME/Library/Gthnk/gthnk.conf manage.py db upgrade
-
-        # if migration:
-        #     # create database using migrations
-        #     print("applying migration")
-        #     upgrade()
-        # else:
-        #     # create database from model schema directly
-        #     db.create_all()
-        #     db.session.commit()
-        #     cfg = alembic.config.Config("gthnk/migrations/alembic.ini")
-        #     alembic.command.stamp(cfg, "head")
-        # # Role.add_default_roles()
 
         # """
         # echo "Create a User Account"
         # SETTINGS=$HOME/Library/Gthnk/gthnk.conf manage.py useradd -e ${email}
         #     -p ${password} && echo "OK"
         # """
-
-        # if admin:
-        #     roles = ["Admin"]
-        # else:
-        #     roles = ["User"]
-        # User.register(
-        #     email=email,
-        #     password=password,
-        #     confirmed=True,
-        #     roles=roles
-        # )
-
-        pass
     else:
-        print("exists:\t{0}".format(filename))
+        print("exists:\t{0}".format(db_filename))
 
 
 def schedule(name, filename, when):
@@ -101,7 +88,7 @@ def install_windows(config):
         "gthnk.cmd")
     schedule("Gthnk Review", filename, '09:00')
 
-    # create_database(config)
+    create_database(config)
 
 
 def uninstall_windows(config):
