@@ -3,6 +3,8 @@
 
 import os
 import subprocess
+from six.moves import input
+from getpass import getpass
 
 from . import md, render, rm
 
@@ -22,14 +24,13 @@ def create_database(config):
             res = "OK"
         print("result:\t{0}".format(res))
 
-        # pushd ${VIRTUAL_ENV}/share
-        # SETTINGS=$HOME/Library/Gthnk/gthnk.conf manage.py db upgrade
-
-        # """
-        # echo "Create a User Account"
-        # SETTINGS=$HOME/Library/Gthnk/gthnk.conf manage.py useradd -e ${email}
-        #     -p ${password} && echo "OK"
-        # """
+        username = input("Choose a username for accessing Gthnk: ")
+        password = getpass("Choose a password:")
+        res = subprocess.check_output([python_path, manage_path, "useradd",
+            "-e", username, "-p", password])
+        if not res:
+            res = "OK"
+        print("result:\t{0}".format(res))
     else:
         print("exists:\t{0}".format(db_filename))
 
