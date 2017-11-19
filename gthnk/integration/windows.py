@@ -52,15 +52,25 @@ def schedule(name, filename, when):
     # It also uses the /it parameter to specify that the task runs only when the user under whose
     # account the task runs is logged onto the computer
     try:
-        # schtasks /query /v /fo list /tn "Gthnk Rotate"
-        res = subprocess.check_output(['schtasks', "/query", "/v", "/fo", "list", "/tn",
-            "Gthnk Rotate"])
-        print("skip:\tschtasks.exe\t{0}".format(name))
+        res = subprocess.check_output(['schtasks', "/query", "/v", "/fo", "list", "/tn", name])
+        print("skip:\tschedule\t{0}".format(name))
+    except subprocess.CalledProcessError:
+        print("exec:\tschedule\t{0}".format(name))
+        res = subprocess.check_output(['C:\Windows\System32\schtasks.exe', "/create", "/tn", name,
+            "/tr", filename, '/sc', 'daily', '/st', '00:03', '/it'])
+        if not res:
+            res = "OK"
+        print("result:\t{0}".format(res))
+
+
+def unschedule(name):
+    try:
+        res = subprocess.check_output(['schtasks', "/query", "/v", "/fo", "list", "/tn", name])
+        print("skip:\tunschedule\t{0}".format(name))
     except subprocess.CalledProcessError:
         print("exec:\tschtasks.exe\t{0}".format(name))
-        res = subprocess.check_output(['C:\Windows\System32\schtasks.exe',
-            "/create", "/tn", name, "/tr", filename, '/sc', 'daily',
-            '/st', '00:03', '/it'])
+        res = subprocess.check_output(['C:\Windows\System32\schtasks.exe', "/delete", "/f", "/tn",
+            name])
         if not res:
             res = "OK"
         print("result:\t{0}".format(res))
@@ -104,6 +114,8 @@ def uninstall_windows(config):
     # remove gthnk.conf
     rm(os.path.join(config['app_data'], "Gthnk", "gthnk.conf"))
 
-    # remove schtasks.exe Gthnk Review
+    # remove Gthnk Review
+    unschedule("Gthnk Review")
 
-    # leave APPDATA/Gthnk for the database
+    # remove Gthnk Rotate
+    unschedule("Gthnk Rotate")
