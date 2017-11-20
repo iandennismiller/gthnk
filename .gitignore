@@ -1,4 +1,6 @@
 /build
 /dist
-*.egg-info
-.coveralls.yml
+/*.egg-info
+/.coveralls.yml
+/.coverage
+/coverage.xml

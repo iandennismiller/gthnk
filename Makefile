@@ -24,6 +24,7 @@ else
 	rm -rf build dist *.egg-info
 	find . -name '*.pyc' -delete
 	find . -name __pycache__ -delete
+	rm .coverage coverage.xml
 endif
 
 server:

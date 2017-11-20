@@ -18,6 +18,7 @@
 - [ ] more robust testing of journal_explorer attachments
 - [ ] installers - windows setup.exe and osx .pkg for Python/virtualenv
 - [ ] enable flake8 Dxxx checks
+- [ ] testing for integration, somehow
 
 ## Milestone 3
 
