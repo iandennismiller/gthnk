@@ -3,3 +3,4 @@ omit =
     gthnk/tests/*
     gthnk/migrations/*
     gthnk/views/administration/templates/*
+    gthnk/__meta__.py

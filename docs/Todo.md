@@ -2,19 +2,22 @@
 
 ## Milestone 1
 
-- [ ] testing for Model components
+- [ ] testing for Librarian
+- [ ] rename OS X integration services
 - [ ] bug: fix date picker
 - [ ] bug: image attachments not centering
+- [ ] improvement: narrow screen rendering
+- [ ] improvement: remove /admin prefix on URLs
 
 ## Milestone 2
 
 - [ ] produce installation videos
-- [ ] overview powerpoint presentation
 - [ ] produce overview video
 - [ ] produce usage video
-- [ ] narrow screen support
+- [ ] overview powerpoint presentation
 - [ ] more robust testing of journal_explorer attachments
 - [ ] installers - windows setup.exe and osx .pkg for Python/virtualenv
+- [ ] enable flake8 Dxxx checks
 
 ## Milestone 3
 
@@ -26,3 +29,5 @@
 - [x] integration for Windows
 - [x] refresh documentation with new installation procedures
 - [x] testing for View components
+- [x] code coverage
+- [x] basic testing for Model components

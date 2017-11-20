@@ -2,7 +2,6 @@
 # gthnk (c) Ian Dennis Miller
 
 import puremagic
-import datetime
 import re
 
 from PyPDF2 import PdfFileReader, PdfFileWriter
@@ -18,12 +17,15 @@ try:
 except ImportError:
     from io import StringIO
 
+
 class Day(db.Model, CRUDMixin):
     """
     A Day consists of the Entry objects that were created on that day.
+
     This is just a convenient way of referring to Entry objects in the database.
     This object is also capable of creating a string that is parsable by the JournalBuffer
     """
+
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, unique=True)
 
@@ -38,10 +40,13 @@ class Day(db.Model, CRUDMixin):
         self.pages.append(page)
         self.pages.reorder()
         db.session.commit()
+        return(page)
 
     def attach(self, binary):
         # determine the format of the file
         ext = puremagic.from_string(binary)
+
+        page = None
 
         # if the attachment is a PDF
         if ext == ".pdf":
@@ -56,17 +61,20 @@ class Day(db.Model, CRUDMixin):
 
                     pdf_page_buf = StringIO()
                     output.write(pdf_page_buf)
-                    self.add_page(pdf_page_buf.getvalue())
+                    page = self.add_page(pdf_page_buf.getvalue())
             # if it is just a single page PDF
             else:
                 # then add the original bytestream
-                self.add_page(binary)
+                page = self.add_page(binary)
         # if the attachment is a recognized image
         elif ext in [".png", ".jfif", ".gif", ".jpeg", ".jpg"]:
-            self.add_page(binary)
+            page = self.add_page(binary)
         # could not recognize file
         else:
             pass
+
+        if page:
+            return(page)
 
     def render_pdf(self):
         outpdf = PdfFileWriter()
@@ -126,6 +134,7 @@ class Day(db.Model, CRUDMixin):
 
     def __str__(self):
         return(self.__unicode__())
+
 
 def latest():
     return(Day.query.order_by(desc(Day.date)).first())
