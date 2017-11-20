@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
-from nose.plugins.attrib import attr
+import six
+# from nose.plugins.attrib import attr
 from .mixins import DiamondTestCase, create_user, setup_journal
 
 
@@ -106,14 +107,76 @@ class ViewTestCase(DiamondTestCase):
 
             rv = c.get('/admin/journal/download/2012-10-03.pdf', follow_redirects=True)
             self.assertRegexpMatches(rv.data, r'PDF', "get day as PDF")
+            self.assertEqual(len(rv.data), 306, "size match on download")
 
-# attachments
-#     @expose("/inbox/<date>", methods=['POST'])
-#     @expose("/thumbnail/<date>-<sequence>.jpg")
-#     @expose("/preview/<date>-<sequence>.jpg")
-#     @expose("/attachment/<date>-<sequence>.<extension>")
+    def test_attachments(self):
+        create_user()
+        setup_journal()
 
-# attachment management
-#     @expose("/day/<date>/attachment/<sequence>/move_up")
-#     @expose("/day/<date>/attachment/<sequence>/move_down")
-#     @expose("/day/<date>/attachment/<sequence>/delete")
+        with self.app.test_client() as c:
+            with c.session_transaction() as sess:
+                sess['user_id'] = '1'
+                sess['_fresh'] = True
+
+            # trigger refresh of journal
+            rv = c.get('/admin/journal/refresh', follow_redirects=True)
+
+            # upload small image
+            with open("gthnk/tests/data/gthnk.png", "r") as f:
+                buf = six.BytesIO(f.read())
+            rv = c.post('/admin/journal/inbox/2012-10-03', data=dict(
+                file=(buf, 'gthnk.png'),
+            ), follow_redirects=True)
+
+            # upload big image
+            with open("gthnk/tests/data/gthnk-big.jpg", "r") as f:
+                buf = six.BytesIO(f.read())
+            rv = c.post('/admin/journal/inbox/2012-10-03', data=dict(
+                file=(buf, 'gthnk-big.jpg'),
+            ), follow_redirects=True)
+
+            # thumbnails
+            rv = c.get('/admin/journal/thumbnail/2012-10-03-0.jpg', follow_redirects=True)
+            self.assertEqual(len(rv.data), 819, "size match on small thumbnail")
+            rv = c.get('/admin/journal/thumbnail/2012-10-03-1.jpg', follow_redirects=True)
+            self.assertEqual(len(rv.data), 1646, "size match on big thumbnail")
+
+            # previews
+            rv = c.get('/admin/journal/preview/2012-10-03-0.jpg', follow_redirects=True)
+            self.assertEqual(len(rv.data), 819, "size match on small preview")
+            rv = c.get('/admin/journal/preview/2012-10-03-1.jpg', follow_redirects=True)
+            self.assertEqual(len(rv.data), 8729, "size match on big preview")
+
+            # attachments
+            rv = c.get('/admin/journal/attachment/2012-10-03-0.jpg', follow_redirects=True)
+            self.assertEqual(len(rv.data), 7348, "size match on small attachment")
+            rv = c.get('/admin/journal/attachment/2012-10-03-1.jpg', follow_redirects=True)
+            self.assertEqual(len(rv.data), 27441, "size match on big attachment")
+
+            # download
+            rv = c.get('/admin/journal/download/2012-10-03.pdf', follow_redirects=True)
+            self.assertEqual(len(rv.data), 17097, "size match on download")
+
+            # attachment management
+            rv = c.get('/admin/journal/day/2012-10-03/1/move_up', follow_redirects=True)
+            rv = c.get('/admin/journal/day/2012-10-03/0/move_down', follow_redirects=True)
+            rv = c.get('/admin/journal/download/2012-10-03.pdf', follow_redirects=True)
+            self.assertEqual(len(rv.data), 17097, "size match on download")
+            # TODO: need more robust testing of PDF ordering
+
+            from ..models import Day
+
+            how_many_1 = len(Day.query.filter_by(date='2012-10-03').first().pages)
+            self.assertEqual(how_many_1, 2, "there are 2 attachments")
+
+            rv = c.get('/admin/journal/day/2012-10-03/attachment/1/delete', follow_redirects=True)
+            how_many_2 = len(Day.query.filter_by(date='2012-10-03').first().pages)
+            self.assertEqual(how_many_2, 1, "there is now 1 attachments")
+            rv = c.get('/admin/journal/download/2012-10-03.pdf', follow_redirects=True)
+            self.assertEqual(len(rv.data), 1596, "size match on download")
+
+            rv = c.get('/admin/journal/day/2012-10-03/attachment/0/delete', follow_redirects=True)
+            how_many_3 = len(Day.query.filter_by(date='2012-10-03').first().pages)
+            self.assertEqual(how_many_3, 0, "there are no attachments")
+            rv = c.get('/admin/journal/download/2012-10-03.pdf', follow_redirects=True)
+            self.assertEqual(len(rv.data), 306, "size match on download")

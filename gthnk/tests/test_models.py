@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
-from nose.plugins.attrib import attr
+# from nose.plugins.attrib import attr
 from datetime import datetime
-import os, shutil, tempfile, sys, unittest, json
 from .mixins import DiamondTestCase
 from ..models import Entry, Day
+
 
 class ModelEntryTestCase(DiamondTestCase):
 
@@ -20,3 +20,6 @@ class ModelEntryTestCase(DiamondTestCase):
 
         self.assertIsNotNone(entry, "object can be retrieved")
         self.assertEqual(entry.content, "empty", "contains correct value")
+
+    def test_page(self):
+        pass

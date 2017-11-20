@@ -14,6 +14,7 @@
 - [ ] produce overview video
 - [ ] produce usage video
 - [ ] narrow screen support
+- [ ] more robust testing of journal_explorer attachments
 
 ## Milestone 3
 

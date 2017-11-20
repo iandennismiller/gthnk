@@ -163,7 +163,8 @@ class JournalExplorer(AuthView):
     @expose("/day/<date>/attachment/<sequence>/delete")
     def delete_page(self, date, sequence):
         day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
-        active_page = day.pages.pop(int(sequence))
+        idx = int(sequence)
+        active_page = day.pages.pop(idx)
         active_page.delete()
         db.session.commit()
         return flask.redirect(flask.url_for('.day_view', date=date))
