@@ -14,6 +14,7 @@ endif
 	pip install -r requirements.txt
 
 develop:
+	# ln -s ~/.coveralls-gthnk.yml .coveralls.yml
 	pip install -r .requirements-dev.txt
 
 clean:
@@ -95,6 +96,10 @@ else
 	SETTINGS=$$PWD/etc/conf/testing.conf sphinx-build -b html docs build/sphinx
 endif
 
+coverage:
+	SETTINGS=$$PWD/etc/conf/testing.conf nosetests --with-xcoverage \
+		--cover-package=$(MOD_NAME) --cover-tests -c etc/nose/test.cfg
+
 lint:
 	pylint gthnk
 
@@ -110,4 +115,4 @@ else
 	cp /tmp/gthnk.rb integrations/homebrew/gthnk.rb
 endif
 
-.PHONY: clean install test server watch lint docs all single release homebrew develop
+.PHONY: clean install test server watch lint docs all single release homebrew develop coverage

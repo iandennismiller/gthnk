@@ -6,6 +6,8 @@ python:
   - 3.5
   - 3.6
 # command to install dependencies
-install: make requirements && make install
+install: make requirements develop && make install
 # command to run tests
-script: make test
+script: make test coverage
+after_success:
+  - coveralls -i

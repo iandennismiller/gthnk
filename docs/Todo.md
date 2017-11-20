@@ -2,7 +2,6 @@
 
 ## Milestone 1
 
-- [ ] testing for View components
 - [ ] testing for Model components
 - [ ] bug: fix date picker
 - [ ] bug: image attachments not centering
@@ -15,6 +14,7 @@
 - [ ] produce usage video
 - [ ] narrow screen support
 - [ ] more robust testing of journal_explorer attachments
+- [ ] installers - windows setup.exe and osx .pkg for Python/virtualenv
 
 ## Milestone 3
 
@@ -25,3 +25,4 @@
 
 - [x] integration for Windows
 - [x] refresh documentation with new installation procedures
+- [x] testing for View components
