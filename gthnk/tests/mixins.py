@@ -1,10 +1,29 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
+import shutil
+import flask
 import warnings
+from ..models import User
 from flask_testing import TestCase
 from flask.exthook import ExtDeprecationWarning
 warnings.simplefilter('ignore', ExtDeprecationWarning)
+
+
+def setup_journal():
+    shutil.copy(
+        "gthnk/tests/data/tmp_journal.txt",
+        flask.current_app.config["INPUT_FILES"]
+    )
+
+
+def create_user():
+    User.register(
+        email="guest@example.com",
+        password="guest",
+        confirmed=True,
+        roles=["User"]
+    )
 
 
 class DiamondTestCase(TestCase):

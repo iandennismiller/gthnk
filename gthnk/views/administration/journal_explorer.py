@@ -37,6 +37,10 @@ class JournalExplorer(AuthView):
             day = Day.query.order_by(Day.date).filter(Day.date > date).first()
             if day:
                 return flask.redirect(flask.url_for('.day_view', date=day.date))
+            else:
+                day = Day.query.order_by(Day.date.desc()).filter(Day.date < date).first()
+                if day:
+                    return flask.redirect(flask.url_for('.day_view', date=day.date))
         # if no dates are found, redirect to home page
         return flask.redirect(flask.url_for('admin.index'))
 
