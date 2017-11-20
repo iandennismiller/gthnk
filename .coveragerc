@@ -1,0 +1,5 @@
+[report]
+omit =
+    gthnk/tests/*
+    gthnk/migrations/*
+    gthnk/views/administration/templates/*

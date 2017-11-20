@@ -10,4 +10,4 @@ install: make requirements develop && make install
 # command to run tests
 script: make test coverage
 after_success:
-  - coveralls -i
+  - coveralls
