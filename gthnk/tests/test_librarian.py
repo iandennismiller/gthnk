@@ -1,42 +1,65 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
-# import shutil
-# import glob
-# import flask
-# from nose.plugins.attrib import attr
+import shutil
+import glob
+import flask
+import os
+from distutils.dir_util import remove_tree
+from nose.plugins.attrib import attr
 from .mixins import DiamondTestCase
-# from ..models import Day, Entry
-# from ..adaptors.journal_buffer import JournalBuffer, TextFileJournalBuffer
+from ..models import Day, Entry
+from ..librarian import Librarian
+
+
+def rm(path):
+    print(path)
+    if os.path.isdir(path):
+        print("remove")
+        remove_tree(path)
+
+
+def clean_tmp_export(export_path):
+    rm(os.path.join(export_path, "attachment"))
+    rm(os.path.join(export_path, "day"))
+    rm(os.path.join(export_path, "markdown"))
+    rm(os.path.join(export_path, "preview"))
+    rm(os.path.join(export_path, "text"))
+    rm(os.path.join(export_path, "thumbnail"))
+    if len(glob.glob(os.path.join(export_path, "*"))) == 0:
+        rm(os.path.join(export_path))
 
 
 class TestLibrarian(DiamondTestCase):
     def setUp(self):
-        pass
-        # # put an example journal in place
-        # shutil.copy(
-        #     "gthnk/tests/data/tmp_journal.txt",
-        #     flask.current_app.config["INPUT_FILES"]
-        # )
+        # put an example journal in place
+        shutil.copy(
+            "gthnk/tests/data/tmp_journal.txt",
+            flask.current_app.config["INPUT_FILES"]
+        )
 
-        # # load some known-correct files
-        # with open('gthnk/tests/data/correct_output.txt', 'r') as f:
-        #     self.correct_output = ''.join(f.readlines())
-        # with open('gthnk/tests/data/correct_merge.txt', 'r') as f:
-        #     self.correct_merge = ''.join(f.readlines())
-        # with open('gthnk/tests/data/two_days_correct.txt', 'r') as f:
-        #     self.correct_twodays = ''.join(f.readlines())
-        # with open('gthnk/tests/data/2012-10-04.txt', 'r') as f:
-        #     self.correct_04 = ''.join(f.readlines())
-        # with open('gthnk/tests/data/2012-10-05.txt', 'r') as f:
-        #     self.correct_05 = ''.join(f.readlines())
+        super(TestLibrarian, self).setUp()
 
-        # super(TestParsing, self).setUp()
+    def test_rotate(self):
+        librarian = Librarian(self.app)
+        librarian.rotate_buffers()
+        self.assertEqual(Day.query.count(), 1, "1 day has been created")
+        self.assertEqual(Entry.query.count(), 4, "4 entries have been created")
 
-    def test_librarian(self):
-        "Process string parsing."
-        pass
-        # journal_buffer = JournalBuffer()
-        # with open("gthnk/tests/data/source_a.txt", "r") as f:
-        #     journal_buffer.parse(f.read())
-        # self.assertIsNotNone(journal_buffer.get_entries())
+    @attr("single")
+    def test_export(self):
+        export_path = flask.current_app.config["EXPORT_PATH"]
+        clean_tmp_export(export_path)
+
+        librarian = Librarian(self.app)
+        librarian.rotate_buffers()
+        librarian.export_journal()
+
+        self.assertEqual(len(glob.glob(os.path.join(export_path, "*"))),
+            6, "correct number of directories created")
+        self.assertEqual(len(glob.glob(os.path.join(export_path, "text", "*"))),
+            1, "correct number of text files created")
+        self.assertEqual(len(glob.glob(os.path.join(export_path, "markdown", "*"))),
+            1, "correct number of markdown files created")
+
+        clean_tmp_export(export_path)

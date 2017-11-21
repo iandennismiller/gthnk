@@ -2,7 +2,6 @@
 
 ## Milestone 1
 
-- [ ] testing for Librarian
 - [ ] rename OS X integration services
 - [ ] bug: fix date picker
 - [ ] bug: image attachments not centering
@@ -32,3 +31,4 @@
 - [x] testing for View components
 - [x] code coverage
 - [x] basic testing for Model components
+- [x] testing for Librarian
