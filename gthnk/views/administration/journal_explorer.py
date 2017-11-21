@@ -20,7 +20,12 @@ class JournalExplorer(AuthView):
 
     @expose('/')
     def index_view(self):
-        return self.render("journal_explorer/search_view.html")
+        # return self.render("journal_explorer/search_view.html")
+        return flask.redirect(flask.url_for('.latest_view'))
+
+    # @expose('/search')
+    # def search_view(self):
+    #     return self.render("journal_explorer/search_view.html")
 
     @expose("/refresh")
     def refresh(self):
@@ -80,18 +85,20 @@ class JournalExplorer(AuthView):
                 day=None, day_str="No entries yet")
 
     @expose("/search")
-    def results_view(self):
-        query_str = flask.request.args['q']
-        if query_str is None:
-            return flask.redirect(flask.url_for('admin.index'))
-
-        query = Entry.query.filter(
-            Entry.content.contains(query_str)).order_by(desc(Entry.timestamp))
-        results = query.all()[:20]
-        for idx in range(0, len(results)):
-            results[idx].content = re.sub(query_str, "**{}**".format(
-                query_str.upper()), results[idx].content, flags=re.I)
-        return self.render('journal_explorer/results_list.html', data=results, count=query.count())
+    def search_view(self):
+        print("blip")
+        if not flask.request.args:
+            return self.render("journal_explorer/search_view.html")
+        else:
+            query_str = flask.request.args['q']
+            query = Entry.query.filter(
+                Entry.content.contains(query_str)).order_by(desc(Entry.timestamp))
+            results = query.all()[:20]
+            for idx in range(0, len(results)):
+                results[idx].content = re.sub(query_str, "**{}**".format(
+                    query_str.upper()), results[idx].content, flags=re.I)
+            return self.render('journal_explorer/results_list.html', data=results,
+                count=query.count())
 
     @expose("/inbox/<date>", methods=['POST'])
     def upload_file(self, date):

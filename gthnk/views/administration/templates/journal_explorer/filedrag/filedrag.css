@@ -61,7 +61,7 @@
 
 .image_container {
     text-align: center;
-    display: inline-grid;
+    // display: inline-grid;
     margin: 0 auto;
 }
 

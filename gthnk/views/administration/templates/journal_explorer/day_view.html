@@ -2,7 +2,12 @@
 
 {% block main_menu %}
 
-<div class="datepicker">
+<script type="text/javascript">
+    var today = "{{ day.date }}";
+</script>
+
+<div id="search_box" style="display: none;">
+    <input name="q" />
 </div>
 
 {{ super() }}
@@ -18,7 +23,7 @@
         {% if day and day.yesterday() %}
             <a href="{{ url_for('.day_view', date=day.yesterday().date) }}" title="previous"><i class="icon-chevron-left"></i></a>
         {% else %}
-            <a href="javascript:void(0)" title="no past days"><i class="icon-stop"></i> earliest</a>
+            <a href="javascript:void(0)" title="no past days"><i class="icon-stop"></i></a>
         {% endif %}
     </li>
     <li>
@@ -35,7 +40,8 @@
         <a id="calendar_button" href="javascript:void(0)" title="go to day"><i class="icon-calendar"></i></a>
     </li>
     <li>
-        <a href="{{ url_for('.index_view') }}" title="search"><i class="icon-search"></i></a>
+        <a href="{{ url_for('.search_view') }}" title="search"><i class="icon-search"></i></a>
+        <!-- <a id="search_button" href="javascript:void(0)" title="search"><i class="icon-search"></i></a> -->
     </li>
     <li>
         <a href="{{ url_for('.download', date=day.date) }}" title="download"><i class="icon-download-alt"></i></a>

@@ -21,7 +21,7 @@ class RedirectView(AdminIndexView):
 
     @expose('/')
     def index(self):
-        return flask.redirect(flask.url_for('journal.index_view'))
+        return flask.redirect(flask.url_for('journal.latest_view'))
 
 
 class EntryAdmin(AuthModelView):
@@ -78,7 +78,7 @@ class PageAdmin(AuthModelView):
         'binary': {
             'label': 'File',
             'base_path': "/tmp",
-            #"validators": [binary_validation]
+            # "validators": [binary_validation]
         }
     }
-    #form = PageForm
+    # form = PageForm

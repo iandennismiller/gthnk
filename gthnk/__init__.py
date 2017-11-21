@@ -44,12 +44,12 @@ class Gthnk(Diamond):
     def init_blueprints(self):
         self.super("blueprints")
 
+        from .views.diamond import diamond_blueprint
+        self.app.register_blueprint(diamond_blueprint)
+
         # administration blueprint is custom to this application
         from .views.administration.administration import adminbaseview
         self.app.register_blueprint(adminbaseview)
-
-        from .views.diamond import diamond_blueprint
-        self.app.register_blueprint(diamond_blueprint)
 
 
 def create_app():
