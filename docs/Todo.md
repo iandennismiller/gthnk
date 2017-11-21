@@ -2,9 +2,8 @@
 
 ## Milestone 1
 
-- [ ] write release procedure document
-- [ ] perform release to pypi
 - [ ] tests pass again on Python 3; drop support for 2?
+- [ ] perform release to pypi
 
 ## Milestone 2
 
@@ -42,3 +41,4 @@
 - [x] rename OS X integration services
 - [x] bug: fix date picker
 - [x] bug: image attachments not centering
+- [x] write release procedure document

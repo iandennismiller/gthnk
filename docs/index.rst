@@ -26,6 +26,15 @@ User Guide
     user/text-file-format
     about/uninstallation
 
+Development
+-----------
+
+.. toctree::
+    :maxdepth: 1
+
+    develop/release
+    develop/contributing
+
 About
 -----
 
@@ -37,6 +46,5 @@ About
     changelog
     License
 
-..     about/credits-and-attributions
-..     about/how_to_contribute_to_the_project
+..     about/credits
 ..     about/philosophy
