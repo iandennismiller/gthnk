@@ -2,8 +2,6 @@
 
 ## Milestone 1
 
-- [ ] improvement: narrow screen rendering
-- [ ] improvement: remove /admin prefix on URLs
 - [ ] write release procedure document
 - [ ] perform release to pypi
 - [ ] add blog component to gthnk.com
@@ -20,6 +18,8 @@
 - [ ] testing for integration.py
 - [ ] fill out changelog
 - [ ] tests pass again on Python 3; drop support for 2?
+- [ ] improvement: remove /admin prefix on URLs
+- [ ] improvement: narrow screen rendering
 
 ## Milestone 3
 

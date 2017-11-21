@@ -14,18 +14,17 @@ from gthnk.models.entry import Entry
 from gthnk.librarian import Librarian
 
 
+journal_blueprint = flask.Blueprint('journal_blueprint', __name__,
+    template_folder='templates', static_folder='static')
+
+
 class JournalExplorer(AuthView):
     def is_accessible(self):
         return(current_user.is_authenticated)
 
     @expose('/')
     def index_view(self):
-        # return self.render("journal_explorer/search_view.html")
         return flask.redirect(flask.url_for('.latest_view'))
-
-    # @expose('/search')
-    # def search_view(self):
-    #     return self.render("journal_explorer/search_view.html")
 
     @expose("/refresh")
     def refresh(self):

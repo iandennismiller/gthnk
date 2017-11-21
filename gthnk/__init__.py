@@ -3,7 +3,7 @@
 
 from datetime import timedelta
 from flask_diamond import Diamond
-from flask_diamond.facets.administration import AdminModelView
+# from flask_diamond.facets.administration import AdminModelView
 from flask_diamond.facets.database import db
 from flask.ext.markdown import Markdown
 from mdx_linkify.mdx_linkify import LinkifyExtension
@@ -16,7 +16,7 @@ application = None
 
 class Gthnk(Diamond):
     def init_administration(self):
-        from .views.administration.journal_explorer import JournalExplorer
+        from .views.journal_explorer import JournalExplorer
         from .views.administration import administration as A
 
         admin = self.super("administration", user=User, role=Role)
@@ -46,6 +46,9 @@ class Gthnk(Diamond):
 
         from .views.diamond import diamond_blueprint
         self.app.register_blueprint(diamond_blueprint)
+
+        from .views.journal_explorer import journal_blueprint
+        self.app.register_blueprint(journal_blueprint)
 
         # administration blueprint is custom to this application
         from .views.administration.administration import adminbaseview
