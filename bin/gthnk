@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Open Gthnk in the default web browser
+open "http://localhost:1620"

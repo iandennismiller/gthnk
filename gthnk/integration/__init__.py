@@ -2,6 +2,8 @@
 # gthnk (c) Ian Dennis Miller
 
 import os
+import random
+import string
 import subprocess
 from six.moves import input
 from getpass import getpass
@@ -68,3 +70,30 @@ def create_db(db_filename, conf_filename, python_path, manage_path):
         print("result:\t{0}".format(res))
     else:
         print("exists:\t{0}".format(db_filename))
+
+
+def make_config():
+    from .osx import install_osx, uninstall_osx
+    from .windows import install_windows, uninstall_windows
+
+    chars = string.ascii_letters + string.digits + '^!$&=?+~#-_.:,;'
+
+    if os.name == 'nt':
+        config = {
+            'secret_key': repr(os.urandom(24)),
+            'hash_salt': "".join([random.choice(chars) for _ in range(24)]),
+            'home_directory': os.environ["USERPROFILE"],
+            "app_data": os.environ["APPDATA"],
+            'do_install': install_windows,
+            'do_uninstall': uninstall_windows,
+        }
+    else:
+        config = {
+            'secret_key': repr(os.urandom(24)),
+            'hash_salt': "".join([random.choice(chars) for _ in range(24)]),
+            'home_directory': os.path.expanduser("~"),
+            'do_install': install_osx,
+            'do_uninstall': uninstall_osx,
+        }
+
+    return(config)

@@ -17,15 +17,15 @@ def osx_files(config):
 
     render(config, 'osx/gthnk.conf.j2',
         os.path.join(config['home_directory'], "Library", "Gthnk", "gthnk.conf"))
-    render(config, 'osx/com.gthnk.dashboard.plist.j2',
+    render(config, 'osx/com.gthnk.review.plist.j2',
         os.path.join(config['home_directory'], "Library", "LaunchAgents",
-            "com.gthnk.dashboard.plist"))
+            "com.gthnk.review.plist"))
     render(config, 'osx/com.gthnk.server.plist.j2',
         os.path.join(config['home_directory'], "Library", "LaunchAgents",
             "com.gthnk.server.plist"))
-    render(config, 'osx/com.gthnk.librarian.plist.j2',
+    render(config, 'osx/com.gthnk.rotate.plist.j2',
         os.path.join(config['home_directory'], "Library", "LaunchAgents",
-            "com.gthnk.librarian.plist"))
+            "com.gthnk.rotate.plist"))
 
 
 def osx_launchd(config):
@@ -34,17 +34,17 @@ def osx_launchd(config):
 
     # unload any existing launch agents
     launchd("unload", os.path.join(config['home_directory'], "Library", "LaunchAgents",
-        "com.gthnk.dashboard.plist"))
+        "com.gthnk.review.plist"))
     launchd("unload", os.path.join(config['home_directory'], "Library", "LaunchAgents",
-        "com.gthnk.librarian.plist"))
+        "com.gthnk.rotate.plist"))
     launchd("unload", os.path.join(config['home_directory'], "Library", "LaunchAgents",
         "com.gthnk.server.plist"))
 
     # load the launch agents
     launchd("load", os.path.join(config['home_directory'], "Library", "LaunchAgents",
-        "com.gthnk.dashboard.plist"))
+        "com.gthnk.review.plist"))
     launchd("load", os.path.join(config['home_directory'], "Library", "LaunchAgents",
-        "com.gthnk.librarian.plist"))
+        "com.gthnk.rotate.plist"))
     launchd("load", os.path.join(config['home_directory'], "Library", "LaunchAgents",
         "com.gthnk.server.plist"))
 
@@ -78,18 +78,18 @@ def uninstall_osx(config):
 
     # unload any existing launch agents
     launchd("unload", os.path.join(config['home_directory'], "Library", "LaunchAgents",
-        "com.gthnk.dashboard.plist"))
+        "com.gthnk.review.plist"))
     launchd("unload", os.path.join(config['home_directory'], "Library", "LaunchAgents",
-        "com.gthnk.librarian.plist"))
+        "com.gthnk.rotate.plist"))
     launchd("unload", os.path.join(config['home_directory'], "Library", "LaunchAgents",
         "com.gthnk.server.plist"))
 
     rm(os.path.join(config['home_directory'], "Library", "LaunchAgents",
         "com.gthnk.server.plist"))
     rm(os.path.join(config['home_directory'], "Library", "LaunchAgents",
-        "com.gthnk.librarian.plist"))
+        "com.gthnk.rotate.plist"))
     rm(os.path.join(config['home_directory'], "Library", "LaunchAgents",
-        "com.gthnk.dashboard.plist"))
+        "com.gthnk.review.plist"))
 
     # remove gthnk.conf
     # rm(os.path.join(config['home_directory'], "Library", "Gthnk", "gthnk.com"))

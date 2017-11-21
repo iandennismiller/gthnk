@@ -2,12 +2,10 @@
 # gthnk (c) Ian Dennis Miller
 
 from setuptools import setup, find_packages
-# from distutils.dir_util import copy_tree
 import os
 import re
 
 
-# from https://github.com/flask-admin/flask-admin/blob/master/setup.py
 def fpath(name):
     return os.path.join(os.path.dirname(__file__), name)
 
@@ -33,9 +31,10 @@ setup(
     scripts=[
         "bin/runserver.py",
         "bin/manage.py",
-        "bin/journal_rotate.py",
         "bin/integration.py",
+        "bin/gthnk",
         "bin/gthnk.cmd",
+        "bin/gthnk-rotate.py",
         "bin/gthnk-rotate.cmd",
     ],
     long_description=read('Readme.rst'),
@@ -58,11 +57,3 @@ setup(
     license='MIT',
     zip_safe=False,
 )
-
-# venv_path = os.environ.get("VIRTUAL_ENV")
-# if venv_path:
-#     # copy_tree("skels", os.path.join(venv_path, "share/skels"))
-#     copy_tree("gthnk/migrations", os.path.join(venv_path, "share/gthnk/migrations"))
-# else:
-#     print("This was not installed in a virtual environment")
-#     print("So, I won't install the skel files.")

@@ -6,7 +6,7 @@ At 12:03 AM every day, scan the journal.txt and rotate out any old files.
 <plist version="1.0">
 <dict>
 	<key>Label</key>
-	<string>com.gthnk.librarian</string>
+	<string>com.gthnk.rotate</string>
 	<key>EnvironmentVariables</key>
     <dict>
 		<key>SETTINGS</key>
@@ -24,6 +24,6 @@ At 12:03 AM every day, scan the journal.txt and rotate out any old files.
         <integer>1</integer>
     </dict>
 	<key>Program</key>
-	<string>{{ home_directory }}/.virtualenvs/gthnk/bin/journal_rotate.py</string>
+	<string>{{ home_directory }}/.virtualenvs/gthnk/bin/gthnk-rotate.py</string>
 </dict>
 </plist>

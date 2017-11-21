@@ -34,6 +34,7 @@ About
 
     about/history
     about/flask-diamond
+    changelog
     License
 
 ..     about/credits-and-attributions
