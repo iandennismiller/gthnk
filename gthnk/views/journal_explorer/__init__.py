@@ -11,7 +11,7 @@ from flask_diamond.facets.administration import AuthView
 from gthnk import db
 from gthnk.models.day import Day, latest
 from gthnk.models.entry import Entry
-from gthnk.librarian import Librarian
+from gthnk.adaptors.librarian import Librarian
 
 
 journal_blueprint = flask.Blueprint('journal_blueprint', __name__,

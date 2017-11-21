@@ -3,13 +3,6 @@
 # gthnk (c) Ian Dennis Miller
 
 import sys
-import traceback
-sys.path.insert(0, '.')
-
-import warnings
-from flask.exthook import ExtDeprecationWarning
-warnings.simplefilter('ignore', ExtDeprecationWarning)
-
 import os
 import glob
 
@@ -17,11 +10,18 @@ from flask_script import Manager, Shell, Server
 from flask_migrate import Migrate, MigrateCommand
 import alembic
 import alembic.config
+
+import warnings
+from flask.exthook import ExtDeprecationWarning
+warnings.simplefilter('ignore', ExtDeprecationWarning)
+
+sys.path.insert(0, '.')
 from gthnk import create_app, db
 from gthnk.models import User, Role
 
 app = create_app()
 migrate = Migrate(app, db, directory="gthnk/migrations")
+
 
 def _make_context():
     return {
@@ -103,7 +103,7 @@ def import_archive(directory):
 
 @manager.command
 def journal_export():
-    from gthnk.librarian import Librarian
+    from gthnk.adaptors.librarian import Librarian
     with app.app_context():
         librarian = Librarian(app)
         librarian.export_journal()

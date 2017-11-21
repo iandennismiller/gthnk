@@ -9,7 +9,7 @@ from distutils.dir_util import remove_tree
 from nose.plugins.attrib import attr
 from .mixins import DiamondTestCase
 from ..models import Day, Entry
-from ..librarian import Librarian
+from ..adaptors.librarian import Librarian
 
 
 def rm(path):

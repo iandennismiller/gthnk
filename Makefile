@@ -24,10 +24,10 @@ else
 	rm -rf build dist *.egg-info
 	find . -name '*.pyc' -delete
 	find . -name __pycache__ -delete
-	rm .coverage coverage.xml
+	rm -f .coverage coverage.xml
 endif
 
-server:
+server: clean
 ifeq ($(OS),Windows_NT)
 	set SETTINGS=%cd%\etc\conf\dev-win.conf & python bin\manage.py runserver
 else
@@ -41,7 +41,7 @@ else
 	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py shell
 endif
 
-test:
+test: clean
 ifeq ($(OS),Windows_NT)
 	set SETTINGS=%cd%\etc\conf\testing-win.conf & nosetests $(MOD_NAME) -c etc\nose\test.cfg
 else

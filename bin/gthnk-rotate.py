@@ -4,7 +4,7 @@
 
 import flask
 import gthnk
-from gthnk.librarian import Librarian
+from gthnk.adaptors.librarian import Librarian
 
 
 def main():
