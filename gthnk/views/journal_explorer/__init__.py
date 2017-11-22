@@ -85,7 +85,6 @@ class JournalExplorer(AuthView):
 
     @expose("/search")
     def search_view(self):
-        print("blip")
         if not flask.request.args:
             return self.render("journal_explorer/search_view.html")
         else:

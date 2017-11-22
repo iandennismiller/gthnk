@@ -32,15 +32,37 @@ $("#edit_button").click(function() {
 // search box inside day view
 if ($("#search_box")) {
     $("#search_button").click(function() {
-        $("#search_button").parent().toggleClass("active");
-        $("#search_box").toggleClass("active");
-        if ($("search_box").hasClass("active")) {
-            $("search_box").show();
-        }
-        else {
-            $("search_box").hide();
+        if (!$("#search_button").hasClass("clicking")) {
+            if (! $("#search_box").hasClass("active")) {
+                $("#search_button").parent().addClass("active");
+                $("#search_box").addClass("active");
+
+                var pos = $("#search_button").position();
+                var width = $("#search_button").outerWidth();
+                var div_width = 200; // this is set in the original HTML
+                var div_height = 43; // this is set in the original HTML
+                $("#search_box").css({
+                    top: (pos.top + div_height) + "px",
+                    left: (pos.left + width + div_width) + "px"
+                });
+                $("#search_box").show()
+                $("input[name=q]").focus();
+            }
         }
     });
+
+    $("input[name=q]").focusout(function() {
+        $("#search_button").parent().removeClass("active");
+        $("#search_box").removeClass("active");
+        $("#search_box").hide();
+
+        // this cooldown prevents the situation where clicking the search button
+        // simultaneously un-focuses the input and then re-focuses it again immediately
+        $("#search_button").addClass("clicking");
+        var cooldown = window.setTimeout(function() {
+            $("#search_button").removeClass("clicking");
+        }, 100);
+    })
 }
 
 // http://www.daterangepicker.com/

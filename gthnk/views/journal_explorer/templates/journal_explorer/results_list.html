@@ -1,43 +1,8 @@
 {% extends 'admin/model/list.html' %}
 
 {% block body %}
-    {% block model_menu_bar %}
-    <ul class="nav nav-tabs">
-        <li class="active">
-            <a href="javascript:void(0)"><i class="icon-list-alt"></i> {{ _gettext('List') }} ({{ count }})</a>
-        </li>
-        {% if admin_view.can_create %}
-        <li>
-            <a href="{{ url_for('.create_view', url=return_url) }}" title="{{ _gettext('Create new record') }}">
-                <i class="icon-plus-sign"></i> {{ _gettext('Create') }}
-            </a>
-        </li>
-        {% endif %}
 
-        {% if filter_groups %}
-        <li class="dropdown">
-            {{ model_layout.filter_options() }}
-        </li>
-        {% endif %}
-
-        {% if actions %}
-        <li class="dropdown">
-            {{ actionlib.dropdown(actions) }}
-        </li>
-        {% endif %}
-
-        {% if search_supported %}
-        <li>
-            {{ model_layout.search_form() }}
-        </li>
-        {% endif %}
-    </ul>
-    {% endblock %}
-
-    {% if filter_groups %}
-        {{ model_layout.filter_form() }}
-        <div class="clearfix"></div>
-    {% endif %}
+    <p></p>
 
     {% block model_list_table %}
 
@@ -91,4 +56,12 @@
     {% endblock %}
 
     {#{ actionlib.form(actions, url_for('.action_view')) }#}
+{% endblock %}
+
+{% block head %}
+{{ super() }}
+<style type="text/css">
+    {% include "journal_explorer/filedrag/filedrag.css" %}
+</style>
+
 {% endblock %}

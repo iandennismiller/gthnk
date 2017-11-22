@@ -6,8 +6,10 @@
     var today = "{{ day.date }}";
 </script>
 
-<div id="search_box" style="display: none;">
-    <input name="q" />
+<div id="search_box" style="display: none; width: 100px; position: absolute; z-index: 99;">
+<form method="GET" action="/admin/journal/search" class="search-form">
+    <input name="q" type="text" placeholder="Search" />
+</form>
 </div>
 
 {{ super() }}
@@ -34,20 +36,20 @@
         {% endif %}
     </li>
     <li>
-        <a href="{{ url_for('.latest_view') }}" title="latest"><i class="icon-certificate"></i></a>
+        <a href="{{ url_for('.latest_view') }}" title="latest"><i class="icon-home"></i></a>
     </li>
     <li>
         <a id="calendar_button" href="javascript:void(0)" title="go to day"><i class="icon-calendar"></i></a>
     </li>
     <li>
-        <a href="{{ url_for('.search_view') }}" title="search"><i class="icon-search"></i></a>
-        <!-- <a id="search_button" href="javascript:void(0)" title="search"><i class="icon-search"></i></a> -->
+        <!-- <a href="{{ url_for('.search_view') }}" title="search"><i class="icon-search"></i></a> -->
+        <a id="search_button" href="javascript:void(0)" title="search"><i class="icon-search"></i></a>
     </li>
     <li>
         <a href="{{ url_for('.download', date=day.date) }}" title="download"><i class="icon-download-alt"></i></a>
     </li>
     <li>
-        <a id="edit_button" href="javascript:void(0)" title="edit"><i class="icon-wrench"></i></a>
+        <a id="edit_button" href="javascript:void(0)" title="edit"><i class="icon-edit"></i></a>
     </li>
     <li>
         <a href="{{ url_for('.refresh') }}" title="refresh"><i class="icon-refresh"></i></a>
@@ -75,9 +77,10 @@
             <!--<a href="javascript:void(0)"><i class="icon-download"></i></a>-->
             &nbsp;
         </div>
-        <div class="editable">
+        <!-- TODO: entryview is not visible to non-admin users... -->
+<!--         <div class="editable">
             <a href="/admin/entryview/?sort=0&amp;flt0_2={{day.date}}+00%3A00&amp;flt1_3={{day.date}}+23%3A59" title="edit"><i class="icon-wrench"></i></a>
-        </div>
+        </div> -->
     </div>
 </div>
 
