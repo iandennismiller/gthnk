@@ -77,7 +77,7 @@ class ViewTestCase(DiamondTestCase):
 
             rv = c.get('admin/journal/search?q={q}'.format(q="zorkle"), follow_redirects=True)
             if six.PY2:
-                self.assertNotRegex(rv.data, r'2012-10-03',
+                self.assertNotRegexpMatches(rv.data, r'2012-10-03',
                     "search for a unfindable string finds nothing")
             elif six.PY3:
                 self.assertNotRegex(str(rv.data), r'2012-10-03',
@@ -99,7 +99,7 @@ class ViewTestCase(DiamondTestCase):
             six.assertRegex(self, str(rv.data), r'2012-10-03', "get day as HTML")
             rv = c.get('/admin/journal/day/2012-10-02.html', follow_redirects=True)
             if six.PY2:
-                self.assertNotRegex(rv.data, r'2012-10-03',
+                self.assertNotRegexpMatches(rv.data, r'2012-10-03',
                     "get non-existent day as HTML")
             elif six.PY3:
                 self.assertNotRegex(str(rv.data), r'2012-10-03',

@@ -31,7 +31,7 @@ Any text editor can be used to add information to **gthnk**.
 Entries are searchable using the embedded **gthnk** server, which can be accessed with a browser.
 Additional media, including images and PDFs, can be attached to the journal.
 
-**gthnk** installs on Windows and OSX systems with Python 3.4+ and Python 2.7.
+**gthnk** installs on Windows and OSX systems with Python 3.5+ and Python 2.7.
 See the `Installation document <http://gthnk.readthedocs.io/en/latest/intro/installation.html>`_ for more details.
 
 Install Windows
