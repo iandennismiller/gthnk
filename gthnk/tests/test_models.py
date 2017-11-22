@@ -20,7 +20,7 @@ class ModelEntryTestCase(DiamondTestCase):
         self.assertIsNotNone(entry, "Entry is created")
 
         # attach an image to a day
-        with open("gthnk/tests/data/gthnk-big.jpg", "r") as f:
+        with open("gthnk/tests/data/gthnk-big.jpg", "rb") as f:
             buf = six.BytesIO(f.read())
             page = day.attach(buf.getvalue())
             self.assertIsNotNone(page, "Page is created")

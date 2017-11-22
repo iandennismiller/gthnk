@@ -3,19 +3,13 @@
 
 import puremagic
 import re
-
+from io import BytesIO
 from PyPDF2 import PdfFileReader, PdfFileWriter
 from flask_diamond.mixins.crud import CRUDMixin
 from sqlalchemy import desc
 from sqlalchemy.ext.orderinglist import ordering_list
 from PIL import Image
-
 from .. import db
-
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
 
 
 class Day(db.Model, CRUDMixin):
@@ -34,7 +28,7 @@ class Day(db.Model, CRUDMixin):
         backref=db.backref("day"))
 
     def add_page(self, binary):
-        from page import Page
+        from .page import Page
         page = Page.create(day=self)
         page.set_image(binary=binary)
         self.pages.append(page)
@@ -51,7 +45,7 @@ class Day(db.Model, CRUDMixin):
         # if the attachment is a PDF
         if ext == ".pdf":
             # use PyPDF2 to read the stream
-            pdf = PdfFileReader(StringIO(binary))
+            pdf = PdfFileReader(BytesIO(binary))
             # if it is a multi-page PDF
             if pdf.getNumPages() > 1:
                 # add the pages individually
@@ -59,7 +53,7 @@ class Day(db.Model, CRUDMixin):
                     output = PdfFileWriter()
                     output.addPage(pdf_page)
 
-                    pdf_page_buf = StringIO()
+                    pdf_page_buf = BytesIO()
                     output.write(pdf_page_buf)
                     page = self.add_page(pdf_page_buf.getvalue())
             # if it is just a single page PDF
@@ -81,16 +75,16 @@ class Day(db.Model, CRUDMixin):
         for page in self.pages:
             if page.extension == "pdf":
                 # the page is already a PDF so append directly
-                outpdf.addPage(PdfFileReader(StringIO(page.binary)).getPage(0))
+                outpdf.addPage(PdfFileReader(BytesIO(page.binary)).getPage(0))
             else:
                 # otherwise, the page is an image that needs to be converted to PDF first
-                buf = StringIO()
-                img = Image.open(StringIO(page.binary))
+                buf = BytesIO()
+                img = Image.open(BytesIO(page.binary))
                 img.convert("RGB").save(buf, format="pdf")
                 # once image is PDF, it can be appended
                 outpdf.addPage(PdfFileReader(buf).getPage(0))
 
-        pdf_page_buf = StringIO()
+        pdf_page_buf = BytesIO()
         outpdf.write(pdf_page_buf)
         return(pdf_page_buf.getvalue())
 

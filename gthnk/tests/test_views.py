@@ -3,6 +3,7 @@
 
 # from nose.plugins.attrib import attr
 from .mixins import DiamondTestCase, create_user
+import six
 
 
 class ViewTestCase(DiamondTestCase):
@@ -11,9 +12,8 @@ class ViewTestCase(DiamondTestCase):
         with self.app.test_client() as c:
             rv = c.get('/', follow_redirects=True)
             self.assertIsNotNone(rv.data, "object can be retrieved")
-            self.assertRegexpMatches(rv.data, r'Login', "response contains text 'Login'")
+            six.assertRegex(self, str(rv.data), r'Login', "response contains text 'Login'")
 
-    # @attr('single')
     def test_login(self):
         create_user()
         with self.app.test_client() as c:
@@ -21,7 +21,7 @@ class ViewTestCase(DiamondTestCase):
                 email="guest@example.com",
                 password="guest"
             ), follow_redirects=True)
-            self.assertRegexpMatches(rv.data, r'logout', "response contains text 'logout'")
+            six.assertRegex(self, str(rv.data), 'logout', "response contains text 'logout'")
 
     def test_bypass_login(self):
         create_user()
@@ -30,4 +30,4 @@ class ViewTestCase(DiamondTestCase):
                 sess['user_id'] = '1'
                 sess['_fresh'] = True
             rv = c.get('/', follow_redirects=True)
-            self.assertRegexpMatches(rv.data, r'logout', "response contains text 'logout'")
+            six.assertRegex(self, str(rv.data), r'logout', "response contains text 'logout'")

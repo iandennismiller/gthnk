@@ -6,7 +6,7 @@ import glob
 import flask
 import os
 from distutils.dir_util import remove_tree
-from nose.plugins.attrib import attr
+# from nose.plugins.attrib import attr
 from .mixins import DiamondTestCase
 from ..models import Day, Entry
 from ..adaptors.librarian import Librarian
@@ -46,7 +46,6 @@ class TestLibrarian(DiamondTestCase):
         self.assertEqual(Day.query.count(), 1, "1 day has been created")
         self.assertEqual(Entry.query.count(), 4, "4 entries have been created")
 
-    @attr("single")
     def test_export(self):
         export_path = flask.current_app.config["EXPORT_PATH"]
         clean_tmp_export(export_path)

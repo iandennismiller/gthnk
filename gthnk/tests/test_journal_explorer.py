@@ -19,7 +19,8 @@ class ViewTestCase(DiamondTestCase):
             rv = c.get('/', follow_redirects=True)
             rv = c.get('/admin/journal/refresh', follow_redirects=True)
             rv = c.get('/admin/journal/day/2012-10-03.html', follow_redirects=True)
-            self.assertRegexpMatches(rv.data, r'graduate management consulting association',
+            six.assertRegex(self, str(rv.data),
+                r'graduate management consulting association',
                 "journal was loaded")
 
     def test_nearest(self):
@@ -35,13 +36,13 @@ class ViewTestCase(DiamondTestCase):
             rv = c.get('/admin/journal/refresh', follow_redirects=True)
 
             rv = c.get('/admin/journal/nearest/2012-10-03', follow_redirects=True)
-            self.assertRegexpMatches(rv.data, r'2012-10-03', "load exact date")
+            six.assertRegex(self, str(rv.data), r'2012-10-03', "load exact date")
 
             rv = c.get('/admin/journal/nearest/2012-09-01', follow_redirects=True)
-            self.assertRegexpMatches(rv.data, r'2012-10-03', "request earlier date")
+            six.assertRegex(self, str(rv.data), r'2012-10-03', "request earlier date")
 
             rv = c.get('/admin/journal/nearest/2012-10-10', follow_redirects=True)
-            self.assertRegexpMatches(rv.data, r'2012-10-03', "request later date")
+            six.assertRegex(self, str(rv.data), r'2012-10-03', "request later date")
 
     def test_latest(self):
         create_user()
@@ -56,7 +57,7 @@ class ViewTestCase(DiamondTestCase):
             rv = c.get('/admin/journal/refresh', follow_redirects=True)
 
             rv = c.get('/admin/journal/latest.html', follow_redirects=True)
-            self.assertRegexpMatches(rv.data, r'2012-10-03', "request latest.html")
+            six.assertRegex(self, str(rv.data), r'2012-10-03', "request latest.html")
 
     def test_search(self):
         create_user()
@@ -71,12 +72,16 @@ class ViewTestCase(DiamondTestCase):
             rv = c.get('/admin/journal/refresh', follow_redirects=True)
 
             rv = c.get('admin/journal/search?q={q}'.format(q="graduate"), follow_redirects=True)
-            self.assertRegexpMatches(rv.data, r'2012-10-03',
+            six.assertRegex(self, str(rv.data), r'2012-10-03',
                 "search for a findable string finds something")
 
             rv = c.get('admin/journal/search?q={q}'.format(q="zorkle"), follow_redirects=True)
-            self.assertNotRegexpMatches(rv.data, r'2012-10-03',
-                "search for a unfindable string finds nothing")
+            if six.PY2:
+                self.assertNotRegex(rv.data, r'2012-10-03',
+                    "search for a unfindable string finds nothing")
+            elif six.PY3:
+                self.assertNotRegex(str(rv.data), r'2012-10-03',
+                    "search for a unfindable string finds nothing")
 
     def test_representations(self):
         create_user()
@@ -91,22 +96,37 @@ class ViewTestCase(DiamondTestCase):
             rv = c.get('/admin/journal/refresh', follow_redirects=True)
 
             rv = c.get('/admin/journal/day/2012-10-03.html', follow_redirects=True)
-            self.assertRegexpMatches(rv.data, r'2012-10-03', "get day as HTML")
+            six.assertRegex(self, str(rv.data), r'2012-10-03', "get day as HTML")
             rv = c.get('/admin/journal/day/2012-10-02.html', follow_redirects=True)
-            self.assertNotRegexpMatches(rv.data, r'2012-10-03', "get non-existent day as HTML")
+            if six.PY2:
+                self.assertNotRegex(rv.data, r'2012-10-03',
+                    "get non-existent day as HTML")
+            elif six.PY3:
+                self.assertNotRegex(str(rv.data), r'2012-10-03',
+                    "get non-existent day as HTML")
 
             rv = c.get('/admin/journal/text/2012-10-03.txt', follow_redirects=True)
-            self.assertRegexpMatches(rv.data, r'2012-10-03', "get day as text")
+            six.assertRegex(self, str(rv.data), r'2012-10-03', "get day as text")
             rv = c.get('/admin/journal/text/2012-10-02.txt', follow_redirects=True)
-            self.assertNotRegexpMatches(rv.data, r'2012-10-03', "get non-existent day as text")
+            if six.PY2:
+                self.assertNotRegexpMatches(rv.data, r'2012-10-03',
+                    "get non-existent day as text")
+            elif six.PY3:
+                self.assertNotRegex(str(rv.data), r'2012-10-03',
+                    "get non-existent day as text")
 
             rv = c.get('/admin/journal/markdown/2012-10-03.md', follow_redirects=True)
-            self.assertRegexpMatches(rv.data, r'2012-10-03', "get day as markdown")
+            six.assertRegex(self, str(rv.data), r'2012-10-03', "get day as markdown")
             rv = c.get('/admin/journal/markdown/2012-10-02.md', follow_redirects=True)
-            self.assertNotRegexpMatches(rv.data, r'2012-10-03', "get non-existent day as markdown")
+            if six.PY2:
+                self.assertNotRegexpMatches(rv.data, r'2012-10-03',
+                    "get non-existent day as markdown")
+            elif six.PY3:
+                self.assertNotRegex(str(rv.data), r'2012-10-03',
+                    "get non-existent day as markdown")
 
             rv = c.get('/admin/journal/download/2012-10-03.pdf', follow_redirects=True)
-            self.assertRegexpMatches(rv.data, r'PDF', "get day as PDF")
+            six.assertRegex(self, str(rv.data), r'PDF', "get day as PDF")
             self.assertEqual(len(rv.data), 306, "size match on download")
 
     def test_attachments(self):
@@ -122,14 +142,14 @@ class ViewTestCase(DiamondTestCase):
             rv = c.get('/admin/journal/refresh', follow_redirects=True)
 
             # upload small image
-            with open("gthnk/tests/data/gthnk.png", "r") as f:
+            with open("gthnk/tests/data/gthnk.png", "rb") as f:
                 buf = six.BytesIO(f.read())
             rv = c.post('/admin/journal/inbox/2012-10-03', data=dict(
                 file=(buf, 'gthnk.png'),
             ), follow_redirects=True)
 
             # upload big image
-            with open("gthnk/tests/data/gthnk-big.jpg", "r") as f:
+            with open("gthnk/tests/data/gthnk-big.jpg", "rb") as f:
                 buf = six.BytesIO(f.read())
             rv = c.post('/admin/journal/inbox/2012-10-03', data=dict(
                 file=(buf, 'gthnk-big.jpg'),
