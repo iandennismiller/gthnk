@@ -9,7 +9,6 @@ Communication with prospective users.
 - [ ] write post announcing 0.5.0
 - [ ] fill out changelog
 - [ ] write contributing document
-- [ ] riot/matrix channel
 - [ ] documentation at docs.gthnk.com
 - [ ] produce overview video
 - [ ] produce installation videos
@@ -56,3 +55,4 @@ Integration and exchange of information.
 - [x] tests pass again on Python 3
 - [x] rc1 to pypi
 - [x] consolidate javascript
+- [x] riot/matrix channel
