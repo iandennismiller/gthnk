@@ -27,7 +27,7 @@ Quality of code and user experience.
 - [ ] more robust testing of journal_explorer attachments
 - [ ] enable flake8 Dxxx checks
 - [ ] testing for integration.py
-- [ ] refactor and consolidate javascript
+- [ ] refactor javascript
 - [ ] separate static content from template content
 - [ ] longer timeout for website authentication
 - [ ] entryview is not visible to non-admin users
@@ -56,3 +56,4 @@ Integration and exchange of information.
 - [x] write release procedure document
 - [x] tests pass again on Python 3
 - [x] rc1 to pypi
+- [x] consolidate javascript

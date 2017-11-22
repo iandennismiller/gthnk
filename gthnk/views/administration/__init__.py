@@ -8,8 +8,13 @@ from flask_diamond.facets.administration import AuthModelView, AdminIndexView
 from wtforms.fields import TextAreaField
 from flask_admin.form.upload import FileUploadField
 
-adminbaseview = flask.Blueprint('adminbaseview', __name__,
-    template_folder='templates', static_folder='static')
+adminbaseview = flask.Blueprint(
+    'adminbaseview',
+    __name__,
+    template_folder='templates',
+    static_folder='static',
+    static_url_path='/static/admin',
+    )
 
 
 class RedirectView(AdminIndexView):

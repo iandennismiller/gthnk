@@ -2,10 +2,6 @@
 
 {% block main_menu %}
 
-<script type="text/javascript">
-    var today = "{{ day.date }}";
-</script>
-
 <div id="search_box" style="display: none; width: 100px; position: absolute; z-index: 99;">
 <form method="GET" action="/admin/journal/search" class="search-form">
     <input name="q" type="text" placeholder="Search" />
@@ -162,19 +158,17 @@
 {% endblock %}
 
 {% block head %}
-{{ super() }}
-<style type="text/css">
-    {% include "journal_explorer/filedrag/filedrag.css" %}
-</style>
-
+    {{ super() }}
+    <link href="{{ url_for('journal_blueprint.static', filename='css/filedrag.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block tail %}
-{{ super() }}
-<script>
-    {% include "journal_explorer/filedrag/filedrag.js" %}
-    {% include "journal_explorer/journal_browser.js" %}
-</script>
+    {{ super() }}
+    <script type="text/javascript">
+        var today = "{{ day.date }}";
+    </script>
+    <script src="{{ url_for('journal_blueprint.static', filename='js/filedrag.js') }}"></script>
+    <script src="{{ url_for('journal_blueprint.static', filename='js/journal_browser.js') }}"></script>
 {% endblock %}
 
 {% block footer %}{% endblock %}

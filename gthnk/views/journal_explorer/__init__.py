@@ -14,8 +14,13 @@ from gthnk.models.entry import Entry
 from gthnk.adaptors.librarian import Librarian
 
 
-journal_blueprint = flask.Blueprint('journal_blueprint', __name__,
-    template_folder='templates', static_folder='static')
+journal_blueprint = flask.Blueprint(
+    'journal_blueprint',
+    __name__,
+    template_folder='templates',
+    static_folder='static',
+    static_url_path='/static/journal_explorer',
+    )
 
 
 class JournalExplorer(AuthView):

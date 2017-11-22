@@ -80,5 +80,5 @@ def create_app():
         application.app.md = Markdown(application.app,
             extensions=[LinkifyExtension(), JournalExtension()])
 
-    # print application.app.url_map
+    print(application.app.url_map)
     return(application.app)

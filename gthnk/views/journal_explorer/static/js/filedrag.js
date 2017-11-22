@@ -51,7 +51,7 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 		var xhr = new XMLHttpRequest();
 		xhr.addEventListener('loadend', uploadComplete, false);
 
-     	xhr.open('POST', '{{ url_for('.upload_file', date=day.date) }}');
+		xhr.open('POST', '/admin/journal/inbox/' + today);
      	xhr.send(formData);
 	}
 
