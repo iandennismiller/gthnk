@@ -44,7 +44,7 @@ Once the requirements are installed, launch `cmd.exe` and run the following:
 
     mkvirtualenv gthnk
     workon gthnk
-    easy_install mr.bob==0.1.2
+    easy_install -U mr.bob==0.1.2
     pip install gthnk
     python %virtual_env%\Scripts\integration.py install
     gthnk

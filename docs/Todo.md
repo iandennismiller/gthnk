@@ -2,7 +2,7 @@
 
 ## Milestone 1
 
-- [ ] perform release to pypi
+- [ ] rc1 to pypi
 
 ## Milestone 2
 

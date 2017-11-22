@@ -7,6 +7,15 @@ Changelog
 - 2017-11-XX
 - ...
 
+
+- integration subsystem for Windows and OS X
+- python 3 compatibility
+- refresh documentation with new installation procedures
+- unit testing
+- code coverage
+- bug: fix date picker
+- bug: image attachments not centering
+
 0.4.0
 -----
 
