@@ -30,7 +30,6 @@ Quality of code and user experience.
 - [ ] refactor javascript
 - [ ] separate static content from template content
 - [ ] longer timeout for website authentication
-- [ ] entryview is not visible to non-admin users
 
 ## Milestone 4
 

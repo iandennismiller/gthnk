@@ -33,6 +33,9 @@ class EntryAdmin(AuthModelView):
     def is_visible(self):
         return security.current_user.has_role('Admin')
 
+    def is_accessible(self):
+        return security.current_user.has_role('User')
+
     can_create = False
     can_delete = False
     can_edit = True

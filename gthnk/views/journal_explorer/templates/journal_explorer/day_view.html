@@ -38,7 +38,6 @@
         <a id="calendar_button" href="javascript:void(0)" title="go to day"><i class="icon-calendar"></i></a>
     </li>
     <li>
-        <!-- <a href="{{ url_for('.search_view') }}" title="search"><i class="icon-search"></i></a> -->
         <a id="search_button" href="javascript:void(0)" title="search"><i class="icon-search"></i></a>
     </li>
     <li>
@@ -73,10 +72,10 @@
             <!--<a href="javascript:void(0)"><i class="icon-download"></i></a>-->
             &nbsp;
         </div>
-        <!-- TODO: entryview is not visible to non-admin users... -->
-<!--         <div class="editable">
-            <a href="/admin/entryview/?sort=0&amp;flt0_2={{day.date}}+00%3A00&amp;flt1_3={{day.date}}+23%3A59" title="edit"><i class="icon-wrench"></i></a>
-        </div> -->
+        <div class="editable">
+<!--             <a href="/admin/entryview/?sort=0&amp;flt0_2={{day.date}}+00%3A00&amp;flt1_3={{day.date}}+23%3A59" title="edit"><i class="icon-wrench"></i></a> -->
+            <a href="{{ url_for('entry.index_view', sort=0, flt0_2=day.date, flt3=day.date) }}" title="edit"><i class="icon-wrench"></i></a>
+        </div>
     </div>
 </div>
 
@@ -158,17 +157,15 @@
 {% endblock %}
 
 {% block head %}
-    {{ super() }}
-    <link href="{{ url_for('journal_blueprint.static', filename='css/filedrag.css') }}" rel="stylesheet">
+{{ super() }}
+<link href="{{ url_for('journal_blueprint.static', filename='css/filedrag.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block tail %}
-    {{ super() }}
-    <script type="text/javascript">
-        var today = "{{ day.date }}";
-    </script>
-    <script src="{{ url_for('journal_blueprint.static', filename='js/filedrag.js') }}"></script>
-    <script src="{{ url_for('journal_blueprint.static', filename='js/journal_browser.js') }}"></script>
+{{ super() }}
+<script type="text/javascript">var today = "{{ day.date }}";</script>
+<script src="{{ url_for('journal_blueprint.static', filename='js/filedrag.js') }}"></script>
+<script src="{{ url_for('journal_blueprint.static', filename='js/journal_browser.js') }}"></script>
 {% endblock %}
 
 {% block footer %}{% endblock %}
