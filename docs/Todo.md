@@ -2,7 +2,6 @@
 
 ## Milestone 1
 
-- [ ] tests pass again on Python 3; drop support for 2?
 - [ ] perform release to pypi
 
 ## Milestone 2
@@ -42,3 +41,4 @@
 - [x] bug: fix date picker
 - [x] bug: image attachments not centering
 - [x] write release procedure document
+- [x] tests pass again on Python 3

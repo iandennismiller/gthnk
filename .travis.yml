@@ -1,12 +1,16 @@
 language: python
 cache: pip
+branches:
+  only:
+    - master
+    - develop
 python:
   - 2.7
   - 3.5
   - 3.6
 # command to install dependencies
-install: make requirements develop && make install
+install: make requirements develop install
 # command to run tests
-script: make test coverage
+script: make coverage
 after_success:
   - coveralls

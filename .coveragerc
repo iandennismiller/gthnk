@@ -3,4 +3,5 @@ omit =
     gthnk/tests/*
     gthnk/migrations/*
     gthnk/views/administration/templates/*
+    gthnk/views/journal_explorer/templates/*
     gthnk/__meta__.py
