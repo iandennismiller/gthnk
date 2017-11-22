@@ -25,6 +25,7 @@ Once the requirements are installed, launch `cmd.exe` and run the following comm
 
 ::
 
+    cmd.exe
     mkvirtualenv gthnk
     workon gthnk
     easy_install mr.bob==0.1.2

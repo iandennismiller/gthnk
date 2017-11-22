@@ -1,15 +1,14 @@
-{# {% extends 'admin/master.html' %} #}
-{% extends 'admin/model/edit.html' %}
+{% extends 'admin/master.html' %}
 {% block body %}
 
 <form method="GET" action="/admin/journal/search" class="search-form">
     <div style="width: 27em; margin: 7em auto 0em auto;">
-	    <div style="font-size: 20pt; margin-bottom: 1em; text-align: center;">gthnk</div>
-	    <div style="margin-bottom: 1em;">
-	        <input type="text" name="q" value="" class="span4" placeholder="Search" autofocus>
+        <div style="font-size: 20pt; margin-bottom: 1em; text-align: center;">gthnk</div>
+        <div style="margin-bottom: 1em;">
+            <input type="text" name="q" value="" class="span4" placeholder="Search" autofocus>
         </div>
 <!--         <div style="text-align: center">
-	        <a href="{{ url_for('journal.latest_view') }}">Latest</a>
+            <a href="{{ url_for('journal.latest_view') }}">Latest</a>
         </div>
  -->    </div>
 </form>
@@ -21,6 +20,7 @@
 </style>
 
 {% endblock %}
+
 
 {% endblock %}
 

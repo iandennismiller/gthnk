@@ -18,7 +18,7 @@ class Gthnk(Diamond):
         from .views.journal_explorer import JournalExplorer
         from .views.administration import DayAdmin, PageAdmin, EntryAdmin
 
-        admin = self.super("administration", user=User, role=Role)
+        admin = self.super("administration", user=User, role=Role, index_view="")
 
         admin.add_view(DayAdmin(
             Day,

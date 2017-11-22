@@ -37,7 +37,7 @@ See the `Installation document <http://gthnk.readthedocs.io/en/latest/intro/inst
 Install Windows
 ^^^^^^^^^^^^^^^
 
-Ensure you have the `System Requirements <http://gthnk.readthedocs.io/en/latest/intro/system-requirements.html>`_ installed: Python 3.6, `virtualenv`, `virtualenvwrapper`, and `virtualenvwrapper-win`.
+Ensure you have the `System Requirements <http://gthnk.readthedocs.io/en/latest/intro/system-requirements.html>`_ installed: Python 3.6, ``virtualenv``, ``virtualenvwrapper``, and ``virtualenvwrapper-win``.
 Once the requirements are installed, launch `cmd.exe` and run the following:
 
 ::
@@ -52,8 +52,8 @@ Once the requirements are installed, launch `cmd.exe` and run the following:
 Install OS X
 ^^^^^^^^^^^^
 
-Ensure you have the `System Requirements <http://gthnk.readthedocs.io/en/latest/intro/system-requirements.html>`_ installed: Python 3.6, virtualenv, and virtualenvwrapper.
-Once the requirements are installed, launch `terminal.app` and run the following:
+Ensure you have the `System Requirements <http://gthnk.readthedocs.io/en/latest/intro/system-requirements.html>`_ installed: Python 3.6, ``virtualenv``, and ``virtualenvwrapper``.
+Once the requirements are installed, launch ``terminal.app`` and run the following:
 
 ::
 
