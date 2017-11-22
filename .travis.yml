@@ -14,3 +14,13 @@ install: make requirements develop install
 script: make coverage
 after_success:
   - coveralls
+notifications:
+  email:
+    on_success: change
+    on_failure: change
+  webhooks:
+    urls:
+      - "https://scalar.vector.im/api/neb/services/hooks/dHJhdmlzLWNpLyU0MGlhbmRlbm5pc21pbGxlciUzQW1hdHJpeC5vcmcvJTIxUWRjV0pHdndOUE5pSHNmcnZWJTNBbWF0cml4Lm9yZw"
+    on_success: change
+    on_failure: always
+    on_start: never
