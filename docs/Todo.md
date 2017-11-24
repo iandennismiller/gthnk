@@ -4,15 +4,11 @@
 
 Communication with prospective users.
 
-- [ ] powerpoint presentation
-- [ ] add blog component to www-gthnk
-- [ ] write post announcing 0.5.0
 - [ ] fill out changelog
 - [ ] write contributing document
-- [ ] documentation at docs.gthnk.com
+- [ ] powerpoint presentation
 - [ ] produce overview video
-- [ ] produce installation videos
-- [ ] produce usage video
+- [ ] release rc2
 
 ## Milestone 3
 
@@ -27,12 +23,14 @@ Quality of code and user experience.
 - [ ] enable flake8 Dxxx checks
 - [ ] testing for integration.py
 - [ ] refactor javascript
-- [ ] separate static content from template content
-- [ ] longer timeout for website authentication
+- [ ] favicon, icon for web app
 
 ## Milestone 4
 
 Integration and exchange of information.
+
+- [ ] produce installation videos
+- [ ] produce usage video
 
 ## Ready for Upcoming Release
 
@@ -56,3 +54,5 @@ Integration and exchange of information.
 - [x] rc1 to pypi
 - [x] consolidate javascript
 - [x] riot/matrix channel
+- [N] longer timeout for website authentication
+- [x] separate static content from template content

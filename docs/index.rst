@@ -26,14 +26,15 @@ User Guide
     user/text-file-format
     about/uninstallation
 
-Development
------------
+Community
+---------
 
 .. toctree::
     :maxdepth: 1
 
-    develop/release
-    develop/contributing
+    contributing/contributing
+    contributing/developer
+    contributing/release
 
 About
 -----

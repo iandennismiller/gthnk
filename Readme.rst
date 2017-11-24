@@ -1,26 +1,29 @@
-gthnk
+Gthnk
 =====
 
-`gthnk <http://gthnk.com>`_ is a personal knowledge management system.
+`Gthnk <http://www.gthnk.com>`_ is a personal knowledge management system.
 Capture your ideas using plain old text files without any cloud services.
 
-Read the `Quick Start <http://gthnk.readthedocs.io/en/latest/intro/quick-start.html>`_ to try it yourself.
-
-.. image:: https://img.shields.io/github/stars/iandennismiller/gthnk.svg?style=social&label=GitHub
-    :target: https://github.com/iandennismiller/gthnk
+Start using Gthnk now with our `Installation Wizard <http://install.gthnk.com>`_ for Windows and OS X.
 
 .. image:: https://img.shields.io/pypi/v/gthnk.svg
-    :target: https://pypi.python.org/pypi/gthnk
+    :target: http://python.gthnk.com
 
 .. image:: https://readthedocs.org/projects/gthnk/badge/?version=latest
-    :target: http://gthnk.readthedocs.io/en/latest/?badge=latest
+    :target: http://docs.gthnk.com
     :alt: Documentation Status
 
 .. image:: https://travis-ci.org/iandennismiller/gthnk.svg?branch=master
-    :target: https://travis-ci.org/iandennismiller/gthnk
+    :target: http://builds.gthnk.com
 
 .. image:: https://coveralls.io/repos/github/iandennismiller/gthnk/badge.svg?branch=master
-    :target: https://coveralls.io/github/iandennismiller/gthnk?branch=master
+    :target: http://coverage.gthnk.com
+
+.. image:: https://img.shields.io/github/license/mashape/apistatus.svg
+    :target: https://opensource.org/licenses/MIT
+
+.. image:: https://img.shields.io/github/stars/iandennismiller/gthnk.svg?style=social&label=GitHub
+    :target: https://github.com/iandennismiller/gthnk
 
 Overview
 --------
@@ -32,12 +35,12 @@ Entries are searchable using the embedded **gthnk** server, which can be accesse
 Additional media, including images and PDFs, can be attached to the journal.
 
 **gthnk** installs on Windows and OSX systems with Python 3.5+ and Python 2.7.
-See the `Installation document <http://gthnk.readthedocs.io/en/latest/intro/installation.html>`_ for more details.
+See the `Installation document <http://docs.gthnk.com/en/latest/intro/installation.html>`_ for more details.
 
 Install Windows
 ^^^^^^^^^^^^^^^
 
-Ensure you have the `System Requirements <http://gthnk.readthedocs.io/en/latest/intro/system-requirements.html>`_ installed: Python 3.6, ``virtualenv``, ``virtualenvwrapper``, and ``virtualenvwrapper-win``.
+Ensure you have the `System Requirements <http://docs.gthnk.com/en/latest/intro/system-requirements.html>`_ installed: Python 3.6, ``virtualenv``, ``virtualenvwrapper``, and ``virtualenvwrapper-win``.
 Once the requirements are installed, launch `cmd.exe` and run the following:
 
 ::
@@ -52,7 +55,7 @@ Once the requirements are installed, launch `cmd.exe` and run the following:
 Install OS X
 ^^^^^^^^^^^^
 
-Ensure you have the `System Requirements <http://gthnk.readthedocs.io/en/latest/intro/system-requirements.html>`_ installed: Python 3.6, ``virtualenv``, and ``virtualenvwrapper``.
+Ensure you have the `System Requirements <http://docs.gthnk.com/en/latest/intro/system-requirements.html>`_ installed: Python 3.6, ``virtualenv``, and ``virtualenvwrapper``.
 Once the requirements are installed, launch ``terminal.app`` and run the following:
 
 ::
@@ -65,4 +68,4 @@ Once the requirements are installed, launch ``terminal.app`` and run the followi
 Documentation
 ^^^^^^^^^^^^^
 
-http://gthnk.readthedocs.io
+http://docs.gthnk.com
