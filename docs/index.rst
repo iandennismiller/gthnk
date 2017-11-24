@@ -32,9 +32,9 @@ Community
 .. toctree::
     :maxdepth: 1
 
-    contributing/contributing
-    contributing/developer
-    contributing/release
+    community/contributing
+    community/developer
+    community/release
 
 About
 -----

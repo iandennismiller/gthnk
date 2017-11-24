@@ -4,8 +4,6 @@
 
 Communication with prospective users.
 
-- [ ] fill out changelog
-- [ ] write contributing document
 - [ ] powerpoint presentation
 - [ ] produce overview video
 - [ ] release rc2
@@ -56,3 +54,5 @@ Integration and exchange of information.
 - [x] riot/matrix channel
 - [N] longer timeout for website authentication
 - [x] separate static content from template content
+- [x] fill out changelog
+- [x] write contributing document
