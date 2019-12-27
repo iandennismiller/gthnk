@@ -8,4 +8,8 @@ warnings.simplefilter('ignore', ExtDeprecationWarning)
 
 from gthnk import create_app
 app = create_app()
-app.run(port=app.config['PORT'])
+
+if 'IP' in app.config:
+  app.run(ip=app.config['IP'], port=app.config['PORT'])
+else:
+  app.run(port=app.config['PORT'])
