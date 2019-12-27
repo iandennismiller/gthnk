@@ -10,6 +10,6 @@ from gthnk import create_app
 app = create_app()
 
 if 'IP' in app.config:
-  app.run(ip=app.config['IP'], port=app.config['PORT'])
+  app.run(host=app.config['IP'], port=app.config['PORT'])
 else:
   app.run(port=app.config['PORT'])
