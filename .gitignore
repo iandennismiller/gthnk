@@ -4,3 +4,5 @@
 /.coveralls.yml
 /.coverage
 /coverage.xml
+*.pyc
+.DS_Store
