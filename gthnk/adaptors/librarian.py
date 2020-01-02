@@ -16,7 +16,7 @@ def overwrite_if_different(filename, new_content):
         # if so, gather the md5 checksums
         with open(filename, "r", encoding='utf-8') as f:
             existing_checksum = hashlib.md5(f.read().encode('utf-8')).hexdigest()
-        generated_checksum = hashlib.md5(new_content).hexdigest()
+        generated_checksum = hashlib.md5(new_content.encode('utf-8')).hexdigest()
 
         # compare to md5 checksum of generated file.
         # if different, then overwrite.
