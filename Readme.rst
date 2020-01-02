@@ -37,32 +37,48 @@ Additional media, including images and PDFs, can be attached to the journal.
 **gthnk** installs on Windows and OSX systems with Python 3.5+ and Python 2.7.
 See the `Installation document <http://docs.gthnk.com/en/latest/intro/installation.html>`_ for more details.
 
-Install Windows
+Quick Start
+^^^^^^^^^^^
+
+::
+
+    docker run -d --rm \
+        --name gthnk \
+        -p 1620:1620 \
+        -v ~/.gthnk:/home/gthnk/storage \
+        iandennismiller/gthnk
+
+Usage
+^^^^^
+
+The default journal is ~/.gthnk/journal.txt, where you will record your notes.
+Open ``journal.txt`` with a text editor:
+
+::
+
+    code ~/.gthnk/journal.txt
+
+Journal Entries
 ^^^^^^^^^^^^^^^
 
-Ensure you have the `System Requirements <http://docs.gthnk.com/en/latest/intro/system-requirements.html>`_ installed: Python 3.6, ``virtualenv``, ``virtualenvwrapper``, and ``virtualenvwrapper-win``.
-Once the requirements are installed, launch ``cmd.exe`` and run the following:
+To get started with ``journal.txt``, insert a date marker (Ctrl-Alt-Cmd-N) to start a new journal day.
+Then, insert a time marker (Ctrl-Alt-Cmd-M) to start a journal entry.
+Now you can compose your note in ``journal.txt``.
 
-::
+You can add multiple entries per day - and even multiple days - by inserting date and time markers as you work.
 
-    mkvirtualenv gthnk
-    easy_install -U mr.bob==0.1.2
-    pip install gthnk
-    python %virtual_env%\Scripts\integration.py install
-    gthnk
+Gthnk Interface
+^^^^^^^^^^^^^^^
 
-Install OS X
-^^^^^^^^^^^^
+To interact with the Gthnk journal, connect to http://localhost:1620 and log in with the username ``user@example.com`` and the password ``secret``.
 
-Ensure you have the `System Requirements <http://docs.gthnk.com/en/latest/intro/system-requirements.html>`_ installed: Python 3.6, ``virtualenv``, and ``virtualenvwrapper``.
-Once the requirements are installed, launch ``terminal.app`` and run the following:
+Click the **refresh** icon in the Journal interface to make Gthnk import from ``journal.txt``.
+Now your journal entries are indexed and searchable - and ``journal.txt`` is a blank document waiting for your next entries.
 
-::
+Next Steps
+^^^^^^^^^^
 
-    mkvirtualenv gthnk
-    pip install gthnk
-    integration.py install
-    gthnk
+Gthnk can do much more than this - `see the Gthnk website <http://www.gthnk.com>`_ to learn about Gthnk.
 
 Documentation
 ^^^^^^^^^^^^^

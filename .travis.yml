@@ -5,9 +5,8 @@ branches:
     - master
     - develop
 python:
-  - 2.7
-  - 3.5
   - 3.6
+  - 3.7
 # command to install dependencies
 install: make requirements develop install
 # command to run tests
