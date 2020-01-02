@@ -30,8 +30,8 @@ def overwrite_if_different(filename, new_content):
 
 class Librarian(object):
     def __init__(self, app):
-        self.app.logger.info("librarian: init")
         self.app = app
+        self.app.logger.info("librarian: init")
 
     def rotate_buffers(self):
         # import any Journal Buffers that might have entries ready for importing
