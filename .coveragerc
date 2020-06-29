@@ -1,7 +1,6 @@
 [report]
 omit =
-    gthnk/tests/*
-    gthnk/migrations/*
-    gthnk/views/administration/templates/*
-    gthnk/views/journal_explorer/templates/*
-    gthnk/__meta__.py
+    src/tests/*
+    src/migrations/*
+    src/gthnk/templates/*
+    src/gthnk/__meta__.py

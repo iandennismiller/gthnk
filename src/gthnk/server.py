@@ -1,16 +1,51 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
+import time
+import json
+import flask
+import logging
+from flask_login import LoginManager, login_user, logout_user, current_user, login_required
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField, validators, DateTimeField
+
 from datetime import timedelta
-from flask_diamond import Diamond
-from flask_diamond.facets.database import db
 from flask.ext.markdown import Markdown
 from mdx_linkify.mdx_linkify import LinkifyExtension
 from mdx_journal import JournalExtension
 
-from .models import User, Role, Entry, Day, Page
+from .models import Entry, Day, Page
 
 application = None
+
+log_filename = '../var/log/server.log'
+print("logging to {}".format(log_filename))
+logging.basicConfig(
+    format='%(asctime)s %(module)-16s %(levelname)-8s %(message)s',
+    filename=log_filename,
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+logging.info("Server: Start")
+
+app = flask.Flask(__name__)
+app.secret_key = b'_5#y3L"F4Q8z\n\xec]/'
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = ".login"
+
+class LoginForm(FlaskForm):
+    access_code = StringField('Code',
+        [validators.Length(min=7, max=7)],
+        render_kw={"placeholder": "123-456"}
+    )
+    submit_button = SubmitField("Login")
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Participant(user_id)
 
 
 class Gthnk(Diamond):

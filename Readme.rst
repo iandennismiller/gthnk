@@ -45,7 +45,7 @@ Quick Start
     docker run -d --rm \
         --name gthnk \
         -p 1620:1620 \
-        -v ~/.gthnk:/home/gthnk/storage \
+        -v ~/.local/share/gthnk:/home/gthnk/.local/share/gthnk \
         iandennismiller/gthnk
 
 Usage
@@ -74,6 +74,13 @@ To interact with the Gthnk journal, connect to http://localhost:1620 and log in 
 
 Click the **refresh** icon in the Journal interface to make Gthnk import from ``journal.txt``.
 Now your journal entries are indexed and searchable - and ``journal.txt`` is a blank document waiting for your next entries.
+
+Integration
+^^^^^^^^^^^
+
+- VS Code: https://github.com/iandennismiller/vscode-gthnk
+- Sublime Text: https://github.com/iandennismiller/gthnk/tree/master/src/sublime-text-plugin
+- Chrome App: https://github.com/iandennismiller/gthnk/tree/master/src/chrome-app
 
 Next Steps
 ^^^^^^^^^^
