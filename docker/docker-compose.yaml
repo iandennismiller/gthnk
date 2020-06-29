@@ -1,0 +1,35 @@
+# Gthnk
+# docker-compose.yaml
+# inspired by https://stackoverflow.com/a/48611098
+version: "3.3"
+services:
+  gthnk-server:
+    image: iandennismiller/gthnk
+    container_name: gthnk-server
+    volumes:
+      - ~/.gthnk:/home/gthnk/storage
+    networks:
+      - gthnk-net
+    ports:
+      - "1620:1620"
+    command: >
+      sh -c "
+      if [ ! -f /home/gthnk/storage/gthnk.conf ]; then
+      sudo -i -u gthnk gthnk-firstrun.sh /home/gthnk/storage/gthnk.conf;
+      fi;
+      sudo -i -u gthnk gthnk-server.sh"
+
+  gthnk-rotate:
+    image: docker:edge
+    container_name: gthnk-rotate
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - gthnk-net
+    command: >
+      sh -c "
+      echo '1 0 * * * docker exec gthnk-server sudo -i -u gthnk gthnk-rotate.sh' > /etc/crontabs/root
+      && crond -f"
+
+networks:
+  gthnk-net:
