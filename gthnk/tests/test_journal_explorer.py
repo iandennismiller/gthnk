@@ -159,13 +159,13 @@ class ViewTestCase(DiamondTestCase):
             rv = c.get('/admin/journal/thumbnail/2012-10-03-0.jpg', follow_redirects=True)
             self.assertEqual(len(rv.data), 819, "size match on small thumbnail")
             rv = c.get('/admin/journal/thumbnail/2012-10-03-1.jpg', follow_redirects=True)
-            self.assertEqual(len(rv.data), 1646, "size match on big thumbnail")
+            self.assertEqual(len(rv.data), 1640, "size match on big thumbnail")
 
             # previews
             rv = c.get('/admin/journal/preview/2012-10-03-0.jpg', follow_redirects=True)
             self.assertEqual(len(rv.data), 819, "size match on small preview")
             rv = c.get('/admin/journal/preview/2012-10-03-1.jpg', follow_redirects=True)
-            self.assertEqual(len(rv.data), 8729, "size match on big preview")
+            self.assertEqual(len(rv.data), 8611, "size match on big preview")
 
             # attachments
             rv = c.get('/admin/journal/attachment/2012-10-03-0.jpg', follow_redirects=True)
