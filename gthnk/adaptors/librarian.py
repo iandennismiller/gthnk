@@ -14,16 +14,16 @@ def overwrite_if_different(filename, new_content):
     # see whether the file exists
     if os.path.isfile(filename):
         # if so, gather the md5 checksums
-        with open(filename, "r", encoding='utf-8') as f:
-            existing_checksum = hashlib.md5(f.read().encode('utf-8')).hexdigest()
-        generated_checksum = hashlib.md5(new_content.encode('utf-8')).hexdigest()
+        with open(filename, "rb") as f:
+            existing_checksum = hashlib.md5(f.read()).hexdigest()
+        generated_checksum = hashlib.md5(new_content).hexdigest()
 
         # compare to md5 checksum of generated file.
         # if different, then overwrite.
         if generated_checksum == existing_checksum:
             return False
 
-    with open(filename, "wb", encoding='utf-8') as f:
+    with open(filename, "wb") as f:
         f.write(new_content)
     return True
 
