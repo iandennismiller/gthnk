@@ -15,16 +15,8 @@ def overwrite_if_different(filename, new_content):
     if os.path.isfile(filename):
         # if so, gather the md5 checksums
         with open(filename, "r", encoding='utf-8') as f:
-            tmp_read = f.read()
-            if type(tmp_read) == str:
-                existing_checksum = hashlib.md5(tmp_read.encode('utf-8')).hexdigest()
-            else:
-                existing_checksum = hashlib.md5(tmp_read).hexdigest()
-
-        if type(new_content) == str:
-            generated_checksum = hashlib.md5(new_content.encode('utf-8')).hexdigest()
-        else:
-            generated_checksum = hashlib.md5(new_content).hexdigest()
+            existing_checksum = hashlib.md5(f.read().encode('utf-8')).hexdigest()
+        generated_checksum = hashlib.md5(new_content.encode('utf-8')).hexdigest()
 
         # compare to md5 checksum of generated file.
         # if different, then overwrite.
@@ -32,11 +24,26 @@ def overwrite_if_different(filename, new_content):
             return False
 
     with open(filename, "wb") as f:
-        if type(new_content) == str:
-            f.write(new_content.encode('utf-8'))
-        else:
-            f.write(new_content)
+        f.write(new_content.encode('utf-8'))
     return True
+
+def overwrite_if_different_bytes(filename, new_content):
+    # see whether the file exists
+    if os.path.isfile(filename):
+        # if so, gather the md5 checksums
+        with open(filename, "rb") as f:
+            existing_checksum = hashlib.md5(f.read()).hexdigest()
+        generated_checksum = hashlib.md5(new_content).hexdigest()
+
+        # compare to md5 checksum of generated file.
+        # if different, then overwrite.
+        if generated_checksum == existing_checksum:
+            return False
+
+    with open(filename, "wb") as f:
+        f.write(new_content)
+    return True
+
 
 
 class Librarian(object):
@@ -107,17 +114,17 @@ class Librarian(object):
             # write raw file
             output_filename = os.path.join(app.config["EXPORT_PATH"], "attachment",
                 page.filename())
-            if not overwrite_if_different(output_filename, page.binary):
+            if not overwrite_if_different_bytes(output_filename, page.binary):
                 app.logger.debug("skipping; generated file identical to existing export")
             else:
                 # write thumbnail
                 output_filename = os.path.join(app.config["EXPORT_PATH"], "thumbnail",
                     page.filename(extension="jpg"))
-                overwrite_if_different(output_filename, page.thumbnail)
+                overwrite_if_different_bytes(output_filename, page.thumbnail)
 
                 # write preview
                 output_filename = os.path.join(app.config["EXPORT_PATH"], "preview",
                     page.filename(extension="jpg"))
-                overwrite_if_different(output_filename, page.preview)
+                overwrite_if_different_bytes(output_filename, page.preview)
 
         app.logger.info("librarian: finish export")
