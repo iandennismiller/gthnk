@@ -105,7 +105,8 @@ lint:
 	pylint gthnk
 
 release:
-	python setup.py sdist upload
+	python setup.py sdist bdist_wheel
+	twine upload --config-file ~/.pypirc dist/*
 
 # create a homebrew install script
 homebrew:
