@@ -14,20 +14,16 @@ endif
 	pip install -r requirements.txt
 
 develop:
-	pip install -r .requirements-dev.txt
+	pip install -r .dev/requirements.txt
 
 clean:
-	rm -rf build dist *.egg-info
+	rm -rf build dist *.egg-info src/gthnk/*.egg-info
 	find . -name '*.pyc' -delete
 	find . -name __pycache__ -delete
 	rm -f .coverage coverage.xml
 
 server:
-ifeq ($(OS),Windows_NT)
-	set SETTINGS=%cd%\etc\conf\dev-win.conf & python bin\manage.py runserver
-else
-	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py runserver
-endif
+	cd src/gthnk && FLASK_ENV=development FLASK_APP=server.py flask run
 
 shell:
 	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py shell

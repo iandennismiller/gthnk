@@ -1,10 +1,9 @@
-/build
-/dist
-/*.egg-info
-/.coveralls.yml
+/build/
+/dist/
+*.egg-info/
 /.coverage
-/coverage.xml
+coverage.xml
 *.pyc
 .DS_Store
-__pycache__
-/.vscode
+__pycache__/
+/.vscode/

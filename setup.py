@@ -27,7 +27,8 @@ setup(
     version=grep('__version__'),
     name='gthnk',
     description="gthnk is a personal knowledge management system",
-    packages=find_packages('src/gthnk'),
+    packages=find_packages('src'),
+    package_dir={'': 'src'},
     scripts=[
         "bin/runserver.py",
         "bin/manage.py",

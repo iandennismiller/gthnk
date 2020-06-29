@@ -10,13 +10,11 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, validators, DateTimeField
 
 from datetime import timedelta
-from flask.ext.markdown import Markdown
+from flaskext.markdown import Markdown
 from mdx_linkify.mdx_linkify import LinkifyExtension
 from mdx_journal import JournalExtension
 
-from .models import Entry, Day, Page
-
-application = None
+from .models import Entry, Day, Page, User
 
 log_filename = '../var/log/server.log'
 print("logging to {}".format(log_filename))
@@ -35,6 +33,8 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = ".login"
 
+Markdown(app)
+
 class LoginForm(FlaskForm):
     access_code = StringField('Code',
         [validators.Length(min=7, max=7)],
@@ -45,75 +45,55 @@ class LoginForm(FlaskForm):
 
 @login_manager.user_loader
 def load_user(user_id):
-    return Participant(user_id)
+    return User(user_id)
 
 
-class Gthnk(Diamond):
-    def init_administration(self):
-        from .views.journal_explorer import JournalExplorer
-        from .views.administration import DayAdmin, PageAdmin, EntryAdmin
+@app.route('/task/<path:path>/', methods = ['GET'])
+@login_required
+def task_index(path):
+    available_task_list = [
+        'welcome',
+        'calibration',
+        'exposure',
+        'sound-to-spelling',
+        'spelling-to-sound',
+        'deadline-naming',
+        'finish-final'
+    ]
 
-        admin = self.super("administration", user=User, role=Role, index_view="")
-
-        admin.add_view(DayAdmin(
-            Day,
-            db.session,
-            name="Days",
-            category="Admin"))
-
-        admin.add_view(PageAdmin(
-            Page,
-            db.session,
-            name="Pages",
-            category="Admin"))
-
-        admin.add_view(EntryAdmin(
-            Entry,
-            db.session,
-            name="Entries",
-            category="Admin"))
-
-        admin.add_view(JournalExplorer(name="Journal", endpoint="journal"))
-
-    def init_blueprints(self):
-        self.super("blueprints")
-
-        from .views.diamond import diamond_blueprint
-        self.app.register_blueprint(diamond_blueprint)
-
-        from .views.journal_explorer import journal_blueprint
-        self.app.register_blueprint(journal_blueprint)
-
-        # administration blueprint is custom to this application
-        from .views.administration import adminbaseview
-        self.app.register_blueprint(adminbaseview)
+    if path in available_task_list:
+        logging.info("{participant} Task '{task}': starting".format(participant=current_user, task=path))
+        return flask.render_template('tasks/{}.html.j2'.format(path))
+    else:
+        logging.warn("task not found: {}".format(path))
+        return flask.abort(404)
 
 
-def create_app():
-    global application
-    if not application:
-        application = Gthnk()
-        application.facet("configuration")
-        application.facet("logs")
-        application.facet("database")
-        application.facet("marshalling")
-        application.facet("blueprints")
-        application.facet("accounts")
-        application.facet("signals")
-        application.facet("forms")
-        application.facet("error_handlers")
-        application.facet("request_handlers")
-        application.facet("administration")
-        # application.facet("rest", api_map=api_map)
-        # application.facet("webassets")
-        # application.facet("email")
-        # application.facet("debugger")
-        # application.facet("task_queue")
 
-        application.app.permanent_session_lifetime = timedelta(minutes=30)
-        application.app.logger.info("starting gthnk server")
-        application.app.md = Markdown(application.app,
-            extensions=[LinkifyExtension(), JournalExtension()])
+# admin.add_view(DayAdmin(
+#     Day,
+#     db.session,
+#     name="Days",
+#     category="Admin"))
 
-    # print(application.app.url_map)
-    return(application.app)
+# admin.add_view(PageAdmin(
+#     Page,
+#     db.session,
+#     name="Pages",
+#     category="Admin"))
+
+# admin.add_view(EntryAdmin(
+#     Entry,
+#     db.session,
+#     name="Entries",
+#     category="Admin"))
+
+# admin.add_view(JournalExplorer(name="Journal", endpoint="journal"))
+
+
+###
+# Index
+
+@app.route('/')
+def index():
+    return flask.render_template('index.html.j2')

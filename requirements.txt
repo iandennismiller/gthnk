@@ -7,5 +7,6 @@ flask-login
 Flask-WTF
 Flask-Cache
 Flask-Script
+flask-markdown
 mdx-linkify==1.0
 mdx-journal>=0.1.4
