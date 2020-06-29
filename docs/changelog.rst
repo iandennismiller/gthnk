@@ -1,10 +1,24 @@
 Changelog
 =========
 
+0.6.1
+-----
+
+2020-06-28
+
+- Fix bug with journal export of attachments
+
+0.6.0
+-----
+
+2020-01-02
+
+- Update for Python 3
+
 0.5.0
 -----
 
-2017-11-XX
+2017-11-29
 
 - integration subsystem for Windows and OS X
 - python 3 compatibility

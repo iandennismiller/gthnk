@@ -23,7 +23,7 @@ def overwrite_if_different(filename, new_content):
         if generated_checksum == existing_checksum:
             return False
 
-    with open(filename, "w", encoding='utf-8') as f:
+    with open(filename, "wb", encoding='utf-8') as f:
         f.write(new_content)
     return True
 
