@@ -2,7 +2,9 @@ six
 puremagic
 PyPDF2
 Pillow
-flask-diamond==0.5.2rc3
-Flask-Cache==0.13.1
+flask
+flask-login
+Flask-WTF
+Flask-Cache
 mdx-linkify==1.0
 mdx-journal>=0.1.4

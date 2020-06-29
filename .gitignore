@@ -6,3 +6,4 @@
 /coverage.xml
 *.pyc
 .DS_Store
+__pycache__
