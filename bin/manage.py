@@ -16,7 +16,10 @@ from sqlalchemy.exc import OperationalError
 sys.path.insert(0, './src')
 from gthnk import db, create_app
 from gthnk.models.user import User
-from gthnk.adaptors.journal_buffer import JournalBuffer
+from gthnk.models.day import Day
+from gthnk.models.entry import Entry
+from gthnk.models.page import Page
+from gthnk.adaptors.journal_buffer import TextFileJournalBuffer
 from gthnk.adaptors.librarian import Librarian
 
 
@@ -79,10 +82,10 @@ def init_db():
     alembic.command.stamp(cfg, "head")
 
 
-@manager.command
+@manager.option('-d', '--directory', help='directory', required=True)
 def import_archive(directory):
     with app.app_context():
-        journal_buffer = JournalBuffer.TextFileJournalBuffer()
+        journal_buffer = TextFileJournalBuffer()
         match_str = os.path.join(directory, "*.txt")
         journal_buffer.process_list(glob.glob(match_str))
         journal_buffer.save_entries()

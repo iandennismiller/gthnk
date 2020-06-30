@@ -1,0 +1,15 @@
+{% extends 'shared/base.html.j2' %}
+
+{% block content %}
+
+    {% for row in data[:20] %}
+
+        <a href="{{ url_for('journal.day_view', date=row.day.date) }}#{{ row.hhmm() }}">
+            {{row.day.date}} <strong>{{row.hhmm()}}</strong>
+        </a>
+
+        {% filter markdown %}{{row.content}}{% endfilter %}
+
+    {% endfor %}
+
+{% endblock %}

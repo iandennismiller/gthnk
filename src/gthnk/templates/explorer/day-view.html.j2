@@ -1,5 +1,8 @@
 {% extends 'shared/base.html.j2' %}
 
+{% set current_page = 'day-view' %}
+
+
 {# {% block main_menu %}
 
 <div id="search_box" style="display: none; width: 100px; position: absolute; z-index: 99;">
@@ -9,16 +12,6 @@
 </div>
 
 #}
-
-{% block extra_nav %}
-
-{{ super() }}
-
-<li class="nav-item">
-    <a class="nav-link" href="{{ url_for('.latest_view') }}"><i class="far fa-clock"></i> EXTRA</a>
-</li>
-
-{% endblock %}
 
 {# <ul class="nav nav-tabs">
     <!--<li>
@@ -72,14 +65,16 @@
 <a id="entries_anchor" name="entries_anchor"></a>
 
 <div id="entries">
-{% filter markdown %}
+{# {% filter markdown %} #}
 {{ day_str|safe }}
-{% endfilter %}
+{# {% endfilter %} #}
+
     <div id="entries_control" class="controllable">
         <div class="viewable">
             &nbsp;
         </div>
     </div>
+
 </div>
 
 <div id="pages_inline">

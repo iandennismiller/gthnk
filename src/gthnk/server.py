@@ -7,17 +7,18 @@ import json
 import flask
 import logging
 import datetime
-from flask_sqlalchemy import SQLAlchemy, desc
+from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, validators, DateTimeField
 
+from sqlalchemy import desc
+
 from datetime import timedelta
-from flaskext.markdown import Markdown
 from mdx_linkify.mdx_linkify import LinkifyExtension
 from mdx_journal import JournalExtension
 
-from . import db, login_manager, create_app
+from . import db, markdown, login_manager, create_app
 
 from .models.day import Day, latest
 from .models.entry import Entry
@@ -67,12 +68,26 @@ def nearest_day_view(date):
 
 @app.route("/day/<date>.html")
 def day_view(date):
-    day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+
+    day = Day.find(date=date)
     if day:
-        day_str = re.sub(r'(\d\d\d\d)', r'<a name="\g<1>"></a>\n\g<1>', day.render())
-        return self.render('journal_explorer/day_view.html', day=day, day_str=day_str)
+        day_md = markdown(day.render())
+
+        # print(day_md)
+        # print(type(day_md))
+
+        # regex = re.compile(r'^<p><h4>(\d\d\d\d)</h4></p>$', re.MULTILINE)
+        # day_md = Markup(regex.sub(r'<a name="\g<1>"></a>\n\n\g<1>', day_md))
+
+        # print(day_md)
+
+        return flask.render_template(
+            'explorer/day-view.html.j2',
+            day=day, 
+            day_str=day_md
+        )
     else:
-        return flask.redirect(flask.url_for('admin.index'))
+        return flask.redirect(flask.url_for('.index'))
 
 @app.route("/text/<date>.txt")
 def text_view(date):
@@ -94,8 +109,7 @@ def markdown_view(date):
 def latest_view():
     latest_day = latest()
     if latest_day:
-        return flask.render_template('explorer/day-view.html.j2',
-            day=latest_day, day_str=latest_day.render())
+        return flask.redirect(flask.url_for('day_view', date=latest_day.date))
     else:
         return flask.render_template('explorer/day-view.html.j2',
             day=None, day_str="No entries yet")
@@ -103,7 +117,7 @@ def latest_view():
 @app.route("/search")
 def search_view():
     if not flask.request.args:
-        return flask.render_template("explorer/search-view.html")
+        return flask.redirect(flask.url_for("index"))
     else:
         query_str = flask.request.args['q']
         query = Entry.query.filter(
@@ -114,7 +128,7 @@ def search_view():
             results[idx].content = re.sub(query_str, "**{}**".format(
                 query_str.upper()), results[idx].content, flags=re.I)
 
-        return flask.render_template('explorer/results-list.html',
+        return flask.render_template('explorer/results-list.html.j2',
             data=results,
             count=query.count()
             )

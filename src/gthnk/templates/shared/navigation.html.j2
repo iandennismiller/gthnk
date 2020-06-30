@@ -1,3 +1,5 @@
+{% set current_page = current_page|default('index') %}
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="{{ url_for('.index') }}">Gthnk</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -13,25 +15,46 @@
 
             {% if current_user.is_authenticated %}
 
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('.latest_view') }}"><i class="far fa-clock"></i> Latest</a>
-            </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('.latest_view') }}"><i class="far fa-clock"></i></a>
+                </li>
 
-            {% block extra_nav %}{% endblock %}
+                {% if current_page == 'day-view' %}
+                    <li class="nav-item">
+                    {% if day and day.yesterday() %}
+                        <a class="nav-link" href="{{ url_for('.day_view', date=day.yesterday().date) }}" title="previous"><i class="fas fa-chevron-left"></i></a>
+                    {% else %}
+                        <a class="nav-link" href="javascript:void(0)" title="no past days"><i class="fas fa-stop"></i></a>
+                    {% endif %}
+                    </li>
+
+
+                    <li class="nav-item">
+                    {% if day and day.tomorrow() %}
+                        <a class="nav-link" href="{{ url_for('.day_view', date=day.tomorrow().date) }}" title="previous"><i class="fas fa-chevron-right"></i></a>
+                    {% else %}
+                        <a class="nav-link" href="javascript:void(0)" title="no further days"><i class="fas fa-stop"></i></a>
+                    {% endif %}
+                    </li>
+
+                {% endif %}
 
             {% endif %}
         </ul>
 
         {% if current_user.is_authenticated %}
         <ul class="navbar-nav ml-md-auto">
+            <li>
+                <form class="form-inline my-2 my-lg-0" method="GET" action="/search">
+                    <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </li>
+
             <li class="nav-item">
                 <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </li>
 
-            {# <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form> #}
         </ul>
         {% endif %}
 

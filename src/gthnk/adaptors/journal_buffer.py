@@ -6,7 +6,7 @@ import io
 import datetime
 import sys
 from collections import defaultdict
-from gthnk import models
+from ..models.entry import Entry
 
 
 def split_filename_list(filename_str):
@@ -93,7 +93,7 @@ class JournalBuffer(object):
                     flask.current_app.logger.warn("Cannot determine day for '{}' '{}'".format(day, timestamp))
                     continue
 
-                models.Entry.create(
+                Entry.create(
                     timestamp=time_obj,
                     content=self.entries[day][timestamp]
                 )

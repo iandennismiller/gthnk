@@ -8,6 +8,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flaskext.markdown import Markdown
 
+from mdx_linkify.mdx_linkify import LinkifyExtension
+from mdx_journal import JournalExtension
 
 app = flask.Flask(__name__)
 app.secret_key = b'_5#y3L"F4Q8z\n\xec]/'
@@ -28,7 +30,11 @@ db = SQLAlchemy()
 
 login_manager = LoginManager()
 
-Markdown(app)
+# Markdown(app)
+markdown = Markdown(app, extensions=[
+    LinkifyExtension(),
+    JournalExtension()
+])
 
 def create_app():
     # this refers locally to the instance of app, above

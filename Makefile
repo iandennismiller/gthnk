@@ -37,6 +37,9 @@ shell:
 test: clean
 	SETTINGS=$$PWD/.dev/conf/testing.conf nosetests $(MOD_NAME) -c .dev/nose/test.cfg
 
+test-import:
+	SETTINGS=$$PWD/.dev/conf/dev.conf bin/manage.py import_archive -d src/tests/data/
+
 single:
 	SETTINGS=$$PWD/.dev/conf/testing.conf nosetests $(MOD_NAME) -c .dev/nose/test-single.cfg
 
