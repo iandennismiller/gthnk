@@ -4,97 +4,30 @@
 
 {% block content %}
 
-<div id="main_content">
+<div id="backdrop" class="container">
+  <div class="row">
+    <div class="col-2"></div>
 
-  <div id="entries_holder">
-    <div id="entries_scroller">
+    <div class="col-8">
 
       <a id="entries_anchor" name="entries_anchor"></a>
 
       <div id="entries">
+        <p id="day-of-week">{{day_of_week}}</p>
+
         {{ day_str|safe }}
       </div>
 
-      <div id="pages_inline">
-
-        {% for page in day.pages %}
-
-          <div class="page_attachment" id="page{{ page.sequence }}">
-            <a id="{{ page.sequence }}" name="{{ page.sequence }}"></a>
-
-            <div class="image_container">
-              <img src="{{ url_for('.preview', date=day.date, sequence=page.sequence) }}">
-
-              <div class="controllable">
-                <div class="viewable">
-                  <a anchorid="{{page.sequence}}" href="{{ url_for('.attachment', date=day.date, sequence=page.sequence, extension=page.extension) }}" title="download"><i class="icon-download-alt"></i></a>
-                </div>
-
-                <div class="editable">
-                  <a href="{{ url_for('.move_page_up', date=day.date, sequence=page.sequence) }}" title="move up"><i class="icon-arrow-up"></i></a>
-                  <a href="{{ url_for('.move_page_down', date=day.date, sequence=page.sequence) }}" title="move down"><i class="icon-arrow-down"></i></a>
-
-                  <span class="delete_widget">
-                    <a class="delete_button" href="javascript:void(0);" title="delete"><i class="icon-trash"></i></a>
-                    <span class="confirm_widget">
-                      <a href="{{ url_for('.delete_page', date=day.date, sequence=page.sequence) }}" title="yes delete"><i class="icon-ok"></i></a>
-                      <a class="cancel_button" href="javascript:void(0);" title="do not delete"><i class="icon-remove"></i></a>
-                    </span>
-                  </span>
-                </div>
-              </div>
-
-          </div>
-        {% endfor %}
-      </div>
     </div>
+
+    <div class="col-2"></div>
+
   </div>
-
-  <div id="page_list">
-    <div id="pages_scroller">
-    <div id="page_wrapper">
-
-    <a class="scroll top_of_page" id="journal_scroll" href="#entries_anchor" >Journal</a>
-
-    <form id="upload" action="{{ url_for('.upload_file', date=day.date) }}" method=post enctype=multipart/form-data>
-
-        <fieldset>
-
-        <input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="300000" />
-
-        <div>
-            <input type="file" id="fileselect" name="fileselect[]" multiple="multiple" />
-            <div id="filedrag">attachments</div>
-        </div>
-
-        <div id="submitbutton">
-            <button type="submit">Upload Files</button>
-        </div>
-
-        </fieldset>
-
-    </form>
-
-    <ul>
-        {% for page in day.pages %}
-        <li>
-            <a class="scroll" href="#{{ page.sequence }}">
-                <img src="{{ url_for('.thumbnail', date=day.date, sequence=page.sequence) }}">
-            </a>
-        </li>
-        {% endfor %}
-    </ul>
-    </div>
-
-</div>
-
-</div>
-
 </div>
 
 <script>
   var today = "{{ day.date }}";
-  init_filedrag();
+  // init_filedrag();
 </script>
 <script src="/static/js/gthnk-explorer.js"></script>
 

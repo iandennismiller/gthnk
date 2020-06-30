@@ -7,6 +7,7 @@ import json
 import flask
 import logging
 import datetime
+
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from flask_wtf import FlaskForm
@@ -82,10 +83,11 @@ def search_view():
 
         for idx in range(0, len(results)):
             results[idx].content = re.sub(query_str, "**{}**".format(
-                query_str.upper()), results[idx].content, flags=re.I)
+                query_str), results[idx].content, flags=re.I)
 
         return flask.render_template('explorer/results-list.html.j2',
             data=results,
+            query_str=query_str,
             count=query.count()
             )
 
@@ -97,20 +99,18 @@ def day_view(date):
 
     day = Day.find(date=date)
     if day:
-        day_md = markdown(day.render())
+        regex = re.compile(r'^<p><h4>(\d\d\d\d)</h4></p>$', re.MULTILINE)
+        replacement = r'\n<a class="anchor" name="\g<1>"></a>\n<p><h4>\g<1></h4></p>\n'
+        day_md = flask.Markup(regex.sub(replacement, str(markdown(day.render()))))
 
-        # print(day_md)
-        # print(type(day_md))
-
-        # regex = re.compile(r'^<p><h4>(\d\d\d\d)</h4></p>$', re.MULTILINE)
-        # day_md = Markup(regex.sub(r'<a name="\g<1>"></a>\n\n\g<1>', day_md))
-
-        # print(day_md)
+        days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        day_of_week = days[datetime.datetime.strptime(date, "%Y-%m-%d").weekday()]
 
         return flask.render_template(
             'explorer/day-view.html.j2',
             day=day, 
-            day_str=day_md
+            day_str=day_md,
+            day_of_week=day_of_week,
         )
     else:
         return flask.redirect(flask.url_for('.index'))

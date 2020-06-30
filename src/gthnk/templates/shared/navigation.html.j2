@@ -1,6 +1,6 @@
 {% set current_page = current_page|default('index') %}
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
     <a class="navbar-brand" href="{{ url_for('.index') }}">Gthnk</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,9 +40,9 @@
                         <a class="nav-link" id="calendar_button" href="javascript:void(0)" title="go to day"><i class="far fa-calendar-alt"></i></a>
                     </li>
 
-                    <li class="nav-item">
+                    {# <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('.download', date=day.date) }}" title="download"><i class="fas fa-file-download"></i></a>
-                    </li>
+                    </li> #}
                 {% endif %}
 
             {% endif %}
@@ -51,15 +51,19 @@
         {% if current_user.is_authenticated %}
         <ul class="navbar-nav ml-md-auto">
 
+            {% if current_page != 'index' %}
+            <form class="nav-item form-inline my-2 my-sm-0" method="GET" action="/search">
+                <div class="input-group">
+                    <input class="form-control" type="search" name="q" placeholder="Search" aria-label="Search">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </form>
+            {% endif %}
+
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('.refresh') }}" title="refresh"><i class="fas fa-sync"></i></a>
-            </li>
-
-            <li>
-                <form class="form-inline my-2 my-lg-0" method="GET" action="/search">
-                    <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit">Search</button>
-                </form>
             </li>
 
             <li class="nav-item">

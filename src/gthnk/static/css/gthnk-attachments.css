@@ -1,0 +1,89 @@
+
+.confirm_widget {
+    display: none;
+}
+
+.controllable a {
+    background-color: white;
+    opacity: 0.75;
+    padding: 0.2em;
+}
+
+.controllable {
+    text-align: right;
+    margin-top: -4em;
+    margin-right: 1em;
+    height: 3em;
+}
+
+.visible {
+    display: block;
+}
+
+.off {
+    display: none;
+}
+
+#edit_button.active, #calendar_button.active{
+    background-color: #e5e5e5;
+}
+
+.page_attachment img {
+    background: white;
+    margin: 2em 0em;
+    box-shadow: 1px 1px 5px #999;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#pages_scroller {
+    overflow: scroll;
+}
+
+#page_list {
+    display: table-cell;
+    width: 13em;
+    border-left: 1px solid rgb(200, 200, 200);
+    padding-left: 0.5em;
+    padding-top: 1em;
+    background: rgb(250, 250, 250);
+    vertical-align: top;
+}
+
+#page_list li {
+    list-style-type: none;
+    margin-left: -20px;
+}
+
+#page_list img, #journal_scroll {
+    margin: 0.5em;
+    box-shadow: 1px 1px 3px #999;
+    /*border: 1px solid gray;*/
+}
+
+#filedrag
+{
+    display: none;
+    font-weight: bold;
+    text-align: center;
+    /*padding: 1em 0;
+    margin: 1em 0;
+    color: #555;*/
+    border: 2px dashed #555;
+    border-radius: 7px;
+    cursor: default;
+    height: 3em;
+    width: 12em;
+    padding-top: 1em;
+    background: white;
+}
+
+#filedrag.hover
+{
+    color: #f00;
+    border-color: #f00;
+    border-style: solid;
+    box-shadow: inset 0 3px 4px #888;
+}
+

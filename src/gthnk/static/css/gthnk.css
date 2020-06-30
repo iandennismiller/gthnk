@@ -1,181 +1,44 @@
+/* @import url(/static/css/gthnk-attachments.css); */
+
+body#day-view {
+    background: rgb(230, 230, 230);
+}
+
+.navbar {
+    padding: .1rem 1rem !important;
+}
+
+#backdrop {
+    padding-top: 2em;
+    padding-bottom: 2em;
+}
+
 .image_container img {
     max-height: 600px;
 }
 
-.datepicker {
-    position: absolute;
-    z-index: 99;
-    background: white;
-    top: 3em;
-    left: 33em;
-    border: 1px solid lightgray;
-}
-
-.confirm_widget {
-    display: none;
-}
-
-.controllable a {
-    background-color: white;
-    opacity: 0.75;
-    padding: 0.2em;
-}
-
-#entries_control {
-    margin-top: -1em !important;
-    height: 2em !important;
-}
-
-.controllable {
-    text-align: right;
-    margin-top: -4em;
-    margin-right: 1em;
-    height: 3em;
-}
-
-.visible {
-    display: block;
-}
-
-/*#entries:hover .controllable, .image_container:hover .controllable {
-    display: block;
-}*/
-
-.off {
-    display: none;
-}
-
-#edit_button.active, #calendar_button.active{
-    background-color: #e5e5e5;
-}
-
-#journal_scroll {
-    display: block;
-    padding-top: 30px;
-    text-align: center;
-    width: 150px;
-    height: 50px;
-    background: white;
-    margin-bottom: 1.5em !important;
-}
-
 .image_container {
     text-align: center;
-    // display: inline-grid;
     margin: 0 auto;
-}
-
-.page_attachment img {
-    background: white;
-    margin: 2em 0em;
-    box-shadow: 1px 1px 5px #999;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-#pages_scroller {
-    /* height: 644px; */
-    overflow: scroll;
-}
-
-#entries_scroller {
-    padding-top: 2em;
-    padding-bottom: 2em;
-    /* height: 602px; */
-    overflow: scroll;
-}
-
-#main_content {
-    display: table;
-    width: 100%;
-}
-
-#entries_holder {
-    display: table-cell;
-    background-color: rgb(230, 230, 230);
-    width: auto;
-    position: relative;
-}
-
-#page_list {
-    display: table-cell;
-    width: 13em;
-    border-left: 1px solid rgb(200, 200, 200);
-    padding-left: 0.5em;
-    padding-top: 1em;
-    background: rgb(250, 250, 250);
-    vertical-align: top;
-}
-
-#page_list li {
-    list-style-type: none;
-    margin-left: -20px;
-}
-
-#page_list img, #journal_scroll {
-    margin: 0.5em;
-    box-shadow: 1px 1px 3px #999;
-    /*border: 1px solid gray;*/
 }
 
 #entries {
     background: white;
-    /*border: 1px solid gray;*/
     box-shadow: 1px 1px 5px #999;
     padding: 1em;
-    padding-bottom: 1em;
-    max-width: 50em;
-    margin: 0 auto;
-    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+    font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
 }
 
-#filedrag
-{
-    display: none;
-    font-weight: bold;
-    text-align: center;
-    /*padding: 1em 0;
-    margin: 1em 0;
-    color: #555;*/
-    border: 2px dashed #555;
-    border-radius: 7px;
-    cursor: default;
-    height: 3em;
-    width: 12em;
-    padding-top: 1em;
-    background: white;
+a.anchor {
+    display: block;
+    position: relative;
+    top: -60px;
+    visibility: hidden;
 }
 
-#filedrag.hover
-{
-    color: #f00;
-    border-color: #f00;
-    border-style: solid;
-    box-shadow: inset 0 3px 4px #888;
-}
-
-.nav {
-    border-right: 2px solid rgb(230, 230, 230);
-}
-
-/*
-    Overrides
-*/
-
-.navbar {
-    margin-bottom: 0 !important;
-}
-
-.nav-tabs {
-    border-bottom: none !important;
-}
-
-body {
-    padding-top: 0 !important;
-}
-
-.container {
-    width: 100% !important;
+#day-of-week {
+    text-align: right;
+    font-size: small;
+    font-style: italic;
 }
 

@@ -30,7 +30,6 @@ db = SQLAlchemy()
 
 login_manager = LoginManager()
 
-# Markdown(app)
 markdown = Markdown(app, extensions=[
     LinkifyExtension(),
     JournalExtension()
