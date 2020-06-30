@@ -44,12 +44,6 @@ class LoginForm(FlaskForm):
     submit_button = SubmitField("Login")
 
 
-@app.route("/refresh")
-def refresh(self):
-    librarian = Librarian(flask.current_app)
-    librarian.rotate_buffers()
-    return flask.redirect(flask.url_for('.latest_view'))
-
 @app.route("/nearest/<date>")
 def nearest_day_view(date):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -63,47 +57,9 @@ def nearest_day_view(date):
             day = Day.query.order_by(Day.date.desc()).filter(Day.date < date).first()
             if day:
                 return flask.redirect(flask.url_for('.day_view', date=day.date))
+
     # if no dates are found, redirect to home page
-    return flask.redirect(flask.url_for('admin.index'))
-
-@app.route("/day/<date>.html")
-def day_view(date):
-
-    day = Day.find(date=date)
-    if day:
-        day_md = markdown(day.render())
-
-        # print(day_md)
-        # print(type(day_md))
-
-        # regex = re.compile(r'^<p><h4>(\d\d\d\d)</h4></p>$', re.MULTILINE)
-        # day_md = Markup(regex.sub(r'<a name="\g<1>"></a>\n\n\g<1>', day_md))
-
-        # print(day_md)
-
-        return flask.render_template(
-            'explorer/day-view.html.j2',
-            day=day, 
-            day_str=day_md
-        )
-    else:
-        return flask.redirect(flask.url_for('.index'))
-
-@app.route("/text/<date>.txt")
-def text_view(date):
-    day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
-    if day:
-        return day.render()
-    else:
-        return flask.redirect(flask.url_for('admin.index'))
-
-@app.route("/markdown/<date>.md")
-def markdown_view(date):
-    day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
-    if day:
-        return day.render_markdown()
-    else:
-        return flask.redirect(flask.url_for('admin.index'))
+    return flask.redirect(flask.url_for('.index'))
 
 @app.route("/latest")
 def latest_view():
@@ -133,15 +89,49 @@ def search_view():
             count=query.count()
             )
 
-@app.route("/inbox/<date>", methods=['POST'])
-def upload_file(date):
-    day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
-    file_handle = flask.request.files['file']
-    if day and file_handle:
-        day.attach(file_handle.read())
-    return flask.redirect(flask.url_for('.day_view', date=date))
+###
+# Day Views
 
-@app.route("/download/<date>.pdf")
+@app.route("/day/<date>.html")
+def day_view(date):
+
+    day = Day.find(date=date)
+    if day:
+        day_md = markdown(day.render())
+
+        # print(day_md)
+        # print(type(day_md))
+
+        # regex = re.compile(r'^<p><h4>(\d\d\d\d)</h4></p>$', re.MULTILINE)
+        # day_md = Markup(regex.sub(r'<a name="\g<1>"></a>\n\n\g<1>', day_md))
+
+        # print(day_md)
+
+        return flask.render_template(
+            'explorer/day-view.html.j2',
+            day=day, 
+            day_str=day_md
+        )
+    else:
+        return flask.redirect(flask.url_for('.index'))
+
+@app.route("/day/<date>.txt")
+def text_view(date):
+    day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+    if day:
+        return day.render()
+    else:
+        return flask.redirect(flask.url_for('.index'))
+
+@app.route("/day/<date>.md")
+def markdown_view(date):
+    day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+    if day:
+        return day.render_markdown()
+    else:
+        return flask.redirect(flask.url_for('.index'))
+
+@app.route("/day/<date>.pdf")
 def download(date):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
     if day:
@@ -152,6 +142,17 @@ def download(date):
         return response
     else:
         return flask.redirect(flask.url_for('.day_view', date=date))
+
+###
+# Attachments
+
+@app.route("/inbox/<date>", methods=['POST'])
+def upload_file(date):
+    day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+    file_handle = flask.request.files['file']
+    if day and file_handle:
+        day.attach(file_handle.read())
+    return flask.redirect(flask.url_for('.day_view', date=date))
 
 @app.route("/thumbnail/<date>-<sequence>.jpg")
 def thumbnail(date, sequence):
@@ -243,8 +244,18 @@ def logout():
     return flask.redirect(flask.url_for('index'))
 
 ###
+# Refresh Buffers
+
+@app.route("/refresh")
+def refresh(self):
+    librarian = Librarian(flask.current_app)
+    librarian.rotate_buffers()
+    return flask.redirect(flask.url_for('.latest_view'))
+
+###
 # Index
 
 @app.route('/')
 def index():
     return flask.render_template('index.html.j2')
+

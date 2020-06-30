@@ -28,13 +28,16 @@
                     {% endif %}
                     </li>
 
-
                     <li class="nav-item">
                     {% if day and day.tomorrow() %}
                         <a class="nav-link" href="{{ url_for('.day_view', date=day.tomorrow().date) }}" title="previous"><i class="fas fa-chevron-right"></i></a>
                     {% else %}
                         <a class="nav-link" href="javascript:void(0)" title="no further days"><i class="fas fa-stop"></i></a>
                     {% endif %}
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" id="calendar_button" href="javascript:void(0)" title="go to day"><i class="far fa-calendar-alt"></i></a>
                     </li>
 
                 {% endif %}
@@ -44,6 +47,11 @@
 
         {% if current_user.is_authenticated %}
         <ul class="navbar-nav ml-md-auto">
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('.refresh') }}" title="refresh"><i class="fas fa-sync"></i></a>
+            </li>
+
             <li>
                 <form class="form-inline my-2 my-lg-0" method="GET" action="/search">
                     <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search" aria-label="Search">
@@ -52,10 +60,19 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a class="nav-link" href="/logout" title="logout"><i class="fas fa-power-off"></i></a>
             </li>
 
         </ul>
+
+        {% else %}
+
+        <ul class="navbar-nav ml-md-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/login" title="log in"><i class="fas fa-user"></i></a>
+            </li>
+        </ul>
+
         {% endif %}
 
     </div>

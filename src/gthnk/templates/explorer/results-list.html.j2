@@ -4,7 +4,7 @@
 
     {% for row in data[:20] %}
 
-        <a href="{{ url_for('journal.day_view', date=row.day.date) }}#{{ row.hhmm() }}">
+        <a href="{{ url_for('.day_view', date=row.day.date) }}#{{ row.hhmm() }}">
             {{row.day.date}} <strong>{{row.hhmm()}}</strong>
         </a>
 
