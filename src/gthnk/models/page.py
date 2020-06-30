@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
-from flask_diamond.mixins.crud import CRUDMixin
-from .. import db
+from ..mixins.crud import CRUDMixin
+from ..server import db
 from PIL import Image
 from io import BytesIO
 

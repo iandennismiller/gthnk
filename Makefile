@@ -17,7 +17,7 @@ develop:
 	pip install -r .dev/requirements.txt
 
 clean:
-	rm -rf build dist *.egg-info src/gthnk/*.egg-info
+	rm -rf build dist *.egg-info src/*.egg-info
 	find . -name '*.pyc' -delete
 	find . -name __pycache__ -delete
 	rm -f .coverage coverage.xml

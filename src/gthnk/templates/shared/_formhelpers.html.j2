@@ -1,0 +1,30 @@
+{% macro render_field(field) %}
+<div class="form-group row">
+    <label class="col-sm-2 col-form-label">{{ field.label }}</label>
+    <div class="col-sm-3">
+        {{ field(class_="form-control", **kwargs)|safe }}
+    </div>
+</div>
+{% if field.errors %}
+    {% for error in field.errors %}
+        <div class="alert alert-danger" role="alert">{{ error }}</div>
+    {% endfor %}
+{% endif %}
+{% endmacro %}
+
+{% macro render_field_nolabel(field) %}
+<div class="form-group row">
+    <div class="col-sm-2">
+        {{ field(class_="form-control", **kwargs)|safe }}
+    </div>
+</div>
+{% if field.errors %}
+    {% for error in field.errors %}
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="alert alert-danger" role="alert"><i class="fas fa-exclamation-circle"></i> {{ error }}</div>
+        </div>
+    </div>
+    {% endfor %}
+{% endif %}
+{% endmacro %}

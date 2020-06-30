@@ -2,8 +2,8 @@
 # gthnk (c) Ian Dennis Miller
 
 import datetime
-from flask_diamond.mixins.crud import CRUDMixin
-from .. import db
+from ..mixins.crud import CRUDMixin
+from ..server import db
 import flask
 
 

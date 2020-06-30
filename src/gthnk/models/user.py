@@ -4,14 +4,15 @@ import random
 import logging
 from flask_login import UserMixin
 
+from .. import db
 
-class Participant(UserMixin):
+class User(db.Model, UserMixin):
     def __init__(self, id):
-        self.data = db.read("participants", id)
+        self.data = db.read("user", id)
         self.id = id
 
     def __repr__(self):
-        return "<Participant: {}>".format(self.id)
+        return "<User: {}>".format(self.id)
 
     def is_authenticated(self):
         return True
@@ -21,9 +22,6 @@ class Participant(UserMixin):
 
     def is_anonymous(self):
         return False
-
-    def is_admin(self):
-        return "sudo" in flask.session and flask.session["sudo"] == True
 
     def get_id(self):
         return self.id
