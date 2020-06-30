@@ -78,9 +78,17 @@ Now your journal entries are indexed and searchable - and ``journal.txt`` is a b
 Integration
 ^^^^^^^^^^^
 
-- VS Code: https://github.com/iandennismiller/vscode-gthnk
+- VS Code: https://marketplace.visualstudio.com/items?itemName=IanDennisMiller.gthnk
 - Sublime Text: https://github.com/iandennismiller/gthnk/tree/master/src/sublime-text-plugin
 - Chrome App: https://github.com/iandennismiller/gthnk/tree/master/src/chrome-app
+
+Other Projects
+^^^^^^^^^^^^^^
+
+- Python-Markdown Journal Extension: https://github.com/iandennismiller/mdx_journal
+- VS Code Extension: https://github.com/iandennismiller/vscode-gthnk
+- Gthnk Presentation: https://github.com/iandennismiller/pres-gthnk-overview
+- Website Repo: https://github.com/iandennismiller/www-gthnk
 
 Next Steps
 ^^^^^^^^^^
