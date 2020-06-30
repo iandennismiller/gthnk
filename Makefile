@@ -23,46 +23,54 @@ clean:
 	rm -f .coverage coverage.xml
 
 server:
-	cd src/gthnk && FLASK_ENV=development FLASK_APP=server.py flask run
+	mkdir -p var/log
+
+	export SETTINGS=$$PWD/.dev/conf/dev.conf && \
+	cd src/gthnk && \
+		FLASK_ENV=development \
+		FLASK_APP=server.py \
+		flask run
 
 shell:
-	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py shell
+	SETTINGS=$$PWD/.dev/conf/dev.conf bin/manage.py shell
 
 test: clean
-	SETTINGS=$$PWD/etc/conf/testing.conf nosetests $(MOD_NAME) -c etc/nose/test.cfg
+	SETTINGS=$$PWD/.dev/conf/testing.conf nosetests $(MOD_NAME) -c .dev/nose/test.cfg
 
 single:
-	SETTINGS=$$PWD/etc/conf/testing.conf nosetests $(MOD_NAME) -c etc/nose/test-single.cfg
+	SETTINGS=$$PWD/.dev/conf/testing.conf nosetests $(MOD_NAME) -c .dev/nose/test-single.cfg
 
 db:
 ifeq ($(OS),Windows_NT)
-	set SETTINGS=%cd%\etc\conf\dev-win.conf & python bin\manage.py init_db
-	set SETTINGS=%cd%\etc\conf\dev-win.conf & python bin\manage.py user_add --email "guest@example.com" --password "guest"
-	set SETTINGS=%cd%\etc\conf\dev-win.conf & python bin\manage.py user_add --email "admin@example.com" --password "aaa" --admin
+	set SETTINGS=%cd%\.dev\conf\dev-win.conf & python bin\manage.py init_db
+	set SETTINGS=%cd%\.dev\conf\dev-win.conf & python bin\manage.py user_add --email "guest@example.com" --password "guest"
+	set SETTINGS=%cd%\.dev\conf\dev-win.conf & python bin\manage.py user_add --email "admin@example.com" --password "aaa" --admin
 else
-	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py init_db
-	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py user_add --email "guest@example.com" --password "guest"
-	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py user_add --email "admin@example.com" --password "aaa" --admin
+	SETTINGS=$$PWD/.dev/conf/dev.conf bin/manage.py init_db
+	SETTINGS=$$PWD/.dev/conf/dev.conf bin/manage.py user_add --username "guest" --password "guest"
 endif
+
+dropdb:
+	SETTINGS=$$PWD/.dev/conf/dev.conf bin/manage.py drop_db
+
+upgradedb:
+	SETTINGS=$$PWD/.dev/conf/dev.conf bin/manage.py db upgrade
+
+migratedb:
+	SETTINGS=$$PWD/.dev/conf/dev.conf bin/manage.py db migrate
 
 watch:
 	watchmedo shell-command -R -p "*.py" -c 'echo \\n\\n\\n\\nSTART; date; \
-		SETTINGS=$$PWD/etc/conf/testing.conf nosetests $(MOD_NAME) \
-		-c etc/nose/test-single.cfg; date' .
-
-upgradedb:
-	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py db upgrade
-
-migratedb:
-	SETTINGS=$$PWD/etc/conf/dev.conf bin/manage.py db migrate
+		SETTINGS=$$PWD/.dev/conf/testing.conf nosetests $(MOD_NAME) \
+		-c .dev/nose/test-single.cfg; date' .
 
 docs:
 	rm -rf build/sphinx
-	SETTINGS=$$PWD/etc/conf/testing.conf sphinx-build -b html docs build/sphinx
+	SETTINGS=$$PWD/.dev/conf/testing.conf sphinx-build -b html docs build/sphinx
 
 coverage:
-	SETTINGS=$$PWD/etc/conf/testing.conf nosetests --with-xcoverage \
-		--cover-package=$(MOD_NAME) --cover-tests -c etc/nose/test.cfg
+	SETTINGS=$$PWD/.dev/conf/testing.conf nosetests --with-xcoverage \
+		--cover-package=$(MOD_NAME) --cover-tests -c .dev/nose/test.cfg
 
 lint:
 	pylint src/gthnk

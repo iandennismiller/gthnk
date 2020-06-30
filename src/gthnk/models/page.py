@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
-from ..mixins.crud import CRUDMixin
-from ..server import db
 from PIL import Image
 from io import BytesIO
 
+from .. import db
+from .mixins.crud import CRUDMixin
 
 class Page(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)

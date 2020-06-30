@@ -1,6 +1,6 @@
-{% extends 'admin/model/edit.html' %}
+{% extends 'shared/base.html.j2' %}
 
-{% block main_menu %}
+{# {% block main_menu %}
 
 <div id="search_box" style="display: none; width: 100px; position: absolute; z-index: 99;">
 <form method="GET" action="/admin/journal/search" class="search-form">
@@ -8,9 +8,19 @@
 </form>
 </div>
 
+#}
+
+{% block extra_nav %}
+
 {{ super() }}
 
-<ul class="nav nav-tabs">
+<li class="nav-item">
+    <a class="nav-link" href="{{ url_for('.latest_view') }}"><i class="far fa-clock"></i> EXTRA</a>
+</li>
+
+{% endblock %}
+
+{# <ul class="nav nav-tabs">
     <!--<li>
         <a href="{{ url_for('.index_view') }}"><i class="icon-list-alt"></i> {{ _gettext('List') }}</a>
     </li>-->
@@ -50,11 +60,9 @@
         <a href="{{ url_for('.refresh') }}" title="refresh"><i class="icon-refresh"></i></a>
     </li>
 </ul>
-{% endblock %}
+{% endblock %} #}
 
-{% block body %}
-
-    {% block model_content %}
+{% block content %}
 
 <div id="main_content">
 
@@ -69,18 +77,13 @@
 {% endfilter %}
     <div id="entries_control" class="controllable">
         <div class="viewable">
-            <!--<a href="javascript:void(0)"><i class="icon-download"></i></a>-->
             &nbsp;
-        </div>
-        <div class="editable">
-<!--             <a href="/admin/entryview/?sort=0&amp;flt0_2={{day.date}}+00%3A00&amp;flt1_3={{day.date}}+23%3A59" title="edit"><i class="icon-wrench"></i></a> -->
-            <a href="{{ url_for('entry.index_view', sort=0, flt0_2=day.date, flt3=day.date) }}" title="edit"><i class="icon-wrench"></i></a>
         </div>
     </div>
 </div>
 
 <div id="pages_inline">
-    {% for page in day.pages %}
+    {# {% for page in day.pages %}
     <div class="page_attachment" id="page{{ page.sequence }}">
         <a id="{{ page.sequence }}" name="{{ page.sequence }}"></a>
         <div class="image_container">
@@ -104,7 +107,7 @@
             </div>
         </div>
     </div>
-    {% endfor %}
+    {% endfor %} #}
 </div>
 
 </div>
@@ -136,13 +139,13 @@
     </form>
 
     <ul>
-        {% for page in day.pages %}
+        {# {% for page in day.pages %}
         <li>
             <a class="scroll" href="#{{ page.sequence }}">
                 <img src="{{ url_for('.thumbnail', date=day.date, sequence=page.sequence) }}">
             </a>
         </li>
-        {% endfor %}
+        {% endfor %} #}
     </ul>
     </div>
 
@@ -152,20 +155,11 @@
 
 </div>
 
-    {% endblock %}
+<link href="{{ url_for('.static', filename='css/filedrag.css') }}" rel="stylesheet">
+<script src="{{ url_for('.static', filename='js/filedrag.js') }}"></script>
 
-{% endblock %}
-
-{% block head %}
-{{ super() }}
-<link href="{{ url_for('journal_blueprint.static', filename='css/filedrag.css') }}" rel="stylesheet">
-{% endblock %}
-
-{% block tail %}
-{{ super() }}
 <script type="text/javascript">var today = "{{ day.date }}";</script>
-<script src="{{ url_for('journal_blueprint.static', filename='js/filedrag.js') }}"></script>
-<script src="{{ url_for('journal_blueprint.static', filename='js/journal_browser.js') }}"></script>
+<script src="{{ url_for('.static', filename='js/journal_browser.js') }}"></script>
+
 {% endblock %}
 
-{% block footer %}{% endblock %}

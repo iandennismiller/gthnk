@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="{{ url_for('.index') }}"><i class="far fa-comment"></i> Server</a>
+    <a class="navbar-brand" href="{{ url_for('.index') }}">Gthnk</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -10,40 +10,30 @@
             {# <li class="nav-item">
                 <a class="nav-link" href="/help"><i class="fas fa-question-circle"></i> Help</a>
             </li> #}
+
             {% if current_user.is_authenticated %}
-            {# <li class="nav-item">
-                <a class="nav-link" href="/"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-            </li> #}
 
-                {% if current_user.is_admin() %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('.latest_view') }}"><i class="far fa-clock"></i> Latest</a>
+            </li>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-tasks"></i> Go
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/sudo">Sudo</a>
+            {% block extra_nav %}{% endblock %}
 
-                        <div class="dropdown-divider"></div>
-                        
-                    </div>
-                </li>
-                {% endif %}
+            {% endif %}
+        </ul>
 
+        {% if current_user.is_authenticated %}
+        <ul class="navbar-nav ml-md-auto">
             <li class="nav-item">
                 <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </li>
 
-            {# {% else %}
-            <li class="nav-item">
-                <a class="nav-link" href="/login"><i class="fas fa-key"></i> Use Access Code</a>
-            </li> #}
-            {% endif %}
+            {# <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form> #}
         </ul>
-        <!-- <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form> -->
+        {% endif %}
+
     </div>
 </nav>

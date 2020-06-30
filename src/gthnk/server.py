@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
+import re
 import time
 import json
 import flask
 import logging
 import datetime
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy, desc
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, validators, DateTimeField
@@ -16,46 +17,30 @@ from flaskext.markdown import Markdown
 from mdx_linkify.mdx_linkify import LinkifyExtension
 from mdx_journal import JournalExtension
 
+from . import db, login_manager, create_app
+
 from .models.day import Day, latest
 from .models.entry import Entry
 from .models.page import Page
 from .models.user import User
 from .adaptors.librarian import Librarian
 
-log_filename = '../var/log/server.log'
-print("logging to {}".format(log_filename))
-logging.basicConfig(
-    format='%(asctime)s %(module)-16s %(levelname)-8s %(message)s',
-    filename=log_filename,
-    level=logging.INFO,
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
-logging.info("Server: Start")
 
-app = flask.Flask(__name__)
-app.secret_key = b'_5#y3L"F4Q8z\n\xec]/'
+app = create_app()
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
-db = SQLAlchemy(app)
-# db.init_app(app)
 
-login_manager = LoginManager(app)
-# login_manager.init_app(app)
 login_manager.login_view = ".login"
-
-Markdown(app)
-
-class LoginForm(FlaskForm):
-    access_code = StringField('Code',
-        [validators.Length(min=7, max=7)],
-        render_kw={"placeholder": "123-456"}
-    )
-    submit_button = SubmitField("Login")
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User(user_id)
+    return User.get_by_id(id=user_id)
+
+
+class LoginForm(FlaskForm):
+    username = StringField('Username')
+    password = PasswordField('Password')
+    submit_button = SubmitField("Login")
 
 
 @app.route("/refresh")
@@ -84,7 +69,7 @@ def nearest_day_view(date):
 def day_view(date):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
     if day:
-        day_str = re.sub(r'(\d\d\d\d)', '<a name="\g<1>"></a>\n\g<1>', day.render())
+        day_str = re.sub(r'(\d\d\d\d)', r'<a name="\g<1>"></a>\n\g<1>', day.render())
         return self.render('journal_explorer/day_view.html', day=day, day_str=day_str)
     else:
         return flask.redirect(flask.url_for('admin.index'))
@@ -105,30 +90,34 @@ def markdown_view(date):
     else:
         return flask.redirect(flask.url_for('admin.index'))
 
-@app.route("/latest.html")
-def latest_view(self):
+@app.route("/latest")
+def latest_view():
     latest_day = latest()
     if latest_day:
-        return self.render('journal_explorer/day_view.html',
+        return flask.render_template('explorer/day-view.html.j2',
             day=latest_day, day_str=latest_day.render())
     else:
-        return self.render('journal_explorer/day_view.html',
+        return flask.render_template('explorer/day-view.html.j2',
             day=None, day_str="No entries yet")
 
 @app.route("/search")
-def search_view(self):
+def search_view():
     if not flask.request.args:
-        return self.render("journal_explorer/search_view.html")
+        return flask.render_template("explorer/search-view.html")
     else:
         query_str = flask.request.args['q']
         query = Entry.query.filter(
             Entry.content.contains(query_str)).order_by(desc(Entry.timestamp))
         results = query.all()[:20]
+
         for idx in range(0, len(results)):
             results[idx].content = re.sub(query_str, "**{}**".format(
                 query_str.upper()), results[idx].content, flags=re.I)
-        return self.render('journal_explorer/results_list.html', data=results,
-            count=query.count())
+
+        return flask.render_template('explorer/results-list.html',
+            data=results,
+            count=query.count()
+            )
 
 @app.route("/inbox/<date>", methods=['POST'])
 def upload_file(date):
@@ -205,6 +194,39 @@ def delete_page(date, sequence):
     active_page.delete()
     db.session.commit()
     return flask.redirect(flask.url_for('.day_view', date=date))
+
+###
+# Authentication
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user and current_user.is_authenticated:
+        flask.flash('Already logged in.')
+        return flask.redirect(flask.url_for('index'))
+
+    # next_page = flask.request.args.get('next', '')
+
+    form = LoginForm()
+    if form.validate_on_submit():
+        # convert access code to user id
+        user = User.find(username=form.username.data)
+
+        if user and user.password == form.password.data:
+            login_user(user)
+            logging.info("{user} logs in".format(user=current_user))
+            flask.flash('Logged in successfully.')
+            return flask.redirect(flask.url_for('index'))
+
+    return flask.render_template('login.html.j2', form=form)
+
+@app.route('/logout', methods=['GET'])
+@login_required
+def logout():
+    if current_user.is_authenticated:
+        logging.info("{user} logs out".format(user=current_user))
+        logout_user()
+        flask.flash('You have successfully logged out.')
+    return flask.redirect(flask.url_for('index'))
 
 ###
 # Index

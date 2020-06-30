@@ -7,3 +7,4 @@ coverage.xml
 .DS_Store
 __pycache__/
 /.vscode/
+/var/

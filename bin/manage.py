@@ -11,13 +11,14 @@ from flask_migrate import Migrate, MigrateCommand
 import alembic
 import alembic.config
 
-import warnings
-from flask.exthook import ExtDeprecationWarning
-warnings.simplefilter('ignore', ExtDeprecationWarning)
+from sqlalchemy.exc import OperationalError
 
-sys.path.insert(0, '.')
-from gthnk import create_app, db
-from gthnk.models import User, Role
+sys.path.insert(0, './src')
+from gthnk import db, create_app
+from gthnk.models.user import User
+from gthnk.adaptors.journal_buffer import JournalBuffer
+from gthnk.adaptors.librarian import Librarian
+
 
 app = create_app()
 migrate = Migrate(app, db, directory="gthnk/migrations")
@@ -36,27 +37,20 @@ manager.add_command("publicserver", Server(port=app.config['PORT'], host="0.0.0.
 manager.add_command('db', MigrateCommand)
 
 
-@manager.option('-e', '--email', help='email address', required=True)
+@manager.option('-u', '--username', help='username', required=True)
 @manager.option('-p', '--password', help='password', required=True)
-@manager.option('-a', '--admin', help='make user an admin user', action='store_true', default=None)
-def user_add(email, password, admin=False):
+def user_add(username, password):
     "add a user to the database"
-    if admin:
-        roles = ["Admin"]
-    else:
-        roles = ["User"]
-    User.register(
-        email=email,
-        password=password,
-        confirmed=True,
-        roles=roles
+    User.create(
+        username=username,
+        password=password
     )
 
 
-@manager.option('-e', '--email', help='email address', required=True)
-def user_del(email):
+@manager.option('-u', '--username', help='username', required=True)
+def user_del(username):
     "delete a user from the database"
-    obj = User.find(email=email)
+    obj = User.find(username=username)
     if obj:
         obj.delete()
         print("Deleted")
@@ -71,29 +65,22 @@ def drop_db():
     db.drop_all()
 
 
-@manager.option('-m', '--migration',
-    help='create database from migrations',
-    action='store_true', default=None)
-def init_db(migration):
+@manager.command
+def init_db():
     "drop all databases, instantiate schemas"
     db.drop_all()
 
-    if migration:
-        # create database using migrations
-        print("applying migration")
-        upgrade()
-    else:
-        # create database from model schema directly
-        db.create_all()
-        db.session.commit()
-        cfg = alembic.config.Config("gthnk/migrations/alembic.ini")
-        alembic.command.stamp(cfg, "head")
-    Role.add_default_roles()
+    # create database from model schema directly
+    db.create_all()
+    db.session.commit()
+
+    # "stamp" database with version for alembic
+    cfg = alembic.config.Config("src/gthnk/migrations/alembic.ini")
+    alembic.command.stamp(cfg, "head")
 
 
 @manager.command
 def import_archive(directory):
-    from gthnk.adaptors.journal_buffer import JournalBuffer
     with app.app_context():
         journal_buffer = JournalBuffer.TextFileJournalBuffer()
         match_str = os.path.join(directory, "*.txt")
@@ -103,7 +90,6 @@ def import_archive(directory):
 
 @manager.command
 def journal_export():
-    from gthnk.adaptors.librarian import Librarian
     with app.app_context():
         librarian = Librarian(app)
         librarian.export_journal()

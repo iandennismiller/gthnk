@@ -1,15 +1,11 @@
-import flask
-import json
-import random
-import logging
 from flask_login import UserMixin
-
 from .. import db
+from .mixins.crud import CRUDMixin
 
-class User(db.Model, UserMixin):
-    def __init__(self, id):
-        self.data = db.read("user", id)
-        self.id = id
+class User(db.Model, UserMixin, CRUDMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.Unicode(1024))
+    password = db.Column(db.Unicode(1024))
 
     def __repr__(self):
         return "<User: {}>".format(self.id)

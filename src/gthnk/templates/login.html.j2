@@ -1,18 +1,19 @@
 {% extends "shared/base.html.j2" %}
 
-{% from "shared/_formhelpers.html.j2" import render_field_nolabel %}
+{% from "shared/_formhelpers.html.j2" import render_field %}
 
 {% block content %}
 <div class="jumbotron">
-    <h1 class="display-4"><i class="fas fa-key"></i> Access Code</h1>
+    <h1 class="display-4"><i class="fas fa-key"></i> Log in</h1>
 
     <p class="lead">
-        Please enter your <b>Access code</b> then press <b>Login</b>.
+        Please enter your <b>Username</b> and <b>Password</b>.
     </p>
 
-    <form method="POST" action="{{ url_for('.login', next=next_page) }}">
+    <form method="POST" action="{{ url_for('.login') }}">
         {{ form.hidden_tag() }}
-        {{ render_field_nolabel(form.access_code, autofocus=true) }}
+        {{ render_field(form.username, autofocus=true) }}
+        {{ render_field(form.password) }}
         {{ form.submit_button(class_="btn btn-primary btn-lg") }}
     </form>
 </div>

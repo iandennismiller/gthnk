@@ -1,8 +1,8 @@
-{# {% extends 'admin/master.html' %} #}
-{% extends 'admin/model/edit.html' %}
-{% block body %}
+{% extends "shared/base.html.j2" %}
 
-<form method="GET" action="/admin/journal/search" class="search-form">
+{% block content %}
+
+<form method="GET" action="/search" class="search-form">
     <div style="width: 27em; margin: 7em auto 0em auto;">
 	    <div style="font-size: 20pt; margin-bottom: 1em; text-align: center;">gthnk</div>
 	    <div style="margin-bottom: 1em;">
@@ -14,15 +14,11 @@
  -->    </div>
 </form>
 
+{% endblock %}
+
 {% block head %}
 {{ super() }}
 <style type="text/css">
     {% include "journal_explorer/filedrag/filedrag.css" %}
 </style>
-
-{% endblock %}
-
-{% endblock %}
-
-{% block footer %}
 {% endblock %}

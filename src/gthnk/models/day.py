@@ -5,11 +5,12 @@ import puremagic
 import re
 from io import BytesIO
 from PyPDF2 import PdfFileReader, PdfFileWriter
-from ..mixins.crud import CRUDMixin
 from sqlalchemy import desc
 from sqlalchemy.ext.orderinglist import ordering_list
 from PIL import Image
-from ..server import db
+
+from .. import db
+from .mixins.crud import CRUDMixin
 
 
 class Day(db.Model, CRUDMixin):

@@ -6,8 +6,9 @@ import os
 import shutil
 import hashlib
 
-import gthnk.adaptors.journal_buffer
-from gthnk.models import Day, Page
+from .journal_buffer import TextFileJournalBuffer
+from ..models.day import Day
+from ..models.page import Page
 
 
 def overwrite_if_different(filename, new_content):
@@ -67,7 +68,7 @@ class Librarian(object):
             shutil.copy2(filename, backup_path)
 
             # load and parse the file
-            journal_buffer = gthnk.adaptors.journal_buffer.TextFileJournalBuffer()
+            journal_buffer = TextFileJournalBuffer()
             journal_buffer.process_one(filename)
             journal_buffer.save_entries()
 
