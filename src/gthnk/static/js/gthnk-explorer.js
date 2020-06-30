@@ -12,9 +12,9 @@ $(".top_of_page").click(function(event){
 })
 
 var set_height = function(){
-    $("#entries_scroller").css("height", $(window).height()-99);
-    $("#pages_scroller").css("height", $(window).height()-57);
-    $("#page_wrapper").css("height", $(window).height()+50);
+    $("#entries_scroller").css("height", $(window).height()-56);
+    $("#pages_scroller").css("height", $(window).height()-80);
+    $("#page_wrapper").css("height", $(window).height()-56-50);
 }
 
 $("#edit_button").click(function() {

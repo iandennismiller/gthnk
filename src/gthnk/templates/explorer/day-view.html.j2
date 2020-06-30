@@ -2,113 +2,55 @@
 
 {% set current_page = 'day-view' %}
 
-
-{# {% block main_menu %}
-
-<div id="search_box" style="display: none; width: 100px; position: absolute; z-index: 99;">
-<form method="GET" action="/admin/journal/search" class="search-form">
-    <input name="q" type="text" placeholder="Search" />
-</form>
-</div>
-
-#}
-
-{# <ul class="nav nav-tabs">
-    <!--<li>
-        <a href="{{ url_for('.index_view') }}"><i class="icon-list-alt"></i> {{ _gettext('List') }}</a>
-    </li>-->
-    <!--<li class="active">
-        <a href="{{ url_for('.index_view') }}"><i class="icon-eye-open"></i> Day</a>
-    </li>-->
-    <li>
-        {% if day and day.yesterday() %}
-            <a href="{{ url_for('.day_view', date=day.yesterday().date) }}" title="previous"><i class="icon-chevron-left"></i></a>
-        {% else %}
-            <a href="javascript:void(0)" title="no past days"><i class="icon-stop"></i></a>
-        {% endif %}
-    </li>
-    <li>
-        {% if day and day.tomorrow() %}
-            <a href="{{ url_for('.day_view', date=day.tomorrow().date) }}" title="next"><i class="icon-chevron-right"></i></a>
-        {% else %}
-            <a href="javascript:void(0)" title="no future days"><i class="icon-stop"></i></a>
-        {% endif %}
-    </li>
-    <li>
-        <a href="{{ url_for('.latest_view') }}" title="latest"><i class="icon-home"></i></a>
-    </li>
-    <li>
-        <a id="calendar_button" href="javascript:void(0)" title="go to day"><i class="icon-calendar"></i></a>
-    </li>
-    <li>
-        <a id="search_button" href="javascript:void(0)" title="search"><i class="icon-search"></i></a>
-    </li>
-    <li>
-        <a href="{{ url_for('.download', date=day.date) }}" title="download"><i class="icon-download-alt"></i></a>
-    </li>
-    <li>
-        <a id="edit_button" href="javascript:void(0)" title="edit"><i class="icon-edit"></i></a>
-    </li>
-    <li>
-        <a href="{{ url_for('.refresh') }}" title="refresh"><i class="icon-refresh"></i></a>
-    </li>
-</ul>
-{% endblock %} #}
-
 {% block content %}
 
 <div id="main_content">
 
-<div id="entries_holder">
-<div id="entries_scroller">
+  <div id="entries_holder">
+    <div id="entries_scroller">
 
-<a id="entries_anchor" name="entries_anchor"></a>
+      <a id="entries_anchor" name="entries_anchor"></a>
 
-<div id="entries">
-{# {% filter markdown %} #}
-{{ day_str|safe }}
-{# {% endfilter %} #}
+      <div id="entries">
+        {{ day_str|safe }}
+      </div>
 
-    <div id="entries_control" class="controllable">
-        <div class="viewable">
-            &nbsp;
-        </div>
-    </div>
+      <div id="pages_inline">
 
-</div>
+        {% for page in day.pages %}
 
-<div id="pages_inline">
-    {# {% for page in day.pages %}
-    <div class="page_attachment" id="page{{ page.sequence }}">
-        <a id="{{ page.sequence }}" name="{{ page.sequence }}"></a>
-        <div class="image_container">
-            <img src="{{ url_for('.preview', date=day.date, sequence=page.sequence) }}">
+          <div class="page_attachment" id="page{{ page.sequence }}">
+            <a id="{{ page.sequence }}" name="{{ page.sequence }}"></a>
 
-            <div class="controllable">
+            <div class="image_container">
+              <img src="{{ url_for('.preview', date=day.date, sequence=page.sequence) }}">
+
+              <div class="controllable">
                 <div class="viewable">
-                    <a anchorid="{{page.sequence}}" href="{{ url_for('.attachment', date=day.date, sequence=page.sequence, extension=page.extension) }}" title="download"><i class="icon-download-alt"></i></a>
+                  <a anchorid="{{page.sequence}}" href="{{ url_for('.attachment', date=day.date, sequence=page.sequence, extension=page.extension) }}" title="download"><i class="icon-download-alt"></i></a>
                 </div>
+
                 <div class="editable">
-                    <a href="{{ url_for('.move_page_up', date=day.date, sequence=page.sequence) }}" title="move up"><i class="icon-arrow-up"></i></a>
-                    <a href="{{ url_for('.move_page_down', date=day.date, sequence=page.sequence) }}" title="move down"><i class="icon-arrow-down"></i></a>
-                    <span class="delete_widget">
-                        <a class="delete_button" href="javascript:void(0);" title="delete"><i class="icon-trash"></i></a>
-                        <span class="confirm_widget">
-                            <a href="{{ url_for('.delete_page', date=day.date, sequence=page.sequence) }}" title="yes delete"><i class="icon-ok"></i></a>
-                            <a class="cancel_button" href="javascript:void(0);" title="do not delete"><i class="icon-remove"></i></a>
-                        </span>
+                  <a href="{{ url_for('.move_page_up', date=day.date, sequence=page.sequence) }}" title="move up"><i class="icon-arrow-up"></i></a>
+                  <a href="{{ url_for('.move_page_down', date=day.date, sequence=page.sequence) }}" title="move down"><i class="icon-arrow-down"></i></a>
+
+                  <span class="delete_widget">
+                    <a class="delete_button" href="javascript:void(0);" title="delete"><i class="icon-trash"></i></a>
+                    <span class="confirm_widget">
+                      <a href="{{ url_for('.delete_page', date=day.date, sequence=page.sequence) }}" title="yes delete"><i class="icon-ok"></i></a>
+                      <a class="cancel_button" href="javascript:void(0);" title="do not delete"><i class="icon-remove"></i></a>
                     </span>
+                  </span>
                 </div>
-            </div>
-        </div>
+              </div>
+
+          </div>
+        {% endfor %}
+      </div>
     </div>
-    {% endfor %} #}
-</div>
+  </div>
 
-</div>
-</div>
-
-<div id="page_list">
+  <div id="page_list">
     <div id="pages_scroller">
     <div id="page_wrapper">
 
@@ -134,13 +76,13 @@
     </form>
 
     <ul>
-        {# {% for page in day.pages %}
+        {% for page in day.pages %}
         <li>
             <a class="scroll" href="#{{ page.sequence }}">
                 <img src="{{ url_for('.thumbnail', date=day.date, sequence=page.sequence) }}">
             </a>
         </li>
-        {% endfor %} #}
+        {% endfor %}
     </ul>
     </div>
 
@@ -150,11 +92,11 @@
 
 </div>
 
-<link href="{{ url_for('.static', filename='css/filedrag.css') }}" rel="stylesheet">
-<script src="{{ url_for('.static', filename='js/filedrag.js') }}"></script>
-
-<script type="text/javascript">var today = "{{ day.date }}";</script>
-<script src="{{ url_for('.static', filename='js/journal_browser.js') }}"></script>
+<script>
+  var today = "{{ day.date }}";
+  init_filedrag();
+</script>
+<script src="/static/js/gthnk-explorer.js"></script>
 
 {% endblock %}
 

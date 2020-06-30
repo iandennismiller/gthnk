@@ -40,6 +40,9 @@
                         <a class="nav-link" id="calendar_button" href="javascript:void(0)" title="go to day"><i class="far fa-calendar-alt"></i></a>
                     </li>
 
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('.download', date=day.date) }}" title="download"><i class="fas fa-file-download"></i></a>
+                    </li>
                 {% endif %}
 
             {% endif %}
@@ -55,7 +58,7 @@
             <li>
                 <form class="form-inline my-2 my-lg-0" method="GET" action="/search">
                     <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit">Search</button>
                 </form>
             </li>
 

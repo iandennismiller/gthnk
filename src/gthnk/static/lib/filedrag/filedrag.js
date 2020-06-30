@@ -3,7 +3,7 @@ filedrag.js - HTML5 File Drag & Drop demonstration
 Featured on SitePoint.com
 Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 */
-(function() {
+var init_filedrag = function() {
 
 	// getElementById
 	function $id(id) {
@@ -96,10 +96,6 @@ Developed by Craig Buckler (@craigbuckler) of OptimalWorks.net
 
 	}
 
-	// call initialization file
-	if (window.File && window.FileList && window.FileReader) {
-		Init();
-	}
+	Init();
 
-
-})();
+};

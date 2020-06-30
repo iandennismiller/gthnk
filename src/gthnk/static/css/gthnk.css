@@ -75,14 +75,14 @@
 }
 
 #pages_scroller {
-    height: 644px;
+    /* height: 644px; */
     overflow: scroll;
 }
 
 #entries_scroller {
     padding-top: 2em;
     padding-bottom: 2em;
-    height: 602px;
+    /* height: 602px; */
     overflow: scroll;
 }
 
