@@ -30,13 +30,7 @@ setup(
     packages=find_packages('src'),
     package_dir={'': 'src'},
     scripts=[
-        "bin/runserver.py",
-        "bin/manage.py",
-        "bin/integration.py",
-        "bin/gthnk",
-        "bin/gthnk.cmd",
-        "bin/gthnk-rotate.py",
-        "bin/gthnk-rotate.cmd",
+        "bin/gthnk.py",
     ],
     long_description=read('Readme.rst'),
     classifiers=[

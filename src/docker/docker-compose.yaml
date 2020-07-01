@@ -7,15 +7,16 @@ services:
     image: iandennismiller/gthnk
     container_name: gthnk-server
     volumes:
-      - ~/.gthnk:/home/gthnk/storage
-    networks:
+      - ~/.gthnk:/home/gthnk/.local/mnt/shared
+      # - ~/Seafile/Gthnk:/home/gthnk/.local/mnt/seafile
+      networks:
       - gthnk-net
     ports:
       - "1620:1620"
     command: >
       sh -c "
-      if [ ! -f /home/gthnk/storage/gthnk.conf ]; then
-      sudo -i -u gthnk gthnk-firstrun.sh /home/gthnk/storage/gthnk.conf;
+      if [ ! -f /home/gthnk/.local/mnt/shared/gthnk.conf ]; then
+      sudo -i -u gthnk gthnk-firstrun.sh /home/gthnk/.local/mnt/shared/gthnk.conf;
       fi;
       sudo -i -u gthnk gthnk-server.sh"
 

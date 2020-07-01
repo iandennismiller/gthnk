@@ -1,4 +1,5 @@
 #!/bin/bash
 
-cd ~/gthnk
-SETTINGS=/home/gthnk/storage/gthnk.conf /home/gthnk/venv/bin/manage.py init_db
+SETTINGS=/home/gthnk/.local/mnt/shared/gthnk.conf \
+    ~/.local/bin/gthnk.py \
+    init_db

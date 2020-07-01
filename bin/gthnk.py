@@ -15,12 +15,14 @@ from sqlalchemy.exc import OperationalError
 
 sys.path.insert(0, './src')
 from gthnk import db, create_app
+from gthnk.__meta__ import __version__
 from gthnk.models.user import User
 from gthnk.models.day import Day
 from gthnk.models.entry import Entry
 from gthnk.models.page import Page
 from gthnk.adaptors.journal_buffer import TextFileJournalBuffer
 from gthnk.adaptors.librarian import Librarian
+from gthnk.integration import make_config
 
 
 app = create_app()
@@ -35,8 +37,6 @@ def _make_context():
 
 manager = Manager(app)
 manager.add_command("shell", Shell(make_context=_make_context))
-manager.add_command("runserver", Server(port=app.config['PORT']))
-manager.add_command("publicserver", Server(port=app.config['PORT'], host="0.0.0.0"))
 manager.add_command('db', MigrateCommand)
 
 
@@ -96,6 +96,28 @@ def journal_export():
     with app.app_context():
         librarian = Librarian(app)
         librarian.export_journal()
+
+
+@manager.command
+def journal_rotate():
+    with app.app_context():
+        librarian = Librarian(app)
+        librarian.rotate_buffers()
+
+
+# integrate Gthnk with the operating system
+@manager.command
+def do_install():
+    config = make_config()
+    config["do_install"](config)
+
+
+# remove Gthnk installation
+@manager.command
+def do_uninstall():
+    config = make_config()
+    config["do_uninstall"](config)
+
 
 if __name__ == "__main__":
     manager.run()

@@ -1,4 +1,5 @@
 #!/bin/bash
 
-cd ~/gthnk
-SETTINGS=/home/gthnk/storage/gthnk.conf /home/gthnk/venv/bin/manage.py user_add -e "$1" -p "$2"
+SETTINGS=/home/gthnk/.local/mnt/shared/gthnk.conf \
+    ~/.local/bin/gthnk.py \
+    user_add -u "$1" -p "$2"

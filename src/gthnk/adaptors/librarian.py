@@ -6,7 +6,7 @@ import os
 import shutil
 import hashlib
 
-from .journal_buffer import TextFileJournalBuffer
+from .journal_buffer import TextFileJournalBuffer, split_filename_list
 from ..models.day import Day
 from ..models.page import Page
 
@@ -55,7 +55,7 @@ class Librarian(object):
     def rotate_buffers(self):
         # import any Journal Buffers that might have entries ready for importing
         self.app.logger.debug("processing list: {}".format(self.app.config["INPUT_FILES"]))
-        file_list = gthnk.adaptors.journal_buffer.split_filename_list(self.app.config["INPUT_FILES"])
+        file_list = split_filename_list(self.app.config["INPUT_FILES"])
 
         # create a new backup path
         todays_date = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H%M%S")

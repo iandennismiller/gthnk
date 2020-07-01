@@ -1,4 +1,5 @@
 #!/bin/bash
 
-cd ~/gthnk
-SETTINGS=/home/gthnk/storage/gthnk.conf /home/gthnk/venv/bin/gthnk-rotate.py
+SETTINGS=/home/gthnk/.local/mnt/shared/gthnk.conf \
+    ~/.local/bin/gthnk.py \
+    journal_rotate

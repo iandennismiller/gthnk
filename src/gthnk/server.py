@@ -247,7 +247,7 @@ def logout():
 # Refresh Buffers
 
 @app.route("/refresh")
-def refresh(self):
+def refresh():
     librarian = Librarian(flask.current_app)
     librarian.rotate_buffers()
     return flask.redirect(flask.url_for('.latest_view'))

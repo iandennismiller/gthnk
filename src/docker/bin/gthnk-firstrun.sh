@@ -6,12 +6,13 @@ if [[ -z $1 ]]; then
     exit
 fi
 
+mkdir -p \
+    /home/gthnk/.local/mnt/shared/export/attachment \
+    /home/gthnk/.local/mnt/shared/export/markdown \
+    /home/gthnk/.local/mnt/shared/export/text \
+    /home/gthnk/.local/mnt/shared/export/thumbnail \
+    /home/gthnk/.local/mnt/shared/export/preview
+
 ~/.local/bin/gthnk-config-init.sh "$1"
 ~/.local/bin/gthnk-db-init.sh
-~/.local/bin/gthnk-user-add.sh user@example.com secret
-
-mkdir -p /home/gthnk/storage/export/attachment \
-    /home/gthnk/storage/export/markdown \
-    /home/gthnk/storage/export/text \
-    /home/gthnk/storage/export/thumbnail \
-    /home/gthnk/storage/export/preview
+~/.local/bin/gthnk-user-add.sh gthnk gthnk
