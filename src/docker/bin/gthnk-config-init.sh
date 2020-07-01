@@ -9,8 +9,8 @@ fi
 cat <<EOF > "$1"
 # Gthnk Configuration
 
-BACKUP_PATH = "/home/gthnk/.local/mnt/shared/backup"
 INPUT_FILES = "/home/gthnk/.local/mnt/shared/journal.txt"
+BACKUP_PATH = "/home/gthnk/.local/mnt/shared/backup"
 EXPORT_PATH = "/home/gthnk/.local/mnt/shared/export"
 
 SQLALCHEMY_DATABASE_URI = "sqlite:////home/gthnk/.local/mnt/shared/gthnk.db"
