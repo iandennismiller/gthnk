@@ -1,49 +1,64 @@
 # Todo
 
+## Milestone: simplify
+
+- [x] remove flask-diamond, refactor for simplicity
 - [ ] migration to update user table; rename email--username
 - [ ] hash passwords
 - [ ] change password in gthnk.py, src/docker/bin/gthnk-user-password.sh
-- [ ] dark mode theme
-- [ ] journal activity summary widget: daily, weekly
-  - [ ] possibly RSS
-- [ ] recent project activity widget
-- [x] narrow/mobile UI
-- [ ] double-square-brackets: tagging, wiki-like pseudo-page results
-  - [ ] extend search to list tags separate from fulltext results
-- [ ] think more about attachments
 - [ ] unified logging during journal rotation
-- [ ] date filter on search
-- [ ] view current configuration
-- [ ] search auto-complete for tags
+- [ ] endpoint to view current configuration
 
-## Milestone 2
+## Milestone: tags
+
+- [x] double-square-brackets: tagging, wiki-like pseudo-page results
+  - [ ] list tags separate from fulltext results
+- [ ] search auto-complete for tags
+- [ ] timeline of when tags appear
+- [ ] rethink /search as /tag/blah
+- [ ] "search" becomes "go to"
+- [ ] entry co-tag graph, navigator
+- [ ] date filter on search/go to
+
+## Milestone: attachments
+
+- [ ] think more about attachments
+
+## Milestone: activity
+
+- [ ] journal activity summary widget: daily, weekly
+- [x] agenda widget extracts todo items from a day's entries
+  - [x] render separately at bottom of day
+- [ ] recent project activity widget (maybe project-system)
+  - [ ] possibly from RSS
+
+## Milestone: communication
 
 Communication with prospective users.
 
 - [x] powerpoint presentation
 - [x] produce overview video
+- [ ] produce installation videos
+- [ ] produce usage video
 
-## Milestone 3
+## Milestone: code quality
 
 Quality of code and user experience.
 
-- [x] improvement: remove /admin prefix on URLs
-- [ ] improvement: narrow screen rendering
-- [ ] installers - windows setup.exe and osx .pkg for Python/virtualenv
-- [ ] integration for Debian/Ubuntu-flavored Linux
-- [ ] integration for Redhat/Fedora-flavored Linux
-- [ ] more robust testing of journal_explorer attachments
+- [ ] more robust testing of explorer attachments
 - [ ] enable flake8 Dxxx checks
 - [ ] testing for integration.py
 - [ ] refactor javascript
+
+## Milestone: user experience
+
+- [ ] dark mode theme
 - [ ] favicon, icon for web app
-
-## Milestone 4
-
-Integration and exchange of information.
-
-- [ ] produce installation videos
-- [ ] produce usage video
+- [x] improvement: remove /admin prefix on URLs
+- [x] improvement: narrow screen rendering
+- [ ] installers - windows setup.exe and osx .pkg for Python/virtualenv
+- [ ] integration for Debian/Ubuntu-flavored Linux
+- [ ] integration for Redhat/Fedora-flavored Linux
 
 ## Ready for Upcoming Release
 

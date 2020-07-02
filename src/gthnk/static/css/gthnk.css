@@ -22,11 +22,15 @@ body#day-view {
     margin: 0 auto;
 }
 
-#entries {
+#entries, #agenda {
     background: white;
     box-shadow: 1px 1px 5px #999;
     padding: 1em;
     font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+}
+
+#agenda {
+    margin-top: 1em;
 }
 
 a.anchor {

@@ -94,6 +94,15 @@ def search_view():
 ###
 # Day Views
 
+def extract_todo_items(day_md):
+    todo_items = []
+
+    regex = re.compile(r'^<li>\s*\[[\sxX]\] (.+)</li>$', re.MULTILINE)
+    for group in regex.findall(day_md):
+        todo_items.append(group)
+
+    return todo_items
+
 @app.route("/day/<date>.html")
 def day_view(date):
 
@@ -115,6 +124,8 @@ def day_view(date):
         # done processing, convert to Markup
         day_md = flask.Markup(regex.sub(replacement, day_md))
 
+        todo_items = extract_todo_items(day_md)
+
         days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         day_of_week = days[datetime.datetime.strptime(date, "%Y-%m-%d").weekday()]
 
@@ -123,6 +134,7 @@ def day_view(date):
             day=day, 
             day_str=day_md,
             day_of_week=day_of_week,
+            todo_items=todo_items,
         )
     else:
         return flask.redirect(flask.url_for('.index'))
