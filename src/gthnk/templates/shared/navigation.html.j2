@@ -38,11 +38,11 @@
         <ul class="navbar-nav ml-md-auto">
 
             {% if current_page != 'index' %}
-            <form class="nav-item form-inline my-2 my-sm-0" method="GET" action="/search">
+            <form class="nav-item form-inline" method="GET" action="/search">
                 <div class="input-group">
                     <input class="form-control" type="search" name="q" placeholder="Search" aria-label="Search">
                     <div class="input-group-append">
-                        <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
+                        <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
             </form>
