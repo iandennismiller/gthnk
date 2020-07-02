@@ -20,14 +20,14 @@ RUN mkdir -p /home/gthnk/.gthnk
 # Install Gthnk Requirements
 COPY requirements.txt /home/gthnk/gthnk/
 RUN sudo -i -u gthnk pip3 install --user -r /home/gthnk/gthnk/requirements.txt
-RUN chown -R gthnk:gthnk /home/gthnk
 
 COPY src/docker/bin/ /home/gthnk/.local/bin
+RUN chown -R gthnk:gthnk /home/gthnk/.local/bin
+
 COPY bin/ /home/gthnk/gthnk/bin
 COPY src/ /home/gthnk/gthnk/src
 COPY setup.py /home/gthnk/gthnk/
 COPY Readme.rst /home/gthnk/gthnk/
-RUN chown -R gthnk:gthnk /home/gthnk/.local/bin /home/gthnk/gthnk
 
 # Install Gthnk
 RUN sudo -i -u gthnk pip3 install --user /home/gthnk/gthnk
