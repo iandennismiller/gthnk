@@ -33,13 +33,13 @@ server:
 		flask run
 
 shell:
-	SETTINGS=$$PWD/.dev/conf/dev.conf bin/manage.py shell
+	SETTINGS=$$PWD/.dev/conf/dev.conf bin/gthnk shell
 
 test: clean
 	SETTINGS=$$PWD/.dev/conf/testing.conf nosetests $(MOD_NAME) -c .dev/nose/test.cfg
 
 test-import:
-	SETTINGS=$$PWD/.dev/conf/dev.conf bin/manage.py import_archive -d src/tests/data/
+	SETTINGS=$$PWD/.dev/conf/dev.conf bin/gthnk import_archive -d src/tests/data/
 
 single:
 	SETTINGS=$$PWD/.dev/conf/testing.conf nosetests $(MOD_NAME) -c .dev/nose/test-single.cfg
@@ -50,18 +50,18 @@ ifeq ($(OS),Windows_NT)
 	set SETTINGS=%cd%\.dev\conf\dev-win.conf & python bin\manage.py user_add --email "guest@example.com" --password "guest"
 	set SETTINGS=%cd%\.dev\conf\dev-win.conf & python bin\manage.py user_add --email "admin@example.com" --password "aaa" --admin
 else
-	SETTINGS=$$PWD/.dev/conf/dev.conf bin/manage.py init_db
-	SETTINGS=$$PWD/.dev/conf/dev.conf bin/manage.py user_add --username "guest" --password "guest"
+	SETTINGS=$$PWD/.dev/conf/dev.conf bin/gthnk init_db
+	SETTINGS=$$PWD/.dev/conf/dev.conf bin/gthnk user_add --username "guest" --password "guest"
 endif
 
 dropdb:
-	SETTINGS=$$PWD/.dev/conf/dev.conf bin/manage.py drop_db
+	SETTINGS=$$PWD/.dev/conf/dev.conf bin/gthnk drop_db
 
 upgradedb:
-	SETTINGS=$$PWD/.dev/conf/dev.conf bin/manage.py db upgrade
+	SETTINGS=$$PWD/.dev/conf/dev.conf bin/gthnk db upgrade
 
 migratedb:
-	SETTINGS=$$PWD/.dev/conf/dev.conf bin/manage.py db migrate
+	SETTINGS=$$PWD/.dev/conf/dev.conf bin/gthnk db migrate
 
 watch:
 	watchmedo shell-command -R -p "*.py" -c 'echo \\n\\n\\n\\nSTART; date; \

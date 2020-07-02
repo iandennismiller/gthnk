@@ -13,7 +13,7 @@ import alembic.config
 
 from sqlalchemy.exc import OperationalError
 
-# sys.path.insert(0, './src')
+sys.path.insert(0, './src')
 
 from gthnk import db, create_app
 from gthnk.__meta__ import __version__

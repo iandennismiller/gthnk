@@ -99,9 +99,21 @@ def day_view(date):
 
     day = Day.find(date=date)
     if day:
+        # convert Markdown to string to avoid HTML escaping
+        day_md = str(markdown(day.render()))
+
+        # add anchors before timestamps
         regex = re.compile(r'^<p><h4>(\d\d\d\d)</h4></p>$', re.MULTILINE)
         replacement = r'\n<a class="anchor" name="\g<1>"></a>\n<p><h4>\g<1></h4></p>\n'
-        day_md = flask.Markup(regex.sub(replacement, str(markdown(day.render()))))
+        day_md = regex.sub(replacement, day_md)
+
+        # make tags searchable
+        regex = re.compile(r'\[\[([\w\s]+)\]\]', re.MULTILINE)
+        replacement = r'[[<a href="/search?q=\g<1>">\g<1></a>]]'
+        day_md = regex.sub(replacement, day_md)
+
+        # done processing, convert to Markup
+        day_md = flask.Markup(regex.sub(replacement, day_md))
 
         days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         day_of_week = days[datetime.datetime.strptime(date, "%Y-%m-%d").weekday()]
