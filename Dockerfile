@@ -1,5 +1,3 @@
-# syntax = docker/dockerfile:experimental
-
 # docker-gthnk
 # Ian Dennis Miller
 
@@ -17,19 +15,25 @@ RUN adduser \
   "gthnk"
 
 # Copy home directory structure
-RUN mkdir -p /home/gthnk/.local
-RUN mkdir -p /home/gthnk/.local/mnt/shared
+RUN mkdir -p /home/gthnk/.gthnk
+
+# Install Gthnk Requirements
+COPY requirements.txt /home/gthnk/gthnk/
+RUN sudo -i -u gthnk pip3 install --user -r /home/gthnk/gthnk/requirements.txt
 
 COPY src/docker/bin/ /home/gthnk/.local/bin
-COPY . /home/gthnk/gthnk
+COPY bin/ /home/gthnk/gthnk/bin
+COPY src/ /home/gthnk/gthnk/src
+COPY setup.py /home/gthnk/gthnk/
+COPY Readme.rst /home/gthnk/gthnk/
 RUN chown -R gthnk:gthnk /home/gthnk
 
 # Install Gthnk
-RUN --mount=type=cache,target=/home/gthnk/.cache/pip sudo -i -u gthnk pip3 install --user /home/gthnk/gthnk
+RUN sudo -i -u gthnk pip3 install --user /home/gthnk/gthnk
 
 # 1) Generate configuration if necessary
 # 2) Launch the Gthnk server
-CMD if [ ! -f /home/gthnk/.local/mnt/shared/gthnk.conf ]; then \
-  sudo -i -u gthnk gthnk-firstrun.sh /home/gthnk/.local/mnt/shared/gthnk.conf; \
+CMD if [ ! -f /home/gthnk/.gthnk/gthnk.conf ]; then \
+  sudo -i -u gthnk gthnk-firstrun.sh /home/gthnk/.gthnk/gthnk.conf; \
   fi; \
   sudo -i -u gthnk gthnk-server.sh

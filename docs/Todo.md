@@ -1,18 +1,33 @@
 # Todo
 
+- [ ] migration to update user table; rename email--username
+- [ ] hash passwords
+- [ ] change password in gthnk.py, src/docker/bin/gthnk-user-password.sh
+- [ ] dark mode theme
+- [ ] journal activity summary widget: daily, weekly
+  - [ ] possibly RSS
+- [ ] recent project activity widget
+- [ ] narrow/mobile UI
+- [ ] double-square-brackets: tagging, wiki-like pseudo-page results
+  - [ ] extend search to list tags separate from fulltext results
+- [ ] think more about attachments
+- [ ] unified logging during journal rotation
+- [ ] date filter on search
+- [ ] view current configuration
+- [ ] search auto-complete for tags
+
 ## Milestone 2
 
 Communication with prospective users.
 
-- [ ] powerpoint presentation
-- [ ] produce overview video
-- [ ] release rc2
+- [x] powerpoint presentation
+- [x] produce overview video
 
 ## Milestone 3
 
 Quality of code and user experience.
 
-- [ ] improvement: remove /admin prefix on URLs
+- [x] improvement: remove /admin prefix on URLs
 - [ ] improvement: narrow screen rendering
 - [ ] installers - windows setup.exe and osx .pkg for Python/virtualenv
 - [ ] integration for Debian/Ubuntu-flavored Linux

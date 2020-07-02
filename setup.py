@@ -30,7 +30,7 @@ setup(
     packages=find_packages('src'),
     package_dir={'': 'src'},
     scripts=[
-        "bin/gthnk.py",
+        "bin/gthnk",
     ],
     long_description=read('Readme.rst'),
     classifiers=[

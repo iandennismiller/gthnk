@@ -7,11 +7,11 @@ if [[ -z $1 ]]; then
 fi
 
 mkdir -p \
-    /home/gthnk/.local/mnt/shared/export/attachment \
-    /home/gthnk/.local/mnt/shared/export/markdown \
-    /home/gthnk/.local/mnt/shared/export/text \
-    /home/gthnk/.local/mnt/shared/export/thumbnail \
-    /home/gthnk/.local/mnt/shared/export/preview
+    /home/gthnk/.gthnk/export/attachment \
+    /home/gthnk/.gthnk/export/markdown \
+    /home/gthnk/.gthnk/export/text \
+    /home/gthnk/.gthnk/export/thumbnail \
+    /home/gthnk/.gthnk/export/preview
 
 ~/.local/bin/gthnk-config-init.sh "$1"
 ~/.local/bin/gthnk-db-init.sh

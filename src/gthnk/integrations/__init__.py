@@ -13,7 +13,7 @@ from jinja2 import Environment, PackageLoader
 
 # render templates as files
 env = Environment(
-    loader=PackageLoader('gthnk.integration', 'templates')
+    loader=PackageLoader('gthnk.integrations', 'templates')
 )
 
 

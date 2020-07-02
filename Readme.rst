@@ -43,9 +43,9 @@ Quick Start
 ::
 
     docker run -d --rm \
-        --name gthnk \
+        --name gthnk-server \
         -p 1620:1620 \
-        -v ~/.local/share/gthnk:/home/gthnk/.local/share/gthnk \
+        -v ~/.gthnk:/home/gthnk/.gthnk \
         iandennismiller/gthnk
 
 Usage
@@ -61,8 +61,8 @@ Open ``journal.txt`` with a text editor:
 Journal Entries
 ^^^^^^^^^^^^^^^
 
-To get started with ``journal.txt``, insert a date marker (Ctrl-Alt-Cmd-N) to start a new journal day.
-Then, insert a time marker (Ctrl-Alt-Cmd-M) to start a journal entry.
+To get started with ``journal.txt``, insert a date marker **YYYY-MM-DD** to start a new journal day.
+Then, insert a time marker **HHMM** to start a journal entry.
 Now you can compose your note in ``journal.txt``.
 
 You can add multiple entries per day - and even multiple days - by inserting date and time markers as you work.
@@ -70,7 +70,7 @@ You can add multiple entries per day - and even multiple days - by inserting dat
 Gthnk Interface
 ^^^^^^^^^^^^^^^
 
-To interact with the Gthnk journal, connect to http://localhost:1620 and log in with the username ``user@example.com`` and the password ``secret``.
+To interact with the Gthnk journal, connect to http://localhost:1620 and log in with the username ``gthnk`` and the password ``gthnk``.
 
 Click the **refresh** icon in the Journal interface to make Gthnk import from ``journal.txt``.
 Now your journal entries are indexed and searchable - and ``journal.txt`` is a blank document waiting for your next entries.
@@ -78,16 +78,23 @@ Now your journal entries are indexed and searchable - and ``journal.txt`` is a b
 Integration
 ^^^^^^^^^^^
 
+Text editor integrations make it easier to insert journal entries.
+
 - VS Code: https://marketplace.visualstudio.com/items?itemName=IanDennisMiller.gthnk
 - Sublime Text: https://github.com/iandennismiller/gthnk/tree/master/src/sublime-text-plugin
-- Chrome App: https://github.com/iandennismiller/gthnk/tree/master/src/chrome-app
 
-Other Projects
-^^^^^^^^^^^^^^
+After installing the plugin for your editor, the following key combinations are available:
+
+- Ctrl-Alt-Cmd-N: Insert date marker YYYYMMDD
+- Ctrl-Alt-Cmd-M: Insert time marker HHMM
+
+Other Gthnk Projects
+^^^^^^^^^^^^^^^^^^^^
 
 - Python-Markdown Journal Extension: https://github.com/iandennismiller/mdx_journal
 - VS Code Extension: https://github.com/iandennismiller/vscode-gthnk
 - Gthnk Presentation: https://github.com/iandennismiller/pres-gthnk-overview
+- Chrome App: https://github.com/iandennismiller/gthnk/tree/master/src/chrome-app
 - Website Repo: https://github.com/iandennismiller/www-gthnk
 
 Next Steps

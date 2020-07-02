@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
@@ -13,7 +13,8 @@ import alembic.config
 
 from sqlalchemy.exc import OperationalError
 
-sys.path.insert(0, './src')
+# sys.path.insert(0, './src')
+
 from gthnk import db, create_app
 from gthnk.__meta__ import __version__
 from gthnk.models.user import User
@@ -22,7 +23,7 @@ from gthnk.models.entry import Entry
 from gthnk.models.page import Page
 from gthnk.adaptors.journal_buffer import TextFileJournalBuffer
 from gthnk.adaptors.librarian import Librarian
-from gthnk.integration import make_config
+from gthnk.integrations import make_config
 
 
 app = create_app()
