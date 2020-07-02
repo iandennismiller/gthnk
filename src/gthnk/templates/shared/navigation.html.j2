@@ -2,53 +2,39 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
     <a class="navbar-brand" href="{{ url_for('.index') }}">gthnk</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+
+    {% if current_user.is_authenticated %}
+
+        <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('.latest_view') }}"><i class="fas fa-sun"></i></a>
+
+        {% if current_page == 'day-view' %}
+
+            <a class="nav-item nav-link px-1 text-secondary" id="calendar_button" href="javascript:void(0)" title="go to day"><i class="far fa-calendar-alt"></i></a>
+
+            {% if day and day.yesterday() %}
+                <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('.day_view', date=day.yesterday().date) }}" title="previous"><i class="fas fa-chevron-left"></i></a>
+            {% else %}
+                <a class="nav-item nav-link px-1 text-secondary" href="javascript:void(0)" title="no past days"><i class="fas fa-stop"></i></a>
+            {% endif %}
+
+            {% if day and day.tomorrow() %}
+                <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('.day_view', date=day.tomorrow().date) }}" title="previous"><i class="fas fa-chevron-right"></i></a>
+            {% else %}
+                <a class="nav-item nav-link px-1 text-secondary" href="javascript:void(0)" title="no further days"><i class="fas fa-stop"></i></a>
+            {% endif %}
+
+        {% endif %}
+
+    {% endif %}
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent2"
+        aria-controls="navbarSupportedContent2" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            {# <li class="nav-item">
-                <a class="nav-link" href="/help"><i class="fas fa-question-circle"></i> Help</a>
-            </li> #}
+    {% if current_user.is_authenticated %}
+    <div class="collapse navbar-collapse" id="navbarSupportedContent2">
 
-            {% if current_user.is_authenticated %}
-
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('.latest_view') }}"><i class="far fa-clock"></i></a>
-                </li>
-
-                {% if current_page == 'day-view' %}
-                    <li class="nav-item">
-                    {% if day and day.yesterday() %}
-                        <a class="nav-link" href="{{ url_for('.day_view', date=day.yesterday().date) }}" title="previous"><i class="fas fa-chevron-left"></i></a>
-                    {% else %}
-                        <a class="nav-link" href="javascript:void(0)" title="no past days"><i class="fas fa-stop"></i></a>
-                    {% endif %}
-                    </li>
-
-                    <li class="nav-item">
-                    {% if day and day.tomorrow() %}
-                        <a class="nav-link" href="{{ url_for('.day_view', date=day.tomorrow().date) }}" title="previous"><i class="fas fa-chevron-right"></i></a>
-                    {% else %}
-                        <a class="nav-link" href="javascript:void(0)" title="no further days"><i class="fas fa-stop"></i></a>
-                    {% endif %}
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" id="calendar_button" href="javascript:void(0)" title="go to day"><i class="far fa-calendar-alt"></i></a>
-                    </li>
-
-                    {# <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('.download', date=day.date) }}" title="download"><i class="fas fa-file-download"></i></a>
-                    </li> #}
-                {% endif %}
-
-            {% endif %}
-        </ul>
-
-        {% if current_user.is_authenticated %}
         <ul class="navbar-nav ml-md-auto">
 
             {% if current_page != 'index' %}
@@ -80,7 +66,8 @@
             </li>
         </ul>
 
-        {% endif %}
 
     </div>
+    {% endif %}
+
 </nav>

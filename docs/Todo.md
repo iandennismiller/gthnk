@@ -7,7 +7,7 @@
 - [ ] journal activity summary widget: daily, weekly
   - [ ] possibly RSS
 - [ ] recent project activity widget
-- [ ] narrow/mobile UI
+- [x] narrow/mobile UI
 - [ ] double-square-brackets: tagging, wiki-like pseudo-page results
   - [ ] extend search to list tags separate from fulltext results
 - [ ] think more about attachments
