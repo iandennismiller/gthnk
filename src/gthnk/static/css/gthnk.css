@@ -8,11 +8,6 @@ body#day-view {
     padding: .1rem 1rem !important;
 }
 
-#backdrop {
-    padding-top: 2em;
-    padding-bottom: 2em;
-}
-
 .image_container img {
     max-height: 600px;
 }
@@ -22,11 +17,19 @@ body#day-view {
     margin: 0 auto;
 }
 
-#entries, #agenda {
-    background: white;
-    box-shadow: 1px 1px 5px #999;
+#backdrop {
+    padding-top: 2em;
+    padding-bottom: 2em;
+}
+
+.gthnk-card {
     padding: 1em;
     font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+}
+
+body.bootstrap .gthnk-card {
+    background: white;
+    box-shadow: 1px 1px 5px #999;
 }
 
 #agenda {
@@ -50,18 +53,35 @@ a.anchor {
     font-style: italic;
 }
 
+/*
+    Dark Mode
+*/
+
+body.bootstrap-dark#day-view {
+    background: rgb(25, 29, 33);
+}
+
+body.bootstrap-dark .gthnk-card {
+    background: rgb(38, 38, 38);
+    box-shadow: 1px 1px 5px #333;
+}
+
+/*
+    Mobile
+*/
+
 @media screen and (max-width: 767px) {
     body {
-        font-size: 0.7rem;
+        font-size: 0.7rem !important;
     }
 
     h3 {
-        font-size: 0.9rem;
+        font-size: 0.9rem !important;
         font-weight: bold;
     }
 
     h4 {
-        font-size: 0.8rem;
+        font-size: 0.8rem !important;
         font-weight: bold;
     }
 }

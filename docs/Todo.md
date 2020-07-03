@@ -52,7 +52,8 @@ Quality of code and user experience.
 
 ## Milestone: user experience
 
-- [ ] keyboard hot keys: left, right, esc
+- [x] keyboard hot keys: left, right, esc
+- [ ] swipe left/right
 - [ ] dark mode theme
 - [x] improvement: remove /admin prefix on URLs
 - [x] improvement: narrow screen rendering

@@ -11,7 +11,7 @@
     <div class="col-xl-10">
       <a id="entries_anchor" name="entries_anchor"></a>
 
-      <div id="entries">
+      <div class="gthnk-card" id="entries">
         <p id="day-of-week">{{day_of_week}}</p>
         {{ day_str|safe }}
       </div>
@@ -23,7 +23,7 @@
   <div class="row">
     <div class="col-xl-1"></div>
     <div class="col-xl-10">
-      <div id="agenda">
+      <div class="gthnk-card" id="agenda">
         <h4>Agenda</h4>
         <ul>
         {% for item in todo_items %}
@@ -47,4 +47,3 @@
 <script src="/static/js/gthnk-explorer.js"></script>
 
 {% endblock %}
-

@@ -1,6 +1,6 @@
 {% set current_page = current_page|default('index') %}
 
-<nav class="navbar navbar-expand-sm navbar-light bg-light sticky-top">
+<nav class="navbar navbar-expand-sm navbar-themed sticky-top">
     <a class="navbar-brand" href="{{ url_for('.index') }}">gthnk</a>
 
     {% if current_user.is_authenticated %}
@@ -66,8 +66,12 @@
             </form>
             {% endif %}
 
-            <li class="nav-item">
+            {# <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('.refresh') }}" title="refresh"><i class="fas fa-sync"></i></a>
+            </li> #}
+
+            <li class="nav-item">
+                <a class="nav-link" href="javascript:toggle_darkmode();" title="dark mode"><i class="far fa-lightbulb"></i></a>
             </li>
 
             <li class="nav-item">
@@ -78,12 +82,11 @@
 
         {% else %}
 
-        <ul class="navbar-nav ml-md-auto">
+        {# <ul class="navbar-nav ml-md-auto">
             <li class="nav-item">
                 <a class="nav-link" href="/login" title="log in"><i class="fas fa-user"></i></a>
             </li>
-        </ul>
-
+        </ul> #}
 
     </div>
     {% endif %}

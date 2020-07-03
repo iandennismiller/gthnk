@@ -18,9 +18,15 @@
     <!-- jquery -->
     <script src="/static/lib/jquery/jquery-3.5.1.min.js"></script>
 
-    <!-- bootstrap -->
+    {# <!-- bootstrap -->
     <link rel="stylesheet" href="/static/lib/bootstrap/bootstrap-4.4.1-dist/css/bootstrap.min.css" />
-    <script src="/static/lib/bootstrap/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+    <script src="/static/lib/bootstrap/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script> #}
+
+    <!-- bootstrap-dark -->
+    <link rel="stylesheet" href="/static/lib/bootstrap-dark/css/bootstrap-dark.min.css" />
+    <link rel="stylesheet" href="/static/lib/bootstrap-dark/css/toggle-bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/lib/bootstrap-dark/css/toggle-bootstrap-dark.min.css" />
+    <script src="/static/lib/bootstrap-dark/js/bootstrap.min.js"></script>
 
     <!-- fontawesome -->
     <link rel="stylesheet" href="/static/lib/fontawesome/fontawesome-free-5.13.0-web/css/all.min.css" />
@@ -41,7 +47,7 @@
 
 </head>
 
-<body id="{{current_page}}">
+<body id="{{current_page}}" class="bootstrap">
     {% include "shared/navigation.html.j2" %}
     
     {% with messages = get_flashed_messages() %}
@@ -79,6 +85,7 @@
         {# <p class="text-center mt-5">Gthnk</p> #}
     </div>
 
+    <script src="/static/js/gthnk.js"></script>
     <script>
         $('.toast').toast({autohide: false});
         $('.toast').toast('show');
