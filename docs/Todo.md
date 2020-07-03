@@ -52,13 +52,19 @@ Quality of code and user experience.
 
 ## Milestone: user experience
 
+- [ ] keyboard hot keys: left, right, esc
 - [ ] dark mode theme
-- [ ] favicon, icon for web app
 - [x] improvement: remove /admin prefix on URLs
 - [x] improvement: narrow screen rendering
 - [ ] installers - windows setup.exe and osx .pkg for Python/virtualenv
 - [ ] integration for Debian/Ubuntu-flavored Linux
 - [ ] integration for Redhat/Fedora-flavored Linux
+
+## Milestone: progressive web app
+
+- [ ] favicon, icon for web app
+- [ ] assemble day view from JSON via browser DOM
+- [ ] use service worker to broker day data
 
 ## Ready for Upcoming Release
 

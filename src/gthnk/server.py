@@ -2,6 +2,7 @@
 # gthnk (c) Ian Dennis Miller
 
 import re
+import os
 import time
 import json
 import flask
@@ -97,41 +98,77 @@ def search_view():
 def extract_todo_items(day_md):
     todo_items = []
 
-    regex = re.compile(r'^<li>\s*\[[\sxX]\] (.+)</li>$', re.MULTILINE)
+    regex = re.compile(r'\s*-\s*\[[\sxX]\]\s*(.+)$', re.MULTILINE)
     for group in regex.findall(day_md):
         todo_items.append(group)
 
     return todo_items
+
+def render_day_pipeline(day_str):
+    # convert Markdown to string to avoid HTML escaping
+    day_md = str(markdown(day_str))
+
+    # add anchors before timestamps
+    regex = re.compile(r'^<p><h4>(\d\d\d\d)</h4></p>$', re.MULTILINE)
+    replacement = r'\n<a class="anchor" name="\g<1>"></a>\n<p><h4>\g<1></h4></p>\n'
+    day_md = regex.sub(replacement, day_md)
+
+    # make tags searchable
+    regex = re.compile(r'\[\[([\w\s]+)\]\]', re.MULTILINE)
+    replacement = r'[[<a href="/search?q=\g<1>">\g<1></a>]]'
+    day_md = regex.sub(replacement, day_md)
+
+    # done processing, convert to Markup
+    day_md = flask.Markup(regex.sub(replacement, day_md))
+
+    return day_md
+
+
+@app.route("/buffer")
+def buffer_view():
+    date = datetime.datetime.today().strftime('%Y-%m-%d')
+
+    input_files = app.config["INPUT_FILES"]
+
+    buffer_str = ""
+    for buffer_file in input_files.split(","):
+        if os.path.isfile(buffer_file):
+            with open(buffer_file, 'r') as f:
+                buffer_str += f.read()
+                buffer_str += "\n\n"
+
+    todo_items = extract_todo_items(buffer_str)
+    day_md = render_day_pipeline(buffer_str)
+
+    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    day_of_week = days[datetime.datetime.strptime(date, "%Y-%m-%d").weekday()]
+
+    return flask.render_template(
+        'explorer/day-view.html.j2',
+        date=date,
+        day=None,
+        day_str=day_md,
+        day_of_week=day_of_week,
+        todo_items=todo_items,
+        is_buffer=True,
+    )
 
 @app.route("/day/<date>.html")
 def day_view(date):
 
     day = Day.find(date=date)
     if day:
-        # convert Markdown to string to avoid HTML escaping
-        day_md = str(markdown(day.render()))
-
-        # add anchors before timestamps
-        regex = re.compile(r'^<p><h4>(\d\d\d\d)</h4></p>$', re.MULTILINE)
-        replacement = r'\n<a class="anchor" name="\g<1>"></a>\n<p><h4>\g<1></h4></p>\n'
-        day_md = regex.sub(replacement, day_md)
-
-        # make tags searchable
-        regex = re.compile(r'\[\[([\w\s]+)\]\]', re.MULTILINE)
-        replacement = r'[[<a href="/search?q=\g<1>">\g<1></a>]]'
-        day_md = regex.sub(replacement, day_md)
-
-        # done processing, convert to Markup
-        day_md = flask.Markup(regex.sub(replacement, day_md))
-
-        todo_items = extract_todo_items(day_md)
+        day_str = day.render()
+        todo_items = extract_todo_items(day_str)
+        day_md = render_day_pipeline(day_str)
 
         days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         day_of_week = days[datetime.datetime.strptime(date, "%Y-%m-%d").weekday()]
 
         return flask.render_template(
             'explorer/day-view.html.j2',
-            day=day, 
+            date=date,
+            day=day,
             day_str=day_md,
             day_of_week=day_of_week,
             todo_items=todo_items,

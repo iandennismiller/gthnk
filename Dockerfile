@@ -25,9 +25,9 @@ COPY src/docker/bin/ /home/gthnk/.local/bin
 RUN chown -R gthnk:gthnk /home/gthnk/.local/bin
 
 COPY bin/ /home/gthnk/gthnk/bin
-COPY src/ /home/gthnk/gthnk/src
 COPY setup.py /home/gthnk/gthnk/
 COPY Readme.rst /home/gthnk/gthnk/
+COPY src/ /home/gthnk/gthnk/src
 
 # Install Gthnk
 RUN sudo -i -u gthnk pip3 install --user /home/gthnk/gthnk
