@@ -63,7 +63,7 @@ body.bootstrap-dark#day-view {
 
 body.bootstrap-dark .gthnk-card {
     background: rgb(38, 38, 38);
-    box-shadow: 1px 1px 5px #333;
+    /* box-shadow: 1px 1px 5px #333; */
 }
 
 /*

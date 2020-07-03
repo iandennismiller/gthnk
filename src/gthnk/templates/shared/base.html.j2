@@ -48,6 +48,8 @@
 </head>
 
 <body id="{{current_page}}" class="bootstrap">
+    <script src="/static/js/gthnk-darkmode.js"></script>
+
     {% include "shared/navigation.html.j2" %}
     
     {% with messages = get_flashed_messages() %}
@@ -85,10 +87,12 @@
         {# <p class="text-center mt-5">Gthnk</p> #}
     </div>
 
-    <script src="/static/js/gthnk.js"></script>
     <script>
         $('.toast').toast({autohide: false});
         $('.toast').toast('show');
+
+        // run dark mode again to ensure the index image is correct
+        set_darkmode(localStorage.getItem("dark-mode"));
     </script>
 
 </body>
