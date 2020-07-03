@@ -33,6 +33,10 @@ body#day-view {
     margin-top: 1em;
 }
 
+#agenda li {
+    list-style-type: none;
+}
+
 a.anchor {
     display: block;
     position: relative;
@@ -46,3 +50,18 @@ a.anchor {
     font-style: italic;
 }
 
+@media screen and (max-width: 767px) {
+    body {
+        font-size: 0.7rem;
+    }
+
+    h3 {
+        font-size: 0.9rem;
+        font-weight: bold;
+    }
+
+    h4 {
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+}

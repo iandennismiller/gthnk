@@ -65,6 +65,7 @@ Quality of code and user experience.
 - [ ] favicon, icon for web app
 - [ ] assemble day view from JSON via browser DOM
 - [ ] use service worker to broker day data
+- [ ] describe with manifest.json
 
 ## Ready for Upcoming Release
 

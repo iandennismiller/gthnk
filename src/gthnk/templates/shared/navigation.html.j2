@@ -1,31 +1,47 @@
 {% set current_page = current_page|default('index') %}
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+<nav class="navbar navbar-expand-sm navbar-light bg-light sticky-top">
     <a class="navbar-brand" href="{{ url_for('.index') }}">gthnk</a>
 
     {% if current_user.is_authenticated %}
 
-        <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('.buffer_view') }}"><i class="far fa-edit"></i></a>
+        {% if current_page == 'results-list' %}
 
-        <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('.latest_view') }}"><i class="fas fa-sun"></i></a>
+            <a class="nav-item nav-link px-1 text-secondary" href="javascript:window.history.back();"><i class="fas fa-arrow-left"></i></a>
+            
+        {% endif %}
+
+        {# <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('.latest_view') }}"><i class="fas fa-sun"></i></a> #}
 
         {% if current_page == 'day-view' %}
 
-            <a class="nav-item nav-link px-1 text-secondary" id="calendar_button" href="javascript:void(0)" title="go to day"><i class="far fa-calendar-alt"></i></a>
-
-            {% if day and day.yesterday() %}
-                <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('.day_view', date=day.yesterday().date) }}" title="previous"><i class="fas fa-chevron-left"></i></a>
+            {% if day %}
+                {% if day.yesterday() %}
+                    <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('.day_view', date=day.yesterday().date) }}" title="previous"><i class="fas fa-chevron-left"></i></a>
+                {% else %}
+                    <a class="nav-item nav-link px-1 text-secondary" href="javascript:void(0)" title="no past days"><i class="fas fa-stop"></i></a>
+                {% endif %}
             {% else %}
-                <a class="nav-item nav-link px-1 text-secondary" href="javascript:void(0)" title="no past days"><i class="fas fa-stop"></i></a>
+                <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('.latest_view') }}" title="latest"><i class="fas fa-chevron-left"></i></a>
             {% endif %}
 
-            {% if day and day.tomorrow() %}
-                <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('.day_view', date=day.tomorrow().date) }}" title="previous"><i class="fas fa-chevron-right"></i></a>
+            {% if day %} 
+                {%if day.tomorrow() %}
+                    <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('.day_view', date=day.tomorrow().date) }}" title="previous"><i class="fas fa-chevron-right"></i></a>
+                {% else %}
+                    {# <a class="nav-item nav-link px-1 text-secondary" href="javascript:void(0)" title="no further days"><i class="fas fa-stop"></i></a> #}
+                {% endif %}
             {% else %}
-                <a class="nav-item nav-link px-1 text-secondary" href="javascript:void(0)" title="no further days"><i class="fas fa-stop"></i></a>
+                {# <a class="nav-item nav-link px-1 text-secondary" href="javascript:void(0)" title="no further days"><i class="fas fa-stop"></i></a> #}
             {% endif %}
-
+            
         {% endif %}
+
+    <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('.buffer_view') }}"><i class="fas fa-fast-forward"></i></a>
+
+    {% if current_page == 'day-view' %}
+        <a class="nav-item nav-link px-1 text-secondary" id="calendar_button" href="javascript:void(0)" title="go to day"><i class="far fa-calendar-alt"></i></a>
+    {% endif %}
 
     {% endif %}
 
