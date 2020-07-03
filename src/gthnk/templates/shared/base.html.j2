@@ -42,6 +42,9 @@
     <!-- filedrag -->
     <script src="/static/lib/filedrag/filedrag.js"></script>
 
+    <!-- swiper -->
+    <script src="/static/lib/swiper/swiper.js"></script>
+
     <!-- gthnk -->
     <link href="/static/css/gthnk.css" rel="stylesheet">
 
@@ -87,13 +90,22 @@
         {# <p class="text-center mt-5">Gthnk</p> #}
     </div>
 
+    <!-- inter-day navigation -->
     <script>
-        $('.toast').toast({autohide: false});
-        $('.toast').toast('show');
+        {% if day and day.yesterday() %}
+        var yesterday = "{{day.yesterday().date}}";
+        {% else %}
+        var yesterday = null;
+        {% endif %}
 
-        // run dark mode again to ensure the index image is correct
-        set_darkmode(localStorage.getItem("dark-mode"));
+        {% if day and day.tomorrow() %}
+        var tomorrow = "{{day.tomorrow().date}}";
+        {% else %}
+        var tomorrow = null;
+        {% endif %}
     </script>
+
+    <script src="/static/js/gthnk.js"></script>
 
 </body>
 

@@ -1,6 +1,14 @@
 /* @import url(/static/css/gthnk-attachments.css); */
 
-body#day-view {
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+}
+
+  body#day-view {
     background: rgb(230, 230, 230);
 }
 

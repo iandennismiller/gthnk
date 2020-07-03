@@ -54,7 +54,7 @@ Quality of code and user experience.
 
 - [x] keyboard hot keys: left, right, esc
 - [ ] swipe left/right
-- [ ] dark mode theme
+- [x] dark mode theme
 - [x] improvement: remove /admin prefix on URLs
 - [x] improvement: narrow screen rendering
 - [ ] installers - windows setup.exe and osx .pkg for Python/virtualenv
