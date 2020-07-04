@@ -8,7 +8,8 @@ services:
     container_name: gthnk-server
     volumes:
       - ~/.gthnk:/home/gthnk/.gthnk
-      # - ~/Seafile/Gthnk:/home/gthnk/.gthnk
+      # - ~/Dropbox/gthnk:/home/gthnk/.gthnk
+      # - ~/Seafile/gthnk:/home/gthnk/.gthnk
     networks:
       - gthnk-net
     ports:

@@ -1,6 +1,6 @@
 # Todo
 
-## Milestone: simplify
+## Milestone: simplify 0.7.x
 
 - [x] remove flask-diamond, refactor for simplicity
 - [ ] migration to update user table; rename email--username
@@ -8,6 +8,11 @@
 - [ ] change password in gthnk.py, src/docker/bin/gthnk-user-password.sh
 - [ ] unified logging during journal rotation
 - [ ] endpoint to view current configuration
+- [ ] results page displays as gthnk-card(s)
+
+## Milestone: attachments 0.8.x
+
+- [ ] think more about attachments
 
 ## Milestone: tags
 
@@ -19,10 +24,6 @@
 - [ ] "search" becomes "go to"
 - [ ] entry co-tag graph, navigator
 - [ ] date filter on search/go to
-
-## Milestone: attachments
-
-- [ ] think more about attachments
 
 ## Milestone: activity
 
@@ -53,7 +54,7 @@ Quality of code and user experience.
 ## Milestone: user experience
 
 - [x] keyboard hot keys: left, right, esc
-- [ ] swipe left/right
+- [x] swipe left/right
 - [x] dark mode theme
 - [x] improvement: remove /admin prefix on URLs
 - [x] improvement: narrow screen rendering
