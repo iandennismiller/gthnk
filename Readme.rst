@@ -31,6 +31,7 @@ Overview
 Entries are created using plain old text files, which **gthnk** imports once per day.
 Any text editor can be used to add information to **gthnk**.
 Entries are searchable using the embedded **gthnk** server, which can be accessed with a browser.
+
 .. Additional media, including images and PDFs, can be attached to the journal.
 
 The easiest way to run **gthnk** is with Docker.
@@ -161,10 +162,10 @@ In order for gthnk to rotate the journals automatically, a separate process need
 
 The full suite of gthnk server processes can be run as:
 
-```
-wget https://github.com/iandennismiller/gthnk/raw/simplify/src/docker/docker-compose.yaml
-docker-compose up -d
-```
+::
+
+    wget https://github.com/iandennismiller/gthnk/raw/simplify/src/docker/docker-compose.yaml
+    docker-compose up -d
 
 Other gthnk Projects
 ^^^^^^^^^^^^^^^^^^^^
