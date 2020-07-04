@@ -180,17 +180,24 @@ The full suite of gthnk server processes can be run as:
     wget https://github.com/iandennismiller/gthnk/raw/master/src/docker/docker-compose.yaml
     docker-compose up -d
 
-Other gthnk Projects
-^^^^^^^^^^^^^^^^^^^^
+Other gthnk Resources
+^^^^^^^^^^^^^^^^^^^^^
 
+- Project repository: https://github.com/iandennismiller/gthnk
 - Public website and blog: http://www.gthnk.com
-    - Website Repo: https://github.com/iandennismiller/www-gthnk
+    - Website repo: https://github.com/iandennismiller/www-gthnk
 - Read The Docs: https://readthedocs.org/projects/gthnk
     - Documentation repo: https://github.com/iandennismiller/gthnk/tree/master/docs
-- VS Code Extension: https://github.com/iandennismiller/vscode-gthnk
-- gthnk Presentation: https://github.com/iandennismiller/pres-gthnk-overview
+- Python Package Index: https://pypi.org/project/gthnk/
+- Presentation: https://iandennismiller.github.io/pres-gthnk-overview
+    - Presentation repo: https://github.com/iandennismiller/pres-gthnk-overview
+- Continuous Integration with Travis: https://travis-ci.org/iandennismiller/gthnk
+- Code Coverage with Coveralls: https://coveralls.io/repos/github/iandennismiller/gthnk
+- VS Code Extension: https://marketplace.visualstudio.com/items?itemName=IanDennisMiller.gthnk
+    - VS Code Extension Repo: https://github.com/iandennismiller/vscode-gthnk
 - Chrome App: https://github.com/iandennismiller/gthnk/tree/master/src/chrome-app
-- Python-Markdown Journal Extension: https://github.com/iandennismiller/mdx_journal
+- Python-Markdown gthnk journal Extension: https://pypi.org/project/mdx_journal/
+    - Repo: https://github.com/iandennismiller/mdx_journal
 
 Documentation
 ^^^^^^^^^^^^^
