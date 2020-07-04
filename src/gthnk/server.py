@@ -127,6 +127,21 @@ def render_day_pipeline(day_str):
     return day_md
 
 
+@app.route("/buffer/latest.json")
+@login_required
+def buffer_timestamp():
+    input_files = app.config["INPUT_FILES"]
+    latest_time = 0
+
+    for buffer_file in input_files.split(","):
+        if os.path.isfile(buffer_file):
+            mtime = os.path.getmtime(buffer_file)
+            if mtime > latest_time:
+                latest_time = mtime
+
+    return {'timestamp': latest_time}
+
+
 @app.route("/buffer")
 @login_required
 def buffer_view():

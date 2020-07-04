@@ -8,7 +8,6 @@
 - [ ] generate unique secret key when configuration is generated
 - [ ] change password in gthnk.py, src/docker/bin/gthnk-user-password.sh
 - [ ] unified logging during journal rotation
-- [ ] endpoint to view current configuration
 - [ ] results page displays as gthnk-card(s)
 - [ ] update documentation and website to reflect current feature set
 - [ ] tests passing
@@ -35,7 +34,8 @@
 - [x] dark mode theme
 - [x] improvement: remove /admin prefix on URLs
 - [x] improvement: narrow screen rendering
-- [ ] automatically poll buffer for updates
+- [x] automatically poll buffer for updates
+- [ ] endpoint to view current configuration
 
 ## Milestone: progressive web app
 
