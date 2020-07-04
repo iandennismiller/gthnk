@@ -24,19 +24,6 @@ Make a journal that lasts 100 years.
 .. image:: https://img.shields.io/github/stars/iandennismiller/gthnk.svg?style=social&label=GitHub
     :target: https://github.com/iandennismiller/gthnk
 
-Table of Contents
------------------
-
-- `Quick Start <#quick-start>`_
-- `Journal Entries <#journal-entries>`_
-- `User Interface <#user-interface>`_
-- `Journal Rotation <#journal-rotation>`_
-- `Integration with Text Editors <#integration-with-text-editors>`_
-- `Tags <#tags>`_
-- `Configuration <#configuration>`_
-- `Cloud Sync <#cloud-sync>`_
-- `Full server with rotation <#full-server-with-rotation>`_
-
 Overview
 --------
 
@@ -66,11 +53,11 @@ Use Docker to run gthnk with all files stored locally in ``~/.gthnk``.
         -v ~/.gthnk:/home/gthnk/.gthnk \
         iandennismiller/gthnk
 
-The default text file where you will record `Journal Entries <#journal-entries>`_ is ``~/.gthnk/journal.txt``.
+The default text file where you will record journal entries is ``~/.gthnk/journal.txt``.
 
-Open ``journal.txt`` with a text editor to add new `Journal Entries <#journal-entries>`_.
+Open ``journal.txt`` with a text editor to add new journal entries.
 
-Open http://localhost:1620 to access the `User Interface <#user-interface>`_.
+Open http://localhost:1620 to access the user interface.
 
 Journal Entries
 ^^^^^^^^^^^^^^^
@@ -113,7 +100,7 @@ When the journal rotates, all the entries are imported from ``journal.txt`` into
 After import, the ``journal.txt`` file is wiped.
 
 The preferred rotation method method is to use an automatic process like ``cron``, ``systemd``, or ``launchd``.
-A `full server with rotation <#full-server-with-rotation>`_ using ``docker-compose`` is available.
+A full server with rotation using ``docker-compose`` is available in the readme.
 
 The journal can be manually rotated using the interface by clicking the **refresh** button in the hamburger menu.
 
