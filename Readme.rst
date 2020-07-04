@@ -37,8 +37,8 @@ Make a journal that lasts 100 years.
 Table of Contents
 -----------------
 
-- [#quick-start][Quick Start]
-- [#journal-entries][Journal Entries]
+- `Quick Start <#quick-start>`_
+- `Journal Entries <#journal-entries>`_
 
 .. - [#][]
 .. - [#][]
