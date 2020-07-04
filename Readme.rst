@@ -6,23 +6,24 @@ Capture your ideas using plain old text files.
 Make a journal that lasts 100 years.
 
 .. image:: https://img.shields.io/pypi/v/gthnk.svg
-    :target: http://python.gthnk.com
+    :target: https://pypi.org/project/gthnk/
+    :alt: Python Package
 
 .. image:: https://readthedocs.org/projects/gthnk/badge/?version=latest
-    :target: http://docs.gthnk.com
+    :target: https://gthnk.readthedocs.io/en/latest/
     :alt: Documentation Status
 
 .. image:: https://travis-ci.org/iandennismiller/gthnk.svg?branch=master
-    :target: http://builds.gthnk.com
+    :target: https://travis-ci.org/github/iandennismiller/gthnk
+    :alt: Build Status
 
 .. image:: https://coveralls.io/repos/github/iandennismiller/gthnk/badge.svg?branch=master
-    :target: http://coverage.gthnk.com
-
-.. image:: https://img.shields.io/github/license/mashape/apistatus.svg
-    :target: https://opensource.org/licenses/MIT
+    :target: https://coveralls.io/github/iandennismiller/gthnk
+    :alt: Coverage Status
 
 .. image:: https://img.shields.io/github/stars/iandennismiller/gthnk.svg?style=social&label=GitHub
     :target: https://github.com/iandennismiller/gthnk
+    :alt: Github Project
 
 Overview
 --------
@@ -37,7 +38,7 @@ Overview
 
 The easiest way to run **gthnk** is with Docker.
 **gthnk** also installs on Windows, Linux, and MacOS systems with Python 3.5+.
-See the `Installation document <http://docs.gthnk.com/en/latest/intro/installation.html>`_ for more details.
+See the `Installation document <https://gthnk.readthedocs.io/en/latest/intro/installation.html>`_ for more details.
 
 Quick Start
 ^^^^^^^^^^^
@@ -196,10 +197,12 @@ Other gthnk Resources
 - Presentation
     - https://iandennismiller.github.io/pres-gthnk-overview
     - repo: https://github.com/iandennismiller/pres-gthnk-overview
+- Chat room (matrix)
+    - https://riot.im/app/#/room/#gthnk:matrix.org
 - Continuous Integration
     - https://travis-ci.org/iandennismiller/gthnk
 - Code Coverage
-    - https://coveralls.io/repos/github/iandennismiller/gthnk
+    - https://coveralls.io/github/iandennismiller/gthnk
 - VS Code Extension
     - https://marketplace.visualstudio.com/items?itemName=IanDennisMiller.gthnk
     - repo: https://github.com/iandennismiller/vscode-gthnk
