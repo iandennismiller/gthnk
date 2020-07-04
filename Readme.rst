@@ -24,25 +24,18 @@ Make a journal that lasts 100 years.
 .. image:: https://img.shields.io/github/stars/iandennismiller/gthnk.svg?style=social&label=GitHub
     :target: https://github.com/iandennismiller/gthnk
 
-.. - Quick Start
-.. - Journal Entries
-.. - User Interface
-.. - Journal Rotation
-.. - Integration with Text Editors
-.. - Tags
-.. - Configuration
-.. - Cloud Sync
-.. - Full server with rotation
-
 Table of Contents
 -----------------
 
 - `Quick Start <#quick-start>`_
 - `Journal Entries <#journal-entries>`_
-
-.. - [#][]
-.. - [#][]
-.. - [#][]
+- `User Interface <#user-interface>`_
+- `Journal Rotation <#journal-rotation>`_
+- `Integration with Text Editors <#integration-with-text-editors>`_
+- `Tags <#tags>`_
+- `Configuration <#configuration>`_
+- `Cloud Sync <#cloud-sync>`_
+- `Full server with rotation <#full-server-with-rotation>`_
 
 Overview
 --------
