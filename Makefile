@@ -103,6 +103,7 @@ docker-run:
 		--rm \
 		--name gthnk-server \
 		-p 1620:1620 \
+		-e TZ=America/Toronto \
 		-v ~/.gthnk:/home/gthnk/.gthnk \
 		$(CONTAINER)
 

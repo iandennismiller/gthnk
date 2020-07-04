@@ -39,3 +39,10 @@ function checkKey(e) {
     }
 }
 document.onkeydown = checkKey;
+
+var swiper = new Swipe(document.getElementsByTagName('body')[0]);
+
+// init touch swiper
+swiper.onLeft(go_tomorrow);
+swiper.onRight(go_yesterday);
+swiper.run();
