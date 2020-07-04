@@ -70,6 +70,7 @@ watch:
 
 docs:
 	rm -rf build/sphinx
+	pip install -r docs/requirements.txt
 	SETTINGS=$$PWD/.dev/conf/testing.conf sphinx-build -b html docs build/sphinx
 
 coverage:

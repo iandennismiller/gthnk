@@ -1,10 +1,10 @@
-coverage
-GitPython==1.0.1
+GitPython
+Sphinx
 alabaster
+nose
+nosexcover
+coverage
+twine
 ipython
 watchdog
 pylint
-nose
-Sphinx
-nosexcover
-twine
