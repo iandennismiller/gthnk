@@ -24,6 +24,21 @@ Make a journal that lasts 100 years.
 .. image:: https://img.shields.io/github/stars/iandennismiller/gthnk.svg?style=social&label=GitHub
     :target: https://github.com/iandennismiller/gthnk
 
+.. - Quick Start
+.. - Journal Entries
+.. - User Interface
+.. - Journal Rotation
+.. - Integration with Text Editors
+.. - Tags
+.. - Configuration
+.. - Cloud Sync
+.. - Full server with rotation
+
+.. toctree::
+   :glob:
+
+   * 
+
 Overview
 --------
 
@@ -52,10 +67,8 @@ Run gthnk locally with a local journal and local database in ``~/.gthnk``.
         -v ~/.gthnk:/home/gthnk/.gthnk \
         iandennismiller/gthnk
 
-Usage
-^^^^^
-
 The default journal where you will record your entries is ``~/.gthnk/journal.txt``.
+
 Open ``journal.txt`` with a text editor to add entries to the journal.
 
 Journal Entries
@@ -82,8 +95,8 @@ The rest is Markdown.
 
 You can add multiple entries per day - and multiple days in a single journal - by inserting date and time markers as you work.
 
-Gthnk Interface
-^^^^^^^^^^^^^^^
+User Interface
+^^^^^^^^^^^^^^
 
 To interact with the gthnk journal, connect to http://localhost:1620 and log in with the username ``gthnk`` and the password ``gthnk``.
 
@@ -118,8 +131,8 @@ After installing the plugin for your editor, the following key combinations are 
 - Ctrl-Alt-Cmd-N: Insert date marker YYYYMMDD
 - Ctrl-Alt-Cmd-M: Insert time marker HHMM
 
-Tagging
-^^^^^^^
+Tags
+^^^^
 
 An experimental Tagging feature is available with double-square brackets:
 
@@ -138,8 +151,8 @@ The default configuration file is ``~/.gthnk/gthnk.conf``.
 
 You can edit the configuration - particularly ``INPUT_FILES`` - in order to pull from multiple journal text sources, which can include shared files on other devices.
 
-Using Cloud Sync
-^^^^^^^^^^^^^^^^
+Cloud Sync
+^^^^^^^^^^
 
 You can sync gthnk to multiple devices using a cloud file system like Dropbox or Seafile.
 Use the ``docker run -v`` flag to point to your cloud storage: ``-v ${PATH_TO_CLOUD}/gthnk:/home/gthnk/.gthnk``
@@ -155,8 +168,8 @@ A complete example using Dropbox could look like:
         -v ~/Dropbox/gthnk:/home/gthnk/.gthnk \
         iandennismiller/gthnk
 
-Running the server with rotation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Full server with rotation
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In order for gthnk to rotate the journals automatically, a separate process needs to run periodically.
 
