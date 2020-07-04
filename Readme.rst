@@ -40,10 +40,11 @@ Table of Contents
 Overview
 --------
 
-**gthnk** presents a *journal* consisting of many *entries*.
-Entries are created using plain old text files, which **gthnk** imports once per day.
-Any text editor can be used to add information to **gthnk**.
-Entries are searchable using the embedded **gthnk** server, which can be accessed with a browser.
+- **gthnk** presents a **journal** consisting of many **entries**.
+- **Entries** are created using plain old text files, which **gthnk** imports once per day.
+- Any text editor can be used to add information to **gthnk**.
+- **Entries** are searchable using the embedded **gthnk** server, which can be accessed with a browser.
+- Plain-text enables backup/restore via hardcopy (e.g. paper) for long-term archival.
 
 .. Additional media, including images and PDFs, can be attached to the journal.
 
@@ -54,7 +55,7 @@ See the `Installation document <http://docs.gthnk.com/en/latest/intro/installati
 Quick Start
 ^^^^^^^^^^^
 
-Run gthnk locally with a local journal and local database in ``~/.gthnk``.
+Use Docker to run gthnk with all files stored locally in ``~/.gthnk``.
 
 ::
 
@@ -65,9 +66,11 @@ Run gthnk locally with a local journal and local database in ``~/.gthnk``.
         -v ~/.gthnk:/home/gthnk/.gthnk \
         iandennismiller/gthnk
 
-The default journal where you will record your entries is ``~/.gthnk/journal.txt``.
+The default text file where you will record `Journal Entries <#journal-entries>`_ is ``~/.gthnk/journal.txt``.
 
-Open ``journal.txt`` with a text editor to add entries to the journal.
+Open ``journal.txt`` with a text editor to add new `Journal Entries <#journal-entries>`_.
+
+Open http://localhost:1620 to access the `User Interface <#user-interface>`_.
 
 Journal Entries
 ^^^^^^^^^^^^^^^
@@ -109,8 +112,8 @@ Journal Rotation
 When the journal rotates, all the entries are imported from ``journal.txt`` into the database.
 After import, the ``journal.txt`` file is wiped.
 
-The preferred rotation method method is to use an automatic process like cron, systemd, or launchd.
-A complete example, including gthnk server and cron server, is described below and can be launched with ``docker-compose``.
+The preferred rotation method method is to use an automatic process like ``cron``, ``systemd``, or ``launchd``.
+A `full server with rotation <#full-server-with-rotation>`_ using ``docker-compose`` is available.
 
 The journal can be manually rotated using the interface by clicking the **refresh** button in the hamburger menu.
 
@@ -132,7 +135,7 @@ After installing the plugin for your editor, the following key combinations are 
 Tags
 ^^^^
 
-An experimental Tagging feature is available with double-square brackets:
+Tagging is available with double-square brackets:
 
 ::
 
@@ -142,18 +145,21 @@ An experimental Tagging feature is available with double-square brackets:
 
     To insert a [[tag]] in [[gthnk]], put one or more words inside square brackets.
 
+A tag links to all other entries containing the tag or fulltext keyword.
+
 Configuration
 ^^^^^^^^^^^^^
 
 The default configuration file is ``~/.gthnk/gthnk.conf``.
+This file can be edited to change the location of input journal files, database, logging, and other system parameters.
 
-You can edit the configuration - particularly ``INPUT_FILES`` - in order to pull from multiple journal text sources, which can include shared files on other devices.
+In particular, you can change ``INPUT_FILES`` to pull from multiple journal text sources including shared files on other devices.
 
 Cloud Sync
 ^^^^^^^^^^
 
 You can sync gthnk to multiple devices using a cloud file system like Dropbox or Seafile.
-Use the ``docker run -v`` flag to point to your cloud storage: ``-v ${PATH_TO_CLOUD}/gthnk:/home/gthnk/.gthnk``
+Use the ``docker run -v`` flag to point to your cloud storage: ``-v ${PATH_TO_CLOUD}/gthnk:/home/gthnk/cloud-storage``
 
 A complete example using Dropbox could look like:
 
@@ -163,10 +169,19 @@ A complete example using Dropbox could look like:
         --name gthnk-server \
         -p 1620:1620 \
         -e TZ=America/Toronto \
-        -v ~/Dropbox/gthnk:/home/gthnk/.gthnk \
+        -v ~/.gthnk:/home/gthnk/.gthnk \
+        -v ~/Dropbox/gthnk:/home/gthnk/cloud-storage \
         iandennismiller/gthnk
 
-Full server with rotation
+This configuration supports running gthnk on a dedicated server, like a local Linux machine, while editing the journal files on devices that are synced via the cloud.
+
+To support a laptop and phone, edit ``~/.gthnk/gthnk.conf`` to specify multiple INPUT_FILES located on cloud storage.
+
+::
+
+    INPUT_FILES = "/home/gthnk/cloud-storage/journal-laptop.txt,/home/gthnk/cloud-storage/journal-phone.txt"
+
+Full Server with Rotation
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In order for gthnk to rotate the journals automatically, a separate process needs to run periodically.
@@ -175,17 +190,20 @@ The full suite of gthnk server processes can be run as:
 
 ::
 
-    wget https://github.com/iandennismiller/gthnk/raw/simplify/src/docker/docker-compose.yaml
+    wget https://github.com/iandennismiller/gthnk/raw/master/src/docker/docker-compose.yaml
     docker-compose up -d
 
 Other gthnk Projects
 ^^^^^^^^^^^^^^^^^^^^
 
-- Python-Markdown Journal Extension: https://github.com/iandennismiller/mdx_journal
+- Public website and blog: http://www.gthnk.com
+    - Website Repo: https://github.com/iandennismiller/www-gthnk
+- Read The Docs: https://readthedocs.org/projects/gthnk
+    - Documentation repo: https://github.com/iandennismiller/gthnk/tree/master/docs
 - VS Code Extension: https://github.com/iandennismiller/vscode-gthnk
 - gthnk Presentation: https://github.com/iandennismiller/pres-gthnk-overview
 - Chrome App: https://github.com/iandennismiller/gthnk/tree/master/src/chrome-app
-- Website Repo: https://github.com/iandennismiller/www-gthnk
+- Python-Markdown Journal Extension: https://github.com/iandennismiller/mdx_journal
 
 Documentation
 ^^^^^^^^^^^^^
