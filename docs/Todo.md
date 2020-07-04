@@ -15,7 +15,41 @@
 
 ## Milestone: attachments 0.8.x
 
-- [ ] think more about attachments
+- [ ] develop plan for attachments
+
+## Milestone: onboarding
+
+- [x] powerpoint presentation
+- [x] produce overview video
+- [ ] produce installation videos
+- [ ] produce usage video
+- [x] Docker workflow
+- [ ] installers - windows setup.exe and osx .pkg for Python/virtualenv
+- [ ] integration for Debian/Ubuntu-flavored Linux
+- [ ] integration for Redhat/Fedora-flavored Linux
+
+## Milestone: ui/ux
+
+- [x] keyboard hot keys: left, right, esc
+- [x] swipe left/right
+- [x] dark mode theme
+- [x] improvement: remove /admin prefix on URLs
+- [x] improvement: narrow screen rendering
+- [ ] automatically poll buffer for updates
+
+## Milestone: progressive web app
+
+- [ ] favicon, icon for web app
+- [ ] assemble day view from JSON via browser DOM
+- [ ] use service worker to broker day data
+- [ ] describe with manifest.json
+
+## Milestone: code quality
+
+- [ ] more robust testing of explorer attachments
+- [ ] enable flake8 Dxxx checks
+- [ ] testing for integration.py
+- [ ] refactor javascript
 
 ## Milestone: tags
 
@@ -35,42 +69,6 @@
   - [x] render separately at bottom of day
 - [ ] recent project activity widget (maybe project-system)
   - [ ] possibly from RSS
-
-## Milestone: communication
-
-Communication with prospective users.
-
-- [x] powerpoint presentation
-- [x] produce overview video
-- [ ] produce installation videos
-- [ ] produce usage video
-
-## Milestone: code quality
-
-Quality of code and user experience.
-
-- [ ] more robust testing of explorer attachments
-- [ ] enable flake8 Dxxx checks
-- [ ] testing for integration.py
-- [ ] refactor javascript
-
-## Milestone: user experience
-
-- [x] keyboard hot keys: left, right, esc
-- [x] swipe left/right
-- [x] dark mode theme
-- [x] improvement: remove /admin prefix on URLs
-- [x] improvement: narrow screen rendering
-- [ ] installers - windows setup.exe and osx .pkg for Python/virtualenv
-- [ ] integration for Debian/Ubuntu-flavored Linux
-- [ ] integration for Redhat/Fedora-flavored Linux
-
-## Milestone: progressive web app
-
-- [ ] favicon, icon for web app
-- [ ] assemble day view from JSON via browser DOM
-- [ ] use service worker to broker day data
-- [ ] describe with manifest.json
 
 ## Ready for Upcoming Release
 

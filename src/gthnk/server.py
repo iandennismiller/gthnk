@@ -47,6 +47,7 @@ class LoginForm(FlaskForm):
 
 
 @app.route("/nearest/<date>")
+@login_required
 def nearest_day_view(date):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
     if day:
@@ -64,6 +65,7 @@ def nearest_day_view(date):
     return flask.redirect(flask.url_for('.index'))
 
 @app.route("/latest")
+@login_required
 def latest_view():
     latest_day = latest()
     if latest_day:
@@ -73,6 +75,7 @@ def latest_view():
             day=None, day_str="No entries yet")
 
 @app.route("/search")
+@login_required
 def search_view():
     if not flask.request.args:
         return flask.redirect(flask.url_for("index"))
@@ -125,6 +128,7 @@ def render_day_pipeline(day_str):
 
 
 @app.route("/buffer")
+@login_required
 def buffer_view():
     date = datetime.datetime.today().strftime('%Y-%m-%d')
 
@@ -154,6 +158,7 @@ def buffer_view():
     )
 
 @app.route("/day/<date>.html")
+@login_required
 def day_view(date):
 
     day = Day.find(date=date)
@@ -177,6 +182,7 @@ def day_view(date):
         return flask.redirect(flask.url_for('.index'))
 
 @app.route("/day/<date>.txt")
+@login_required
 def text_view(date):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
     if day:
@@ -185,6 +191,7 @@ def text_view(date):
         return flask.redirect(flask.url_for('.index'))
 
 @app.route("/day/<date>.md")
+@login_required
 def markdown_view(date):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
     if day:
@@ -193,6 +200,7 @@ def markdown_view(date):
         return flask.redirect(flask.url_for('.index'))
 
 @app.route("/day/<date>.pdf")
+@login_required
 def download(date):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
     if day:
@@ -208,6 +216,7 @@ def download(date):
 # Attachments
 
 @app.route("/inbox/<date>", methods=['POST'])
+@login_required
 def upload_file(date):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
     file_handle = flask.request.files['file']
@@ -216,6 +225,7 @@ def upload_file(date):
     return flask.redirect(flask.url_for('.day_view', date=date))
 
 @app.route("/thumbnail/<date>-<sequence>.jpg")
+@login_required
 def thumbnail(date, sequence):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
     page = day.pages[int(sequence)]
@@ -224,6 +234,7 @@ def thumbnail(date, sequence):
     return response
 
 @app.route("/preview/<date>-<sequence>.jpg")
+@login_required
 def preview(date, sequence):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
     page = day.pages[int(sequence)]
@@ -232,6 +243,7 @@ def preview(date, sequence):
     return response
 
 @app.route("/attachment/<date>-<sequence>.<extension>")
+@login_required
 def attachment(date, sequence, extension):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
     page = day.pages[int(sequence)]
@@ -241,6 +253,7 @@ def attachment(date, sequence, extension):
     return response
 
 @app.route("/day/<date>/attachment/<sequence>/move_up")
+@login_required
 def move_page_up(date, sequence):
     if int(sequence) > 0:
         day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -252,6 +265,7 @@ def move_page_up(date, sequence):
     return flask.redirect(flask.url_for('.day_view', date=date))
 
 @app.route("/day/<date>/attachment/<sequence>/move_down")
+@login_required
 def move_page_down(date, sequence):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
     if int(sequence) < len(day.pages)-1:
@@ -263,6 +277,7 @@ def move_page_down(date, sequence):
     return flask.redirect(flask.url_for('.day_view', date=date))
 
 @app.route("/day/<date>/attachment/<sequence>/delete")
+@login_required
 def delete_page(date, sequence):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
     idx = int(sequence)
@@ -308,6 +323,7 @@ def logout():
 # Refresh Buffers
 
 @app.route("/refresh")
+@login_required
 def refresh():
     librarian = Librarian(flask.current_app)
     librarian.rotate_buffers()

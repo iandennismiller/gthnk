@@ -1,5 +1,10 @@
 # gthnk (c) Ian Dennis Miller
 
+###
+# To set up a fresh dev environment:
+# make requirements develop db test-import server
+###
+
 SHELL=/bin/bash
 PROJECT_NAME=gthnk
 MOD_NAME=gthnk
@@ -8,9 +13,6 @@ install:
 	python setup.py install
 
 requirements:
-ifeq ($(OS),Windows_NT)
-	easy_install -U mr.bob==0.1.2
-endif
 	pip install -r requirements.txt
 
 develop:
@@ -45,14 +47,8 @@ single:
 	SETTINGS=$$PWD/.dev/conf/testing.conf nosetests $(MOD_NAME) -c .dev/nose/test-single.cfg
 
 db:
-ifeq ($(OS),Windows_NT)
-	set SETTINGS=%cd%\.dev\conf\dev-win.conf & python bin\manage.py init_db
-	set SETTINGS=%cd%\.dev\conf\dev-win.conf & python bin\manage.py user_add --email "guest@example.com" --password "guest"
-	set SETTINGS=%cd%\.dev\conf\dev-win.conf & python bin\manage.py user_add --email "admin@example.com" --password "aaa" --admin
-else
 	SETTINGS=$$PWD/.dev/conf/dev.conf bin/gthnk init_db
-	SETTINGS=$$PWD/.dev/conf/dev.conf bin/gthnk user_add --username "guest" --password "guest"
-endif
+	SETTINGS=$$PWD/.dev/conf/dev.conf bin/gthnk user_add --username "gthnk" --password "gthnk"
 
 dropdb:
 	SETTINGS=$$PWD/.dev/conf/dev.conf bin/gthnk drop_db
