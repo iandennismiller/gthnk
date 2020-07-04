@@ -34,10 +34,15 @@ Make a journal that lasts 100 years.
 .. - Cloud Sync
 .. - Full server with rotation
 
-.. toctree::
-   :glob:
+Table of Contents
+-----------------
 
-   * 
+- [#quick-start][Quick Start]
+- [#journal-entries][Journal Entries]
+
+.. - [#][]
+.. - [#][]
+.. - [#][]
 
 Overview
 --------
