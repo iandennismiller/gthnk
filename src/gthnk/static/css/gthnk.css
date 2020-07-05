@@ -8,7 +8,7 @@ body {
     min-height: 100%;
 }
 
-  body#day-view {
+body#day-view {
     background: rgb(230, 230, 230);
 }
 
@@ -33,6 +33,7 @@ body {
 .gthnk-card {
     padding: 1em;
     font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+    word-wrap: break-word;
 }
 
 body.bootstrap .gthnk-card {

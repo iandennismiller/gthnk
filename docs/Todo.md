@@ -7,7 +7,7 @@
 - [ ] unified logging during journal rotation
 - [ ] update documentation and website to reflect current feature set
 - [ ] tests passing
-- [ ] fix wrapping on long unbroken lines like URLs
+- [x] fix wrapping on long unbroken lines like URLs
 - [x] hash passwords
 - [x] results page displays as gthnk-card(s)
 - [x] change password in gthnk.py, src/docker/bin/gthnk-user-password.sh
