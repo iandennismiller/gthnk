@@ -102,7 +102,7 @@ docker-run:
 		-v ~/.gthnk:/home/gthnk/.gthnk \
 		$(CONTAINER)
 
-docker-build:
+docker-build: clean
 	docker build -t $(CONTAINER):latest .
 
 docker-push:

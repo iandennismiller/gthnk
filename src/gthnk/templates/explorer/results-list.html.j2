@@ -6,19 +6,32 @@
 
 <div class="container">
 
-  <h2>{{count}} results: {{ query_str }}</h2>
+    <div class="row">
+      <div class="col-1"></div>
+      <div class="col-10">
+        <h2>{{count}} results: {{ query_str }}</h2>
+      </div>
+      <div class="col-1"></div>
+    </div>
 
   {% for row in data[:20] %}
     <div class="row">
+      <div class="col-1"></div>
 
-      <div class="col-2">
-        <a href="{{ url_for('.day_view', date=row.day.date) }}#{{ row.hhmm() }}">
-          {{row.day.date}} <strong>{{row.hhmm()}}</strong>
-        </a>
-      </div>
 
       <div class="col-10">
+        <div class="gthnk-card" id="agenda">
+        <p>
+          <a href="{{ url_for('.day_view', date=row.day.date) }}#{{ row.hhmm() }}">
+            {{row.day.date}} <strong>{{row.hhmm()}}</strong>
+          </a>
+        </p>
+
         {% filter markdown %}{{row.content}}{% endfilter %}
+        </div>
+      </div>
+
+      <div class="col-1">
       </div>
 
     </div>
