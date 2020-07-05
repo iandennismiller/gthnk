@@ -11,6 +11,7 @@
 - [ ] results page displays as gthnk-card(s)
 - [ ] update documentation and website to reflect current feature set
 - [ ] tests passing
+- [ ] fix wrapping on long unbroken lines like URLs
 
 ## Milestone: attachments 0.8.x
 

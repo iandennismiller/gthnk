@@ -14,7 +14,7 @@ def read(fname):
     return open(fpath(fname)).read()
 
 
-file_text = read(fpath('src/gthnk/__meta__.py'))
+file_text = read(fpath('gthnk/__meta__.py'))
 
 
 def grep(attrname):
@@ -27,10 +27,9 @@ setup(
     version=grep('__version__'),
     name='gthnk',
     description="gthnk is a personal knowledge management system",
-    packages=find_packages('src'),
-    package_dir={'': 'src'},
+    packages=find_packages(),
     scripts=[
-        "bin/gthnk",
+        "scripts/gthnk",
     ],
     long_description=read('Readme.rst'),
     classifiers=[

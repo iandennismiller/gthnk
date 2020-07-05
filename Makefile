@@ -10,24 +10,22 @@ PROJECT_NAME=gthnk
 MOD_NAME=gthnk
 
 install:
-	python setup.py install
+	cd src && python setup.py install
 
 requirements:
 	pip install -r requirements.txt
 
 develop:
-	pip install -r .dev/requirements.txt
+	pip install -r usr/dev/requirements.txt
 
 clean:
-	rm -rf build dist *.egg-info src/*.egg-info
+	rm -rf build dist *.egg-info src/*.egg-info src/build src/dist
 	find . -name '*.pyc' -delete
 	find . -name __pycache__ -delete
 	rm -f .coverage coverage.xml
 
 server:
-	mkdir -p var/log
-
-	export SETTINGS=$$PWD/.dev/conf/dev.conf && \
+	export SETTINGS=$$PWD/usr/conf/dev.conf && \
 	cd src/gthnk && \
 		FLASK_ENV=development \
 		FLASK_RUN_PORT=1620 \
@@ -35,49 +33,49 @@ server:
 		flask run
 
 shell:
-	SETTINGS=$$PWD/.dev/conf/dev.conf bin/gthnk shell
+	SETTINGS=$$PWD/usr/conf/dev.conf bin/gthnk shell
 
 test: clean
-	SETTINGS=$$PWD/.dev/conf/testing.conf nosetests $(MOD_NAME) -c .dev/nose/test.cfg
+	SETTINGS=$$PWD/usr/conf/testing.conf nosetests $(MOD_NAME) -c usr/nose/test.cfg
 
 test-import:
-	SETTINGS=$$PWD/.dev/conf/dev.conf bin/gthnk import_archive -d src/tests/data/
+	SETTINGS=$$PWD/usr/conf/dev.conf bin/gthnk import_archive -d src/tests/data/
 
 single:
-	SETTINGS=$$PWD/.dev/conf/testing.conf nosetests $(MOD_NAME) -c .dev/nose/test-single.cfg
+	SETTINGS=$$PWD/usr/conf/testing.conf nosetests $(MOD_NAME) -c usr/nose/test-single.cfg
 
 db:
-	SETTINGS=$$PWD/.dev/conf/dev.conf bin/gthnk init_db
-	SETTINGS=$$PWD/.dev/conf/dev.conf bin/gthnk user_add --username "gthnk" --password "gthnk"
+	SETTINGS=$$PWD/usr/conf/dev.conf bin/gthnk init_db
+	SETTINGS=$$PWD/usr/conf/dev.conf bin/gthnk user_add --username "gthnk" --password "gthnk"
 
 dropdb:
-	SETTINGS=$$PWD/.dev/conf/dev.conf bin/gthnk drop_db
+	SETTINGS=$$PWD/usr/conf/dev.conf bin/gthnk drop_db
 
 upgradedb:
-	SETTINGS=$$PWD/.dev/conf/dev.conf bin/gthnk db upgrade
+	SETTINGS=$$PWD/usr/conf/dev.conf bin/gthnk db upgrade
 
 migratedb:
-	SETTINGS=$$PWD/.dev/conf/dev.conf bin/gthnk db migrate
+	SETTINGS=$$PWD/usr/conf/dev.conf bin/gthnk db migrate
 
 watch:
 	watchmedo shell-command -R -p "*.py" -c 'echo \\n\\n\\n\\nSTART; date; \
-		SETTINGS=$$PWD/.dev/conf/testing.conf nosetests $(MOD_NAME) \
-		-c .dev/nose/test-single.cfg; date' .
+		SETTINGS=$$PWD/usr/conf/testing.conf nosetests $(MOD_NAME) \
+		-c usr/nose/test-single.cfg; date' .
 
 docs:
 	rm -rf build/sphinx
 	pip install -r docs/requirements.txt
-	SETTINGS=$$PWD/.dev/conf/testing.conf sphinx-build -b html docs build/sphinx
+	SETTINGS=$$PWD/usr/conf/testing.conf sphinx-build -b html docs build/sphinx
 
 coverage:
-	SETTINGS=$$PWD/.dev/conf/testing.conf nosetests --with-xcoverage \
-		--cover-package=$(MOD_NAME) --cover-tests -c .dev/nose/test.cfg
+	SETTINGS=$$PWD/usr/conf/testing.conf nosetests --with-xcoverage \
+		--cover-package=$(MOD_NAME) --cover-tests -c usr/nose/test.cfg
 
 lint:
 	pylint src/gthnk
 
 release:
-	python setup.py sdist bdist_wheel
+	cd src && python setup.py sdist bdist_wheel
 	# twine upload --config-file ~/.pypirc dist/*
 
 ###

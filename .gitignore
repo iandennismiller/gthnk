@@ -8,3 +8,5 @@ coverage.xml
 __pycache__/
 /.vscode/
 /var/
+/src/build/
+/src/dist/
