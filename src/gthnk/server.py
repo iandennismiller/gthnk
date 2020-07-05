@@ -20,7 +20,7 @@ from datetime import timedelta
 from mdx_linkify.mdx_linkify import LinkifyExtension
 from mdx_journal import JournalExtension
 
-from . import db, markdown, login_manager, create_app
+from . import db, markdown, login_manager, create_app, bcrypt
 
 from .models.day import Day, latest
 from .models.entry import Entry
@@ -347,7 +347,7 @@ def login():
         # convert access code to user id
         user = User.find(username=form.username.data)
 
-        if user and user.password == form.password.data:
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user)
             logging.info("{user} logs in".format(user=current_user))
             flask.flash('Logged in successfully.')

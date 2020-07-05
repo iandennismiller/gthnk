@@ -7,6 +7,7 @@ from pathlib import Path, PurePath
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flaskext.markdown import Markdown
+from flask_bcrypt import Bcrypt
 
 from mdx_linkify.mdx_linkify import LinkifyExtension
 from mdx_journal import JournalExtension
@@ -34,6 +35,8 @@ markdown = Markdown(app, extensions=[
     LinkifyExtension(),
     JournalExtension()
 ])
+
+bcrypt = Bcrypt(app)
 
 def create_app():
     # this refers locally to the instance of app, above

@@ -2,16 +2,16 @@
 
 ## Milestone: simplify 0.7.x
 
-- [x] remove flask-diamond, refactor for simplicity
 - [ ] migration to update user table; rename email--username
-- [ ] hash passwords
 - [ ] generate unique secret key when configuration is generated
-- [ ] change password in gthnk.py, src/docker/bin/gthnk-user-password.sh
 - [ ] unified logging during journal rotation
-- [x] results page displays as gthnk-card(s)
 - [ ] update documentation and website to reflect current feature set
 - [ ] tests passing
 - [ ] fix wrapping on long unbroken lines like URLs
+- [x] hash passwords
+- [x] results page displays as gthnk-card(s)
+- [x] change password in gthnk.py, src/docker/bin/gthnk-user-password.sh
+- [x] remove flask-diamond, refactor for simplicity
 
 ## Milestone: attachments 0.8.x
 
@@ -19,14 +19,14 @@
 
 ## Milestone: onboarding
 
-- [x] powerpoint presentation
-- [x] produce overview video
 - [ ] produce installation videos
 - [ ] produce usage video
-- [x] Docker workflow
 - [ ] installers - windows setup.exe and osx .pkg for Python/virtualenv
 - [ ] integration for Debian/Ubuntu-flavored Linux
 - [ ] integration for Redhat/Fedora-flavored Linux
+- [x] Docker workflow
+- [x] powerpoint presentation
+- [x] produce overview video
 
 ## Milestone: ui/ux
 
