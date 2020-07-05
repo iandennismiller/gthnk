@@ -28,12 +28,10 @@
         <ul>
         {% for checked, item in todo_items %}
           <li>
-          <div class="checkbox">
-          <label>
-            <input class="form-control-input" type="checkbox" disabled {% if checked %}checked="checked"{% endif %}/>
-            <span class="form-control-description">{{ item }}</span>
-            </label>
-          </div>
+            <div class="custom-control custom-checkbox">
+              <input type="checkbox" class="custom-control-input" id="{{ item|slugify }}" disabled {% if checked %}checked="checked"{% endif %}>
+              <label class="custom-control-label" for="{{ item|slugify }}">{{ item }}</label>
+            </div>
           </li>
         {% endfor %}
         </ul>
