@@ -101,9 +101,9 @@ def search_view():
 def extract_todo_items(day_md):
     todo_items = []
 
-    regex = re.compile(r'\s*-\s*\[[\sxX]\]\s*(.+)$', re.MULTILINE)
-    for group in regex.findall(day_md):
-        todo_items.append(group)
+    regex = re.compile(r'\s*-\s*\[([\sxX])\]\s*(.+)$', re.MULTILINE)
+    for checked, item in regex.findall(day_md):
+        todo_items.append((checked != ' ', item))
 
     return todo_items
 
