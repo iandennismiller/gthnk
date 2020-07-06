@@ -1,0 +1,15 @@
+# Gthnk Configuration
+
+INPUT_FILES = "{{ gthnk_dir }}/journal.txt"
+BACKUP_PATH = "{{ gthnk_dir }}/backup"
+EXPORT_PATH = "{{ gthnk_dir }}/export"
+
+SQLALCHEMY_DATABASE_URI = "sqlite:///{{ gthnk_dir }}/gthnk.db"
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+LOG = "{{ gthnk_dir }}/gthnk.log"
+
+BASE_URL = "http://gthnk.lan"
+
+LOG_LEVEL = "INFO"
+SECRET_KEY = '{{ secret_key }}'

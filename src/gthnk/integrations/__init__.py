@@ -72,6 +72,13 @@ def create_db(db_filename, conf_filename, python_path, manage_path):
         print("exists:\t{0}".format(db_filename))
 
 
+def write_config_file(out_file, gthnk_path):
+    secret_key = repr(os.urandom(24))
+    with open(out_file, "w") as f:
+        template = env.get_template("config.j2")
+        f.write(template.render(gthnk_path=gthnk_path, secret_key=secret_key))
+
+
 def make_config():
     from .osx import install_osx, uninstall_osx
     from .windows import install_windows, uninstall_windows

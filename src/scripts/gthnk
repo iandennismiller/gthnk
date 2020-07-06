@@ -22,8 +22,8 @@ from gthnk.models.day import Day
 from gthnk.models.entry import Entry
 from gthnk.models.page import Page
 from gthnk.adaptors.journal_buffer import TextFileJournalBuffer
-from gthnk.adaptors.librarian import Librarian
-from gthnk.integrations import make_config
+from gthnk.librarian import Librarian
+from gthnk.integrations import make_config, write_config_file
 
 
 app = create_app()
@@ -78,7 +78,9 @@ def change_password(username, password):
 
 @manager.command
 def drop_db():
-    "drop all databases, instantiate schemas"
+    """
+    drop all databases
+    """
     db.reflect()
     db.drop_all()
 
@@ -99,6 +101,9 @@ def init_db():
 
 @manager.option('-d', '--directory', help='directory', required=True)
 def import_archive(directory):
+    """
+    Import archive of journal files
+    """
     with app.app_context():
         journal_buffer = TextFileJournalBuffer()
         match_str = os.path.join(directory, "*.txt")
@@ -108,6 +113,9 @@ def import_archive(directory):
 
 @manager.command
 def journal_export():
+    """
+    Export journal files
+    """
     with app.app_context():
         librarian = Librarian(app)
         librarian.export_journal()
@@ -115,23 +123,37 @@ def journal_export():
 
 @manager.command
 def journal_rotate():
+    """
+    Rotate journal files
+    """
     with app.app_context():
         librarian = Librarian(app)
         librarian.rotate_buffers()
 
 
-# integrate Gthnk with the operating system
 @manager.command
 def do_install():
+    """
+    integrate Gthnk with the operating system
+    """
     config = make_config()
     config["do_install"](config)
 
 
-# remove Gthnk installation
 @manager.command
 def do_uninstall():
+    """
+    remove Gthnk installation
+    """
     config = make_config()
     config["do_uninstall"](config)
+
+
+@manager.option('-f', '--filename', help='destination configuration filename', required=True)
+@manager.option('-g', '--gthnk_path', help='path to gthnk data storage', required=True)
+def init_config_file(filename, gthnk_path):
+    "initialize a configuration file"
+    write_config_file(out_file=filename, gthnk_path=gthnk_path)
 
 
 if __name__ == "__main__":

@@ -18,9 +18,7 @@ services:
       - TZ=America/Toronto
     command: >
       sh -c "
-      if [ ! -f /home/gthnk/.gthnk/gthnk.conf ]; then
-      sudo -i -u gthnk gthnk-firstrun.sh /home/gthnk/.gthnk/gthnk.conf;
-      fi;
+      if [ ! -f /home/gthnk/.gthnk/gthnk.conf ]; then sudo -i -u gthnk gthnk-firstrun.sh; fi;
       sudo -i -u gthnk gthnk-server.sh"
 
   gthnk-rotate:
