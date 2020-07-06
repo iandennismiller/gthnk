@@ -9,3 +9,4 @@ ipython
 watchdog
 pylint
 Flask-Testing
+rstcheck

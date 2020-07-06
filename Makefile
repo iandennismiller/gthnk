@@ -29,29 +29,29 @@ server:
 		flask run
 
 shell:
-	SETTINGS=$$PWD/usr/conf/dev.conf bin/gthnk shell
+	SETTINGS=$$PWD/usr/conf/dev.conf src/scripts/gthnk shell
 
 test: clean
 	SETTINGS=$$PWD/usr/conf/testing.conf python -m tests.runner
 
 test-import:
-	SETTINGS=$$PWD/usr/conf/dev.conf bin/gthnk import_archive -d src/tests/data/
+	SETTINGS=$$PWD/usr/conf/dev.conf src/scripts/gthnk import_archive -d src/tests/data/
 
 single:
 	SETTINGS=$$PWD/usr/conf/testing.conf nosetests src/gthnk -c usr/nose/test-single.cfg
 
 db:
-	SETTINGS=$$PWD/usr/conf/dev.conf bin/gthnk init_db
-	SETTINGS=$$PWD/usr/conf/dev.conf bin/gthnk user_add --username "gthnk" --password "gthnk"
+	SETTINGS=$$PWD/usr/conf/dev.conf src/scripts/gthnk init_db
+	SETTINGS=$$PWD/usr/conf/dev.conf src/scripts/gthnk user_add --username "gthnk" --password "gthnk"
 
 dropdb:
-	SETTINGS=$$PWD/usr/conf/dev.conf bin/gthnk drop_db
+	SETTINGS=$$PWD/usr/conf/dev.conf src/scripts/gthnk drop_db
 
 upgradedb:
-	SETTINGS=$$PWD/usr/conf/dev.conf bin/gthnk db upgrade
+	SETTINGS=$$PWD/usr/conf/dev.conf src/scripts/gthnk db upgrade
 
 migratedb:
-	SETTINGS=$$PWD/usr/conf/dev.conf bin/gthnk db migrate
+	SETTINGS=$$PWD/usr/conf/dev.conf src/scripts/gthnk db migrate
 
 watch:
 	watchmedo shell-command -R -p "*.py" -c 'echo \\n\\n\\n\\nSTART; date; \

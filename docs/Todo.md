@@ -5,7 +5,7 @@
 ### Milestone: simplify 0.7.0
 
 - [ ] update documentation and website to reflect current feature set
-- [ ] migration to update user table; rename email--username
+- [x] migration to update user table; rename email--username
 - [x] tests passing
 - [x] generate unique secret key when configuration is generated
 - [x] logging during journal rotation

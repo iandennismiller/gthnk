@@ -34,7 +34,15 @@ Community
 
     community/contributing
     community/developer
-    community/release
+
+Development
+-----------
+
+.. toctree::
+    :maxdepth: 1
+
+    dev/release
+    dev/migrations
 
 About
 -----
@@ -43,7 +51,6 @@ About
     :maxdepth: 1
 
     about/history
-    about/flask-diamond
     changelog
     License
 

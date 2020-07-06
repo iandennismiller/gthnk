@@ -28,7 +28,7 @@ from gthnk.integrations import make_config, write_config_file
 
 
 app = create_app()
-migrate = Migrate(app, db, directory="gthnk/migrations")
+migrate = Migrate(app, db, directory="src/gthnk/migrations")
 
 
 def _make_context():
