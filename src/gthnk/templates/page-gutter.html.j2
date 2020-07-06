@@ -4,7 +4,7 @@
 
     <a class="scroll top_of_page" id="journal_scroll" href="#entries_anchor" >Journal</a>
 
-    <form id="upload" action="{{ url_for('.upload_file', date=day.date) }}" method=post enctype=multipart/form-data>
+    <form id="upload" action="{{ url_for('gthnk.upload_file', date=day.date) }}" method=post enctype=multipart/form-data>
 
         <fieldset>
 
@@ -27,7 +27,7 @@
         {% for page in day.pages %}
         <li>
             <a class="scroll" href="#{{ page.sequence }}">
-                <img src="{{ url_for('.thumbnail', date=day.date, sequence=page.sequence) }}">
+                <img src="{{ url_for('gthnk.thumbnail', date=day.date, sequence=page.sequence) }}">
             </a>
         </li>
         {% endfor %}

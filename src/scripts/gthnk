@@ -15,8 +15,9 @@ from sqlalchemy.exc import OperationalError
 
 sys.path.insert(0, './src')
 
-from gthnk import db, create_app, bcrypt
+from gthnk import db
 from gthnk.__meta__ import __version__
+from gthnk.server import create_app
 from gthnk.models.user import User
 from gthnk.models.day import Day
 from gthnk.models.entry import Entry
@@ -45,11 +46,9 @@ manager.add_command('db', MigrateCommand)
 @manager.option('-p', '--password', help='password', required=True)
 def user_add(username, password):
     "add a user to the database"
-    pw_hash = bcrypt.generate_password_hash(password).decode('utf-8')
-
-    User.create(
+    User.create_with_password(
         username=username,
-        password=pw_hash
+        password=password
     )
 
 
@@ -68,12 +67,9 @@ def user_del(username):
 @manager.option('-p', '--password', help='password', required=True)
 def change_password(username, password):
     "change a user password"
-    pw_hash = bcrypt.generate_password_hash(password).decode('utf-8')
-
     u = User.find(username=username)
     if u:
-        u.password = pw_hash
-        u.save()
+        u.change_password(password)
 
 
 @manager.command

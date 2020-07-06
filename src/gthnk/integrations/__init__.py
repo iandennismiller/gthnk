@@ -4,6 +4,7 @@
 import os
 import random
 import string
+import logging
 import subprocess
 from six.moves import input
 from getpass import getpass
@@ -21,17 +22,17 @@ env = Environment(
 def md(directory):
     if not os.path.exists(directory):
         os.makedirs(directory)
-        print("created:\t{0}".format(directory))
+        logging.info("created:\t{0}".format(directory))
     else:
-        print("exists:\t{0}".format(directory))
+        logging.info("exists:\t{0}".format(directory))
 
 
 def launchd(cmd, target):
-    print("exec:\tlaunchctl {0} {1}".format(cmd, target))
+    logging.info("exec:\tlaunchctl {0} {1}".format(cmd, target))
     res = subprocess.check_output(["/bin/launchctl", cmd, target])
     if not res:
         res = "OK"
-    print("result:\t{0}".format(res))
+    logging.info("result:\t{0}".format(res))
 
 
 def render(config, src, dst):
@@ -39,9 +40,9 @@ def render(config, src, dst):
         with open(dst, "w") as f:
             template = env.get_template(src)
             f.write(template.render(**config))
-            print("created:\t{0}".format(dst))
+            logging.info("created:\t{0}".format(dst))
     else:
-        print("exists:\t{0}".format(dst))
+        logging.info("exists:\t{0}".format(dst))
 
 
 def rm(target):
@@ -49,17 +50,17 @@ def rm(target):
         # delete that file
         os.remove(target)
     else:
-        print("gone:\t{0}".format(target))
+        logging.info("gone:\t{0}".format(target))
 
 
 def create_db(db_filename, conf_filename, python_path, manage_path):
     if not os.path.isfile(db_filename):
-        print("create:\tdb\t{0}".format(db_filename))
+        logging.info("create:\tdb\t{0}".format(db_filename))
         os.environ["SETTINGS"] = conf_filename
         res = subprocess.check_output([python_path, manage_path, "db", "upgrade"])
         if not res:
             res = "OK"
-        print("result:\t{0}".format(res))
+        logging.info("result:\t{0}".format(res))
 
         username = input("Choose a username for accessing Gthnk: ")
         password = getpass("Choose a password:")
@@ -67,9 +68,9 @@ def create_db(db_filename, conf_filename, python_path, manage_path):
             "-e", username, "-p", password])
         if not res:
             res = "OK"
-        print("result:\t{0}".format(res))
+        logging.info("result:\t{0}".format(res))
     else:
-        print("exists:\t{0}".format(db_filename))
+        logging.info("exists:\t{0}".format(db_filename))
 
 
 def write_config_file(out_file, gthnk_path):

@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
-import os
-import sys
-
-from tests import env_vscode
+from tests import env_vscode, CustomTestCase
 env_vscode()
 
 import six
@@ -12,7 +9,6 @@ import datetime
 import unittest
 
 from gthnk import Day, Entry, Page
-from tests.mixins import CustomTestCase
 
 class TestModels(CustomTestCase):
 

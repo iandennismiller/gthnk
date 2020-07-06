@@ -9,9 +9,12 @@ import flask
 import logging
 import datetime
 
+import jinja2
+
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from flask_wtf import FlaskForm
+from flaskext.markdown import Markdown
 from wtforms import StringField, PasswordField, SubmitField, validators, DateTimeField
 
 from sqlalchemy import desc
@@ -20,17 +23,16 @@ from datetime import timedelta
 from mdx_linkify.mdx_linkify import LinkifyExtension
 from mdx_journal import JournalExtension
 
-from . import db, markdown, login_manager, create_app, bcrypt, Day, Entry, Page, User
+from . import db, login_manager, bcrypt, Day, Entry, Page, User
 
 from .models.day import latest
 from .librarian import Librarian
 
 
-app = create_app()
+bp = flask.Blueprint('gthnk', __name__)
 
 
 login_manager.login_view = ".login"
-
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -63,8 +65,8 @@ def slugify(value):
 
     return _slugify_hyphenate_re.sub('-', value)
 
-
-@app.template_filter('slugify')
+# @bp.template_filter('slugify')
+@jinja2.contextfilter
 def _slugify(string):
     if not string:
         return ""
@@ -73,39 +75,39 @@ def _slugify(string):
 ###
 # Application
 
-@app.route("/nearest/<date>")
+@bp.route("/nearest/<date>")
 @login_required
 def nearest_day_view(date):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
     if day:
-        return flask.redirect(flask.url_for('.day_view', date=day.date))
+        return flask.redirect(flask.url_for('gthnk.day_view', date=day.date))
     else:
         day = Day.query.order_by(Day.date).filter(Day.date > date).first()
         if day:
-            return flask.redirect(flask.url_for('.day_view', date=day.date))
+            return flask.redirect(flask.url_for('gthnk.day_view', date=day.date))
         else:
             day = Day.query.order_by(Day.date.desc()).filter(Day.date < date).first()
             if day:
-                return flask.redirect(flask.url_for('.day_view', date=day.date))
+                return flask.redirect(flask.url_for('gthnk.day_view', date=day.date))
 
     # if no dates are found, redirect to home page
-    return flask.redirect(flask.url_for('.index'))
+    return flask.redirect(flask.url_for('gthnk.index'))
 
-@app.route("/latest")
+@bp.route("/latest")
 @login_required
 def latest_view():
     latest_day = latest()
     if latest_day:
-        return flask.redirect(flask.url_for('day_view', date=latest_day.date))
+        return flask.redirect(flask.url_for('gthnk.day_view', date=latest_day.date))
     else:
         return flask.render_template('explorer/day-view.html.j2',
             day=None, day_str="No entries yet")
 
-@app.route("/search")
+@bp.route("/search")
 @login_required
 def search_view():
     if not flask.request.args:
-        return flask.redirect(flask.url_for("index"))
+        return flask.redirect(flask.url_for("gthnk.index"))
     else:
         query_str = flask.request.args['q']
         query = Entry.query.filter(
@@ -136,7 +138,7 @@ def extract_todo_items(day_md):
 
 def render_day_pipeline(day_str):
     # convert Markdown to string to avoid HTML escaping
-    day_md = str(markdown(day_str))
+    day_md = str(app.markdown(day_str))
 
     # add anchors before timestamps
     regex = re.compile(r'^<p><h4>(\d\d\d\d)</h4></p>$', re.MULTILINE)
@@ -154,7 +156,7 @@ def render_day_pipeline(day_str):
     return day_md
 
 
-@app.route("/buffer/latest.json")
+@bp.route("/buffer/latest.json")
 @login_required
 def buffer_timestamp():
     input_files = app.config["INPUT_FILES"]
@@ -169,7 +171,7 @@ def buffer_timestamp():
     return {'timestamp': latest_time}
 
 
-@app.route("/buffer")
+@bp.route("/buffer")
 @login_required
 def buffer_view():
     date = datetime.datetime.today().strftime('%Y-%m-%d')
@@ -199,7 +201,7 @@ def buffer_view():
         is_buffer=True,
     )
 
-@app.route("/day/<date>.html")
+@bp.route("/day/<date>.html")
 @login_required
 def day_view(date):
 
@@ -221,27 +223,27 @@ def day_view(date):
             todo_items=todo_items,
         )
     else:
-        return flask.redirect(flask.url_for('.index'))
+        return flask.redirect(flask.url_for('gthnk.index'))
 
-@app.route("/day/<date>.txt")
+@bp.route("/day/<date>.txt")
 @login_required
 def text_view(date):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
     if day:
         return day.render()
     else:
-        return flask.redirect(flask.url_for('.index'))
+        return flask.redirect(flask.url_for('gthnk.index'))
 
-@app.route("/day/<date>.md")
+@bp.route("/day/<date>.md")
 @login_required
 def markdown_view(date):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
     if day:
         return day.render_markdown()
     else:
-        return flask.redirect(flask.url_for('.index'))
+        return flask.redirect(flask.url_for('gthnk.index'))
 
-@app.route("/day/<date>.pdf")
+@bp.route("/day/<date>.pdf")
 @login_required
 def download(date):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -252,21 +254,21 @@ def download(date):
         response.headers['Content-Disposition'] = disposition_str
         return response
     else:
-        return flask.redirect(flask.url_for('.day_view', date=date))
+        return flask.redirect(flask.url_for('gthnk.day_view', date=date))
 
 ###
 # Attachments
 
-@app.route("/inbox/<date>", methods=['POST'])
+@bp.route("/inbox/<date>", methods=['POST'])
 @login_required
 def upload_file(date):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
     file_handle = flask.request.files['file']
     if day and file_handle:
         day.attach(file_handle.read())
-    return flask.redirect(flask.url_for('.day_view', date=date))
+    return flask.redirect(flask.url_for('gthnk.day_view', date=date))
 
-@app.route("/thumbnail/<date>-<sequence>.jpg")
+@bp.route("/thumbnail/<date>-<sequence>.jpg")
 @login_required
 def thumbnail(date, sequence):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -275,7 +277,7 @@ def thumbnail(date, sequence):
     response.headers['Content-Type'] = 'image/jpeg'
     return response
 
-@app.route("/preview/<date>-<sequence>.jpg")
+@bp.route("/preview/<date>-<sequence>.jpg")
 @login_required
 def preview(date, sequence):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -284,7 +286,7 @@ def preview(date, sequence):
     response.headers['Content-Type'] = 'image/jpeg'
     return response
 
-@app.route("/attachment/<date>-<sequence>.<extension>")
+@bp.route("/attachment/<date>-<sequence>.<extension>")
 @login_required
 def attachment(date, sequence, extension):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -294,7 +296,7 @@ def attachment(date, sequence, extension):
     response.headers['Content-Disposition'] = 'inline; filename="{0}"'.format(page.filename())
     return response
 
-@app.route("/day/<date>/attachment/<sequence>/move_up")
+@bp.route("/day/<date>/attachment/<sequence>/move_up")
 @login_required
 def move_page_up(date, sequence):
     if int(sequence) > 0:
@@ -304,9 +306,9 @@ def move_page_up(date, sequence):
         day.pages.insert(int(sequence)-1, active_page)
         day.pages.reorder()
         db.session.commit()
-    return flask.redirect(flask.url_for('.day_view', date=date))
+    return flask.redirect(flask.url_for('gthnk.day_view', date=date))
 
-@app.route("/day/<date>/attachment/<sequence>/move_down")
+@bp.route("/day/<date>/attachment/<sequence>/move_down")
 @login_required
 def move_page_down(date, sequence):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -316,9 +318,9 @@ def move_page_down(date, sequence):
         day.pages.insert(int(sequence)+1, active_page)
         day.pages.reorder()
         db.session.commit()
-    return flask.redirect(flask.url_for('.day_view', date=date))
+    return flask.redirect(flask.url_for('gthnk.day_view', date=date))
 
-@app.route("/day/<date>/attachment/<sequence>/delete")
+@bp.route("/day/<date>/attachment/<sequence>/delete")
 @login_required
 def delete_page(date, sequence):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -326,16 +328,16 @@ def delete_page(date, sequence):
     active_page = day.pages.pop(idx)
     active_page.delete()
     db.session.commit()
-    return flask.redirect(flask.url_for('.day_view', date=date))
+    return flask.redirect(flask.url_for('gthnk.day_view', date=date))
 
 ###
 # Authentication
 
-@app.route('/login', methods=['GET', 'POST'])
+@bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user and current_user.is_authenticated:
         flask.flash('Already logged in.')
-        return flask.redirect(flask.url_for('index'))
+        return flask.redirect(flask.url_for('gthnk.index'))
 
     # next_page = flask.request.args.get('next', '')
 
@@ -348,33 +350,62 @@ def login():
             login_user(user)
             logging.info("{user} logs in".format(user=current_user))
             flask.flash('Logged in successfully.')
-            return flask.redirect(flask.url_for('index'))
+            return flask.redirect(flask.url_for('gthnk.index'))
 
     return flask.render_template('login.html.j2', form=form)
 
-@app.route('/logout', methods=['GET'])
+@bp.route('/logout', methods=['GET'])
 @login_required
 def logout():
     if current_user.is_authenticated:
         logging.info("{user} logs out".format(user=current_user))
         logout_user()
         flask.flash('You have successfully logged out.')
-    return flask.redirect(flask.url_for('index'))
+    return flask.redirect(flask.url_for('gthnk.index'))
 
 ###
 # Refresh Buffers
 
-@app.route("/refresh")
+@bp.route("/refresh")
 @login_required
 def refresh():
     librarian = Librarian(flask.current_app)
     librarian.rotate_buffers()
-    return flask.redirect(flask.url_for('.latest_view'))
+    return flask.redirect(flask.url_for('gthnk.latest_view'))
 
 ###
 # Index
 
-@app.route('/')
+@bp.route('/')
 def index():
     return flask.render_template('index.html.j2')
 
+def create_app():
+    app = flask.Flask(__name__)
+    app.config.from_envvar('SETTINGS')
+
+    logging.basicConfig(
+        format='%(asctime)s %(module)-16s %(levelname)-8s %(message)s',
+        filename=app.config["LOG"],
+        level=logging.INFO,
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    logging.info("Server: Start")
+
+    logging.info("Database: {}".format(app.config['SQLALCHEMY_DATABASE_URI']))
+
+    bp.add_app_template_filter(slugify)
+    app.register_blueprint(bp)
+
+    db.init_app(app)
+    login_manager.init_app(app)
+    bcrypt.init_app(app)
+    app.markdown = Markdown(app, extensions=[
+        LinkifyExtension(),
+        JournalExtension()
+    ])
+
+
+    return app
+
+app = create_app()

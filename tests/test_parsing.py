@@ -1,17 +1,12 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
-import os
-import sys
-
-from tests import env_vscode
+from tests import env_vscode, CustomTestCase
 env_vscode()
 
 import shutil
 import glob
 import flask
-
-from tests.mixins import CustomTestCase
 
 from gthnk import Day
 from gthnk import Entry

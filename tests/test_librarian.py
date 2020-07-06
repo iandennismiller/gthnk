@@ -1,27 +1,21 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
-import os
-import sys
-
-from tests import env_vscode
+from tests import env_vscode, CustomTestCase
 env_vscode()
 
-import shutil
+import os
 import glob
 import flask
+import shutil
 from distutils.dir_util import remove_tree
-
-from tests.mixins import CustomTestCase
 
 from gthnk import Day, Entry
 from gthnk.librarian import Librarian
 
 
 def rm(path):
-    print(path)
     if os.path.isdir(path):
-        print("remove")
         remove_tree(path)
 
 

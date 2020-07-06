@@ -32,8 +32,7 @@ shell:
 	SETTINGS=$$PWD/usr/conf/dev.conf bin/gthnk shell
 
 test: clean
-	SETTINGS=/Users/idm/Work/gthnk/usr/conf/testing.conf python -m tests.runner
-	# SETTINGS=/Users/idm/Work/gthnk/usr/conf/testing.conf python ./test_gthnk.py
+	SETTINGS=$$PWD/usr/conf/testing.conf python -m tests.runner
 
 test-import:
 	SETTINGS=$$PWD/usr/conf/dev.conf bin/gthnk import_archive -d src/tests/data/

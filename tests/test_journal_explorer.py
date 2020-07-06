@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
-import os
-import sys
-
-from tests import env_vscode
+from tests import env_vscode, CustomTestCase, create_user, setup_journal
 env_vscode()
 
 import six
-from tests.mixins import CustomTestCase, create_user, setup_journal
 
 
 class TestJournalExplorer(CustomTestCase):
@@ -19,7 +15,7 @@ class TestJournalExplorer(CustomTestCase):
 
         with self.app.test_client() as c:
             with c.session_transaction() as sess:
-                sess['user_id'] = '1'
+                sess['_user_id'] = '1'
                 sess['_fresh'] = True
             rv = c.get('/', follow_redirects=True)
             rv = c.get('/refresh', follow_redirects=True)
@@ -34,7 +30,7 @@ class TestJournalExplorer(CustomTestCase):
 
         with self.app.test_client() as c:
             with c.session_transaction() as sess:
-                sess['user_id'] = '1'
+                sess['_user_id'] = '1'
                 sess['_fresh'] = True
 
             # trigger refresh of journal
@@ -55,13 +51,13 @@ class TestJournalExplorer(CustomTestCase):
 
         with self.app.test_client() as c:
             with c.session_transaction() as sess:
-                sess['user_id'] = '1'
+                sess['_user_id'] = '1'
                 sess['_fresh'] = True
 
             # trigger refresh of journal
             rv = c.get('/refresh', follow_redirects=True)
 
-            rv = c.get('/latest.html', follow_redirects=True)
+            rv = c.get('/latest', follow_redirects=True)
             six.assertRegex(self, str(rv.data), r'2012-10-03', "request latest.html")
 
     def test_search(self):
@@ -70,23 +66,20 @@ class TestJournalExplorer(CustomTestCase):
 
         with self.app.test_client() as c:
             with c.session_transaction() as sess:
-                sess['user_id'] = '1'
+                sess['_user_id'] = '1'
                 sess['_fresh'] = True
 
             # trigger refresh of journal
             rv = c.get('/refresh', follow_redirects=True)
 
-            rv = c.get('admin/journal/search?q={q}'.format(q="graduate"), follow_redirects=True)
+            rv = c.get('/search?q={q}'.format(q="graduate"), follow_redirects=True)
             six.assertRegex(self, str(rv.data), r'2012-10-03',
                 "search for a findable string finds something")
 
-            rv = c.get('admin/journal/search?q={q}'.format(q="zorkle"), follow_redirects=True)
-            if six.PY2:
-                self.assertNotRegexpMatches(rv.data, r'2012-10-03',
-                    "search for a unfindable string finds nothing")
-            elif six.PY3:
-                self.assertNotRegex(str(rv.data), r'2012-10-03',
-                    "search for a unfindable string finds nothing")
+            rv = c.get('/search?q={q}'.format(q="zorkle"), follow_redirects=True)
+
+            self.assertNotRegex(str(rv.data), r'2012-10-03',
+                "search for a unfindable string finds nothing")
 
     def test_representations(self):
         create_user()
@@ -94,7 +87,7 @@ class TestJournalExplorer(CustomTestCase):
 
         with self.app.test_client() as c:
             with c.session_transaction() as sess:
-                sess['user_id'] = '1'
+                sess['_user_id'] = '1'
                 sess['_fresh'] = True
 
             # trigger refresh of journal
@@ -103,44 +96,36 @@ class TestJournalExplorer(CustomTestCase):
             rv = c.get('/day/2012-10-03.html', follow_redirects=True)
             six.assertRegex(self, str(rv.data), r'2012-10-03', "get day as HTML")
             rv = c.get('/day/2012-10-02.html', follow_redirects=True)
-            if six.PY2:
-                self.assertNotRegexpMatches(rv.data, r'2012-10-03',
-                    "get non-existent day as HTML")
-            elif six.PY3:
-                self.assertNotRegex(str(rv.data), r'2012-10-03',
-                    "get non-existent day as HTML")
 
-            rv = c.get('/text/2012-10-03.txt', follow_redirects=True)
+            self.assertNotRegex(str(rv.data), r'2012-10-03',
+                "get non-existent day as HTML")
+
+            rv = c.get('/day/2012-10-03.txt', follow_redirects=True)
             six.assertRegex(self, str(rv.data), r'2012-10-03', "get day as text")
-            rv = c.get('/text/2012-10-02.txt', follow_redirects=True)
-            if six.PY2:
-                self.assertNotRegexpMatches(rv.data, r'2012-10-03',
-                    "get non-existent day as text")
-            elif six.PY3:
-                self.assertNotRegex(str(rv.data), r'2012-10-03',
-                    "get non-existent day as text")
+            rv = c.get('/day/2012-10-02.txt', follow_redirects=True)
 
-            rv = c.get('/markdown/2012-10-03.md', follow_redirects=True)
+            self.assertNotRegex(str(rv.data), r'2012-10-03',
+                "get non-existent day as text")
+
+            rv = c.get('/day/2012-10-03.md', follow_redirects=True)
             six.assertRegex(self, str(rv.data), r'2012-10-03', "get day as markdown")
-            rv = c.get('/markdown/2012-10-02.md', follow_redirects=True)
-            if six.PY2:
-                self.assertNotRegexpMatches(rv.data, r'2012-10-03',
-                    "get non-existent day as markdown")
-            elif six.PY3:
-                self.assertNotRegex(str(rv.data), r'2012-10-03',
+            rv = c.get('/day/2012-10-02.md', follow_redirects=True)
+
+            self.assertNotRegex(str(rv.data), r'2012-10-03',
                     "get non-existent day as markdown")
 
-            rv = c.get('/download/2012-10-03.pdf', follow_redirects=True)
+            rv = c.get('/day/2012-10-03.pdf', follow_redirects=True)
             six.assertRegex(self, str(rv.data), r'PDF', "get day as PDF")
             self.assertEqual(len(rv.data), 306, "size match on download")
 
-    def test_attachments(self):
+    # TODO: Skipping attachments for now - but will eventually re-enable
+    def unsupported_test_attachments(self):
         create_user()
         setup_journal()
 
         with self.app.test_client() as c:
             with c.session_transaction() as sess:
-                sess['user_id'] = '1'
+                sess['_user_id'] = '1'
                 sess['_fresh'] = True
 
             # trigger refresh of journal
