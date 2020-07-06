@@ -20,13 +20,10 @@ from datetime import timedelta
 from mdx_linkify.mdx_linkify import LinkifyExtension
 from mdx_journal import JournalExtension
 
-from . import db, markdown, login_manager, create_app, bcrypt
+from . import db, markdown, login_manager, create_app, bcrypt, Day, Entry, Page, User
 
-from .models.day import Day, latest
-from .models.entry import Entry
-from .models.page import Page
-from .models.user import User
-from .adaptors.librarian import Librarian
+from .models.day import latest
+from .librarian import Librarian
 
 
 app = create_app()

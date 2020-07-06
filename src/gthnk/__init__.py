@@ -29,6 +29,11 @@ logging.info("Server: Start")
 logging.info("Database: {}".format(app.config['SQLALCHEMY_DATABASE_URI']))
 db = SQLAlchemy()
 
+from .models.day import Day
+from .models.entry import Entry
+from .models.page import Page
+from .models.user import User
+
 login_manager = LoginManager()
 
 markdown = Markdown(app, extensions=[
