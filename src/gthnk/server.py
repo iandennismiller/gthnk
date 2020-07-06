@@ -346,11 +346,17 @@ def login():
         # convert access code to user id
         user = User.find(username=form.username.data)
 
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user)
-            logging.info("{user} logs in".format(user=current_user))
-            flask.flash('Logged in successfully.')
-            return flask.redirect(flask.url_for('gthnk.index'))
+        if user:
+            try:
+                password_match = bcrypt.check_password_hash(user.password, form.password.data)
+            except ValueError:
+                password_match = False
+
+            if password_match:
+                login_user(user)
+                logging.info("{user} logs in".format(user=current_user))
+                flask.flash('Logged in successfully.')
+                return flask.redirect(flask.url_for('gthnk.index'))
 
     return flask.render_template('login.html.j2', form=form)
 
