@@ -11,10 +11,10 @@ class Page(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)
     day_id = db.Column(db.Integer, db.ForeignKey('day.id'))
     sequence = db.Column(db.Integer)
-    binary = db.Column(db.Binary)
+    binary = db.Column(db.LargeBinary)
     title = db.Column(db.Unicode(1024))
-    thumbnail = db.Column(db.Binary)
-    preview = db.Column(db.Binary)
+    thumbnail = db.Column(db.LargeBinary)
+    preview = db.Column(db.LargeBinary)
     extension = db.Column(db.String(32))
 
     def set_image(self, binary):
