@@ -90,7 +90,7 @@ class JournalBuffer(object):
                         "{} {}".format(day, timestamp), '%Y-%m-%d %H%M')
                 except:
                     import flask
-                    flask.current_app.logger.warn("Cannot determine day for '{}' '{}'".format(day, timestamp))
+                    flask.current_app.logger.warning("Cannot determine day for '{}' '{}'".format(day, timestamp))
                     continue
 
                 Entry.create(

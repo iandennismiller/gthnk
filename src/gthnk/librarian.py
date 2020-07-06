@@ -6,9 +6,10 @@ import os
 import shutil
 import hashlib
 
-from .journal_buffer import TextFileJournalBuffer, split_filename_list
-from ..models.day import Day
-from ..models.page import Page
+from .adaptors.journal_buffer import TextFileJournalBuffer, split_filename_list
+from .models.day import Day
+from .models.page import Page
+from .integrations import md
 
 
 def overwrite_if_different(filename, new_content):
@@ -57,14 +58,18 @@ class Librarian(object):
         self.app.logger.debug("processing list: {}".format(self.app.config["INPUT_FILES"]))
         file_list = split_filename_list(self.app.config["INPUT_FILES"])
 
+        self.app.logger.info("rotating")
+
         # create a new backup path
         todays_date = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H%M%S")
         backup_path = os.path.join(self.app.config["BACKUP_PATH"], todays_date)
         if not os.path.exists(backup_path):
             os.makedirs(backup_path)
 
+        self.app.logger.info("write to backup path: {}".format(backup_path))
+
         for filename in file_list:
-            self.app.logger.debug("begin: {}".format(filename))
+            self.app.logger.info("load and parse: {}".format(filename))
             shutil.copy2(filename, backup_path)
 
             # load and parse the file
@@ -76,56 +81,58 @@ class Librarian(object):
             with open(filename, "w", encoding='utf-8'):
                 pass
 
-            self.app.logger.debug("finish: {}".format(filename))
+            self.app.logger.info("finish: {}".format(filename))
 
     def export_journal(self):
         app = self.app
         app.logger.info("librarian: start export")
 
         # create export path if necessary
-        if not os.path.exists(app.config["EXPORT_PATH"]):
-            os.makedirs(app.config["EXPORT_PATH"])
-            os.makedirs(os.path.join(app.config["EXPORT_PATH"], "day"))
-            os.makedirs(os.path.join(app.config["EXPORT_PATH"], "text"))
-            os.makedirs(os.path.join(app.config["EXPORT_PATH"], "markdown"))
-            os.makedirs(os.path.join(app.config["EXPORT_PATH"], "attachment"))
-            os.makedirs(os.path.join(app.config["EXPORT_PATH"], "thumbnail"))
-            os.makedirs(os.path.join(app.config["EXPORT_PATH"], "preview"))
+        export_path = app.config["EXPORT_PATH"]
+        md(directory=export_path)
+
+        for subdir in ["day", "text", "markdown", "attachment", "thumbnail", "preview"]:
+            md(directory=os.path.join(export_path, subdir))
 
         # export all days
         for day in Day.query.order_by(Day.date).all():
-            app.logger.debug(day)
+            app.logger.info("export day: {}".format(day))
 
             # write text representation
             output_filename = os.path.join(app.config["EXPORT_PATH"], "text",
                 "{0}.txt".format(day.date))
+            app.logger.debug("write text: {}".format(output_filename))
             if not overwrite_if_different(output_filename, day.render()):
                 app.logger.debug("skipping; generated file identical to existing export")
 
             # write markdown representation
             output_filename = os.path.join(app.config["EXPORT_PATH"], "markdown",
                 "{0}.md".format(day.date))
+            app.logger.debug("write markdown: {}".format(output_filename))
             if not overwrite_if_different(output_filename, day.render_markdown()):
                 app.logger.debug("skipping; generated file identical to existing export")
 
         # export all pages
         for page in Page.query.order_by(Page.id).all():
-            app.logger.debug(page)
+            app.logger.info("export page: {}".format(page))
 
             # write raw file
             output_filename = os.path.join(app.config["EXPORT_PATH"], "attachment",
                 page.filename())
+            app.logger.debug("write raw file: {}".format(output_filename))
             if not overwrite_if_different_bytes(output_filename, page.binary):
                 app.logger.debug("skipping; generated file identical to existing export")
             else:
                 # write thumbnail
                 output_filename = os.path.join(app.config["EXPORT_PATH"], "thumbnail",
                     page.filename(extension="jpg"))
+                app.logger.debug("write thumbnail: {}".format(output_filename))
                 overwrite_if_different_bytes(output_filename, page.thumbnail)
 
                 # write preview
                 output_filename = os.path.join(app.config["EXPORT_PATH"], "preview",
                     page.filename(extension="jpg"))
+                app.logger.debug("write preview: {}".format(output_filename))
                 overwrite_if_different_bytes(output_filename, page.preview)
 
         app.logger.info("librarian: finish export")
