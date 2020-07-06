@@ -8,3 +8,4 @@ twine
 ipython
 watchdog
 pylint
+Flask-Testing

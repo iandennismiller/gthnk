@@ -1,15 +1,21 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
+import os
+import sys
+
+from tests import env_vscode
+env_vscode()
+
 import shutil
 import glob
 import flask
-import os
 from distutils.dir_util import remove_tree
-# from nose.plugins.attrib import attr
-from .mixins import DiamondTestCase
-from ..models import Day, Entry
-from ..adaptors.librarian import Librarian
+
+from tests.mixins import CustomTestCase
+
+from gthnk import Day, Entry
+from gthnk.librarian import Librarian
 
 
 def rm(path):
@@ -30,11 +36,11 @@ def clean_tmp_export(export_path):
         rm(os.path.join(export_path))
 
 
-class TestLibrarian(DiamondTestCase):
+class TestLibrarian(CustomTestCase):
     def setUp(self):
         # put an example journal in place
         shutil.copy(
-            "gthnk/tests/data/tmp_journal.txt",
+            "tests/data/tmp_journal.txt",
             flask.current_app.config["INPUT_FILES"]
         )
 

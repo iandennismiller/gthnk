@@ -5,10 +5,6 @@
 # make requirements develop db test-import server
 ###
 
-SHELL=/bin/bash
-PROJECT_NAME=gthnk
-MOD_NAME=gthnk
-
 install:
 	cd src && python setup.py install
 
@@ -36,13 +32,14 @@ shell:
 	SETTINGS=$$PWD/usr/conf/dev.conf bin/gthnk shell
 
 test: clean
-	SETTINGS=$$PWD/usr/conf/testing.conf nosetests $(MOD_NAME) -c usr/nose/test.cfg
+	SETTINGS=/Users/idm/Work/gthnk/usr/conf/testing.conf python -m tests.runner
+	# SETTINGS=/Users/idm/Work/gthnk/usr/conf/testing.conf python ./test_gthnk.py
 
 test-import:
 	SETTINGS=$$PWD/usr/conf/dev.conf bin/gthnk import_archive -d src/tests/data/
 
 single:
-	SETTINGS=$$PWD/usr/conf/testing.conf nosetests $(MOD_NAME) -c usr/nose/test-single.cfg
+	SETTINGS=$$PWD/usr/conf/testing.conf nosetests src/gthnk -c usr/nose/test-single.cfg
 
 db:
 	SETTINGS=$$PWD/usr/conf/dev.conf bin/gthnk init_db
@@ -59,7 +56,7 @@ migratedb:
 
 watch:
 	watchmedo shell-command -R -p "*.py" -c 'echo \\n\\n\\n\\nSTART; date; \
-		SETTINGS=$$PWD/usr/conf/testing.conf nosetests $(MOD_NAME) \
+		SETTINGS=$$PWD/usr/conf/testing.conf nosetests src/gthnk \
 		-c usr/nose/test-single.cfg; date' .
 
 docs:
@@ -69,7 +66,7 @@ docs:
 
 coverage:
 	SETTINGS=$$PWD/usr/conf/testing.conf nosetests --with-xcoverage \
-		--cover-package=$(MOD_NAME) --cover-tests -c usr/nose/test.cfg
+		--cover-package=src/gthnk --cover-tests -c usr/nose/test.cfg
 
 lint:
 	pylint src/gthnk
@@ -81,7 +78,6 @@ release:
 ###
 # Docker
 
-CONTAINER=iandennismiller/gthnk
 USERNAME=gthnk
 PASSWORD=gthnk
 CONTAINER_EXEC=docker exec -it gthnk-server sudo -i -u gthnk
@@ -100,13 +96,13 @@ docker-run:
 		-p 1620:1620 \
 		-e TZ=America/Toronto \
 		-v ~/.gthnk:/home/gthnk/.gthnk \
-		$(CONTAINER)
+		iandennismiller/gthnk
 
 docker-build: clean
-	docker build -t $(CONTAINER):latest .
+	docker build -t iandennismiller/gthnk:latest .
 
 docker-push:
-	docker push $(CONTAINER)
+	docker push iandennismiller/gthnk
 
 docker-config:
 	$(CONTAINER_EXEC) gthnk-config-init.sh /home/gthnk/.gthnk/gthnk.conf

@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
+import os
+import sys
+
+from tests import env_vscode
+env_vscode()
+
 import six
-# from nose.plugins.attrib import attr
-from .mixins import DiamondTestCase, create_user, setup_journal
+from tests.mixins import CustomTestCase, create_user, setup_journal
 
 
-class ViewTestCase(DiamondTestCase):
+class TestJournalExplorer(CustomTestCase):
 
     def test_refresh(self):
         create_user()
@@ -17,8 +22,8 @@ class ViewTestCase(DiamondTestCase):
                 sess['user_id'] = '1'
                 sess['_fresh'] = True
             rv = c.get('/', follow_redirects=True)
-            rv = c.get('/admin/journal/refresh', follow_redirects=True)
-            rv = c.get('/admin/journal/day/2012-10-03.html', follow_redirects=True)
+            rv = c.get('/refresh', follow_redirects=True)
+            rv = c.get('/day/2012-10-03.html', follow_redirects=True)
             six.assertRegex(self, str(rv.data),
                 r'graduate management consulting association',
                 "journal was loaded")
@@ -33,15 +38,15 @@ class ViewTestCase(DiamondTestCase):
                 sess['_fresh'] = True
 
             # trigger refresh of journal
-            rv = c.get('/admin/journal/refresh', follow_redirects=True)
+            rv = c.get('/refresh', follow_redirects=True)
 
-            rv = c.get('/admin/journal/nearest/2012-10-03', follow_redirects=True)
+            rv = c.get('/nearest/2012-10-03', follow_redirects=True)
             six.assertRegex(self, str(rv.data), r'2012-10-03', "load exact date")
 
-            rv = c.get('/admin/journal/nearest/2012-09-01', follow_redirects=True)
+            rv = c.get('/nearest/2012-09-01', follow_redirects=True)
             six.assertRegex(self, str(rv.data), r'2012-10-03', "request earlier date")
 
-            rv = c.get('/admin/journal/nearest/2012-10-10', follow_redirects=True)
+            rv = c.get('/nearest/2012-10-10', follow_redirects=True)
             six.assertRegex(self, str(rv.data), r'2012-10-03', "request later date")
 
     def test_latest(self):
@@ -54,9 +59,9 @@ class ViewTestCase(DiamondTestCase):
                 sess['_fresh'] = True
 
             # trigger refresh of journal
-            rv = c.get('/admin/journal/refresh', follow_redirects=True)
+            rv = c.get('/refresh', follow_redirects=True)
 
-            rv = c.get('/admin/journal/latest.html', follow_redirects=True)
+            rv = c.get('/latest.html', follow_redirects=True)
             six.assertRegex(self, str(rv.data), r'2012-10-03', "request latest.html")
 
     def test_search(self):
@@ -69,7 +74,7 @@ class ViewTestCase(DiamondTestCase):
                 sess['_fresh'] = True
 
             # trigger refresh of journal
-            rv = c.get('/admin/journal/refresh', follow_redirects=True)
+            rv = c.get('/refresh', follow_redirects=True)
 
             rv = c.get('admin/journal/search?q={q}'.format(q="graduate"), follow_redirects=True)
             six.assertRegex(self, str(rv.data), r'2012-10-03',
@@ -93,11 +98,11 @@ class ViewTestCase(DiamondTestCase):
                 sess['_fresh'] = True
 
             # trigger refresh of journal
-            rv = c.get('/admin/journal/refresh', follow_redirects=True)
+            rv = c.get('/refresh', follow_redirects=True)
 
-            rv = c.get('/admin/journal/day/2012-10-03.html', follow_redirects=True)
+            rv = c.get('/day/2012-10-03.html', follow_redirects=True)
             six.assertRegex(self, str(rv.data), r'2012-10-03', "get day as HTML")
-            rv = c.get('/admin/journal/day/2012-10-02.html', follow_redirects=True)
+            rv = c.get('/day/2012-10-02.html', follow_redirects=True)
             if six.PY2:
                 self.assertNotRegexpMatches(rv.data, r'2012-10-03',
                     "get non-existent day as HTML")
@@ -105,9 +110,9 @@ class ViewTestCase(DiamondTestCase):
                 self.assertNotRegex(str(rv.data), r'2012-10-03',
                     "get non-existent day as HTML")
 
-            rv = c.get('/admin/journal/text/2012-10-03.txt', follow_redirects=True)
+            rv = c.get('/text/2012-10-03.txt', follow_redirects=True)
             six.assertRegex(self, str(rv.data), r'2012-10-03', "get day as text")
-            rv = c.get('/admin/journal/text/2012-10-02.txt', follow_redirects=True)
+            rv = c.get('/text/2012-10-02.txt', follow_redirects=True)
             if six.PY2:
                 self.assertNotRegexpMatches(rv.data, r'2012-10-03',
                     "get non-existent day as text")
@@ -115,9 +120,9 @@ class ViewTestCase(DiamondTestCase):
                 self.assertNotRegex(str(rv.data), r'2012-10-03',
                     "get non-existent day as text")
 
-            rv = c.get('/admin/journal/markdown/2012-10-03.md', follow_redirects=True)
+            rv = c.get('/markdown/2012-10-03.md', follow_redirects=True)
             six.assertRegex(self, str(rv.data), r'2012-10-03', "get day as markdown")
-            rv = c.get('/admin/journal/markdown/2012-10-02.md', follow_redirects=True)
+            rv = c.get('/markdown/2012-10-02.md', follow_redirects=True)
             if six.PY2:
                 self.assertNotRegexpMatches(rv.data, r'2012-10-03',
                     "get non-existent day as markdown")
@@ -125,7 +130,7 @@ class ViewTestCase(DiamondTestCase):
                 self.assertNotRegex(str(rv.data), r'2012-10-03',
                     "get non-existent day as markdown")
 
-            rv = c.get('/admin/journal/download/2012-10-03.pdf', follow_redirects=True)
+            rv = c.get('/download/2012-10-03.pdf', follow_redirects=True)
             six.assertRegex(self, str(rv.data), r'PDF', "get day as PDF")
             self.assertEqual(len(rv.data), 306, "size match on download")
 
@@ -139,64 +144,64 @@ class ViewTestCase(DiamondTestCase):
                 sess['_fresh'] = True
 
             # trigger refresh of journal
-            rv = c.get('/admin/journal/refresh', follow_redirects=True)
+            rv = c.get('/refresh', follow_redirects=True)
 
             # upload small image
-            with open("gthnk/tests/data/gthnk.png", "rb") as f:
+            with open("tests/data/gthnk.png", "rb") as f:
                 buf = six.BytesIO(f.read())
-            rv = c.post('/admin/journal/inbox/2012-10-03', data=dict(
+            rv = c.post('/inbox/2012-10-03', data=dict(
                 file=(buf, 'gthnk.png'),
             ), follow_redirects=True)
 
             # upload big image
-            with open("gthnk/tests/data/gthnk-big.jpg", "rb") as f:
+            with open("tests/data/gthnk-big.jpg", "rb") as f:
                 buf = six.BytesIO(f.read())
-            rv = c.post('/admin/journal/inbox/2012-10-03', data=dict(
+            rv = c.post('/inbox/2012-10-03', data=dict(
                 file=(buf, 'gthnk-big.jpg'),
             ), follow_redirects=True)
 
             # thumbnails
-            rv = c.get('/admin/journal/thumbnail/2012-10-03-0.jpg', follow_redirects=True)
+            rv = c.get('/thumbnail/2012-10-03-0.jpg', follow_redirects=True)
             self.assertEqual(len(rv.data), 819, "size match on small thumbnail")
-            rv = c.get('/admin/journal/thumbnail/2012-10-03-1.jpg', follow_redirects=True)
+            rv = c.get('/thumbnail/2012-10-03-1.jpg', follow_redirects=True)
             self.assertEqual(len(rv.data), 1640, "size match on big thumbnail")
 
             # previews
-            rv = c.get('/admin/journal/preview/2012-10-03-0.jpg', follow_redirects=True)
+            rv = c.get('/preview/2012-10-03-0.jpg', follow_redirects=True)
             self.assertEqual(len(rv.data), 819, "size match on small preview")
-            rv = c.get('/admin/journal/preview/2012-10-03-1.jpg', follow_redirects=True)
+            rv = c.get('/preview/2012-10-03-1.jpg', follow_redirects=True)
             self.assertEqual(len(rv.data), 8611, "size match on big preview")
 
             # attachments
-            rv = c.get('/admin/journal/attachment/2012-10-03-0.jpg', follow_redirects=True)
+            rv = c.get('/attachment/2012-10-03-0.jpg', follow_redirects=True)
             self.assertEqual(len(rv.data), 7348, "size match on small attachment")
-            rv = c.get('/admin/journal/attachment/2012-10-03-1.jpg', follow_redirects=True)
+            rv = c.get('/attachment/2012-10-03-1.jpg', follow_redirects=True)
             self.assertEqual(len(rv.data), 27441, "size match on big attachment")
 
             # download
-            rv = c.get('/admin/journal/download/2012-10-03.pdf', follow_redirects=True)
+            rv = c.get('/download/2012-10-03.pdf', follow_redirects=True)
             self.assertEqual(len(rv.data), 17097, "size match on download")
 
             # attachment management
-            rv = c.get('/admin/journal/day/2012-10-03/1/move_up', follow_redirects=True)
-            rv = c.get('/admin/journal/day/2012-10-03/0/move_down', follow_redirects=True)
-            rv = c.get('/admin/journal/download/2012-10-03.pdf', follow_redirects=True)
+            rv = c.get('/day/2012-10-03/1/move_up', follow_redirects=True)
+            rv = c.get('/day/2012-10-03/0/move_down', follow_redirects=True)
+            rv = c.get('/download/2012-10-03.pdf', follow_redirects=True)
             self.assertEqual(len(rv.data), 17097, "size match on download")
             # TODO: need more robust testing of PDF ordering
 
-            from ..models import Day
+            from gthnk import Day
 
             how_many_1 = len(Day.query.filter_by(date='2012-10-03').first().pages)
             self.assertEqual(how_many_1, 2, "there are 2 attachments")
 
-            rv = c.get('/admin/journal/day/2012-10-03/attachment/1/delete', follow_redirects=True)
+            rv = c.get('/day/2012-10-03/attachment/1/delete', follow_redirects=True)
             how_many_2 = len(Day.query.filter_by(date='2012-10-03').first().pages)
             self.assertEqual(how_many_2, 1, "there is now 1 attachments")
-            rv = c.get('/admin/journal/download/2012-10-03.pdf', follow_redirects=True)
+            rv = c.get('/download/2012-10-03.pdf', follow_redirects=True)
             self.assertEqual(len(rv.data), 1596, "size match on download")
 
-            rv = c.get('/admin/journal/day/2012-10-03/attachment/0/delete', follow_redirects=True)
+            rv = c.get('/day/2012-10-03/attachment/0/delete', follow_redirects=True)
             how_many_3 = len(Day.query.filter_by(date='2012-10-03').first().pages)
             self.assertEqual(how_many_3, 0, "there are no attachments")
-            rv = c.get('/admin/journal/download/2012-10-03.pdf', follow_redirects=True)
+            rv = c.get('/download/2012-10-03.pdf', follow_redirects=True)
             self.assertEqual(len(rv.data), 306, "size match on download")

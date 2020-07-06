@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
-# from nose.plugins.attrib import attr
-from .mixins import DiamondTestCase, create_user
+import os
+import sys
+
+from tests import env_vscode
+env_vscode()
+
+from tests.mixins import CustomTestCase, create_user
 import six
 
 
-class ViewTestCase(DiamondTestCase):
+class TestViews(CustomTestCase):
 
     def test_login_redirect(self):
         with self.app.test_client() as c:

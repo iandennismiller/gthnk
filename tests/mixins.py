@@ -4,36 +4,32 @@
 import shutil
 import flask
 import warnings
-from ..models import User
 from flask_testing import TestCase
-from flask.exthook import ExtDeprecationWarning
-warnings.simplefilter('ignore', ExtDeprecationWarning)
 
 
 def setup_journal():
     shutil.copy(
-        "gthnk/tests/data/tmp_journal.txt",
+        "tests/data/tmp_journal.txt",
         flask.current_app.config["INPUT_FILES"]
     )
 
 
 def create_user():
-    User.register(
-        email="guest@example.com",
-        password="guest",
-        confirmed=True,
-        roles=["User"]
+    from gthnk.models.user import User
+    User.create(
+        username="gthnk",
+        password="gthnk"
     )
 
 
-class DiamondTestCase(TestCase):
+class CustomTestCase(TestCase):
     def create_app(self):
         """
         Create a Flask-Diamond app for testing.
 
         .
         """
-        from .. import create_app
+        from gthnk import create_app
         app = create_app()
         app.config['TESTING'] = True
         app.config['WTF_CSRF_ENABLED'] = False
@@ -45,7 +41,7 @@ class DiamondTestCase(TestCase):
 
         .
         """
-        from .. import db
+        from gthnk import db
         from flask import current_app
 
         db.create_all()
@@ -57,6 +53,6 @@ class DiamondTestCase(TestCase):
 
         .
         """
-        from .. import db
+        from gthnk import db
         db.session.remove()
         db.drop_all()

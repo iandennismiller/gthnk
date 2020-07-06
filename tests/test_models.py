@@ -1,14 +1,20 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
+import os
+import sys
+
+from tests import env_vscode
+env_vscode()
+
 import six
 import datetime
-# from nose.plugins.attrib import attr
-from .mixins import DiamondTestCase
-from ..models import Entry, Day, Page
+import unittest
 
+from gthnk import Day, Entry, Page
+from tests.mixins import CustomTestCase
 
-class ModelEntryTestCase(DiamondTestCase):
+class TestModels(CustomTestCase):
 
     def test_crud(self):
         "Go through CRUD operations to exercise the models."
@@ -20,7 +26,7 @@ class ModelEntryTestCase(DiamondTestCase):
         self.assertIsNotNone(entry, "Entry is created")
 
         # attach an image to a day
-        with open("gthnk/tests/data/gthnk-big.jpg", "rb") as f:
+        with open("tests/data/gthnk-big.jpg", "rb") as f:
             buf = six.BytesIO(f.read())
             page = day.attach(buf.getvalue())
             self.assertIsNotNone(page, "Page is created")
