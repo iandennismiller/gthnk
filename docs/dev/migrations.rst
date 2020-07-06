@@ -15,21 +15,18 @@ To create a new Migration:
 1. Drop the dev database.  We need to start fresh.
 2. Upgrade from blank to the latest migration state.
 3. Build the new migration, which is based on how current object state differs from the previous migration.
-4. Edit the 
+4. Edit the newly created migration in ``src/gthnk/migrations/versions``.
 
 ..
 
-    make drop_db
+    make dropdb
     make upgradedb
     make migratedb
 
-Edit the file created in src/gthnk/migrations/versions.
+SQLite3 does not support ``ALTER TABLE ... DROP COLUMN``.  So, comment out the following:
 
-SQLite3 does not support ALTER TABLE ... DROP COLUMN.  So, comment out the following:
+- ``op.drop_column()``
+- ``op.drop_constraint()``
+- ``op.alter_column()``
 
-- op.drop_column
-- op.drop_constraint
-- op.alter_column
-
-In addition, edit downgrade() to remove any corresponding commands - even if they are supported (like add column).
-
+In addition, edit ``downgrade()`` to remove any corresponding commands - even if they are supported (like add column).

@@ -24,7 +24,7 @@ User Guide
     user/browser-integration
     user/mobile-devices
     user/text-file-format
-    about/uninstallation
+    user/uninstallation
 
 Community
 ---------
@@ -53,6 +53,3 @@ About
     about/history
     changelog
     License
-
-..     about/credits
-..     about/philosophy
