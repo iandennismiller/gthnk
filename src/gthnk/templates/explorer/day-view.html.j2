@@ -12,7 +12,7 @@
       <a id="entries_anchor" name="entries_anchor"></a>
 
       <div class="gthnk-card" id="entries">
-        <p id="day-of-week">{% if is_buffer %}(buffer) {%endif%}{{ day_of_week }}</p>
+        <p id="day-of-week">{% if is_buffer %}(buffer){% else %}{{ day_of_week }}{% endif %}</p>
         {{ day_str|safe }}
       </div>
     </div>
