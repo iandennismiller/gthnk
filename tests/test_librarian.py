@@ -10,7 +10,8 @@ import flask
 import shutil
 from distutils.dir_util import remove_tree
 
-from gthnk import Day, Entry
+from gthnk.models.day import Day
+from gthnk.models.entry import Entry
 from gthnk.librarian import Librarian
 
 

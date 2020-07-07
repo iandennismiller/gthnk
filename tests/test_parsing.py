@@ -8,8 +8,8 @@ import shutil
 import glob
 import flask
 
-from gthnk import Day
-from gthnk import Entry
+from gthnk.models.day import Day
+from gthnk.models.entry import Entry
 from gthnk.adaptors.journal_buffer import JournalBuffer, TextFileJournalBuffer
 
 

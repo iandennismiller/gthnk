@@ -8,7 +8,9 @@ import six
 import datetime
 import unittest
 
-from gthnk import Day, Entry, Page
+from gthnk.models.day import Day
+from gthnk.models.entry import Entry
+from gthnk.models.page import Page
 
 class TestModels(CustomTestCase):
 

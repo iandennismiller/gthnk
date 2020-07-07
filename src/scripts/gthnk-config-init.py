@@ -8,7 +8,9 @@ import random
 template = """
 # Gthnk Configuration
 
-INPUT_FILES = "{gthnk_path}/journal.txt"
+WEB_JOURNAL_FILE = "{gthnk_path}/journal-web.txt"
+
+INPUT_FILES = "{gthnk_path}/journal-web.txt,{gthnk_path}/journal.txt"
 BACKUP_PATH = "{gthnk_path}/backup"
 EXPORT_PATH = "{gthnk_path}/export"
 

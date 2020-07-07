@@ -10,7 +10,7 @@
         Please enter your <b>Username</b> and <b>Password</b>.
     </p>
 
-    <form method="POST" action="{{ url_for('gthnk.login') }}">
+    <form method="POST" action="{{ url_for('auth.login') }}">
         {{ form.hidden_tag() }}
         {{ render_field(form.username, autofocus=true) }}
         {{ render_field(form.password) }}

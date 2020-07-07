@@ -11,23 +11,21 @@
             
         {% endif %}
 
-        {# <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('gthnk.latest_view') }}"><i class="fas fa-sun"></i></a> #}
-
         {% if current_page == 'day-view' %}
 
             {% if day %}
                 {% if day.yesterday() %}
-                    <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('gthnk.day_view', date=day.yesterday().date) }}" title="previous"><i class="fas fa-chevron-left"></i></a>
+                    <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('day.day_view', date=day.yesterday().date) }}" title="previous"><i class="fas fa-chevron-left"></i></a>
                 {% else %}
                     <a class="nav-item nav-link px-1 text-secondary" href="javascript:void(0)" title="no past days"><i class="fas fa-stop"></i></a>
                 {% endif %}
             {% else %}
-                <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('gthnk.latest_view') }}" title="latest"><i class="fas fa-chevron-left"></i></a>
+                <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('day.latest_view') }}" title="latest"><i class="fas fa-chevron-left"></i></a>
             {% endif %}
 
             {% if day %} 
                 {%if day.tomorrow() %}
-                    <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('gthnk.day_view', date=day.tomorrow().date) }}" title="previous"><i class="fas fa-chevron-right"></i></a>
+                    <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('day.day_view', date=day.tomorrow().date) }}" title="previous"><i class="fas fa-chevron-right"></i></a>
                 {% else %}
                     {# <a class="nav-item nav-link px-1 text-secondary" href="javascript:void(0)" title="no further days"><i class="fas fa-stop"></i></a> #}
                 {% endif %}
@@ -37,7 +35,7 @@
             
         {% endif %}
 
-    <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('gthnk.buffer_view') }}"><i class="fas fa-fast-forward"></i></a>
+    <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('day.buffer_view') }}"><i class="fas fa-fast-forward"></i></a>
 
     {% if current_page == 'day-view' %}
         <a class="nav-item nav-link px-1 text-secondary" id="calendar_button" href="javascript:void(0)" title="go to day"><i class="far fa-calendar-alt"></i></a>

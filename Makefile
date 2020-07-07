@@ -37,9 +37,6 @@ test: clean
 test-import:
 	SETTINGS=$$PWD/usr/conf/dev.conf src/scripts/gthnk import_archive -d src/tests/data/
 
-single:
-	SETTINGS=$$PWD/usr/conf/testing.conf nosetests src/gthnk -c usr/nose/test-single.cfg
-
 db:
 	SETTINGS=$$PWD/usr/conf/dev.conf src/scripts/gthnk init_db
 	SETTINGS=$$PWD/usr/conf/dev.conf src/scripts/gthnk user_add --username "gthnk" --password "gthnk"
@@ -52,11 +49,6 @@ upgradedb:
 
 migratedb:
 	SETTINGS=$$PWD/usr/conf/dev.conf src/scripts/gthnk db migrate
-
-watch:
-	watchmedo shell-command -R -p "*.py" -c 'echo \\n\\n\\n\\nSTART; date; \
-		SETTINGS=$$PWD/usr/conf/testing.conf nosetests src/gthnk \
-		-c usr/nose/test-single.cfg; date' .
 
 docs:
 	rm -rf build/sphinx

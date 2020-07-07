@@ -30,6 +30,7 @@ setup(
     packages=find_packages(),
     scripts=[
         "scripts/gthnk",
+        "scripts/gthnk-config-init.py",
     ],
     long_description=read('Readme.rst'),
     classifiers=[

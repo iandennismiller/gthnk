@@ -22,7 +22,7 @@
       <div class="col-10">
         <div class="gthnk-card" id="agenda">
         <p>
-          <a href="{{ url_for('gthnk.day_view', date=row.day.date) }}#{{ row.hhmm() }}">
+          <a href="{{ url_for('day.day_view', date=row.day.date) }}#{{ row.hhmm() }}">
             {{row.day.date}} <strong>{{row.hhmm()}}</strong>
           </a>
         </p>
