@@ -212,6 +212,25 @@ Other gthnk Resources
     - https://pypi.org/project/mdx_journal/
     - repo: https://github.com/iandennismiller/mdx_journal
 
+Diamond Methods
+^^^^^^^^^^^^^^^
+
+- Routine
+    - http://www.idmiller.com/books/routine/index.html
+    - https://www.amazon.com/Routine-Reflection-Ian-Dennis-Miller/dp/1974269108
+- Project System
+    - https://project-system.readthedocs.io/en/latest/
+    - python: https://pypi.org/project/project-system/
+    - repo: https://github.com/iandennismiller/project-system
+- Diamond Patterns
+    - https://diamond-patterns.readthedocs.io/en/latest/
+    - python: https://pypi.org/project/diamond-patterns/
+    - repo: https://github.com/iandennismiller/diamond-patterns
+- Gthnk
+    - http://www.gthnk.com
+    - python: https://pypi.org/project/gthnk/
+    - repo: https://github.com/iandennismiller/gthnk
+
 Documentation
 ^^^^^^^^^^^^^
 
