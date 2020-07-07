@@ -2,7 +2,7 @@ var go_tomorrow = function() {
     if (tomorrow) {
         window.location.href = "/day/" + tomorrow + ".html";
     } else {
-        window.location.href = "/buffer";
+        window.location.href = "/day/live";
     }
 }
 
@@ -35,7 +35,7 @@ function checkKey(e) {
         go_tomorrow();
     }
     else if (e.keyCode == 192) { 
-        window.location.href = "/buffer";
+        window.location.href = "/day/live";
     }
 }
 document.onkeydown = checkKey;
