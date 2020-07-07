@@ -32,15 +32,14 @@
 
 ### Milestone: ui/ux
 
+- [ ] endpoint to view current configuration
 - [x] keyboard hot keys: left, right, esc
 - [x] swipe left/right
 - [x] dark mode theme
 - [x] improvement: remove /admin prefix on URLs
 - [x] improvement: narrow screen rendering
 - [x] automatically poll buffer for updates
-- [ ] endpoint to view current configuration
-- [ ] vscode extension could embed gthnk browser
-- [ ] quick add note in hamburger menu; append journal-web.txt with auto timestamp
+- [x] quick add note in hamburger menu; append journal-web.txt with auto timestamp
 
 ### Milestone: progressive web app
 
@@ -76,6 +75,10 @@
   - [x] render separately at bottom of day
 - [ ] recent project activity widget (maybe project-system)
   - [ ] possibly from RSS
+
+### Milestone: next steps
+
+- [ ] vscode extension could embed gthnk browser
 
 ## Done
 

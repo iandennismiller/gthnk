@@ -1,0 +1,35 @@
+{% extends 'shared/base.html.j2' %}
+
+{% from "shared/_formhelpers.html.j2" import render_field_nodiv %}
+
+{% set current_page = 'note-view' %}
+
+{% block content %}
+<div id="backdrop" class="container">
+
+  <div class="row">
+    <div class="col-xl-1"></div>
+    <div class="col-xl-10">
+      <div class="gthnk-card" id="entries">
+        <p>{{ datestamp }}</p>
+        <p>{{ timestamp }}</p>
+        <form method="POST" action="{{ url_for('gthnk.note_view') }}">
+          {{ form.hidden_tag() }}
+          {{ render_field_nodiv(form.entry, autofocus=true) }}
+          {{ form.save_button(class_="btn btn-primary btn-lg") }}
+        </form>        
+      </div>
+    </div>
+    <div class="col-xl-1"></div>
+  </div>
+
+</div>
+
+<script>
+  var today = "{{ date }}";
+  // init_filedrag();
+</script>
+
+<script src="/static/js/gthnk-explorer.js"></script>
+
+{% endblock %}

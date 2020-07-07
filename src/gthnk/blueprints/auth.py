@@ -16,8 +16,8 @@ def load_user(user_id):
 
 
 class LoginForm(FlaskForm):
-    username = StringField('Username')
-    password = PasswordField('Password')
+    username = StringField('Username', validators=[validators.DataRequired()])
+    password = PasswordField('Password', validators=[validators.DataRequired()])
     submit_button = SubmitField("Login")
 
 auth = flask.Blueprint('auth', __name__)

@@ -35,7 +35,7 @@ def latest_view():
     if latest_day:
         return flask.redirect(flask.url_for('day.day_view', date=latest_day.date))
     else:
-        return flask.render_template('explorer/day-view.html.j2',
+        return flask.render_template('day-view.html.j2',
             day=None, day_str="No entries yet")
 
 
@@ -90,7 +90,7 @@ def buffer_view():
 
     input_files = flask.current_app.config["INPUT_FILES"]
     if "WEB_JOURNAL_FILE" in flask.current_app.config:
-        input_files.append(flask.current_app.config["WEB_JOURNAL_FILE"])
+        input_files += "," + flask.current_app.config["WEB_JOURNAL_FILE"]
 
     buffer_str = ""
     for buffer_file in input_files.split(","):
@@ -106,7 +106,7 @@ def buffer_view():
     day_of_week = days[datetime.datetime.strptime(date, "%Y-%m-%d").weekday()]
 
     return flask.render_template(
-        'explorer/day-view.html.j2',
+        'day-view.html.j2',
         date=date,
         day=None,
         day_str=day_md,
@@ -129,7 +129,7 @@ def day_view(date):
         day_of_week = days[datetime.datetime.strptime(date, "%Y-%m-%d").weekday()]
 
         return flask.render_template(
-            'explorer/day-view.html.j2',
+            'day-view.html.j2',
             date=date,
             day=day,
             day_str=day_md,
