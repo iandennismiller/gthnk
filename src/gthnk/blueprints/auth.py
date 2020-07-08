@@ -8,7 +8,7 @@ from .. import login_manager, bcrypt
 from ..models.user import User
 
 
-login_manager.login_view = ".login"
+login_manager.login_view = "auth.login"
 
 @login_manager.user_loader
 def load_user(user_id):

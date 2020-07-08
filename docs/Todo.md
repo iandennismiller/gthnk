@@ -32,7 +32,7 @@
 
 ### Milestone: ui/ux
 
-- [ ] endpoint to view current configuration
+- [x] endpoint to view current configuration
 - [x] keyboard hot keys: left, right, esc
 - [x] swipe left/right
 - [x] dark mode theme
@@ -61,13 +61,14 @@
 ### Milestone: tags
 
 - [x] double-square-brackets: tagging, wiki-like pseudo-page results
-  - [ ] list tags separate from fulltext results
+  - [x] list tags separate from fulltext results
 - [ ] search auto-complete for tags
 - [ ] timeline of when tags appear
 - [ ] rethink /search as /tag/blah
 - [ ] "search" becomes "go to"
 - [ ] entry co-tag graph, navigator
 - [ ] date filter on search/go to
+- [ ] search results markdown is clickable, including tags
 
 ### Milestone: activity
 

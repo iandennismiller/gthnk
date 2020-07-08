@@ -1,0 +1,60 @@
+{% extends 'shared/base.html.j2' %}
+
+{% from "shared/_formhelpers.html.j2" import render_field_nodiv %}
+
+{% set current_page = 'config-view' %}
+
+{% block content %}
+<div id="backdrop" class="container">
+
+  <div class="row">
+    <div class="col-xl-1"></div>
+    <div class="col-xl-10">
+
+      <h1>Configuration</h1>
+
+      <div class="gthnk-card" id="entries">
+        <style type="text/css">.key { display: inline-block; width: 12em; }</style>
+        <p>
+          <span class="key">Input Files</span>
+          <span class="value">{{ configuration['INPUT_FILES'] }}</span>
+        </p>
+
+        <p>
+          <span class="key">Web Journal File</span>
+          <span class="value">{{ configuration['WEB_JOURNAL_FILE'] }}</span>
+        </p>
+
+        <p>
+          <span class="key">Backups Directory</span>
+          <span class="value">{{ configuration['BACKUP_PATH'] }}</span>
+        </p>
+
+        <p>
+          <span class="key">Exports Directory</span>
+          <span class="value">{{ configuration['EXPORT_PATH'] }}</span>
+        </p>
+
+        <p>
+          <span class="key">Database Filename</span>
+          <span class="value">{{ configuration['SQLALCHEMY_DATABASE_URI']|replace('sqlite:///', '') }}</span>
+        </p>
+
+        <p>
+          <span class="key">Log Filename</span>
+          <span class="value">{{ configuration['LOG'] }}</span>
+        </p>
+
+        <p>
+          <span class="key">Gthnk Server URL</span>
+          <span class="value">{{ configuration['BASE_URL'] }}</span>
+        </p>
+
+      </div>
+    </div>
+    <div class="col-xl-1"></div>
+  </div>
+
+</div>
+
+{% endblock %}

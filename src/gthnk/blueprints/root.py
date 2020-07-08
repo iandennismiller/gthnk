@@ -18,10 +18,18 @@ class NoteForm(FlaskForm):
         validators=[validators.DataRequired()],
         render_kw={
             'class': 'form-control rounded-0',
-            'rows': 10
+            'rows': 5
         }
     )
     save_button = SubmitField("Save")
+
+@root.route('/config')
+@login_required
+def config_view():
+    return flask.render_template('config-view.html.j2',
+            configuration=flask.current_app.config
+        )
+
 
 @root.route('/note', methods=['GET', 'POST'])
 @login_required

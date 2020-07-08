@@ -3,6 +3,7 @@
 
 import re
 import io
+import os
 import datetime
 import sys
 import json
@@ -138,9 +139,10 @@ class TextFileJournalBuffer(JournalBuffer):
     provide functions for loading content from a text file
     """
     def process_one(self, filename):
-        with io.open(filename, "r", encoding="utf-8") as f:
-            contents = f.read()
-        self.parse(contents)
+        if os.path.isfile(filename):
+            with io.open(filename, "r", encoding="utf-8") as f:
+                contents = f.read()
+            self.parse(contents)
 
     def process_list(self, filename_list):
         for filename in filename_list:
