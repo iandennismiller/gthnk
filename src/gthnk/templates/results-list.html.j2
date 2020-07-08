@@ -14,7 +14,51 @@
       <div class="col-1"></div>
     </div>
 
-  {% for row in data[:20] %}
+  {% if tag_results|length > 0 %}
+
+  <div class="row">
+    <div class="col-1"></div>
+    <div class="col-10">
+      <h3>Tag results</h3>
+    </div>
+    <div class="col-1"></div>
+  </div>
+
+  {% for row in tag_results[:20] %}
+    <div class="row">
+      <div class="col-1"></div>
+
+      <div class="col-10">
+        <div class="gthnk-card" id="agenda">
+        <p>
+          <a href="{{ url_for('day.day_view', date=row.day.date) }}#{{ row.hhmm() }}">
+            {{row.day.date}} <strong>{{row.hhmm()}}</strong>
+          </a>
+        </p>
+
+        {% filter markdown %}{{row.content}}{% endfilter %}
+        </div>
+      </div>
+
+      <div class="col-1">
+      </div>
+
+    </div>
+  {% endfor %}
+  {% endif %}
+
+  {% if results|length > 0 %}
+
+  <div class="row">
+
+    <div class="col-1"></div>
+    <div class="col-10">
+      <h3>Fulltext results</h3>
+    </div>
+    <div class="col-1"></div>
+  </div>
+
+  {% for row in results[:20] %}
     <div class="row">
       <div class="col-1"></div>
 
@@ -36,6 +80,7 @@
 
     </div>
   {% endfor %}
+  {% endif %}
 
 </div>
 

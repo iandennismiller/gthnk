@@ -64,17 +64,37 @@ def search_view():
     if not flask.request.args:
         return flask.redirect(flask.url_for("gthnk.index"))
     else:
+        # first locate tags
+        query_str = "[[{}]]".format(flask.request.args['q'])
+        query = Entry.query.filter(
+            Entry.content.contains(query_str)).order_by(desc(Entry.timestamp))
+        tag_results = query.all()[:20]
+
+        # then locate any fulltext match
         query_str = flask.request.args['q']
         query = Entry.query.filter(
             Entry.content.contains(query_str)).order_by(desc(Entry.timestamp))
         results = query.all()[:20]
+
+        remove_ids = set()
+
+        for tag_result in tag_results:
+            for result in results:
+                if tag_result.id == result.id:
+                    remove_ids.add(tag_result.id)
+        
+        filtered_results = []
+        for result in results:
+            if result.id not in remove_ids:
+                filtered_results.append(result)
 
         for idx in range(0, len(results)):
             results[idx].content = re.sub(query_str, "**{}**".format(
                 query_str), results[idx].content, flags=re.I)
 
         return flask.render_template('results-list.html.j2',
-            data=results,
+            tag_results=tag_results,
+            results=filtered_results,
             query_str=query_str,
             count=query.count()
             )

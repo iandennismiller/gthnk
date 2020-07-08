@@ -35,7 +35,7 @@ test: clean
 	SETTINGS=$$PWD/usr/conf/testing.conf python -m tests.runner
 
 test-import:
-	SETTINGS=$$PWD/usr/conf/dev.conf src/scripts/gthnk import_archive -d src/tests/data/
+	SETTINGS=$$PWD/usr/conf/dev.conf src/scripts/gthnk import_archive -d tests/data/
 
 db:
 	SETTINGS=$$PWD/usr/conf/dev.conf src/scripts/gthnk init_db
