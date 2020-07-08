@@ -1,5 +1,16 @@
 #!/bin/bash
 
-~/.local/bin/gthnk-config-init.py /home/gthnk/.gthnk/gthnk.conf /home/gthnk/.gthnk
-~/.local/bin/gthnk-db-init.sh
-~/.local/bin/gthnk-user-add.sh gthnk gthnk
+GTHNK_PATH=$1
+
+if [ ! -f ${GTHNK_PATH}/gthnk.conf ]; then
+    echo "Creating configuration file"
+    gthnk-config-init.py ${GTHNK_PATH}/gthnk.conf ${GTHNK_PATH}
+fi
+
+if [ ! -f ${GTHNK_PATH}/gthnk.db ]; then
+    echo "Creating database"
+    gthnk-db-init.sh
+
+    echo "Creating default user"
+    gthnk-user-add.sh gthnk gthnk
+fi

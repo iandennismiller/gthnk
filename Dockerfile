@@ -30,7 +30,4 @@ RUN sudo -i -u gthnk pip3 install --user /home/gthnk/gthnk/src
 
 # 1) Generate configuration if necessary
 # 2) Launch the Gthnk server
-CMD if [ ! -f /home/gthnk/.gthnk/gthnk.conf ]; then \
-  sudo -i -u gthnk gthnk-firstrun.sh /home/gthnk/.gthnk/gthnk.conf; \
-  fi; \
-  sudo -i -u gthnk gthnk-server.sh
+CMD sudo -i -u gthnk sh -c 'gthnk-firstrun.sh /home/gthnk/.gthnk; gthnk-server.sh'

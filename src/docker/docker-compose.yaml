@@ -16,10 +16,7 @@ services:
       - "1620:1620"
     environment:
       - TZ=America/Toronto
-    command: >
-      sh -c "
-      if [ ! -f /home/gthnk/.gthnk/gthnk.conf ]; then sudo -i -u gthnk gthnk-firstrun.sh; fi;
-      sudo -i -u gthnk gthnk-server.sh"
+    command: sudo -i -u gthnk sh -c 'gthnk-firstrun.sh /home/gthnk/.gthnk; gthnk-server.sh'
 
   gthnk-rotate:
     image: docker:edge
