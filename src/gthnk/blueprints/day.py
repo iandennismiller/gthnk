@@ -1,10 +1,12 @@
 import os
 import re
 import flask
+import logging
 import datetime
 from flask_login import login_required
 from ..models.day import Day, latest
 from ..utils.slugify import slugify, _slugify
+from ..adaptors.journal_buffer import TextFileJournalBuffer
 
 day = flask.Blueprint('day', __name__)
 
@@ -92,12 +94,9 @@ def buffer_view():
     if "WEB_JOURNAL_FILE" in flask.current_app.config:
         input_files += "," + flask.current_app.config["WEB_JOURNAL_FILE"]
 
-    buffer_str = ""
-    for buffer_file in input_files.split(","):
-        if os.path.isfile(buffer_file):
-            with open(buffer_file, 'r') as f:
-                buffer_str += f.read()
-                buffer_str += "\n\n"
+    journal_buffer = TextFileJournalBuffer()
+    journal_buffer.process_list(input_files.split(","))
+    buffer_str = "".join(journal_buffer.render_entries())
 
     todo_items = extract_todo_items(buffer_str)
     day_md = render_day_pipeline(buffer_str)
