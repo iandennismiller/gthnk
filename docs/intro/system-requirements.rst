@@ -4,7 +4,7 @@ System Requirements
 Gthnk requires some software to be installed in order to function.
 The following packages should be installed globally, as the superuser, for all users on the system to access.
 
-- Python 3.6, Python 3.5, or Python 2.7.
+- Python 3.5+
 - Python development libraries (i.e. header files for compiling C code)
 - `pip <http://pip.readthedocs.org/en/latest/>`_
 - `virtualenv <http://virtualenv.readthedocs.org/en/latest/>`_

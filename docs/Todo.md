@@ -40,6 +40,7 @@
 - [x] improvement: narrow screen rendering
 - [x] automatically poll buffer for updates
 - [x] quick add note in hamburger menu; append journal-web.txt with auto timestamp
+  - [x] live view should stitch entries together and sort by time
 
 ### Milestone: progressive web app
 
@@ -79,6 +80,7 @@
 ### Milestone: next steps
 
 - [ ] vscode extension could embed gthnk browser
+- [ ] adaptor for weather updates
 
 ## Done
 

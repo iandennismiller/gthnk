@@ -3,6 +3,6 @@
 
 __version__ = '0.7.0'
 __author__ = 'Ian Dennis Miller'
-__email__ = 'iandennismiller@gmail.com'
+__email__ = 'ian@iandennismiller.com'
 __url__ = 'http://www.gthnk.com'
 __copyright__ = '(c) Ian Dennis Miller'
