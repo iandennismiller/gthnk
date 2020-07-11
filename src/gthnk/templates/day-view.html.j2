@@ -45,42 +45,28 @@
 
 <script>
   var today = "{{ date }}";
-  // init_filedrag();
+</script>
 
-  {% if is_buffer %}
-  var mtime = 0;
+<!-- inter-day navigation -->
+<script>
+  {% if day and day.yesterday() %}
+  var yesterday = "{{day.yesterday().date}}";
+  {% else %}
+  var yesterday = null;
+  {% endif %}
 
-  function check_buffer(do_reload) {
-    $.ajax({
-      dataType: "json",
-      url: "/day/live/latest.json",
-      success: function(data) {
-        if (data.timestamp > mtime) {
-          mtime = data.timestamp;
-          if (do_reload) {
-            localStorage.setItem("do-scroll", "true");
-            window.location.reload(true);
-          }
-        }
-      }
-    });
-  }
-
-  // check the buffer periodically
-  setInterval( function() {
-    check_buffer(true);
-  }, 5000);
-
-  // check the buffer once, right now, just to set the mtime.
-  check_buffer(false);
-
-  if (localStorage.getItem("do-scroll") == "true") {
-    localStorage.setItem("do-scroll", "false");
-    window.scrollTo(0, document.body.scrollHeight);
-  }
+  {% if day and day.tomorrow() %}
+  var tomorrow = "{{day.tomorrow().date}}";
+  {% else %}
+  var tomorrow = null;
   {% endif %}
 </script>
 
-<script src="/static/js/gthnk-explorer.js"></script>
+{% if is_buffer %}
+  <script src="/static/js/gthnk-live-update.js"></script>
+{% endif %}
+
+{# <script src="/static/js/gthnk-attachments.js"></script> #}
+<script src="/static/js/gthnk-navigate.js"></script>
 
 {% endblock %}

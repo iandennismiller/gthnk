@@ -152,5 +152,14 @@ def init_config_file(filename, gthnk_path):
     write_config_file(out_file=filename, gthnk_path=gthnk_path)
 
 
+@manager.command
+def gui():
+    """
+    drop all databases
+    """
+    import webview
+    webview.create_window('gthnk', 'http://localhost:1620')
+    webview.start()
+
 if __name__ == "__main__":
     manager.run()

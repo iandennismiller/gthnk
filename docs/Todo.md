@@ -78,10 +78,18 @@
 - [ ] recent project activity widget (maybe project-system)
   - [ ] possibly from RSS
 
+### Milestone: reports
+
+- [ ] report report
+- [ ] weather report
+- [ ] git report
+- [ ] headlines report
+- [ ] systems report
+- [ ] today's calendar report
+
 ### Milestone: next steps
 
 - [ ] vscode extension could embed gthnk browser
-- [ ] adaptor for weather updates
 
 ## Done
 
