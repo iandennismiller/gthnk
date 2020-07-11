@@ -30,6 +30,7 @@ def nearest_day_view(date):
     # if no dates are found, redirect to home page
     return flask.redirect(flask.url_for('gthnk.index'))
 
+
 @day.route("/latest")
 @login_required
 def latest_view():
@@ -49,6 +50,7 @@ def extract_todo_items(day_md):
         todo_items.append((checked != ' ', item))
 
     return todo_items
+
 
 def render_day_pipeline(day_str):
     # convert Markdown to string to avoid HTML escaping
@@ -114,6 +116,7 @@ def buffer_view():
         is_buffer=True,
     )
 
+
 @day.route("/day/<date>.html")
 @login_required
 def day_view(date):
@@ -138,6 +141,7 @@ def day_view(date):
     else:
         return flask.redirect(flask.url_for('gthnk.index'))
 
+
 @day.route("/day/<date>.txt")
 @login_required
 def text_view(date):
@@ -147,6 +151,7 @@ def text_view(date):
     else:
         return flask.redirect(flask.url_for('gthnk.index'))
 
+
 @day.route("/day/<date>.md")
 @login_required
 def markdown_view(date):
@@ -155,6 +160,7 @@ def markdown_view(date):
         return day.render_markdown()
     else:
         return flask.redirect(flask.url_for('gthnk.index'))
+
 
 @day.route("/day/<date>.pdf")
 @login_required

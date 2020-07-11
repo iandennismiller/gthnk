@@ -29,6 +29,7 @@ def overwrite_if_different(filename, new_content):
         f.write(new_content.encode('utf-8'))
     return True
 
+
 def overwrite_if_different_bytes(filename, new_content):
     # see whether the file exists
     if os.path.isfile(filename):
@@ -47,7 +48,6 @@ def overwrite_if_different_bytes(filename, new_content):
     return True
 
 
-
 class Librarian(object):
     def __init__(self, app):
         self.app = app
@@ -55,8 +55,13 @@ class Librarian(object):
 
     def rotate_buffers(self):
         # import any Journal Buffers that might have entries ready for importing
-        self.app.logger.debug("processing list: {}".format(self.app.config["INPUT_FILES"]))
-        file_list = split_filename_list(self.app.config["INPUT_FILES"])
+
+        input_files = self.app.config["INPUT_FILES"]
+        if "WEB_JOURNAL_FILE" in self.app.config:
+            input_files += "," + self.app.config["WEB_JOURNAL_FILE"]
+
+        self.app.logger.debug("processing list: {}".format(input_files))
+        file_list = split_filename_list(input_files)
 
         self.app.logger.info("rotating")
 
