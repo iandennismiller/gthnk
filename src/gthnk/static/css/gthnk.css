@@ -63,6 +63,15 @@ a.anchor {
 }
 
 /*
+    Images
+*/
+
+.img-thumbnail {
+    max-width: 200px;
+    max-height: 200px;
+}
+
+/*
     Dark Mode
 */
 

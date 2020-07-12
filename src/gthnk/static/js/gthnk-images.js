@@ -4,5 +4,6 @@
  */
 
 $( document ).ready( function() {
-    $("img").addClass('img-fluid');
+    $("#entries img").addClass('img-fluid img-thumbnail');
+    $("#entries img").click(function() {$(this).toggleClass('img-thumbnail')});
 } );
