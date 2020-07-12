@@ -9,26 +9,11 @@ var set_height = function(){
     $("#page_wrapper").css("height", $(window).height()-56-50);
 }
 
-var set_image_widths = function() {
-    // set image widths
-    var widths = $(".page_attachment a + div img").map(function(){
-        return $(this).width();
-    }).get();
-
-    $(".image_container").each(function(index, value){
-        $(value).css("width", widths[index]);
-    });
-}
-
 /**********
  * Handlers
  */
 
 // $(window).resize( set_height );
-
-$(window).bind("load", function() {
-    set_image_widths();
-});
 
 // http://stackoverflow.com/questions/4198041/jquery-smooth-scroll-to-an-anchor/12714767#12714767
 $(".scroll").click(function(event){
@@ -82,6 +67,21 @@ $(".cancel_button").click(function() {
     console.log(container);
     $(container).toggle("slide");
 });
+
+var set_image_widths = function() {
+    // set image widths
+    var widths = $(".page_attachment a + div img").map(function(){
+        return $(this).width();
+    }).get();
+
+    $(".image_container").each(function(index, value){
+        $(value).css("width", widths[index]);
+    });
+}
+
+// $(window).bind("load", function() {
+//     set_image_widths();
+// });
 
 /******
  * Main
