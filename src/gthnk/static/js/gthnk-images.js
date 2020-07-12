@@ -3,7 +3,8 @@
  * Ian Dennis Miller
  */
 
-$( document ).ready( function() {
-    $("#entries img").addClass('img-fluid img-thumbnail');
-    $("#entries img").click(function() {$(this).toggleClass('img-thumbnail')});
-} );
+$("#entries img").addClass('img-fluid img-thumbnail');
+$("#entries img").click(function() {$(this).toggleClass('img-thumbnail')});
+
+// $( document ).ready( function() {
+// } );
