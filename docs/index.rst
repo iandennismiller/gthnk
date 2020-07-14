@@ -50,6 +50,7 @@ About
 .. toctree::
     :maxdepth: 1
 
+    about/vision
     about/history
     changelog
     License
