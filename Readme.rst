@@ -17,10 +17,6 @@ Make a journal that lasts 100 years.
     :target: https://travis-ci.org/github/iandennismiller/gthnk
     :alt: Build Status
 
-.. image:: https://coveralls.io/repos/github/iandennismiller/gthnk/badge.svg?branch=master
-    :target: https://coveralls.io/github/iandennismiller/gthnk
-    :alt: Coverage Status
-
 .. image:: https://img.shields.io/github/stars/iandennismiller/gthnk.svg?style=social&label=GitHub
     :target: https://github.com/iandennismiller/gthnk
     :alt: Github Project
@@ -201,8 +197,6 @@ Other Gthnk Resources
     - https://app.element.io/#/room/#gthnk:matrix.org
 - Continuous Integration
     - https://travis-ci.org/iandennismiller/gthnk
-- Code Coverage
-    - https://coveralls.io/github/iandennismiller/gthnk
 - VS Code Extension
     - https://marketplace.visualstudio.com/items?itemName=IanDennisMiller.gthnk
     - repo: https://github.com/iandennismiller/vscode-gthnk
