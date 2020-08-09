@@ -1,7 +1,7 @@
-gthnk
+Gthnk
 =====
 
-`gthnk <http://www.gthnk.com>`_ is a personal knowledge management system.
+`Gthnk <http://www.gthnk.com>`_ is a personal knowledge management system.
 Capture your ideas using plain old text files.
 Make a journal that lasts 100 years.
 
@@ -28,22 +28,22 @@ Make a journal that lasts 100 years.
 Overview
 --------
 
-- **gthnk** presents a **journal** consisting of many **entries**.
-- **Entries** are created using plain old text files, which **gthnk** imports once per day.
-- Any text editor can be used to add information to **gthnk**.
-- **Entries** are searchable using the embedded **gthnk** server, which can be accessed with a browser.
+- **Gthnk** presents a **journal** consisting of many **entries**.
+- **Entries** are created using plain old text files, which **Gthnk** imports once per day.
+- Any text editor can be used to add information to **Gthnk**.
+- **Entries** are searchable using the embedded **Gthnk** server, which can be accessed with a browser.
 - Plain-text enables backup/restore via hardcopy (e.g. paper) for long-term archival.
 
 .. Additional media, including images and PDFs, can be attached to the journal.
 
-The easiest way to run **gthnk** is with Docker.
-**gthnk** also installs on Windows, Linux, and MacOS systems with Python 3.5+.
+The easiest way to run **Gthnk** is with Docker.
+**Gthnk** also installs on Windows, Linux, and MacOS systems with Python 3.5+.
 See the `Installation document <https://gthnk.readthedocs.io/en/latest/intro/installation.html>`_ for more details.
 
 Quick Start
 ^^^^^^^^^^^
 
-Use Docker to run gthnk with all files stored locally in ``~/.gthnk``.
+Use Docker to run Gthnk with all files stored locally in ``~/.gthnk``.
 
 ::
 
@@ -79,7 +79,7 @@ Then, insert a time marker **HHMM** and a blank line to start a journal entry.
 
     And this is a separate entry, a minute later.
 
-Those two delimiters - date and time followed by a blank line - are all there is to the gthnk journal file format.
+Those two delimiters - date and time followed by a blank line - are all there is to the Gthnk journal file format.
 The rest is Markdown.
 
 You can add multiple entries per day - and multiple days in a single journal - by inserting date and time markers as you work.
@@ -87,12 +87,12 @@ You can add multiple entries per day - and multiple days in a single journal - b
 User Interface
 ^^^^^^^^^^^^^^
 
-To interact with the gthnk journal, connect to http://localhost:1620 and log in with the username ``gthnk`` and the password ``gthnk``.
+To interact with the Gthnk journal, connect to http://localhost:1620 and log in with the username ``gthnk`` and the password ``gthnk``.
 
 Click the **fast-forward** icon to view the live journal buffer.
 As you edit ``journal.txt``, this live buffer will be updated.
 
-Once the journals have been rotated, the history of previous days becomes available within the gthnk Interface.
+Once the journals have been rotated, the history of previous days becomes available within the Gthnk Interface.
 
 Journal Rotation
 ^^^^^^^^^^^^^^^^
@@ -146,7 +146,7 @@ In particular, you can change ``INPUT_FILES`` to pull from multiple journal text
 Cloud Sync
 ^^^^^^^^^^
 
-You can sync gthnk to multiple devices using a cloud file system like Dropbox or Seafile.
+You can sync Gthnk to multiple devices using a cloud file system like Dropbox or Seafile.
 Use the ``docker run -v`` flag to point to your cloud storage: ``-v ${PATH_TO_CLOUD}/gthnk:/home/gthnk/cloud-storage``
 
 A complete example using Dropbox could look like:
@@ -161,7 +161,7 @@ A complete example using Dropbox could look like:
         -v ~/Dropbox/gthnk:/home/gthnk/cloud-storage \
         iandennismiller/gthnk
 
-This configuration supports running gthnk on a dedicated server, like a local Linux machine, while editing the journal files on devices that are synced via the cloud.
+This configuration supports running Gthnk on a dedicated server, like a local Linux machine, while editing the journal files on devices that are synced via the cloud.
 
 To support a laptop and phone, edit ``~/.gthnk/gthnk.conf`` to specify multiple INPUT_FILES located on cloud storage.
 
@@ -172,16 +172,16 @@ To support a laptop and phone, edit ``~/.gthnk/gthnk.conf`` to specify multiple 
 Full Server with Rotation
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In order for gthnk to rotate the journals automatically, a separate process needs to run periodically.
+In order for Gthnk to rotate the journals automatically, a separate process needs to run periodically.
 
-The full suite of gthnk server processes can be run as:
+The full suite of Gthnk server processes can be run as:
 
 ::
 
     wget https://github.com/iandennismiller/gthnk/raw/master/src/docker/docker-compose.yaml
     docker-compose up -d
 
-Other gthnk Resources
+Other Gthnk Resources
 ^^^^^^^^^^^^^^^^^^^^^
 
 - Project repository
