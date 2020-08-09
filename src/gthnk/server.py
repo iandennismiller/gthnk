@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
+import os
 import flask
 import logging
 
@@ -18,7 +19,13 @@ from .models.user import User
 
 def create_app():
     app = flask.Flask(__name__)
-    app.config.from_envvar('SETTINGS')
+    try:
+        app.config.from_envvar('SETTINGS')
+    except RuntimeError:
+        default_filename = os.path.expanduser('~/.gthnk/gthnk.conf')
+        if os.path.isfile(default_filename):
+            print("WARN: using default configuration file ~/.gthnk/gthnk.conf")
+            app.config.from_pyfile(default_filename)
 
     logging.basicConfig(
         format='%(asctime)s %(module)-16s %(levelname)-8s %(message)s',
