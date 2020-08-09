@@ -64,7 +64,7 @@ lint:
 
 release:
 	cd src && python setup.py sdist bdist_wheel
-	# twine upload --config-file ~/.pypirc dist/*
+	twine upload --config-file ~/.pypirc src/dist/*
 
 ###
 # Docker
