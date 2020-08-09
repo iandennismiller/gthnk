@@ -81,7 +81,7 @@ master_doc = 'index'
 
 # from gthnk.__meta__ import __copyright__, __version__
 # General information about the project.
-project = u'gthnk'
+project = u'Gthnk'
 copyright = grep("__copyright__")
 
 # The version info for the project you're documenting, acts as replacement for
