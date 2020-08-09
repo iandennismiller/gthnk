@@ -75,12 +75,15 @@ class Librarian(object):
 
         for filename in file_list:
             self.app.logger.info("load and parse: {}".format(filename))
-            shutil.copy2(filename, backup_path)
+            try:
+                shutil.copy2(filename, backup_path)
 
-            # load and parse the file
-            journal_buffer = TextFileJournalBuffer()
-            journal_buffer.process_one(filename)
-            journal_buffer.save_entries()
+                # load and parse the file
+                journal_buffer = TextFileJournalBuffer()
+                journal_buffer.process_one(filename)
+                journal_buffer.save_entries()
+            except FileNotFoundError:
+                pass
 
             # now reset the file size to 0.
             with open(filename, "w", encoding='utf-8'):

@@ -5,18 +5,19 @@ branches:
     - master
     - develop
 python:
+  - 3.5
   - 3.6
   - 3.7
 # command to install dependencies
 install: make requirements develop install
 # command to run tests
-script: make coverage
-after_success:
-  - coveralls
+script: make test
+# after_success:
+#   - coveralls
 notifications:
-  email:
-    on_success: change
-    on_failure: change
+  # email:
+  #   on_success: change
+  #   on_failure: change
   webhooks:
     urls:
       - "https://scalar.vector.im/api/neb/services/hooks/dHJhdmlzLWNpLyU0MGlhbmRlbm5pc21pbGxlciUzQW1hdHJpeC5vcmcvJTIxUWRjV0pHdndOUE5pSHNmcnZWJTNBbWF0cml4Lm9yZw"
