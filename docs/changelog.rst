@@ -1,6 +1,22 @@
 Changelog
 =========
 
+0.7.0
+-----
+
+2020-08-09
+
+- dark mode UI
+- Docker workflow
+- live view of current buffer
+- improvements to mobile UI: swipe left/right, small screen
+- add notes via web UI
+- simple support for tags
+- simple agenda renderer
+- NB: removed attachments features (temporary)
+- major refactoring to support future development
+- fix tons of bugs
+
 0.6.2
 -----
 

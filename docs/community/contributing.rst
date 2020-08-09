@@ -17,7 +17,7 @@ Help field questions from the community
 
 So you've become a Gthnk power user and now you know enough to fix other peoples' Gthnk problems.
 Fantastic!
-Please join our chatroom at http://chat.gthnk.com and just hang out to help answer questions from the community.
+Please join our `chat room <https://app.element.io/#/room/#gthnk:matrix.org>`_ and just hang out to help answer questions from the community.
 People will occasionally come by to ask questions and you can help immensely by answering some of them.
 
 Help with the documentation
@@ -32,7 +32,7 @@ Internationalization
 
 Can you help localize Gthnk for a new language?
 We can use help translating the software, websites, and documentation.
-If you want to help make Gthnk available to a new community of users, please find us in the `chat room <http://chat.gthnk.com>`_.
+If you want to help make Gthnk available to a new community of users, please find us in the `chat room <https://app.element.io/#/room/#gthnk:matrix.org>`_.
 
 Software Development
 --------------------

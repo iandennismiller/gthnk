@@ -41,4 +41,4 @@ Be sure that the fixed phrases include blank lines around the timestamp.
 Other text editors
 ------------------
 
-Any text editor that provides macros for the date and time is likely to support **gthnk**.  If you successfully set up another text editor, please `create an issue <https://github.com/iandennismiller/gthnk/issues>`_ that describes your process and we can add it to this document.
+Any text editor that provides macros for the date and time is likely to support **Gthnk**.  If you successfully set up another text editor, please `create an issue <https://github.com/iandennismiller/gthnk/issues>`_ that describes your process and we can add it to this document.

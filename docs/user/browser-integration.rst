@@ -1,7 +1,8 @@
 Browser Integration
 ===================
 
-**gthnk** runs a private web server that only you can connect to.  There are a few browser tricks that make it easier to get extra use out of **gthnk**.
+**Gthnk** runs a private web server that only you can connect to.
+There are a few browser tricks that make it easier to get extra use out of **Gthnk**.
 
 Google Chrome
 -------------
@@ -22,7 +23,7 @@ Now you can quickly search the journal in the search bar.  For example, if you k
 
     "j http"
 
-That would search **gthnk** for anything matching *http*, which would hopefully find the URL you bookmarked.
+That would search **Gthnk** for anything matching *http*, which would hopefully find the URL you bookmarked.
 
 App Launcher
 ^^^^^^^^^^^^
@@ -44,7 +45,7 @@ Chrome Extension
 
 This method has been replaced by the App Launcher, which is better...
 
-The **gthnk** Google Chrome extension enables **gthnk** to be launched from the menu bar using the Chrome Launcher.
+The **Gthnk** Google Chrome extension enables **Gthnk** to be launched from the menu bar using the Chrome Launcher.
 
 1. Download the extension code from github
 
@@ -58,7 +59,7 @@ The **gthnk** Google Chrome extension enables **gthnk** to be launched from the 
 5. Navigate to gthnk/integrations/chrome-app
 6. Click *OK*
 
-Now, you have an icon that will launch **gthnk**.
+Now, you have an icon that will launch **Gthnk**.
 
 Hotkey
 ^^^^^^
@@ -86,4 +87,4 @@ Steps for adding a Gthnk hotkey:
 Other Browsers
 --------------
 
-Since **gthnk** is provided as a web server, you can use any browser to connect to it.  If you craft integrations for other browsers, please `create an issue <https://github.com/iandennismiller/gthnk/issues>`_ that describes your process and we can add it to this document.
+Since **Gthnk** is provided as a web server, you can use any browser to connect to it.  If you craft integrations for other browsers, please `create an issue <https://github.com/iandennismiller/gthnk/issues>`_ that describes your process and we can add it to this document.

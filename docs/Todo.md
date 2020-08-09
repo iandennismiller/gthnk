@@ -2,19 +2,6 @@
 
 ## Roadmap
 
-### Milestone: simplify 0.7.0
-
-- [ ] update documentation and website to reflect current feature set
-- [x] migration to update user table; rename email--username
-- [x] tests passing
-- [x] generate unique secret key when configuration is generated
-- [x] logging during journal rotation
-- [x] fix wrapping on long unbroken lines like URLs
-- [x] hash passwords
-- [x] results page displays as gthnk-card(s)
-- [x] change password in gthnk.py, src/docker/bin/gthnk-user-password.sh
-- [x] remove flask-diamond, refactor for simplicity
-
 ### Milestone: attachments 0.7.1
 
 - [ ] develop plan for attachments
@@ -29,18 +16,6 @@
 - [x] Docker workflow
 - [x] powerpoint presentation
 - [x] produce overview video
-
-### Milestone: ui/ux
-
-- [x] endpoint to view current configuration
-- [x] keyboard hot keys: left, right, esc
-- [x] swipe left/right
-- [x] dark mode theme
-- [x] improvement: remove /admin prefix on URLs
-- [x] improvement: narrow screen rendering
-- [x] automatically poll buffer for updates
-- [x] quick add note in hamburger menu; append journal-web.txt with auto timestamp
-  - [x] live view should stitch entries together and sort by time
 
 ### Milestone: progressive web app
 
@@ -111,3 +86,29 @@
 - [x] separate static content from template content
 - [x] fill out changelog
 - [x] write contributing document
+
+### Milestone: simplify 0.7.0
+
+- [x] update documentation and website to reflect current feature set
+- [x] migration to update user table; rename email--username
+- [x] tests passing
+- [x] generate unique secret key when configuration is generated
+- [x] logging during journal rotation
+- [x] fix wrapping on long unbroken lines like URLs
+- [x] hash passwords
+- [x] results page displays as gthnk-card(s)
+- [x] change password in gthnk.py, src/docker/bin/gthnk-user-password.sh
+- [x] remove flask-diamond, refactor for simplicity
+
+### Milestone: ui/ux
+
+- [x] endpoint to view current configuration
+- [x] keyboard hot keys: left, right, esc
+- [x] swipe left/right
+- [x] dark mode theme
+- [x] improvement: remove /admin prefix on URLs
+- [x] improvement: narrow screen rendering
+- [x] automatically poll buffer for updates
+- [x] quick add note in hamburger menu; append journal-web.txt with auto timestamp
+  - [x] live view should stitch entries together and sort by time
+

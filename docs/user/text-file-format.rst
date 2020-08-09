@@ -1,7 +1,7 @@
 Text File Format
 ================
 
-**gthnk** uses a basic text file format because anything more complicated isn't reliable enough for something as important as your thoughts.  Even though journal entries are stored in a sqlite3 database for fast indexing, they are also exported as plain text files every night.
+**Gthnk** uses a basic text file format because anything more complicated isn't reliable enough for something as important as your thoughts.  Even though journal entries are stored in a sqlite3 database for fast indexing, they are also exported as plain text files every night.
 
 Text Formatting
 ---------------
@@ -23,7 +23,7 @@ Any journal entry may contain Markdown.  This makes it easy to add lists and URL
 Custom Markdown Extension
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To support rendering **gthnk** journals in a more aesthetically pleasing way, `mdx_journal <https://github.com/iandennismiller/mdx_journal>`_ was written to provide a minor extension to basic markdown.  This extension will cause datestamps to become large headings and timestamps to become slightly smaller headings.  It makes a day's entries much more readable.
+To support rendering **Gthnk** journals in a more aesthetically pleasing way, `mdx_journal <https://github.com/iandennismiller/mdx_journal>`_ was written to provide a minor extension to basic markdown.  This extension will cause datestamps to become large headings and timestamps to become slightly smaller headings.  It makes a day's entries much more readable.
 
 Filesystem Exports
 ------------------

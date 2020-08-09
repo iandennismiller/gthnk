@@ -1,18 +1,20 @@
 Uninstallation
 ==============
 
+System integration is only partially supported.
+
+It is currently easier to run via Docker.
+
 Windows
 -------
 
 ::
 
-    workon gthnk
-    python %virtual_env%\Scripts\integration.py uninstall
+    gthnk do_uninstall
 
 OS X
 ----
 
 ::
 
-    workon gthnk
-    integration.py uninstall
+    gthnk do_uninstall

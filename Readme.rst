@@ -198,7 +198,7 @@ Other gthnk Resources
     - https://iandennismiller.github.io/pres-gthnk-overview
     - repo: https://github.com/iandennismiller/pres-gthnk-overview
 - Chat room (matrix)
-    - https://riot.im/app/#/room/#gthnk:matrix.org
+    - https://app.element.io/#/room/#gthnk:matrix.org
 - Continuous Integration
     - https://travis-ci.org/iandennismiller/gthnk
 - Code Coverage

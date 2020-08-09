@@ -15,7 +15,7 @@ Implement your favorite feature
 -------------------------------
 
 If you know a feature you'd like to code in order to help with Gthnk, then make your own local branch and write it until you are happy.
-Depending on the scope of the feature, you might want to get in touch via the `chat room <http://chat.gthnk.com>`_ to brainstorm, first.
+Depending on the scope of the feature, you might want to get in touch via the `chat room <https://app.element.io/#/room/#gthnk:matrix.org>`_ to brainstorm, first.
 
 If you end up writing a feature that is really useful to you, then maybe you will consider contributing it to the community.
 In that case, be sure to write tests for your feature and add code comments where appropriate.
@@ -24,7 +24,7 @@ The code should pass a Python linter that checks for PEP8 compliance.
 Help with an existing issue
 ---------------------------
 
-You can contribute by working on issues that have been submitted by the community using the `Issue Tracker <http://issues.gthnk.com>`_.
+You can contribute by working on issues that have been submitted by the community using the `Issue Tracker <https://github.com/iandennismiller/gthnk/issues>`_.
 This is a little more advanced than simply implementing a new feature since the issue may imply acceptance criteria.
 It is recommended that you coordinate with project members before working on an issue.
-The easiest way to contact the team is through the `Issue Tracker <http://issues.gthnk.com>`_ itself; each issue has a comment thread associated with it.
+The easiest way to contact the team is through the `Issue Tracker <https://github.com/iandennismiller/gthnk/issues>`_ itself; each issue has a comment thread associated with it.

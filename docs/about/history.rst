@@ -4,7 +4,7 @@ History of gthnk
 I began documenting my work-related thoughts in a *work journal* circa 2006.
 Initially, I used Open Office templates.
 I chose to separate journal entries with a timestamp because I could type it pretty quickly on a numeric keypad.
-I iterated through quite a few methods for keeping a chronological sequence of entries until I ended up with **gthnk**.
+I iterated through quite a few methods for keeping a chronological sequence of entries until I ended up with **Gthnk**.
 
 This work was inspired by DevonThink, which I really tried to use.
 For me, I needed a less opaque container for my information.
