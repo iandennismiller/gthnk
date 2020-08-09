@@ -9,7 +9,7 @@ install:
 	cd src && python setup.py install
 
 requirements:
-	pip install -r requirements.txt
+	pip install -r src/requirements.txt
 
 develop:
 	pip install -r usr/dev/requirements.txt
