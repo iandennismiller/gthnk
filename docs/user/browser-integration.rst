@@ -15,7 +15,7 @@ Search Bar
 3. Scroll to the bottom of the list of search engines and *Add a new search engine*
     1. call it "gthnk"
     2. use a simple keyword like "j" for journal
-    3. paste the following: http://localhost:1620/admin/journal/search?q=%s
+    3. paste the following: http://localhost:1620/search?q=%s
 
 Now you can quickly search the journal in the search bar.  For example, if you knew you saved a URL in the last week, you might type the following in the search bar:
 
@@ -33,7 +33,7 @@ App Launcher
     2. chrome://flags/#bookmark-apps - Enable
     3. chrome://flags/#disable-hosted-apps-in-windows - Enable
 2. Add Gthnk as an App
-    1. Navigate to http://localhost:1620/admin/journal/latest.html
+    1. Navigate to http://localhost:1620/day/live
     2. Click the 3-dot "more" tool button
     3. Click "More Tools"
     4. Click "Add to Applications"

@@ -51,7 +51,7 @@ var init_filedrag = function() {
 		var xhr = new XMLHttpRequest();
 		xhr.addEventListener('loadend', uploadComplete, false);
 
-		xhr.open('POST', '/admin/journal/inbox/' + today);
+		xhr.open('POST', '/day/inbox/' + today);
      	xhr.send(formData);
 	}
 
