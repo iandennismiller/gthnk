@@ -32,7 +32,7 @@ setup(
         "scripts/gthnk",
         "scripts/gthnk-config-init.py",
     ],
-    long_description=read('Readme.rst'),
+    long_description=read('../Readme.rst'),
     classifiers=[
         "Development Status :: 4 - Beta",
         "Framework :: Flask",

@@ -12,7 +12,7 @@ requirements:
 	pip install -r src/requirements.txt
 
 develop:
-	pip install -r usr/dev/requirements.txt
+	pip install -r src/requirements-dev.txt
 
 clean:
 	rm -rf build dist *.egg-info src/*.egg-info src/build src/dist
@@ -66,51 +66,5 @@ release:
 	cd src && python setup.py sdist bdist_wheel
 	twine upload --config-file ~/.pypirc src/dist/*
 
-###
-# Docker
-
-USERNAME=gthnk
-PASSWORD=gthnk
-CONTAINER_EXEC=docker exec -it gthnk-server sudo -i -u gthnk
-
-docker-compose:
-	docker-compose -f src/docker/docker-compose.yaml up -d
-
-docker-compose-down:
-	docker-compose -f src/docker/docker-compose.yaml down
-
-docker-run:
-	docker run \
-		-it \
-		--rm \
-		--name gthnk-server \
-		-p 1620:1620 \
-		-e TZ=America/Toronto \
-		-v ~/.gthnk:/home/gthnk/.gthnk \
-		iandennismiller/gthnk
-
-docker-build: clean
-	docker build -t iandennismiller/gthnk:latest .
-
-docker-push:
-	docker push iandennismiller/gthnk
-
-docker-config:
-	$(CONTAINER_EXEC) gthnk-config-init.sh /home/gthnk/.gthnk/gthnk.conf
-
-docker-db:
-	$(CONTAINER_EXEC) gthnk-db-init.sh
-
-docker-user-add:
-	$(CONTAINER_EXEC) gthnk-user-add.sh $(USERNAME) $(PASSWORD)
-
-docker-user-del:
-	$(CONTAINER_EXEC) gthnk-user-del.sh $(USERNAME)
-
-docker-rotate:
-	$(CONTAINER_EXEC) gthnk-rotate.sh
-
-docker-shell:
-	docker exec -it gthnk-server bash
 
 .PHONY: clean install test server watch lint docs all single release homebrew develop coverage
