@@ -1,51 +1,14 @@
 # -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
-import datetime
 import os
 import shutil
-import hashlib
+import datetime
 
-from .adaptors.journal_buffer import TextFileJournalBuffer, split_filename_list
 from .models.day import Day
 from .models.page import Page
-from .integrations import md
-
-
-def overwrite_if_different(filename, new_content):
-    # see whether the file exists
-    if os.path.isfile(filename):
-        # if so, gather the md5 checksums
-        with open(filename, "r", encoding='utf-8') as f:
-            existing_checksum = hashlib.md5(f.read().encode('utf-8')).hexdigest()
-        generated_checksum = hashlib.md5(new_content.encode('utf-8')).hexdigest()
-
-        # compare to md5 checksum of generated file.
-        # if different, then overwrite.
-        if generated_checksum == existing_checksum:
-            return False
-
-    with open(filename, "wb") as f:
-        f.write(new_content.encode('utf-8'))
-    return True
-
-
-def overwrite_if_different_bytes(filename, new_content):
-    # see whether the file exists
-    if os.path.isfile(filename):
-        # if so, gather the md5 checksums
-        with open(filename, "rb") as f:
-            existing_checksum = hashlib.md5(f.read()).hexdigest()
-        generated_checksum = hashlib.md5(new_content).hexdigest()
-
-        # compare to md5 checksum of generated file.
-        # if different, then overwrite.
-        if generated_checksum == existing_checksum:
-            return False
-
-    with open(filename, "wb") as f:
-        f.write(new_content)
-    return True
+from .journal_buffer import TextFileJournalBuffer, split_filename_list
+from .utils import md, overwrite_if_different, overwrite_if_different_bytes
 
 
 class Librarian(object):

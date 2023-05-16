@@ -10,3 +10,4 @@ __pycache__/
 /var/
 /src/build/
 /src/dist/
+.env

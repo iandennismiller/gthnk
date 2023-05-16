@@ -18,15 +18,6 @@ env = Environment(
 )
 
 
-# create directories
-def md(directory):
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-        logging.info("created:\t{0}".format(directory))
-    else:
-        logging.info("exists:\t{0}".format(directory))
-
-
 def launchd(cmd, target):
     logging.info("exec:\tlaunchctl {0} {1}".format(cmd, target))
     res = subprocess.check_output(["/bin/launchctl", cmd, target])
