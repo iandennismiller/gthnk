@@ -13,9 +13,9 @@ Make a journal that lasts 100 years.
     :target: https://gthnk.readthedocs.io/en/latest/
     :alt: Documentation Status
 
-.. image:: https://travis-ci.org/iandennismiller/gthnk.svg?branch=master
-    :target: https://travis-ci.org/github/iandennismiller/gthnk
-    :alt: Build Status
+.. .. image:: https://travis-ci.org/iandennismiller/gthnk.svg?branch=master
+..     :target: https://travis-ci.org/github/iandennismiller/gthnk
+..     :alt: Build Status
 
 .. image:: https://img.shields.io/github/stars/iandennismiller/gthnk.svg?style=social&label=GitHub
     :target: https://github.com/iandennismiller/gthnk
@@ -182,7 +182,7 @@ Other Gthnk Resources
 
 - `Project repository <https://github.com/iandennismiller/gthnk>`_
 - `Public website <http://www.gthnk.com>`_ - `repo <https://github.com/iandennismiller/www-gthnk>`_
-- `Read The Docs <https://readthedocs.org/projects/gthnk>`_ - `repo <https://github.com/iandennismiller/gthnk/tree/master/docs>`_
+- `Read The Docs <https://gthnk.readthedocs.io/en/latest/>`_ - `project <https://readthedocs.org/projects/gthnk>`_ - `repo <https://github.com/iandennismiller/gthnk/tree/master/docs>`_
 - `Python Package Index <https://pypi.org/project/gthnk/>`_
 - `Presentation: Overview of Gthnk <https://iandennismiller.github.io/pres-gthnk-overview>`_ - `repo <https://github.com/iandennismiller/pres-gthnk-overview>`_
 - `Continuous Integration <https://travis-ci.org/iandennismiller/gthnk>`_

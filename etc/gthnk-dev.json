@@ -1,4 +1,6 @@
 {
+    "lazy": true,
+    "log_filename": "/Users/idm/Work/gthnk/var/gthnk.log",
     "backend": "filetree",
     "filetree_root": "/Users/idm/Work/gthnk/var/gthnk"
 }

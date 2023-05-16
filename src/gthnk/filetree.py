@@ -113,7 +113,7 @@ class FileTree(object):
     def scan_day_ids(self):
         "Scan the filesystem for day ids and create days for them."
         day_ids = []
-        print(f"Scanning {self.path}/day for days.")
+        self.journal.logger.info(f"Scanning {self.path}/day for days.")
         for filename in os.listdir(os.path.join(self.path, "day")):
             if filename.endswith(".txt"):
                 day_id = filename.replace(".txt", "")
@@ -121,13 +121,13 @@ class FileTree(object):
         for day_id in day_ids:
             if day_id not in self.journal.days:
                 self.journal.get_day(day_id)
-        print(f"Scanned {len(day_ids)} days from filesystem.")
+        self.journal.logger.info(f"Scanned {len(day_ids)} days from filesystem.")
 
     def load_all_days(self):
         "Load all days from the filesystem."
         for day_id in self.journal.days.keys():
             self.read_day_id(day_id)
-            print(f"Loaded day {day_id} from filesystem.")
+            self.journal.logger.info(f"Loaded day {day_id} from filesystem.")
 
     def write_artifact(self, artifact):
         "Write a artifact to the filesystem."

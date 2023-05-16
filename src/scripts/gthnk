@@ -1,82 +1,73 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# gthnk (c) Ian Dennis Miller
 
-import sys
 import os
+import sys
+import json
 import glob
+import logging
+import datetime
 
-from flask_script import Manager, Shell, Server
-from flask_migrate import Migrate, MigrateCommand
-import alembic
-import alembic.config
+import click
+from dotenv import load_dotenv
+load_dotenv()
 
-from sqlalchemy.exc import OperationalError
-
-from gthnk import db
-from gthnk.__meta__ import __version__
-from gthnk.server import create_app
-from gthnk.models.user import User
-from gthnk.models.day import Day
-from gthnk.models.entry import Entry
-from gthnk.models.page import Page
-from gthnk.adaptors.journal_buffer import TextFileJournalBuffer
-from gthnk.librarian import Librarian
-from gthnk.integrations import make_config, write_config_file
+from gthnk import Gthnk
+from gthnk.filebuffer import FileBuffer
 
 
-app = create_app()
-migrate = Migrate(app, db, directory="src/gthnk/migrations")
+@click.group()
+def cli():
+    pass
+
+@cli.command()
+def path():
+    "Display the path of the journal filetree"
+    g = Gthnk(config_filename=os.getenv("GTHNK_CONFIG"))
+    print(g.filetree.get_path())
+
+@cli.command()
+@click.option('--date', is_flag=True, default=False, help="Print only the date")
+@click.option('--uri', is_flag=True, default=False, help="Print only the uri")
+@click.argument('query', nargs=-1)
+def search(date, uri, query):
+    "Search the journal for a query"
+    g = Gthnk(config_filename=os.getenv("GTHNK_CONFIG"))
+
+    # load all days if lazy
+    if g.lazy:
+        g.filetree.load_all_days()
+
+    query_str = " ".join(query)
+    print(f"Query: {query_str}")
+    for entry in g.journal.search(query_str):
+        if date and uri:
+            print(entry.day.get_uri())
+        elif date:
+            print(entry.day.day_id)
+        elif uri:
+            print(entry.get_uri())
+        else:
+            print(entry.render_standalone())
+
+# @cli.command()
+# def config():
+#     g = Gthnk(config_filename=os.getenv("GTHNK_CONFIG"))
+#     print(json.dumps(g.config, indent=2, sort_keys=True))
+
+# @cli.command()
+# def rotate():
+#     "Import file buffers and rotate them"
+#     g = Gthnk(config_filename=os.getenv("GTHNK_CONFIG"))
+
+@cli.command()
+@click.argument('filename')
+def read(filename):
+    "Read a file buffer and import it into the journal"
+    g = Gthnk(config_filename=os.getenv("GTHNK_CONFIG"))
+    fb = FileBuffer(filename, journal=g.journal)
+    g.filetree.write_journal()
+    print(g.journal)
 
 
-def _make_context():
-    return {
-        "app": app,
-        "db": db,
-    }
-
-manager = Manager(app)
-manager.add_command("shell", Shell(make_context=_make_context))
-manager.add_command('db', MigrateCommand)
-
-
-@manager.option('-d', '--directory', help='directory', required=True)
-def import_archive(directory):
-    """
-    Import archive of journal files
-    """
-    with app.app_context():
-        journal_buffer = TextFileJournalBuffer()
-        match_str = os.path.join(directory, "*.txt")
-        journal_buffer.process_list(glob.glob(match_str))
-        journal_buffer.save_entries()
-
-@manager.command
-def journal_export():
-    """
-    Export journal files
-    """
-    with app.app_context():
-        librarian = Librarian(app)
-        librarian.export_journal()
-
-@manager.command
-def journal_rotate():
-    """
-    Rotate journal files
-    """
-    with app.app_context():
-        librarian = Librarian(app)
-        librarian.rotate_buffers()
-
-@manager.command
-def gui():
-    """
-    drop all databases
-    """
-    import webview
-    webview.create_window('gthnk', 'http://localhost:1620')
-    webview.start()
-
-if __name__ == "__main__":
-    manager.run()
+if __name__ == '__main__':
+    cli()

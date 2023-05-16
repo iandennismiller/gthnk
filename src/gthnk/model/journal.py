@@ -4,8 +4,12 @@ from .day import Day
 
 
 class Journal(object):
-    def __init__(self):
+    def __init__(self, logger=None):
         self.days = {}
+        if logger:
+            self.logger = logger
+        else:
+            self.logger = lambda x: None
 
     def get_day(self, day_id):
         if day_id not in self.days:
@@ -22,8 +26,10 @@ class Journal(object):
         return "/"
 
     def search(self, query):
-        for day in self.days.values():
-            for entry in day.entries.values():
+        # search days in chronological order
+        for day in sorted(self.days.values(), key=lambda x: x.day_id):
+            # search entries in chronological order
+            for entry in sorted(day.entries.values(), key=lambda x: x.timestamp):
                 if re.search(query, entry.content):
                     yield entry
 

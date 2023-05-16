@@ -1,5 +1,9 @@
 import os
+import sys
 import hashlib
+import logging
+from rich.logging import RichHandler
+from rich.console import Console
 
 
 def overwrite_if_different(filename, new_content):
@@ -62,3 +66,39 @@ def split_filename_list(filename_str):
     """
     """
     return([x.strip() for x in filename_str.split(',')])
+
+
+def init_logger(logger=None, name=None, filename=None, level=None):
+    if logger is None and name is not None:
+        logger = logging.getLogger(name)
+    
+    if logger is None:
+        raise Exception("Either logger or name must be provided")
+
+    # only the first invocation will configure this
+    if not len(logger.handlers):
+        if filename is None:
+            name_snakecase = change_case(logger.name)
+            filename = os.path.join("var", f"{name_snakecase}.log")
+
+        if level is None:
+            level = logging.getLevelName("WARNING")
+
+        logger.setLevel(level)
+        logger.propagate = False
+
+        logfile = open(filename, 'a')
+        monitor_format = logging.Formatter('%(message)s')
+        stderr = Console(file=logfile, tab_size=2, width=130, force_terminal=True)
+        handler = RichHandler(markup=True, console=stderr, show_path=True, show_time=True, show_level=True, rich_tracebacks=True)
+        handler.setFormatter(monitor_format)
+        logger.addHandler(handler)
+
+        logger.info(f"Process {os.getpid()} (parent {os.getppid()}) logging to {filename} at level {level}")
+
+    return logger
+
+
+def change_case(str):     
+    return ''.join(['_'+i.lower() if i.isupper()
+               else i for i in str]).lstrip('_')

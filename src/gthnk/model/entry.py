@@ -10,6 +10,8 @@ class Entry(object):
     def get_uri(self):
         return os.path.join(self.day.journal.get_uri(), self.day.day_id, f"{self.timestamp}.txt")
 
+    def render_standalone(self):
+        return f"{self.day.day_id}\n\n{self.timestamp}\n\n{self.content}\n"
+
     def __repr__(self):
-        buf = f"{self.timestamp}\n\n{self.content}\n\n"
-        return buf
+        return f"{self.timestamp}\n\n{self.content}\n\n"

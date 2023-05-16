@@ -28,3 +28,22 @@ class FileBuffer(object):
                     entry.content = raw_entries[day_id][timestamp]
 
             return self.journal
+
+    def rotate(self):
+        """
+        Blank out the file buffer.
+        """
+        self.backup()
+        self.clear()
+
+    def backup(self):
+        """
+        Backup the file buffer.
+        """
+        pass
+
+    def clear(self):
+        """
+        Clear the file buffer.
+        """
+        pass
