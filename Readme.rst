@@ -180,15 +180,15 @@ The full suite of Gthnk server processes can be run as:
 Other Gthnk Resources
 ^^^^^^^^^^^^^^^^^^^^^
 
-- [Project repository](https://github.com/iandennismiller/gthnk)
-- [Public website](http://www.gthnk.com) - [repo](https://github.com/iandennismiller/www-gthnk)
-- [Read The Docs](https://readthedocs.org/projects/gthnk) - [repo](https://github.com/iandennismiller/gthnk/tree/master/docs)
-- [Python Package Index](https://pypi.org/project/gthnk/)
-- [Presentation: Overview of Gthnk](https://iandennismiller.github.io/pres-gthnk-overview) - [repo](https://github.com/iandennismiller/pres-gthnk-overview)
-- [Continuous Integration](https://travis-ci.org/iandennismiller/gthnk)
-- [VS Code Extension](https://marketplace.visualstudio.com/items?itemName=IanDennisMiller.gthnk) - repo: https://github.com/iandennismiller/vscode-gthnk
-- [Chrome App](https://github.com/iandennismiller/gthnk/tree/master/share/chrome-app)
-- [Python-Markdown gthnk journal Extension](https://pypi.org/project/mdx_journal/) - [repo](https://github.com/iandennismiller/mdx_journal)
+- `Project repository <https://github.com/iandennismiller/gthnk>`_
+- `Public website <http://www.gthnk.com>`_ - `repo <https://github.com/iandennismiller/www-gthnk>`_
+- `Read The Docs <https://readthedocs.org/projects/gthnk>`_ - `repo <https://github.com/iandennismiller/gthnk/tree/master/docs>`_
+- `Python Package Index <https://pypi.org/project/gthnk/>`_
+- `Presentation: Overview of Gthnk <https://iandennismiller.github.io/pres-gthnk-overview>`_ - `repo <https://github.com/iandennismiller/pres-gthnk-overview>`_
+- `Continuous Integration <https://travis-ci.org/iandennismiller/gthnk>`_
+- `VS Code Extension <https://marketplace.visualstudio.com/items?itemName=IanDennisMiller.gthnk>`_ - `repo <https://github.com/iandennismiller/vscode-gthnk>`_
+- `Chrome App <https://github.com/iandennismiller/gthnk/tree/master/share/chrome-app>`_
+- `Python-Markdown gthnk journal Extension <https://pypi.org/project/mdx_journal/>`_ - `repo <https://github.com/iandennismiller/mdx_journal>`_
 
 Documentation
 ^^^^^^^^^^^^^
