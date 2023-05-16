@@ -180,50 +180,15 @@ The full suite of Gthnk server processes can be run as:
 Other Gthnk Resources
 ^^^^^^^^^^^^^^^^^^^^^
 
-- Project repository
-    - https://github.com/iandennismiller/gthnk
-- Public website
-    - http://www.gthnk.com
-    - repo: https://github.com/iandennismiller/www-gthnk
-- Read The Docs
-    - https://readthedocs.org/projects/gthnk
-    - repo: https://github.com/iandennismiller/gthnk/tree/master/docs
-- Python Package Index
-    - https://pypi.org/project/gthnk/
-- Presentation
-    - https://iandennismiller.github.io/pres-gthnk-overview
-    - repo: https://github.com/iandennismiller/pres-gthnk-overview
-- Chat room (matrix)
-    - https://app.element.io/#/room/#gthnk:matrix.org
-- Continuous Integration
-    - https://travis-ci.org/iandennismiller/gthnk
-- VS Code Extension
-    - https://marketplace.visualstudio.com/items?itemName=IanDennisMiller.gthnk
-    - repo: https://github.com/iandennismiller/vscode-gthnk
-- Chrome App
-    - https://github.com/iandennismiller/gthnk/tree/master/src/chrome-app
-- Python-Markdown gthnk journal Extension
-    - https://pypi.org/project/mdx_journal/
-    - repo: https://github.com/iandennismiller/mdx_journal
-
-Diamond Methods
-^^^^^^^^^^^^^^^
-
-- Routine
-    - http://www.idmiller.com/books/routine/index.html
-    - https://www.amazon.com/Routine-Reflection-Ian-Dennis-Miller/dp/1974269108
-- Project System
-    - https://project-system.readthedocs.io/en/latest/
-    - python: https://pypi.org/project/project-system/
-    - repo: https://github.com/iandennismiller/project-system
-- Diamond Patterns
-    - https://diamond-patterns.readthedocs.io/en/latest/
-    - python: https://pypi.org/project/diamond-patterns/
-    - repo: https://github.com/iandennismiller/diamond-patterns
-- Gthnk
-    - http://www.gthnk.com
-    - python: https://pypi.org/project/gthnk/
-    - repo: https://github.com/iandennismiller/gthnk
+- [Project repository](https://github.com/iandennismiller/gthnk)
+- [Public website](http://www.gthnk.com) - [repo](https://github.com/iandennismiller/www-gthnk)
+- [Read The Docs](https://readthedocs.org/projects/gthnk) - [repo](https://github.com/iandennismiller/gthnk/tree/master/docs)
+- [Python Package Index](https://pypi.org/project/gthnk/)
+- [Presentation: Overview of Gthnk](https://iandennismiller.github.io/pres-gthnk-overview) - [repo](https://github.com/iandennismiller/pres-gthnk-overview)
+- [Continuous Integration](https://travis-ci.org/iandennismiller/gthnk)
+- [VS Code Extension](https://marketplace.visualstudio.com/items?itemName=IanDennisMiller.gthnk) - repo: https://github.com/iandennismiller/vscode-gthnk
+- [Chrome App](https://github.com/iandennismiller/gthnk/tree/master/share/chrome-app)
+- [Python-Markdown gthnk journal Extension](https://pypi.org/project/mdx_journal/) - [repo](https://github.com/iandennismiller/mdx_journal)
 
 Documentation
 ^^^^^^^^^^^^^
