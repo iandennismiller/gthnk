@@ -27,7 +27,11 @@ setup(
     version=grep('__version__'),
     name='gthnk',
     description="gthnk is a personal knowledge management system",
-    packages=find_packages(),
+    packages=[
+        "gthnk",
+        "gthnk_server",
+        "gthnk_integration",
+    ],
     scripts=[
         "scripts/gthnk",
         "scripts/gthnk-config-init.py",

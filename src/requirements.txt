@@ -14,3 +14,4 @@ mdx-linkify==1.0
 mdx-journal>=0.1.4
 flask-bcrypt
 python-dotenv
+pytest

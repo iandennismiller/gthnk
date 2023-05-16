@@ -21,6 +21,12 @@ class Journal(object):
     def get_uri(self):
         return "/"
 
+    def search(self, query):
+        for day in self.days.values():
+            for entry in day.entries.values():
+                if re.search(query, entry.content):
+                    yield entry
+
     def __repr__(self):
         buf = ""
         for day_id in sorted(self.days.keys()):
