@@ -89,7 +89,7 @@ def init_logger(logger=None, name=None, filename=None, level=None):
 
         logfile = open(filename, 'a')
         monitor_format = logging.Formatter('%(message)s')
-        stderr = Console(file=logfile, tab_size=2, width=130, force_terminal=True)
+        stderr = Console(file=logfile, tab_size=2, width=100, force_terminal=True)
         handler = RichHandler(markup=True, console=stderr, show_path=True, show_time=True, show_level=True, rich_tracebacks=True)
         handler.setFormatter(monitor_format)
         logger.addHandler(handler)

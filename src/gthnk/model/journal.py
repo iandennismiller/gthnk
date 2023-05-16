@@ -26,11 +26,12 @@ class Journal(object):
         return "/"
 
     def search(self, query):
+        query = query.lower()
         # search days in chronological order
         for day in sorted(self.days.values(), key=lambda x: x.day_id):
             # search entries in chronological order
             for entry in sorted(day.entries.values(), key=lambda x: x.timestamp):
-                if re.search(query, entry.content):
+                if re.search(query, entry.content.lower()):
                     yield entry
 
     def __repr__(self):

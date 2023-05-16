@@ -127,7 +127,7 @@ class FileTree(object):
         "Load all days from the filesystem."
         for day_id in self.journal.days.keys():
             self.read_day_id(day_id)
-            self.journal.logger.info(f"Loaded day {day_id} from filesystem.")
+            self.journal.logger.debug(f"Loaded day {day_id} from filesystem.")
 
     def write_artifact(self, artifact):
         "Write a artifact to the filesystem."

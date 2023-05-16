@@ -22,48 +22,70 @@ def cli():
 @cli.command()
 def path():
     "Display the path of the journal filetree"
-    g = Gthnk(config_filename=os.getenv("GTHNK_CONFIG"))
+    g = Gthnk()
     print(g.filetree.get_path())
 
 @cli.command()
 @click.option('--date', is_flag=True, default=False, help="Print only the date")
 @click.option('--uri', is_flag=True, default=False, help="Print only the uri")
+@click.option('--path', is_flag=True, default=False, help="Print the full file path")
+@click.option('--count', is_flag=True, default=False, help="Print the number of entries that matched")
+@click.option('--num', default=None, help="Number of entries to return")
 @click.argument('query', nargs=-1)
-def search(date, uri, query):
+def search(date, uri, path, count, num, query):
     "Search the journal for a query"
-    g = Gthnk(config_filename=os.getenv("GTHNK_CONFIG"))
+    g = Gthnk()
 
-    # load all days if lazy
-    if g.lazy:
-        g.filetree.load_all_days()
+    # # load all days if lazy
+    # if g.lazy:
+    #     g.filetree.load_all_days()
 
     query_str = " ".join(query)
-    print(f"Query: {query_str}")
+
+    if num:
+        num = int(num)
+
+    if count:
+        print(len(list(g.journal.search(query_str))))
+        return
+
+    if uri and path:
+        print("Cannot provide both --uri and --path at the same time")
+        return
+
+    count = 0
     for entry in g.journal.search(query_str):
+        count += 1
         if date and uri:
             print(entry.day.get_uri())
+        elif date and path:
+            print(f"{g.filetree.get_path()}/day{entry.day.get_uri()}")
         elif date:
             print(entry.day.day_id)
         elif uri:
             print(entry.get_uri())
+        elif path:
+            print(f"{g.filetree.get_path()}/entry{entry.get_uri()}")
         else:
             print(entry.render_standalone())
+        if num and count >= num:
+            break
 
 # @cli.command()
 # def config():
-#     g = Gthnk(config_filename=os.getenv("GTHNK_CONFIG"))
+#     g = Gthnk()
 #     print(json.dumps(g.config, indent=2, sort_keys=True))
 
 # @cli.command()
 # def rotate():
 #     "Import file buffers and rotate them"
-#     g = Gthnk(config_filename=os.getenv("GTHNK_CONFIG"))
+#     g = Gthnk()
 
 @cli.command()
 @click.argument('filename')
 def read(filename):
     "Read a file buffer and import it into the journal"
-    g = Gthnk(config_filename=os.getenv("GTHNK_CONFIG"))
+    g = Gthnk()
     fb = FileBuffer(filename, journal=g.journal)
     g.filetree.write_journal()
     print(g.journal)
