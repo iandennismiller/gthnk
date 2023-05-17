@@ -11,10 +11,10 @@ from mdx_journal import JournalExtension
 
 from . import db, login_manager, bcrypt
 
-from gthnk.models.day import Day
-from gthnk.models.entry import Entry
-from gthnk.models.page import Page
-from gthnk.models.user import User
+from .models.day import Day
+from .models.entry import Entry
+from .models.page import Page
+from .models.user import User
 
 
 def create_app():

@@ -156,11 +156,11 @@ config_template = """
 
 INPUT_FILES = "{gthnk_path}/journal.txt"
 
-LAZY=true
-BACKEND=filetree
+LAZY = True
+BACKEND = "filetree"
 FILETREE_ROOT="{gthnk_path}"
 
-LOG_FILENAME="{gthnk_path}/gthnk.log"
+LOG_FILENAME = "{gthnk_path}/gthnk.log"
 LOG_LEVEL = "INFO"
 
 SECRET_KEY = {secret_key}

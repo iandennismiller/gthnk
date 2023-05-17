@@ -34,6 +34,8 @@ setup(
     ],
     scripts=[
         "scripts/gthnk",
+        "scripts/gthnk-server",
+        "scripts/gthnk-manager",
     ],
     long_description=read('../Readme.rst'),
     classifiers=[
@@ -59,7 +61,7 @@ setup(
         "python-dotenv",
         "pytest",
         "rich",
-        "sqlalchemy",
+        "SQLAlchemy==1.4",
     ],
     extras_require={
         "dev": [
@@ -75,15 +77,19 @@ setup(
             "rstcheck",
         ],
         "server": [
-            "flask",
+            "jinja2<3.1.0",
+            "flask==1.1.2",
+            "werkzeug==2.0.3",
             "flask-login",
             "Flask-WTF",
             "Flask-Cache",
             "Flask-Script",
             "flask-markdown",
-            "flask_migrate",
+            "Flask-Migrate==2.6.0",
             "flask-bcrypt",
             "Flask-SQLAlchemy",
+            "Markdown<3.2",
+            "itsdangerous==2.0.1",
             "mdx-linkify==1.0",
             "mdx-journal>=0.1.4",
         ],

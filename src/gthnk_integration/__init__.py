@@ -14,7 +14,7 @@ from jinja2 import Environment, PackageLoader
 
 # render templates as files
 env = Environment(
-    loader=PackageLoader('gthnk.integrations', 'templates')
+    loader=PackageLoader('gthnk_integration', 'templates')
 )
 
 

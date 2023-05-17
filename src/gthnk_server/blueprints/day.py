@@ -6,7 +6,7 @@ import datetime
 from flask_login import login_required
 from ..models.day import Day, latest
 from ..utils.slugify import slugify, _slugify
-from ..adaptors.journal_buffer import TextFileJournalBuffer
+from ..journal_buffer import TextFileJournalBuffer
 
 day = flask.Blueprint('day', __name__)
 

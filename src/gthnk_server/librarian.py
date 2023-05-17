@@ -8,7 +8,7 @@ import datetime
 from .models.day import Day
 from .models.page import Page
 from .journal_buffer import TextFileJournalBuffer, split_filename_list
-from .utils import md, overwrite_if_different, overwrite_if_different_bytes
+from gthnk.utils import md, overwrite_if_different, overwrite_if_different_bytes
 
 
 class Librarian(object):

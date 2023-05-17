@@ -16,6 +16,17 @@ install-server:
 dev:
 	pip install -e ./src[dev]
 
+server:
+	export SETTINGS=$$PWD/.env && \
+	FLASK_ENV=development \
+	FLASK_RUN_PORT=1620 \
+	FLASK_APP=src/gthnk_server/server \
+	flask run
+
+shell:
+	export SETTINGS=$$PWD/.env && \
+		gthnk-manager shell
+
 clean:
 	rm -rf src/*.egg-info src/build src/dist
 	find . -name '*.pyc' -delete
