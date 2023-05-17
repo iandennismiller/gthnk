@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from gthnk import Gthnk
+from gthnk.model.journal import Journal
 from gthnk.filebuffer import FileBuffer
 
 
@@ -24,6 +25,48 @@ def path():
     "Display the path of the journal filetree"
     g = Gthnk()
     print(g.filetree.get_path())
+
+@cli.command()
+def buffer():
+    "Display the contents of the file buffers"
+    g = Gthnk()
+    # parse and accumulate into a blank journal
+    j = Journal()
+    for buffer in g.buffers:
+        fb = FileBuffer(buffer, journal=j)
+    print(j)
+
+@cli.command()
+@click.option('--date', is_flag=True, default=False, help="Print only the date, not the entry")
+@click.option('--previous', is_flag=True, default=False, help="Retrieve the day before the id provided")
+@click.option('--next', is_flag=True, default=False, help="Retrieve the day after the id provided")
+@click.option('--latest', is_flag=True, default=False, help="Retrieve the latest day")
+@click.argument('day_id', default=None, required=False)
+def day(date, previous, next, latest, day_id):
+    "Retrieve a day from the journal by id (YYYY-MM-DD)"
+    g = Gthnk()
+
+    if day_id is None:
+        if latest:
+            day_id = g.journal.get_latest_day_id()
+        else:
+            print("Please provide a day id")
+            return
+    
+    day = g.journal.get_day(day_id)
+    if day is None:
+        print("Day not found")
+        return
+    
+    if previous:
+        day = g.journal.get_previous_day(day)
+    elif next:
+        day = g.journal.get_next_day(day)
+    
+    if date:
+        print(day.day_id)
+    else:
+        print(day)
 
 @cli.command()
 @click.option('--date', is_flag=True, default=False, help="Print only the date")
@@ -76,18 +119,18 @@ def search(date, uri, path, count, num, reverse, query):
             break
 
 @cli.command()
-@click.argument('path')
-@click.argument('filename', default=None, required=False)
-def config(path, filename):
-    "Create a config file"
+@click.argument('gthnk_path')
+@click.argument('out_filename', default=None, required=False)
+def config(gthnk_path, out_filename):
+    "Generate a sample config file, optionally saving to a file"
     secret_key = str(os.urandom(24))
     buf = config_template.format(
-        gthnk_path=path,
+        gthnk_path=gthnk_path,
         secret_key=secret_key,
     )
 
-    if filename:
-        with open(out_file, "w") as f:
+    if out_filename:
+        with open(out_filename, "w") as f:
             f.write(buf)
     else:
         print(buf)

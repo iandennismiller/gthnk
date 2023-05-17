@@ -2,9 +2,13 @@
 
 ## Roadmap
 
-### Milestone: attachments 0.7.1
+### Milestone: 0.8
 
-- [ ] develop plan for attachments
+- [ ] lazy load and export for filetree
+- [ ] artifacts
+- [ ] tags
+- [ ] sqlite backend
+- [ ] web UI
 
 ### Milestone: onboarding
 

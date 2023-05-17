@@ -25,6 +25,33 @@ class Journal(object):
     def get_uri(self):
         return "/"
 
+    def get_latest_day_id(self):
+        return max(self.days.keys())
+    
+    def get_previous_day(self, day):
+        # first find the index of the day in the sorted list
+        sorted_days = sorted(self.days.keys())
+        index = sorted_days.index(day.day_id)
+
+        # if the day is already the first day, return it
+        if index == 0:
+            return day
+        else:
+            # return the day before that
+            return self.days[sorted_days[index - 1]]
+
+    def get_next_day(self, day):
+        # first find the index of the day in the sorted list
+        sorted_days = sorted(self.days.keys())
+        index = sorted_days.index(day.day_id)
+
+        # if the day is already the last day, return it
+        if index == len(sorted_days) - 1:
+            return day
+        else:
+            # return the day after that
+            return self.days[sorted_days[index + 1]]
+
     def search(self, query, chronological=False):
         query = query.lower()
 
