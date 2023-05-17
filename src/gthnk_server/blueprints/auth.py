@@ -4,7 +4,7 @@ import logging
 from flask_wtf import FlaskForm
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from wtforms import StringField, PasswordField, SubmitField, validators
-from .. import login_manager, bcrypt
+from ..server import login_manager #, bcrypt
 from ..user import User, UserStore
 
 
@@ -27,6 +27,13 @@ auth = flask.Blueprint('auth', __name__)
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+    user = userstore.get_by_id(1)
+    login_user(user)
+    logging.getLogger("gthnk").info("{user} automatically logs in without password".format(user=current_user))
+    return flask.redirect(flask.url_for('gthnk.index'))
+
+@auth.route('/login-password', methods=['GET', 'POST'])
+def login_password():
     if current_user and current_user.is_authenticated:
         flask.flash('Already logged in.')
         return flask.redirect(flask.url_for('gthnk.index'))

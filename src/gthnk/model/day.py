@@ -21,6 +21,13 @@ class Day(object):
     def get_uri(self):
         return os.path.join(self.journal.get_uri(), f"{self.day_id}.txt")
 
+    def yesterday(self):
+        yd = self.journal.get_previous_day(self)
+        return yd
+
+    def tomorrow(self):
+        return self.journal.get_next_day(self)
+
     def __repr__(self):
         buf = f"{self.day_id}\n\n"
         if len(self.entries) > 0:

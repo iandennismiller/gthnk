@@ -30,24 +30,24 @@ class Journal(object):
     
     def get_previous_day(self, day):
         # first find the index of the day in the sorted list
-        sorted_days = sorted(self.days.keys())
+        sorted_days = sorted([key for key, value in self.days.items() if len(value.entries) > 0])
         index = sorted_days.index(day.day_id)
 
-        # if the day is already the first day, return it
+        # if the day is already the first day
         if index == 0:
-            return day
+            return None
         else:
             # return the day before that
             return self.days[sorted_days[index - 1]]
 
     def get_next_day(self, day):
         # first find the index of the day in the sorted list
-        sorted_days = sorted(self.days.keys())
+        sorted_days = sorted([key for key, value in self.days.items() if len(value.entries) > 0])
         index = sorted_days.index(day.day_id)
 
-        # if the day is already the last day, return it
+        # if the day is already the last day
         if index == len(sorted_days) - 1:
-            return day
+            return None
         else:
             # return the day after that
             return self.days[sorted_days[index + 1]]

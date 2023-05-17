@@ -50,13 +50,13 @@
 <!-- inter-day navigation -->
 <script>
   {% if day and day.yesterday() %}
-  var yesterday = "{{day.yesterday().date}}";
+  var yesterday = "{{day.yesterday().day_id}}";
   {% else %}
   var yesterday = null;
   {% endif %}
 
   {% if day and day.tomorrow() %}
-  var tomorrow = "{{day.tomorrow().date}}";
+  var tomorrow = "{{day.tomorrow().day_id}}";
   {% else %}
   var tomorrow = null;
   {% endif %}
