@@ -54,6 +54,7 @@ class Journal(object):
 
     def search(self, query, chronological=False):
         query = query.lower()
+        self.logger.info(f"Searching for {query}")
 
         # by default, search entries in reverse chronological order
         # the days start sorted chronologically

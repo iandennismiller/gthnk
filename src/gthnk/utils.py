@@ -79,7 +79,7 @@ def init_logger(logger=None, name=None, filename=None, level=None):
     if not len(logger.handlers):
         if filename is None:
             name_snakecase = change_case(logger.name)
-            filename = os.path.join("var", f"{name_snakecase}.log")
+            filename = os.path.join("/tmp", f"{name_snakecase}.log")
 
         if level is None:
             level = logging.getLevelName("WARNING")
