@@ -9,7 +9,6 @@ from flask_wtf import FlaskForm
 from wtforms import TextAreaField, SubmitField, validators
 
 from gthnk.model.entry import Entry
-# from ..librarian import Librarian
 from ..server import gthnk
 
 root = flask.Blueprint('gthnk', __name__)
@@ -93,8 +92,8 @@ def search_view():
 @root.route("/refresh")
 @login_required
 def refresh():
-    librarian = Librarian(flask.current_app)
-    librarian.rotate_buffers()
+    # librarian = Librarian(flask.current_app)
+    # librarian.rotate_buffers()
     return flask.redirect(flask.url_for('day.latest_view'))
 
 ###

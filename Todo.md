@@ -5,10 +5,10 @@
 ### Milestone: 0.8
 
 - [ ] migration tool to leave sqlite backend
-- [ ] web UI backed by filetree
 - [ ] artifacts (replaces Pages)
 - [ ] repair day/entry mismatches
 - [ ] lazy load and export for filetree
+- [x] web UI backed by filetree
 - [x] remove tags
 
 ### Milestone: onboarding

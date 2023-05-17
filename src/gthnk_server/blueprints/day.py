@@ -7,7 +7,7 @@ from flask_login import login_required
 from gthnk.model.day import Day
 from gthnk.model.journal import Journal
 from gthnk.filebuffer import FileBuffer
-from ..utils.slugify import slugify, _slugify
+from ..jinja_slugify import slugify, _slugify
 from ..server import gthnk
 
 day = flask.Blueprint('day', __name__)
