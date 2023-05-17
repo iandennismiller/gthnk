@@ -9,6 +9,7 @@
 - [ ] tags
 - [ ] sqlite backend
 - [ ] web UI
+- [ ] repair day/entry mismatches
 
 ### Milestone: onboarding
 
@@ -17,6 +18,7 @@
 - [ ] installers - windows setup.exe and osx .pkg for Python/virtualenv
 - [ ] integration for Debian/Ubuntu-flavored Linux
 - [ ] integration for Redhat/Fedora-flavored Linux
+- [ ] homebrew install
 - [x] Docker workflow
 - [x] powerpoint presentation
 - [x] produce overview video
@@ -36,18 +38,6 @@
 - [ ] enable flake8 Dxxx checks
 - [ ] testing for integration.py
 - [ ] refactor javascript
-
-### Milestone: tags
-
-- [x] double-square-brackets: tagging, wiki-like pseudo-page results
-  - [x] list tags separate from fulltext results
-- [ ] search auto-complete for tags
-- [ ] timeline of when tags appear
-- [ ] rethink /search as /tag/blah
-- [ ] "search" becomes "go to"
-- [ ] entry co-tag graph, navigator
-- [ ] date filter on search/go to
-- [ ] search results markdown is clickable, including tags
 
 ### Milestone: activity
 

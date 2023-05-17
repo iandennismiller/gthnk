@@ -116,21 +116,6 @@ After installing the plugin for your editor, the following key combinations are 
 - Ctrl-Alt-Cmd-N: Insert date marker YYYYMMDD
 - Ctrl-Alt-Cmd-M: Insert time marker HHMM
 
-Tags
-^^^^
-
-Tagging is available with double-square brackets:
-
-::
-
-    2020-07-04
-
-    0804
-
-    To insert a [[tag]] in [[gthnk]], put one or more words inside square brackets.
-
-A tag links to all other entries containing the tag or fulltext keyword.
-
 Configuration
 ^^^^^^^^^^^^^
 

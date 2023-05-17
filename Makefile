@@ -1,18 +1,25 @@
 # gthnk (c) Ian Dennis Miller
 
+help:
+	@echo The following makefile targets are available:
+	@echo
+	@grep -e '^\w\S\+\:' Makefile | sed 's/://g' | cut -d ' ' -f 1
+
 install:
 	pip install -U pip
-	pip install -r src/requirements.txt
 	pip install -e ./src
 
-develop:
-	pip install -r src/requirements-dev.txt
+install-server:
+	pip install -U pip
+	pip install -e ./src[server]
+
+dev:
+	pip install -e ./src[dev]
 
 clean:
 	rm -rf src/*.egg-info src/build src/dist
 	find . -name '*.pyc' -delete
 	find . -name __pycache__ -delete
-	rm -f .coverage coverage.xml
 
 test:
 	pytest ./src
@@ -56,5 +63,3 @@ release:
 
 # lint:
 # 	pylint src/gthnk
-
-.PHONY: clean install test server watch lint docs all single release homebrew develop coverage
