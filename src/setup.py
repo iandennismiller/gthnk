@@ -34,6 +34,7 @@ setup(
     ],
     scripts=[
         "scripts/gthnk",
+        "scripts/gthnk-7-to-8.py",
     ],
     long_description=read('../Readme.rst'),
     classifiers=[
