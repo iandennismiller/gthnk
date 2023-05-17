@@ -4,9 +4,8 @@ import flask
 import logging
 import datetime
 from flask_login import login_required
-from ..models.day import Day, latest
+from gthnk.model.day import Day
 from ..utils.slugify import slugify, _slugify
-from ..journal_buffer import TextFileJournalBuffer
 
 day = flask.Blueprint('day', __name__)
 
@@ -90,6 +89,11 @@ def buffer_timestamp():
 @day.route("/day/live")
 @login_required
 def buffer_view():
+
+    # j = Journal()
+    # for buffer in g.buffers:
+    #     fb = FileBuffer(buffer, journal=j)
+
     date = datetime.datetime.today().strftime('%Y-%m-%d')
 
     input_files = flask.current_app.config["INPUT_FILES"]

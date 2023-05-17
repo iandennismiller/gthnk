@@ -18,19 +18,22 @@ class Gthnk(object):
         else:
             self.config = dotenv_values(config_filename)
 
-        if "log_level" in self.config:
+        if "LOG_LEVEL" in self.config:
             log_level = self.config["LOG_LEVEL"]
         else:
             log_level = "INFO"
 
-        if "log_filename" in self.config:
+        if "LOG_FILENAME" in self.config:
             self.logger = init_logger(
-                name=__name__,
+                name="gthnk",
                 filename=self.config["LOG_FILENAME"],
                 level=log_level,
             )
         else:
-            self.logger = init_logger(name=__name__, level=log_level)
+            self.logger = init_logger(
+                name=__name__,
+                level=log_level
+            )
         self.logger.info("Start Gthnk")
         self.logger.info(f"Load config: {config_filename}")
 

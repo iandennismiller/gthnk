@@ -5,15 +5,18 @@ from flask_wtf import FlaskForm
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from wtforms import StringField, PasswordField, SubmitField, validators
 from .. import login_manager, bcrypt
-from ..models.user import User
+from ..user import User, UserStore
 
 
 login_manager.login_view = "auth.login"
 
+userstore = UserStore()
+user = User(username='gthnk', password='gthnk')
+userstore.add(user)
+
 @login_manager.user_loader
 def load_user(user_id):
-    return User.get_by_id(id=user_id)
-
+    return userstore.get_by_id(user_id)
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[validators.DataRequired()])
@@ -33,17 +36,18 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         # convert access code to user id
-        user = User.find(username=form.username.data)
+        user = userstore.get(username=form.username.data)
 
         if user:
             try:
-                password_match = bcrypt.check_password_hash(user.password, form.password.data)
+                # password_match = bcrypt.check_password_hash(user.password, form.password.data)
+                password_match = user.password == form.password.data
             except ValueError:
                 password_match = False
 
             if password_match:
                 login_user(user)
-                logging.info("{user} logs in".format(user=current_user))
+                logging.getLogger("gthnk").info("{user} logs in".format(user=current_user))
                 flask.flash('Logged in successfully.')
                 return flask.redirect(flask.url_for('gthnk.index'))
 
@@ -53,7 +57,7 @@ def login():
 @login_required
 def logout():
     if current_user.is_authenticated:
-        logging.info("{user} logs out".format(user=current_user))
+        logging.getLogger("gthnk").info("{user} logs out".format(user=current_user))
         logout_user()
         flask.flash('You have successfully logged out.')
     return flask.redirect(flask.url_for('gthnk.index'))

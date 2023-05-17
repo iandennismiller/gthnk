@@ -8,8 +8,8 @@ from flask_login import login_required
 from flask_wtf import FlaskForm
 from wtforms import TextAreaField, SubmitField, validators
 
-from ..models.entry import Entry
-from ..librarian import Librarian
+from gthnk.model.entry import Entry
+# from ..librarian import Librarian
 
 root = flask.Blueprint('gthnk', __name__)
 

@@ -4,12 +4,12 @@
 
 ### Milestone: 0.8
 
-- [ ] lazy load and export for filetree
-- [ ] artifacts
-- [ ] tags
-- [ ] sqlite backend
-- [ ] web UI
+- [ ] migration tool to leave sqlite backend
+- [ ] web UI backed by filetree
+- [ ] artifacts (replaces Pages)
 - [ ] repair day/entry mismatches
+- [ ] lazy load and export for filetree
+- [x] remove tags
 
 ### Milestone: onboarding
 

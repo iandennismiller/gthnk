@@ -3,38 +3,30 @@
 
 import os
 import flask
-import logging
 
 from flaskext.markdown import Markdown
 from mdx_linkify.mdx_linkify import LinkifyExtension
 from mdx_journal import JournalExtension
 
-from . import db, login_manager, bcrypt
+from . import login_manager, bcrypt
 
-from .models.day import Day
-from .models.entry import Entry
-from .models.page import Page
-from .models.user import User
+from gthnk import Gthnk
 
 
 def create_app():
     app = flask.Flask(__name__)
+    
     try:
         app.config.from_envvar('SETTINGS')
+        g = Gthnk(os.getenv('SETTINGS'))
     except RuntimeError:
-        default_filename = os.path.expanduser('~/.gthnk/gthnk.conf')
+        default_filename = os.path.expanduser('~/.config/gthnk/.env')
         if os.path.isfile(default_filename):
-            print("WARN: using default configuration file ~/.gthnk/gthnk.conf")
+            print(f"WARN: using default configuration file {default_filename}")
             app.config.from_pyfile(default_filename)
+            g = Gthnk(default_filename)
 
-    logging.basicConfig(
-        format='%(asctime)s %(module)-16s %(levelname)-8s %(message)s',
-        filename=app.config["LOG"],
-        level=logging.INFO,
-        datefmt='%Y-%m-%d %H:%M:%S'
-    )
-    logging.info("Server: Start")
-    logging.info("Database: {}".format(app.config['SQLALCHEMY_DATABASE_URI']))
+    g.logger.info("Server: Start")
 
     from .blueprints.root import root
     app.register_blueprint(root)
@@ -48,7 +40,7 @@ def create_app():
     # from .blueprints.attachments import attachments
     # app.register_blueprint(attachments)
 
-    db.init_app(app)
+    # db.init_app(app)
     login_manager.init_app(app)
     bcrypt.init_app(app)
     app.markdown = Markdown(app, extensions=[
