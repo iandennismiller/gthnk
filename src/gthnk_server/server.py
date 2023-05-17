@@ -44,9 +44,7 @@ def create_app():
     # from .blueprints.attachments import attachments
     # app.register_blueprint(attachments)
 
-    # db.init_app(app)
     login_manager.init_app(app)
-    # bcrypt.init_app(app)
     app.markdown = Markdown(app, extensions=[
         LinkifyExtension(),
         JournalExtension()

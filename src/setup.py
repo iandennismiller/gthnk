@@ -34,8 +34,6 @@ setup(
     ],
     scripts=[
         "scripts/gthnk",
-        "scripts/gthnk-server",
-        "scripts/gthnk-manager",
     ],
     long_description=read('../Readme.rst'),
     classifiers=[
@@ -79,6 +77,7 @@ setup(
             "Flask-Migrate==2.6.0",
             "SQLAlchemy==1.4",
             "Flask-SQLAlchemy",
+            "Flask-Script",
         ],
         "server": [
             "jinja2<3.1.0",
@@ -88,10 +87,7 @@ setup(
             "itsdangerous==2.0.1",
             "flask-login",
             "Flask-WTF",
-            "Flask-Cache",
-            "Flask-Script",
             "flask-markdown",
-            "flask-bcrypt",
             "mdx-linkify==1.0",
             "mdx-journal>=0.1.4",
         ],
