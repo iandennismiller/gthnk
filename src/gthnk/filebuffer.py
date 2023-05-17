@@ -1,3 +1,7 @@
+import os
+import shutil
+import datetime
+
 from .gthnk_format import parse_text
 from .model.journal import Journal
 
@@ -29,21 +33,21 @@ class FileBuffer(object):
 
             return self.journal
 
-    def rotate(self):
-        """
-        Blank out the file buffer.
-        """
-        self.backup()
-        self.clear()
-
-    def backup(self):
+    def backup(self, filetree_root):
         """
         Backup the file buffer.
         """
-        pass
+        current_day_id = datetime.datetime.now().strftime("%Y-%m-%d")
+        current_timestamp = current_time = datetime.datetime.now().strftime("%H%M")
+        basename = os.path.basename(self.filename)
+        filename = f"{current_day_id}-{current_timestamp}-{basename}"
+        backup_filename = os.path.join(filetree_root, "backup", filename)
+        # copy the file to the backup directory
+        shutil.copyfile(self.filename, backup_filename)
 
     def clear(self):
         """
         Clear the file buffer.
         """
-        pass
+        with open(self.filename, 'w') as f:
+            f.write("")

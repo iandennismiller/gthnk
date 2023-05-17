@@ -29,10 +29,11 @@ def path():
 @click.option('--date', is_flag=True, default=False, help="Print only the date")
 @click.option('--uri', is_flag=True, default=False, help="Print only the uri")
 @click.option('--path', is_flag=True, default=False, help="Print the full file path")
+@click.option('--reverse', is_flag=True, default=False, help="Reverse the order of the entries")
 @click.option('--count', is_flag=True, default=False, help="Print the number of entries that matched")
 @click.option('--num', default=None, help="Number of entries to return")
 @click.argument('query', nargs=-1)
-def search(date, uri, path, count, num, query):
+def search(date, uri, path, count, num, reverse, query):
     "Search the journal for a query"
     g = Gthnk()
 
@@ -41,6 +42,9 @@ def search(date, uri, path, count, num, query):
     #     g.filetree.load_all_days()
 
     query_str = " ".join(query)
+    if not query_str:
+        print("Please provide a query")
+        return
 
     if num:
         num = int(num)
@@ -54,7 +58,7 @@ def search(date, uri, path, count, num, query):
         return
 
     count = 0
-    for entry in g.journal.search(query_str):
+    for entry in g.journal.search(query_str, chronological=reverse):
         count += 1
         if date and uri:
             print(entry.day.get_uri())
@@ -71,15 +75,28 @@ def search(date, uri, path, count, num, query):
         if num and count >= num:
             break
 
-# @cli.command()
-# def config():
-#     g = Gthnk()
-#     print(json.dumps(g.config, indent=2, sort_keys=True))
+@cli.command()
+@click.argument('path')
+@click.argument('filename', default=None, required=False)
+def config(path, filename):
+    "Create a config file"
+    secret_key = str(os.urandom(24))
+    buf = config_template.format(
+        gthnk_path=path,
+        secret_key=secret_key,
+    )
 
-# @cli.command()
-# def rotate():
-#     "Import file buffers and rotate them"
-#     g = Gthnk()
+    if filename:
+        with open(out_file, "w") as f:
+            f.write(buf)
+    else:
+        print(buf)
+
+@cli.command()
+def rotate():
+    "Import file buffers and rotate them"
+    g = Gthnk()
+    g.rotate_buffers()
 
 @cli.command()
 @click.argument('filename')
@@ -89,6 +106,25 @@ def read(filename):
     fb = FileBuffer(filename, journal=g.journal)
     g.filetree.write_journal()
     print(g.journal)
+
+
+config_template = """
+# Gthnk Configuration
+
+INPUT_FILES = "{gthnk_path}/journal.txt"
+
+LAZY=true
+BACKEND=filetree
+FILETREE_ROOT="{gthnk_path}"
+
+LOG_FILENAME="{gthnk_path}/gthnk.log"
+LOG_LEVEL = "INFO"
+
+SECRET_KEY = {secret_key}
+BASE_URL = "http://gthnk.lan"
+SQLALCHEMY_DATABASE_URI = "sqlite:///{gthnk_path}/gthnk.db"
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+"""
 
 
 if __name__ == '__main__':

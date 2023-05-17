@@ -1,6 +1,9 @@
 import json
-from .utils import init_logger
+
 from dotenv import dotenv_values
+
+from .utils import init_logger
+from .filebuffer import FileBuffer
 
 
 class Gthnk(object):
@@ -30,6 +33,9 @@ class Gthnk(object):
         self.logger.info("Start Gthnk")
         self.logger.info(f"Load config: {config_filename}")
 
+        self.buffers = []
+        self.register_buffers(buffer_filenames=self.config["INPUT_FILES"].split(","))
+
         from .model.journal import Journal
         self.journal = Journal(logger=self.logger)
 
@@ -56,15 +62,20 @@ class Gthnk(object):
         # else:
         #     self.filetree.scan_day_ids()
 
-    def register_buffer(self, buffer):
+    def register_buffers(self, buffer_filenames):
         "Register a new buffer with the journal."
-        pass
+        for buffer_filename in buffer_filenames:
+            self.logger.info(f"Register buffer: {buffer_filename}")
+            self.buffers.append(buffer_filename)
 
     def import_buffers(self):
         "Scan the available buffers for new entries and import them."
-        # fb = FileBuffer("/Users/idm/Work/gthnk/src/tests/data/2012-10-04.txt", journal=j)
-        pass
+        for buffer_filename in self.buffers:
+            buffer = FileBuffer(buffer_filename, journal=self.journal)
 
     def rotate_buffers(self):
         "Tell all of the buffers to rotate their files."
-        pass
+        for buffer_filename in self.buffers:
+            buffer = FileBuffer(buffer_filename, journal=self.journal)
+            buffer.backup(filetree_root=self.config["FILETREE_ROOT"])
+            buffer.clear()

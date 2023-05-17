@@ -11,3 +11,4 @@ __pycache__/
 /src/build/
 /src/dist/
 .env
+.pytest_cache/

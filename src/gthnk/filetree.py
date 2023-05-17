@@ -29,6 +29,10 @@ class FileTree(object):
         entry_path = os.path.join(self.path, "entry")
         if not os.path.exists(entry_path):
             os.makedirs(entry_path)
+        # ensure backup path exists as subdirectory of root
+        backup_path = os.path.join(self.path, "backup")
+        if not os.path.exists(backup_path):
+            os.makedirs(backup_path)
 
         self.scan_day_ids()
 

@@ -25,10 +25,17 @@ class Journal(object):
     def get_uri(self):
         return "/"
 
-    def search(self, query):
+    def search(self, query, chronological=False):
         query = query.lower()
-        # search days in chronological order
-        for day in sorted(self.days.values(), key=lambda x: x.day_id):
+
+        # by default, search entries in reverse chronological order
+        # the days start sorted chronologically
+        sorted_days = sorted(self.days.values(), key=lambda x: x.day_id)
+        # but unless we specify that chronological=True, we want the reverse
+        if not chronological:
+            sorted_days = reversed(sorted_days)
+
+        for day in sorted_days:
             # search entries in chronological order
             for entry in sorted(day.entries.values(), key=lambda x: x.timestamp):
                 if re.search(query, entry.content.lower()):
