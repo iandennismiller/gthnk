@@ -1,6 +1,8 @@
 import os
+import io
 
 from .model.journal import Journal
+from .model.artifact import Artifact
 from .filebuffer import FileBuffer
 
 
@@ -21,18 +23,12 @@ class FileTree(object):
         # ensure root path exists
         if not os.path.exists(self.path):
             os.makedirs(self.path)
-        # ensure day path exists as subdirectory of root
-        day_path = os.path.join(self.path, "day")
-        if not os.path.exists(day_path):
-            os.makedirs(day_path)
-        # ensure entry path exists as subdirectory of root
-        entry_path = os.path.join(self.path, "entry")
-        if not os.path.exists(entry_path):
-            os.makedirs(entry_path)
-        # ensure backup path exists as subdirectory of root
-        backup_path = os.path.join(self.path, "backup")
-        if not os.path.exists(backup_path):
-            os.makedirs(backup_path)
+
+        # ensure artifacts path exists as subdirectory of root
+        for subdir in ["day", "entry", "backup", "artifact"]:
+            path = os.path.join(self.path, subdir)
+            if not os.path.exists(path):
+                os.makedirs(path)
 
         self.scan_day_ids()
 
@@ -133,10 +129,65 @@ class FileTree(object):
             self.read_day_id(day_id)
             self.journal.logger.debug(f"Loaded day {day_id} from filesystem.")
 
-    def write_artifact(self, artifact):
-        "Write a artifact to the filesystem."
+    ###
+    # Artifacts
+
+    def scan_artifact_ids(self):
+        "Scan the filesystem for artifact ids and lazy-create artifacts for them."
         pass
 
-    def read_artifact(self, artifact_id):
+    def get_path_for_artifact(self, artifact):
+        "Return the filesystem path containing an artifact."
+        return os.path.join(self.path, "artifact", artifact.day.day_id, artifact.sequence)
+
+    def get_path_for_artifact_id(self, day_id, sequence):
+        "Return the filesystem path containing an artifact."
+        return os.path.join(self.path, "artifact", day_id, sequence)
+
+    def ensure_path_for_artifact(self, artifact):
+        "Ensure that a path exists."
+        path = self.get_path_for_artifact(artifact)
+        dirname = os.path.dirname(path)
+        if not os.path.exists(dirname):
+            os.makedirs(dirname)
+
+    def write_artifact(self, artifact):
+        "Write an artifact to the filesystem."
+        self.ensure_path_for_artifact(artifact)
+        path = self.get_path_for_artifact(artifact)
+        filename = os.path.join(path, artifact.filename)
+
+        # if file path exists, do not overwrite
+        if not os.path.exists(filename):
+            with open(filename, 'wb') as f:
+                f.write(artifact.bytesio.read())
+
+    def read_artifact(self, day_id, sequence, lazy=True):
         "Read a artifact from the filesystem."
-        pass
+        day = self.journal.get_day(day_id)
+
+        # look in the artifact directory for the file
+        artifact_path = self.get_path_for_artifact_id(day.day_id, sequence)
+
+        # the name of the file in artifact_path
+        artifact_path_files = os.listdir(artifact_path)
+        if len(artifact_path_files) > 0:
+            filename = [0]
+        else:
+            raise FileNotFoundError(f"Artifact {day_id}/{sequence} not found.")
+
+        if not lazy:
+            artifact_filename = os.path.join(artifact_path, filename)
+            with open(artifact_filename, 'rb') as f:
+                data = io.BytesIO(f.read())
+        else:
+            data = None
+
+        artifact = Artifact(day=day, sequence=sequence, filename=filename, data=data)
+        return artifact
+
+    def import_artifact(self, filename):
+        "Import an artifact into the filetree, then attach to a day in the journal."
+        self.journal.logger.info(f"Import artifact: {filename}")
+        current_day_id = datetime.datetime.now().strftime("%Y-%m-%d")
+        sequence = self.journal.get_next_sequence(current_day_id)

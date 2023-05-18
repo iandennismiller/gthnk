@@ -150,11 +150,21 @@ def read(filename):
     g.filetree.write_journal()
     print(f"Journal contains {len(g.journal)} entries")
 
+@cli.command("import")
+@click.argument('filename')
+def import_artifact(filename):
+    "Import filename into the current day, as an artifact"
+    g = Gthnk()
+    g.filetree.import_artifact(filename)
+
 @cli.command()
+@click.option('--refresh', is_flag=True, default=False, help="Load new entries into vector db")
 @click.argument('prompt', nargs=-1)
-def ask(prompt):
+def ask(refresh, prompt):
     "Read a file buffer and import it into the journal"
     g = Gthnk()
+    if refresh:
+        g.refresh_llm()
     prompt = " ".join(prompt)
     print(f"Ask LLM: {prompt}")
     print(g.llm.ask(prompt))

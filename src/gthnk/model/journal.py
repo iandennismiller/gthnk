@@ -28,6 +28,9 @@ class Journal(object):
     def get_latest_day_id(self):
         return max(self.days.keys())
     
+    def get_latest_day(self):
+        return self.get_day(self.get_latest_day_id())
+
     def get_previous_day(self, day):
         # first find the index of the day in the sorted list
         sorted_days = sorted([key for key, value in self.days.items() if len(value.entries) > 0])

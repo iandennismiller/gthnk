@@ -9,10 +9,8 @@ from .filetree import FileTree
 
 try:
     from .llm import LLM
-    print("Loading LLM")
 except ModuleNotFoundError:
-    DefaultEntriesStorage = None
-    print("Not loading LLM")
+    LLM = None
 
 
 class Gthnk(object):
@@ -55,7 +53,9 @@ class Gthnk(object):
 
         # if self.config["BACKEND"] == "filetree":
         self.init_filetree(filetree_root=self.config["FILETREE_ROOT"])
-        self.init_llm()
+
+        if LLM:
+            self.llm = LLM()
 
     def init_filetree(self, filetree_root):
         self.logger.info(f"Filetree backend: {filetree_root}")
@@ -74,16 +74,14 @@ class Gthnk(object):
         # else:
         #     self.filetree.scan_day_ids()
 
-    def init_llm(self):
-        if LLM:
-            self.llm = LLM()
-            for day in self.journal.days.values():
-                for entry in day.entries.values():
-                    self.llm.context_db.add(day=day, entry=entry)
-            print("LLM initialized")
-        else:
-            self.llm = None
-            print("LLM not initialized")
+    def refresh_llm(self):
+        if not LLM:
+            return
+
+        for day in self.journal.days.values():
+            for entry in day.entries.values():
+                self.llm.context_db.add(entry)
+        self.logger.info("Refreshed entries in LLM context db")
 
     def register_buffers(self, buffer_filenames):
         "Register a new buffer with the journal."

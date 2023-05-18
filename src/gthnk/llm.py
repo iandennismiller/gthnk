@@ -19,9 +19,7 @@ class LLM(object):
         CTX_MAX = 2048
         LLAMA_THREADS_NUM = int(os.getenv("LLAMA_THREADS_NUM", 8))
         LLAMA_MODEL_PATH = os.path.expanduser(os.getenv("LLAMA_MODEL_PATH"))
-
-        print(f"LLAMA : {LLAMA_MODEL_PATH}" + "\n")
-        assert os.path.exists(LLAMA_MODEL_PATH), "\033[91m\033[1m" + f"Model can't be found." + "\033[0m\033[0m"
+        logging.getLogger("gthnk").info(f"LLAMA : {LLAMA_MODEL_PATH}" + "\n")
 
         self.llm = Llama(
             model_path=LLAMA_MODEL_PATH,
@@ -44,24 +42,25 @@ class LLM(object):
 
         self.context_db = DefaultEntriesStorage(llm_embed=self.llm_embed)
 
-        print(f"Llama models loaded")
+        logging.getLogger("gthnk").info(f"Llama models loaded")
 
-    def context(self, query):
-        context = self.context_db.query(query=query, top_entries_num=5)
-        return context
-
-    def ask(self, prompt: str, CTX_MAX: int = 2048):
-        prompt_task = f'Answer the following question: {prompt}.\n'
-        context = self.context(prompt_task)
+    def ask(self, prompt: str, CTX_MAX: int = 2048, refresh: bool = False):
+        context = self.context_db.query(query=prompt, top_num=5)
         if context:
-            prompt_task += 'Take into account the following context: ' + '\n\n'.join(context)
+            prompt_task = 'Consider the following context:\n'
+            for i, c in enumerate(context):
+                item = c.replace("\n", " ")
+                prompt_task += f'{i+1}. {item}\n'
+            prompt_task += f'\nBased on that context, answer the following question: {prompt}'
+        else:
+            prompt_task = f'Answer the following question: {prompt}'
 
-        print(f"Final prompt: {prompt_task}")
+        logging.getLogger("gthnk").info(prompt_task)
 
         result = self.llm(
             prompt_task[:CTX_MAX],
             stop=["### Human"],
-            echo=False,
+            echo=True,
             temperature=0.2
         )
         return str(result['choices'][0]['text'].strip())
@@ -92,27 +91,20 @@ class DefaultEntriesStorage(object):
             embedding_function=embedding_function,
         )
 
-    def add(self, day: Dict, entry: Entry):
+    def add(self, entry: Entry):
+        day = entry.day
         entry_id = f"{day.day_id}-{entry.timestamp}"
         metadatas = {
+            "entry_id": entry_id,
             "day_id": day.day_id,
             "timestamp": entry.timestamp,
-            # "entry_id": entry_id,
-            "entry": entry.content
         }
 
         # Check if the entry already exists
         if len(self.collection.get(ids=[entry_id], include=[])["ids"]) > 0:
-            print(f"Entry {entry_id} already exists")
-            pass
-            # self.collection.update(
-            #     ids=entry_id,
-            #     embeddings=embeddings,
-            #     documents=entry.content,
-            #     metadatas=metadatas,
-            # )
+            logging.getLogger("gthnk").info(f"Entry {entry_id} already exists")
         else:
-            print(f"Calculate embeddings for entry {entry_id}")
+            logging.getLogger("gthnk").info(f"Calculate embeddings for entry {entry_id}")
             embeddings = self.llm_embed.embed(entry.content)
             self.collection.add(
                 ids=entry_id,
@@ -120,19 +112,18 @@ class DefaultEntriesStorage(object):
                 documents=entry.content,
                 metadatas=metadatas,
             )
-            print(f"Entry {entry_id} added")
+            logging.getLogger("gthnk").info(f"Entry {entry_id} added")
 
-    def query(self, query: str, top_entries_num: int) -> List[dict]:
+    def query(self, query: str, top_num: int) -> List[dict]:
         count: int = self.collection.count()
         if count == 0:
             return []
         entries = self.collection.query(
             query_texts=query,
-            n_results=min(top_entries_num, count),
-            include=["metadatas"]
+            n_results=min(top_num, count),
+            include=["documents"]
         )
-        # return [f'{item["day_id"]}-{item["timestamp"]}' for item in entries["metadatas"][0]]
-        return [item["entry"] for item in entries["metadatas"][0]]
+        return [doc for doc in entries["documents"][0]]
 
 
 class LlamaEmbeddingFunction(EmbeddingFunction):
@@ -144,6 +135,7 @@ class LlamaEmbeddingFunction(EmbeddingFunction):
 
     def __call__(self, texts: Documents) -> Embeddings:
         embeddings = []
+        # logging.getLogger("gthnk").info(f"Calculate embeddings for texts {texts}")
         for t in texts:
             e = self.llm_embed.embed(t)
             embeddings.append(e)
