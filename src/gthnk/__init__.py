@@ -5,6 +5,14 @@ from dotenv import dotenv_values
 
 from .utils import init_logger
 from .filebuffer import FileBuffer
+from .filetree import FileTree
+
+try:
+    from .llm import LLM
+    print("Loading LLM")
+except ModuleNotFoundError:
+    DefaultEntriesStorage = None
+    print("Not loading LLM")
 
 
 class Gthnk(object):
@@ -47,10 +55,10 @@ class Gthnk(object):
 
         # if self.config["BACKEND"] == "filetree":
         self.init_filetree(filetree_root=self.config["FILETREE_ROOT"])
+        self.init_llm()
 
     def init_filetree(self, filetree_root):
         self.logger.info(f"Filetree backend: {filetree_root}")
-        from .filetree import FileTree
         self.filetree = FileTree(
             journal=self.journal,
             path=filetree_root,
@@ -65,6 +73,17 @@ class Gthnk(object):
         # # default to lazy loading
         # else:
         #     self.filetree.scan_day_ids()
+
+    def init_llm(self):
+        if LLM:
+            self.llm = LLM()
+            for day in self.journal.days.values():
+                for entry in day.entries.values():
+                    self.llm.context_db.add(day=day, entry=entry)
+            print("LLM initialized")
+        else:
+            self.llm = None
+            print("LLM not initialized")
 
     def register_buffers(self, buffer_filenames):
         "Register a new buffer with the journal."

@@ -7,6 +7,10 @@ help:
 
 install:
 	pip install -U pip
+	pip install -e ./src[llm]
+
+install-bare:
+	pip install -U pip
 	pip install -e ./src
 
 install-server:
@@ -14,6 +18,7 @@ install-server:
 	pip install -e ./src[server]
 
 dev:
+	pip install -U pip
 	pip install -e ./src[dev]
 
 server:

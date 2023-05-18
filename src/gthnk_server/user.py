@@ -40,20 +40,3 @@ class User(object):
 
     def get_id(self):
         return self.id
-
-    def change_password(self, password):
-        from .. import bcrypt
-        pw_hash = bcrypt.generate_password_hash(password).decode('utf-8')
-        self.password = pw_hash
-        self.save()
-
-    @classmethod
-    def create_with_password(cls, username, password):
-        from .. import bcrypt
-        pw_hash = bcrypt.generate_password_hash(password).decode('utf-8')
-        u = cls.create(username=username, password=pw_hash)
-        return u
-
-    @classmethod
-    def find(cls, username):
-        return cls.get(username=username)

@@ -12,3 +12,4 @@ __pycache__/
 /src/dist/
 .env
 .pytest_cache/
+/chroma

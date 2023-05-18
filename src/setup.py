@@ -62,6 +62,10 @@ setup(
         "rich",
     ],
     extras_require={
+        "llm": [
+            "llama-cpp-python==0.1.43",
+            "chromadb==0.3.21",
+        ],
         "dev": [
             "pdbpp",
             "GitPython",

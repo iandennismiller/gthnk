@@ -8,6 +8,8 @@
 - [ ] artifacts (replaces Pages)
 - [ ] repair day/entry mismatches
 - [ ] lazy load and export for filetree
+- [ ] paginate search results
+- [ ] LLM integration with ChromaDB
 - [x] web UI backed by filetree
 - [x] remove tags
 
