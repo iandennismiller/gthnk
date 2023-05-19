@@ -87,10 +87,18 @@ class Gthnk(object):
         if not self.llm:
             self.llm = LLM()
 
+        created_count = 0
+        exists_count = 0
+
         for day in self.journal.days.values():
             for entry in day.entries.values():
-                self.llm.context_db.add(entry)
-        self.logger.info("Refreshed entries in LLM context db")
+                created = self.llm.context_db.add(entry)
+                if created:
+                    created_count += 1
+                else:
+                    exists_count += 1
+
+        self.logger.info(f"Refreshed entries in LLM context db: created {created}, exists {exists}")
 
     def register_buffers(self, buffer_filenames):
         "Register a new buffer with the journal."

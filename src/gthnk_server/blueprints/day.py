@@ -28,22 +28,25 @@ def nearest_day_view(date):
         # find the index of the first date that is larger
         day_id_list = sorted(list(gthnk.journal.days.keys()))
         try:
-            day_index = next(idx for idx, value in enumerate(day_id_list) if value > day_id)
+            day_index = next(idx for idx, value in enumerate(day_id_list) if value > date)
+            day_id = day_id_list[day_index]
         except StopIteration:
+            # or try to find the first one that is smaller
+            day_id_list = list(reversed(day_id_list))
             try:
-                day_index = next(idx for idx, value in enumerate(day_id_list) if value < day_id)
+                day_index = next(idx for idx, value in enumerate(day_id_list) if value < date)
+                day_id = day_id_list[day_index]
             except StopIteration:
                 return flask.redirect(flask.url_for('gthnk.index'))
-        
-        day_id = day_id_list[day_index]
 
         # if content exists, then the day exists
         day = gthnk.journal.days[day_id]
-        if 'content' in day.__dict__:
+        if 'entries' in day.__dict__ and len(day.entries) > 0:
             return flask.redirect(flask.url_for('day.day_view', date=day.day_id))
         else:
-            day_id_list = list(gthnk.journal.days.keys())
-            day_index = next(x[0] for x in enumerate(day_id_list) if str(x[1]) < day_id)
+            day_id_list = sorted(list(gthnk.journal.days.keys()))
+            breakpoint()
+            day_index = next(idx for idx, value in enumerate(day_id_list) if value < date)
             day_id = day_id_list[day_index]
             if day:
                 return flask.redirect(flask.url_for('day.day_view', date=day.day_id))

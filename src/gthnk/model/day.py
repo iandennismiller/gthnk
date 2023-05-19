@@ -32,10 +32,12 @@ class Day(object):
     def uri(self):
         return os.path.join(self.journal.uri, "day", f"{self.day_id}.txt")
 
+    @property
     def yesterday(self):
         yd = self.journal.get_previous_day(self)
         return yd
 
+    @property
     def tomorrow(self):
         return self.journal.get_next_day(self)
 

@@ -1,6 +1,9 @@
 import os
+import sys
 import logging
+
 from typing import Dict, List
+from contextlib import redirect_stderr, redirect_stdout
 
 from llama_cpp import Llama
 import chromadb
@@ -15,12 +18,16 @@ from .model.day import Day
 
 
 class LLM(object):
+
     def __init__(self):
         CTX_MAX = 2048
         LLAMA_THREADS_NUM = int(os.getenv("LLAMA_THREADS_NUM", 8))
         LLAMA_MODEL_PATH = os.path.expanduser(os.getenv("LLAMA_MODEL_PATH"))
         logging.getLogger("gthnk").info(f"LLAMA : {LLAMA_MODEL_PATH}" + "\n")
 
+        # with open('/dev/null', 'w') as f:
+        #     with redirect_stderr(f):
+        #         with redirect_stdout(f):
         self.llm = Llama(
             model_path=LLAMA_MODEL_PATH,
             # n_predict=1024,
@@ -81,6 +88,7 @@ class DefaultEntriesStorage(object):
             settings=chromadb.config.Settings(
                 chroma_db_impl="duckdb+parquet",
                 persist_directory=CHROMA_PERSIST_DIR,
+                anonymized_telemetry=False,
             )
         )
 
@@ -104,10 +112,17 @@ class DefaultEntriesStorage(object):
 
         # Check if the entry already exists
         if len(self.collection.get(ids=[entry_id], include=[])["ids"]) > 0:
-            logging.getLogger("gthnk").info(f"Entry {entry_id} already exists")
+            logging.getLogger("gthnk").debug(f"Entry {entry_id} already exists")
+            return
         else:
             logging.getLogger("gthnk").info(f"Calculate embeddings for entry {entry_id}")
-            embeddings = self.llm_embed.embed(entry.content)
+            tokens = entry.content.split(" ")
+            max_tokens = 1024
+            if len(tokens) >= max_tokens:
+                content = " ".join(tokens[:max_tokens])
+            else:
+                content = entry.content
+            embeddings = self.llm_embed.embed(content)
             self.collection.add(
                 ids=entry_id,
                 embeddings=embeddings,
@@ -115,13 +130,16 @@ class DefaultEntriesStorage(object):
                 metadatas=metadatas,
             )
             logging.getLogger("gthnk").info(f"Entry {entry_id} added")
+            return True
 
     def query(self, query: str, top_num: int) -> List[dict]:
         count: int = self.collection.count()
         if count == 0:
             return []
+        # query_embeddings = self.llm_embed.embed(query)
         entries = self.collection.query(
-            query_texts=query,
+            # query_embeddings=query_embeddings,
+            query_texts=[query],
             n_results=min(top_num, count),
             include=["documents"]
         )
