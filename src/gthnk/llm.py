@@ -27,6 +27,7 @@ class LLM(object):
             n_ctx=CTX_MAX,
             n_threads=LLAMA_THREADS_NUM,
             n_batch=512,
+            verbose=False,
             # use_mlock=True,
         )
 
@@ -37,6 +38,7 @@ class LLM(object):
             n_threads=LLAMA_THREADS_NUM,
             n_batch=512,
             embedding=True,
+            verbose=False,
             # use_mlock=True,
         )
 
@@ -44,7 +46,7 @@ class LLM(object):
 
         logging.getLogger("gthnk").info(f"Llama models loaded")
 
-    def ask(self, prompt: str, CTX_MAX: int = 2048, refresh: bool = False):
+    def ask(self, prompt: str, CTX_MAX: int = 2048):
         context = self.context_db.query(query=prompt, top_num=5)
         if context:
             prompt_task = 'Consider the following context:\n'

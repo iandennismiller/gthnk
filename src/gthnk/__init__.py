@@ -5,7 +5,7 @@ from dotenv import dotenv_values
 
 from .utils import init_logger
 from .filebuffer import FileBuffer
-from .filetree import FileTree
+from .filetree import FileTreeRoot
 
 try:
     from .llm import LLM
@@ -44,27 +44,28 @@ class Gthnk(object):
         self.logger.info(f"Load config: {config_filename}")
 
         self.buffers = []
-        self.register_buffers(buffer_filenames=self.config["INPUT_FILES"].split(","))
+        if "INPUT_FILES" in self.config:
+            self.register_buffers(buffer_filenames=self.config["INPUT_FILES"].split(","))
+        else:
+            raise ValueError("No INPUT_FILES in config")
 
         from .model.journal import Journal
         self.journal = Journal(logger=self.logger)
 
         # self.lazy = True
+        self.llm = None
 
         # if self.config["BACKEND"] == "filetree":
         self.init_filetree(filetree_root=self.config["FILETREE_ROOT"])
 
-        if LLM:
-            self.llm = LLM()
-
     def init_filetree(self, filetree_root):
         self.logger.info(f"Filetree backend: {filetree_root}")
-        self.filetree = FileTree(
+        self.filetree = FileTreeRoot(
             journal=self.journal,
             path=filetree_root,
         )
 
-        self.filetree.load_all_days()
+        self.filetree.days.load_all_days()
 
         # # only load all days if lazy is explicitly False
         # if "lazy" in self.config and self.config["LAZY"] is False:
@@ -74,9 +75,16 @@ class Gthnk(object):
         # else:
         #     self.filetree.scan_day_ids()
 
+    def ask_llm(self, query):
+        if LLM and not self.llm:
+            self.llm = LLM()
+        return self.llm.ask(query)
+
     def refresh_llm(self):
         if not LLM:
             return
+        if not self.llm:
+            self.llm = LLM()
 
         for day in self.journal.days.values():
             for entry in day.entries.values():
