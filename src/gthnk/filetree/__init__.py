@@ -6,7 +6,7 @@ from .model.artifact import Artifact
 from .filebuffer import FileBuffer
 
 
-class FileTree(object):
+class FileTreeRoot(object):
     """
     Represents a full journal as a filesystem tree.
     Works by mapping a journal URI to a filesystem path.
@@ -30,7 +30,9 @@ class FileTree(object):
             if not os.path.exists(path):
                 os.makedirs(path)
 
-        self.scan_day_ids()
+        self.artifacts = FileTreeArtifacts(self)
+        self.entries = FileTreeEntries(self)
+        self.days = FileTreeDays(self)
 
     def decode_path(self, path):
         "Return the journal object for a given filesystem path."
@@ -191,3 +193,38 @@ class FileTree(object):
         self.journal.logger.info(f"Import artifact: {filename}")
         current_day_id = datetime.datetime.now().strftime("%Y-%m-%d")
         sequence = self.journal.get_next_sequence(current_day_id)
+
+    def get_next_artifact_sequence(self, day=None):
+        "Get the next artifact sequence for a day."
+
+        # if day is None, use today
+        if day is None:
+            day_id = datetime.datetime.now().strftime("%Y-%m-%d")
+        else:
+            day_id = day.day_id
+
+        # Then we count the number of folders in artifact/day_id.
+        day_artifacts_path = os.path.join(self.path, "artifact", day_id)
+
+        # if the path does not exist, create it and set sequence to 0
+        if not os.path.exists(day_artifacts_path):
+            os.makedirs(day_artifacts_path)
+            sequence = 0
+            self.journal.logger.info(f"Created artifact directory for {day_id}.")
+        else:
+            day_artifacts = sorted(os.listdir(day_artifacts_path))
+            self.journal.logger.info(f"Found {len(day_artifacts)} artifact directories for {day_id}.")
+
+            # check whether the last one is empty
+            last_artifact_path = os.path.join(day_artifacts_path, day_artifacts[-1])
+            # If the last one in the list is empty, that's the sequence. 
+            if len(os.listdir(last_artifact_path) == 0):
+                sequence = int(day_artifacts[-1])
+                self.journal.logger.info(f"Found empty artifact directory for {day_id} {sequence}.")
+            else:
+                # If it is not empty, increment sequence and create a directory with the sequence id.
+                sequence = len(day_artifacts)
+                os.makedirs(os.path.join(day_artifacts_path, str(sequence)))
+                self.journal.logger.info(f"Created artifact directory for {day_id} {sequence}.")
+
+        return sequence

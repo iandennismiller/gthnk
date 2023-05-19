@@ -13,14 +13,17 @@ class Artifact(object):
         return os.path.join(self.day.journal.get_uri(), self.day.day_id, self.sequence, self.filename)
 
     def set_data(self, data):
+        "Set the data contents of the artifact as BytesIO"
         self._data = BytesIO(data)
 
     @property
     def data(self):
+        "return the actual data contents of the artifact as BytesIO"
         return self.bytesio.getvalue()
 
     @property
     def bytesio(self):
+        "return a BytesIO object containing the data contents of the artifact"
         if not self._data:
             with open(self.filename, 'rb') as f:
                 self._data = io.BytesIO(f.read())
