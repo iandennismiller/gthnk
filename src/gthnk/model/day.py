@@ -1,6 +1,7 @@
 import os
 
 from .entry import Entry
+from .artifact import Artifact
 
 
 class Day(object):
@@ -27,8 +28,9 @@ class Day(object):
             self.artifacts[sequence_str] = Artifact(day=self, sequence=sequence, filename=filename)
         return self.artifacts[sequence_str]
 
-    def get_uri(self):
-        return os.path.join(self.journal.get_uri(), f"{self.day_id}.txt")
+    @property
+    def uri(self):
+        return os.path.join(self.journal.uri, "day", f"{self.day_id}.txt")
 
     def yesterday(self):
         yd = self.journal.get_previous_day(self)

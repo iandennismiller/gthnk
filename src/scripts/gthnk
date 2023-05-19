@@ -155,7 +155,30 @@ def read(filename):
 def import_artifact(filename):
     "Import filename into the current day, as an artifact"
     g = Gthnk()
-    g.filetree.artifacts.load(filename)
+    g.filetree.artifacts.import_file(filename)
+
+@cli.command("artifact")
+@click.option('--uri', is_flag=True, default=False, help="Print only the uri")
+@click.option('--path', is_flag=True, default=False, help="Print the full file path")
+@click.option('--load', is_flag=True, default=False, help="Don't be lazy; load artifact")
+@click.argument('day_id')
+@click.argument('sequence')
+def get_artifact(uri, path, load, day_id, sequence):
+    "Retrieve an artifact from gthnk"
+    g = Gthnk()
+    artifact = g.journal.get_artifact(day_id, int(sequence))
+    if artifact.filename is None:
+        print("Artifact not found")
+        return
+    if load:
+        assert artifact.data
+
+    if uri:
+        print(artifact.uri)
+    elif path:
+        print(artifact.full_filename)
+    else:
+        print(artifact)
 
 @cli.command()
 @click.option('--refresh', is_flag=True, default=False, help="Load new entries into vector db")

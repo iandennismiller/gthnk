@@ -4,12 +4,9 @@ from .day import Day
 
 
 class Journal(object):
-    def __init__(self, logger=None):
+    def __init__(self, gthnk=None):
         self.days = {}
-        if logger:
-            self.logger = logger
-        else:
-            self.logger = lambda x: None
+        self.gthnk = gthnk
 
     def get_day(self, day_id):
         if day_id not in self.days:
@@ -22,7 +19,12 @@ class Journal(object):
         day = self.get_day(day_id)
         return day.get_entry(timestamp_str)
 
-    def get_uri(self):
+    def get_artifact(self, day_id, sequence):
+        day = self.get_day(day_id)
+        return day.get_artifact(sequence)
+
+    @property
+    def uri(self):
         return "/"
 
     def get_latest_day_id(self):
@@ -57,7 +59,7 @@ class Journal(object):
 
     def search(self, query, chronological=False):
         query = query.lower()
-        self.logger.info(f"Searching for {query}")
+        self.gthnk.logger.info(f"Searching for {query}")
 
         # by default, search entries in reverse chronological order
         # the days start sorted chronologically

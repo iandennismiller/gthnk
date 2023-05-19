@@ -14,7 +14,7 @@ class FileTreeEntries(object):
 
     def get_path(self, entry):
         "Return the filesystem path for an entry."
-        return os.path.join(self.filetree.path, "entry", f".{entry.get_uri()}")
+        return os.path.join(self.filetree.path, f".{entry.uri}")
 
     def get_path_id(self, day_id, timestamp):
         "Return the filesystem path for an entry."

@@ -12,11 +12,10 @@ class FileTreeDays(object):
 
     def __init__(self, filetree):
         self.filetree = filetree
-        self.scan_ids()
 
     def get_path(self, day):
         "Return the filesystem path for a day."
-        return os.path.join(self.filetree.path, "day", f".{day.get_uri()}")
+        return os.path.join(self.filetree.path, f".{day.uri}")
 
     def get_path_id(self, day_id):
         "Return the filesystem path for a day."
@@ -40,18 +39,23 @@ class FileTreeDays(object):
     def scan_ids(self):
         "Scan the filesystem for day ids and create days for them."
         day_ids = []
-        logging.getLogger("gthnk").info(f"Scanning {self.filetree.path}/day for days.")
+        logging.getLogger("gthnk").debug(f"Scanning {self.filetree.path}/day for days.")
         for filename in os.listdir(os.path.join(self.filetree.path, "day")):
             if filename.endswith(".txt"):
                 day_id = filename.replace(".txt", "")
                 day_ids.append(day_id)
-        for day_id in day_ids:
-            if day_id not in self.filetree.journal.days:
-                self.filetree.journal.get_day(day_id)
-        logging.getLogger("gthnk").info(f"Scanned {len(day_ids)} days from filesystem.")
+        logging.getLogger("gthnk").debug(f"Scanned {len(day_ids)} days from filesystem.")
+        return day_ids
 
     def load_all(self):
         "Load all days from the filesystem."
+        day_ids = self.scan_ids()
+        for day_id in day_ids:
+            if day_id not in self.filetree.journal.days:
+                self.filetree.journal.get_day(day_id)
+
         for day_id in self.filetree.journal.days.keys():
             self.read_id(day_id)
             logging.getLogger("gthnk").debug(f"Loaded day {day_id} from filesystem.")
+
+        logging.getLogger("gthnk").info(f"Loaded {len(self.filetree.journal.days)} days from filesystem.")

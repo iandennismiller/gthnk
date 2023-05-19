@@ -25,7 +25,7 @@ def create_app():
     try:
         app.config.from_envvar('SETTINGS')
     except RuntimeError:
-        default_filename = os.path.expanduser('~/.config/gthnk/.env')
+        default_filename = os.path.expanduser('~/.config/gthnk/gthnk.conf')
         if os.path.isfile(default_filename):
             print(f"WARN: using default configuration file {default_filename}")
             app.config.from_pyfile(default_filename)

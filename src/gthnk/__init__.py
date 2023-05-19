@@ -19,7 +19,7 @@ class Gthnk(object):
             config_filename = ".env"
             self.config = dotenv_values(config_filename)
             if self.config == {}:
-                config_filename = os.path.expanduser("~/.config/gthnk/.env")
+                config_filename = os.path.expanduser("~/.config/gthnk/gthnk.conf")
                 self.config = dotenv_values(config_filename)
         else:
             self.config = dotenv_values(config_filename)
@@ -40,7 +40,7 @@ class Gthnk(object):
                 name=__name__,
                 level=log_level
             )
-        self.logger.info("Start Gthnk")
+        self.logger.info("[bold yellow]Start Gthnk[/bold yellow]")
         self.logger.info(f"Load config: {config_filename}")
 
         self.buffers = []
@@ -50,7 +50,7 @@ class Gthnk(object):
             raise ValueError("No INPUT_FILES in config")
 
         from .model.journal import Journal
-        self.journal = Journal(logger=self.logger)
+        self.journal = Journal(gthnk=self)
 
         # self.lazy = True
         self.llm = None
@@ -59,13 +59,14 @@ class Gthnk(object):
         self.init_filetree(filetree_root=self.config["FILETREE_ROOT"])
 
     def init_filetree(self, filetree_root):
-        self.logger.info(f"Filetree backend: {filetree_root}")
+        self.logger.info(f"Filetree: {filetree_root}")
         self.filetree = FileTreeRoot(
             journal=self.journal,
             path=filetree_root,
         )
 
         self.filetree.days.load_all()
+        self.filetree.artifacts.load_all()
 
         # # only load all days if lazy is explicitly False
         # if "lazy" in self.config and self.config["LAZY"] is False:
@@ -94,7 +95,7 @@ class Gthnk(object):
     def register_buffers(self, buffer_filenames):
         "Register a new buffer with the journal."
         for buffer_filename in buffer_filenames:
-            self.logger.info(f"Register buffer: {buffer_filename}")
+            self.logger.info(f"Buffer: {buffer_filename}")
             self.buffers.append(buffer_filename)
 
     def import_buffers(self):

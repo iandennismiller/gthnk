@@ -7,8 +7,9 @@ class Entry(object):
         self.timestamp = timestamp
         self.content = content
     
-    def get_uri(self):
-        return os.path.join(self.day.journal.get_uri(), self.day.day_id, f"{self.timestamp}.txt")
+    @property
+    def uri(self):
+        return os.path.join(self.day.journal.uri, "entry", self.day.day_id, f"{self.timestamp}.txt")
 
     def render_standalone(self):
         return f"{self.day.day_id}\n\n{self.timestamp}\n\n{self.content}\n"
