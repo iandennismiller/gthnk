@@ -33,7 +33,7 @@ class FileTreeRoot(object):
 
         self.days = FileTreeDays(self)
         self.entries = FileTreeEntries(self)
-        # self.artifacts = FileTreeArtifacts(self)
+        self.artifacts = FileTreeArtifacts(self)
 
     def decode_path(self, path):
         "Return the journal object for a given filesystem path."
@@ -58,4 +58,4 @@ class FileTreeRoot(object):
     def write_journal(self):
         "Update the filetree with the contents of the journal."
         for day in self.journal:
-            self.days.write_day(day)
+            self.days.write(day)

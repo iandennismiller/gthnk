@@ -82,7 +82,7 @@ def search(date, uri, path, count, num, reverse, query):
 
     # # load all days if lazy
     # if g.lazy:
-    #     g.filetree.days.load_all_days()
+    #     g.filetree.days.load_all()
 
     query_str = " ".join(query)
     if not query_str:
@@ -155,7 +155,7 @@ def read(filename):
 def import_artifact(filename):
     "Import filename into the current day, as an artifact"
     g = Gthnk()
-    g.filetree.artifacts.import_artifact(filename)
+    g.filetree.artifacts.load(filename)
 
 @cli.command()
 @click.option('--refresh', is_flag=True, default=False, help="Load new entries into vector db")

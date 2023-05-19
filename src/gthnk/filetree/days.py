@@ -12,32 +12,32 @@ class FileTreeDays(object):
 
     def __init__(self, filetree):
         self.filetree = filetree
-        self.scan_day_ids()
+        self.scan_ids()
 
-    def get_path_for_day(self, day):
+    def get_path(self, day):
         "Return the filesystem path for a day."
         return os.path.join(self.filetree.path, "day", f".{day.get_uri()}")
 
-    def get_path_for_day_id(self, day_id):
+    def get_path_id(self, day_id):
         "Return the filesystem path for a day."
         return os.path.join(self.filetree.path, "day", f"{day_id}.txt")
 
-    def write_day(self, day):
+    def write(self, day):
         "Write a day to the filesystem."
-        path = self.get_path_for_day(day)
+        path = self.get_path(day)
         with open(path, "w") as f:
             f.write(day.__repr__())
         
         for entry in day.entries.values():
-            self.filetree.entries.write_entry(entry)
+            self.filetree.entries.write(entry)
 
-    def read_day_id(self, day_id):
+    def read_id(self, day_id):
         "Read a day from the filesystem."
-        filename = self.get_path_for_day_id(day_id)
+        filename = self.get_path_id(day_id)
         fb = FileBuffer(filename=filename, journal=self.filetree.journal)
         return self.filetree.journal.get_day(day_id)
 
-    def scan_day_ids(self):
+    def scan_ids(self):
         "Scan the filesystem for day ids and create days for them."
         day_ids = []
         logging.getLogger("gthnk").info(f"Scanning {self.filetree.path}/day for days.")
@@ -50,8 +50,8 @@ class FileTreeDays(object):
                 self.filetree.journal.get_day(day_id)
         logging.getLogger("gthnk").info(f"Scanned {len(day_ids)} days from filesystem.")
 
-    def load_all_days(self):
+    def load_all(self):
         "Load all days from the filesystem."
         for day_id in self.filetree.journal.days.keys():
-            self.read_day_id(day_id)
+            self.read_id(day_id)
             logging.getLogger("gthnk").debug(f"Loaded day {day_id} from filesystem.")

@@ -1,6 +1,7 @@
 import os
 import io
 import logging
+import datetime
 
 from ..model.artifact import Artifact
 
@@ -14,29 +15,29 @@ class FileTreeArtifacts(object):
     def __init__(self, filetree):
         self.filetree = filetree
 
-    def scan_artifact_ids(self):
+    def scan_ids(self):
         "Scan the filesystem for artifact ids and lazy-create artifacts for them."
         pass
 
-    def get_path_for_artifact(self, artifact):
+    def get_path(self, artifact):
         "Return the filesystem path containing an artifact."
         return os.path.join(self.path, "artifact", artifact.day.day_id, artifact.sequence)
 
-    def get_path_for_artifact_id(self, day_id, sequence):
+    def get_path_id(self, day_id, sequence):
         "Return the filesystem path containing an artifact."
         return os.path.join(self.path, "artifact", day_id, sequence)
 
-    def ensure_path_for_artifact(self, artifact):
+    def ensure_path(self, artifact):
         "Ensure that a path exists."
-        path = self.get_path_for_artifact(artifact)
+        path = self.get_path(artifact)
         dirname = os.path.dirname(path)
         if not os.path.exists(dirname):
             os.makedirs(dirname)
 
-    def write_artifact(self, artifact):
+    def write(self, artifact):
         "Write an artifact to the filesystem."
-        self.ensure_path_for_artifact(artifact)
-        path = self.get_path_for_artifact(artifact)
+        self.ensure_path(artifact)
+        path = self.get_path(artifact)
         filename = os.path.join(path, artifact.filename)
 
         # if file path exists, do not overwrite
@@ -44,12 +45,12 @@ class FileTreeArtifacts(object):
             with open(filename, 'wb') as f:
                 f.write(artifact.bytesio.read())
 
-    def read_artifact(self, day_id, sequence, lazy=True):
+    def read_id(self, day_id, sequence, lazy=True):
         "Read a artifact from the filesystem."
-        day = self.journal.get_day(day_id)
+        day = self.filetree.journal.get_day(day_id)
 
         # look in the artifact directory for the file
-        artifact_path = self.get_path_for_artifact_id(day.day_id, sequence)
+        artifact_path = self.get_path_id(day.day_id, sequence)
 
         # the name of the file in artifact_path
         artifact_path_files = os.listdir(artifact_path)
@@ -68,13 +69,15 @@ class FileTreeArtifacts(object):
         artifact = Artifact(day=day, sequence=sequence, filename=filename, data=data)
         return artifact
 
-    def import_artifact(self, filename):
+    def load(self, filename):
         "Import an artifact into the filetree, then attach to a day in the journal."
         logging.getLogger("gthnk").info(f"Import artifact: {filename}")
         current_day_id = datetime.datetime.now().strftime("%Y-%m-%d")
-        sequence = self.journal.get_next_sequence(current_day_id)
+        sequence = self.get_next_sequence(current_day_id)
+        print(sequence)
+        breakpoint()
 
-    def get_next_artifact_sequence(self, day=None):
+    def get_next_sequence(self, day=None):
         "Get the next artifact sequence for a day."
 
         # if day is None, use today

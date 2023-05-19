@@ -65,15 +65,15 @@ class Gthnk(object):
             path=filetree_root,
         )
 
-        self.filetree.days.load_all_days()
+        self.filetree.days.load_all()
 
         # # only load all days if lazy is explicitly False
         # if "lazy" in self.config and self.config["LAZY"] is False:
-        #     self.filetree.load_all_days()
+        #     self.filetree.days.load_all()
         #     self.lazy = False
         # # default to lazy loading
         # else:
-        #     self.filetree.scan_day_ids()
+        #     self.filetree.scan_ids()
 
     def ask_llm(self, query):
         if LLM and not self.llm:

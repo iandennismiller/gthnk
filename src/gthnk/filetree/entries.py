@@ -12,32 +12,32 @@ class FileTreeEntries(object):
     def __init__(self, filetree):
         self.filetree = filetree
 
-    def get_path_for_entry(self, entry):
+    def get_path(self, entry):
         "Return the filesystem path for an entry."
         return os.path.join(self.filetree.path, "entry", f".{entry.get_uri()}")
 
-    def get_path_for_entry_id(self, day_id, timestamp):
+    def get_path_id(self, day_id, timestamp):
         "Return the filesystem path for an entry."
         return os.path.join(self.filetree.path, "entry", f"{day_id}/{timestamp}.txt")
 
-    def ensure_path_for_entry(self, entry):
+    def ensure_path(self, entry):
         "Ensure that a path exists."
-        path = self.get_path_for_entry(entry)
+        path = self.get_path(entry)
         dirname = os.path.dirname(path)
 
         if not os.path.exists(dirname):
             os.makedirs(dirname)
 
-    def write_entry(self, entry):
+    def write(self, entry):
         "Write an entry to the filesystem."
-        self.ensure_path_for_entry(entry)
-        path = self.get_path_for_entry(entry)
+        self.ensure_path(entry)
+        path = self.get_path(entry)
         with open(path, "w") as f:
             f.write(f"{entry.day.day_id}\n\n{entry.timestamp}\n\n{entry.content}")
 
-    def read_entry_id(self, day_id, timestamp):
+    def read_id(self, day_id, timestamp):
         "Read an entry from the filesystem."
         # day = self.filetree.journal.get_day(day_id)
-        filename = self.get_path_for_entry_id(day_id, timestamp)
+        filename = self.get_path_id(day_id, timestamp)
         fb = FileBuffer(filename=filename, journal=self.filetree.journal)
         return self.filetree.journal.get_day(day_id, timestamp)

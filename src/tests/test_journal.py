@@ -17,7 +17,7 @@ def test_load_all_days():
     j = Journal()
     # create a filetree and associate it with this journal
     filetree = FileTreeRoot(journal=j, path="/tmp/gthnk")
-    filetree.days.load_all_days()
+    filetree.days.load_all()
     assert j
 
 def test_initial_structure():
@@ -38,6 +38,6 @@ def test_write_day():
     day = j.get_day(day_id="2012-10-04")
     print(day.get_entry("1101").get_uri())
     print(filetree.get_path())
-    print(filetree.days.get_path_for_day(day))
-    filetree.entries.write_entry(day.get_entry("1101"))
-    filetree.days.write_day(day)
+    print(filetree.days.get_path(day))
+    filetree.entries.write(day.get_entry("1101"))
+    filetree.days.write(day)
