@@ -7,8 +7,8 @@ from contextlib import redirect_stderr, redirect_stdout
 
 from llama_cpp import Llama
 import chromadb
-from chromadb.utils.embedding_functions import OpenAIEmbeddingFunction
 from chromadb.api.types import Documents, EmbeddingFunction, Embeddings
+from chromadb.utils import embedding_functions
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -38,28 +38,23 @@ class LLM(object):
             # use_mlock=True,
         )
 
-        self.llm_embed = Llama(
-            model_path=LLAMA_MODEL_PATH,
-            # n_predict=1024,
-            n_ctx=CTX_MAX,
-            n_threads=LLAMA_THREADS_NUM,
-            n_batch=512,
-            embedding=True,
-            verbose=False,
-            # use_mlock=True,
-        )
-
-        self.context_db = DefaultEntriesStorage(llm_embed=self.llm_embed)
+        self.context_db = DefaultEntriesStorage()
 
         logging.getLogger("gthnk").info(f"Llama models loaded")
 
     def ask(self, prompt: str, CTX_MAX: int = 2048):
-        context = self.context_db.query(query=prompt, top_num=5)
+        context = self.context_db.query(query=prompt, top_num=100)
         if context:
             prompt_task = 'Consider the following context:\n'
             for i, c in enumerate(context):
                 item = c.replace("\n", " ")
+                item_token_count = len(item.split(" "))
+                if item_token_count > 40:
+                    item = " ".join(item.split(" ")[:40])
                 prompt_task += f'{i+1}. {item}\n'
+                token_count = len(prompt_task.split(" "))
+                if token_count > 256:
+                    break
             prompt_task += f'\nBased on that context, answer the following question: {prompt}'
         else:
             prompt_task = f'Answer the following question: {prompt}'
@@ -78,9 +73,8 @@ class LLM(object):
 class DefaultEntriesStorage(object):
     "Entries storage using local ChromaDB"
 
-    def __init__(self, llm_embed):
+    def __init__(self):
         logging.getLogger('chromadb').setLevel(logging.ERROR)
-        self.llm_embed = llm_embed
 
         # Create Chroma collection
         CHROMA_PERSIST_DIR = os.getenv("CHROMA_PERSIST_DIR", "chroma")
@@ -93,7 +87,11 @@ class DefaultEntriesStorage(object):
         )
 
         metric = "cosine"
-        embedding_function = LlamaEmbeddingFunction(self.llm_embed)
+        # /Users/idm/.cache/torch/sentence_transformers/sentence-transformers_all-mpnet-base-v2
+        embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
+            model_name="all-mpnet-base-v2"
+            # model_name="all-MiniLM-L6-v2"
+        )
 
         self.collection = chroma_client.get_or_create_collection(
             name="gthnk",
@@ -115,48 +113,21 @@ class DefaultEntriesStorage(object):
             logging.getLogger("gthnk").debug(f"Entry {entry_id} already exists")
             return
         else:
-            logging.getLogger("gthnk").info(f"Calculate embeddings for entry {entry_id}")
-            tokens = entry.content.split(" ")
-            max_tokens = 1024
-            if len(tokens) >= max_tokens:
-                content = " ".join(tokens[:max_tokens])
-            else:
-                content = entry.content
-            embeddings = self.llm_embed.embed(content)
             self.collection.add(
                 ids=entry_id,
-                embeddings=embeddings,
                 documents=entry.content,
                 metadatas=metadatas,
             )
-            logging.getLogger("gthnk").info(f"Entry {entry_id} added")
+            logging.getLogger("gthnk").debug(f"Calculate embeddings for entry {entry_id}")
             return True
 
     def query(self, query: str, top_num: int) -> List[dict]:
         count: int = self.collection.count()
         if count == 0:
             return []
-        # query_embeddings = self.llm_embed.embed(query)
         entries = self.collection.query(
-            # query_embeddings=query_embeddings,
             query_texts=[query],
             n_results=min(top_num, count),
             include=["documents"]
         )
         return [doc for doc in entries["documents"][0]]
-
-
-class LlamaEmbeddingFunction(EmbeddingFunction):
-    "Llama embedding function"
-
-    def __init__(self, llm_embed):
-        self.llm_embed = llm_embed
-        return
-
-    def __call__(self, texts: Documents) -> Embeddings:
-        embeddings = []
-        # logging.getLogger("gthnk").info(f"Calculate embeddings for texts {texts}")
-        for t in texts:
-            e = self.llm_embed.embed(t)
-            embeddings.append(e)
-        return embeddings

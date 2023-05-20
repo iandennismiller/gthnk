@@ -4,12 +4,13 @@
 
 ### Milestone: 0.8
 
-- [ ] migration tool to leave sqlite backend
 - [ ] artifacts (replaces Pages)
+- [ ] migration tool to leave sqlite backend
 - [ ] repair day/entry mismatches
-- [ ] lazy load and export for filetree
 - [ ] paginate search results
-- [ ] LLM integration with ChromaDB
+- [ ] lazy load and export for filetree
+- [ ] improve LLM context and question answering
+- [x] LLM integration with ChromaDB
 - [x] web UI backed by filetree
 - [x] remove tags
 
