@@ -198,17 +198,14 @@ config_template = """
 
 INPUT_FILES = "{gthnk_path}/journal.txt"
 
-LAZY = True
-BACKEND = "filetree"
 FILETREE_ROOT="{gthnk_path}"
+LAZY = True
 
 LOG_FILENAME = "{gthnk_path}/gthnk.log"
 LOG_LEVEL = "INFO"
 
 SECRET_KEY = {secret_key}
 BASE_URL = "http://gthnk.lan"
-SQLALCHEMY_DATABASE_URI = "sqlite:///{gthnk_path}/gthnk.db"
-SQLALCHEMY_TRACK_MODIFICATIONS = False
 """
 
 

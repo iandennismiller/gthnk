@@ -77,9 +77,10 @@ class Gthnk(object):
         #     self.filetree.scan_ids()
 
     def ask_llm(self, query):
-        if LLM and not self.llm:
-            self.llm = LLM()
-        return self.llm.ask(query)
+        if LLM:
+            if not self.llm:
+                self.llm = LLM()
+            return self.llm.ask(query)
 
     def refresh_llm(self):
         if not LLM:

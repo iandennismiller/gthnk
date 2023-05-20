@@ -29,16 +29,20 @@ class LLM(object):
 
         if model_type in ["llama_ggmlv2", "llama_ggmlv3"]:
             num_query_results = 50
-            max_item_tokens = 40
-            max_context_tokens = 1024
+            max_item_tokens = 48
+            max_context_tokens = 384
         elif model_type == "llama":
             num_query_results = 50
             max_item_tokens = 40
             max_context_tokens = 256
         elif model_type == "mpt":
+            num_query_results = 100
+            max_item_tokens = 64
+            max_context_tokens = 2048
+        elif model_type == "gptj":
             num_query_results = 50
             max_item_tokens = 32
-            max_context_tokens = 128
+            max_context_tokens = 256
 
         context_list = self.context_db.query(query=prompt, top_num=num_query_results)
 
@@ -121,6 +125,7 @@ class LLM(object):
         else:
             raise Exception("Invalid model type")
 
+
         if not binary_path or not model_path:
             raise Exception(f"LLAMA_{model_type.toupper()}_BINARY_PATH or LLAMA_{model_type.toupper()}_MODEL_PATH not set")
 
@@ -139,9 +144,11 @@ class LLM(object):
             "--threads", LLAMA_THREADS_NUM,
             "--repeat_penalty", "1.1"
         ]
+        logging.getLogger("gthnk").info(f"Running LLAMA: {model_path}" + "\n")
         result_obj = subprocess.run(cmd, capture_output=True, text=True)
 
         if result_obj.returncode != 0:
+            logging.getLogger("gthnk").error(result_obj.stderr)
             result = "Error generating response"
         else:
             # remove everything before the prompt
@@ -178,6 +185,33 @@ class LLM(object):
 
         return result
 
+    def ask_gptj(self, prompt: str):
+        binary_path = os.getenv("GPTJ_BINARY_PATH")
+        model_path = os.getenv("GPTJ_MODEL_PATH")
+        if not binary_path or not model_path:
+            raise Exception("GPTJ_BINARY_PATH or GPTJ_MODEL_PATH not set")
+        
+        # run the mpt binary as a subprocess and get the result
+        binary_path = os.path.expanduser(binary_path)
+        model_path = os.path.expanduser(model_path)
+        cmd = [
+            binary_path,
+            "--model", model_path,
+            "--prompt", prompt,
+            "--threads", "8",
+            "--temp", "0.3",
+            "--n_predict", "256",
+        ]
+        result_raw = subprocess.run(cmd, capture_output=True, text=True).stdout
+
+        # remove everything before the prompt
+        result = result_raw.split(prompt)[1]
+        # remove everything after the response
+        result = result.split("main: mem per token = ")[0]
+        result = result.replace('<|endoftext|>', '')
+
+        return result
+
     def ask(self, prompt: str):
         model_type = os.getenv("LLM_TYPE", "llama_cpp")
         prompt_type = os.getenv("LLM_PROMPT_TYPE", "plain")
@@ -187,6 +221,8 @@ class LLM(object):
 
         if prompt_type == "wizard":
             prompt_fmt = wizard_prompt
+        elif prompt_type == "manticore":
+            prompt_fmt = manticore_prompt
         else:
             prompt_fmt = plain_prompt
         prompt = prompt_fmt.format(prompt=prompt, context=context)
@@ -201,6 +237,8 @@ class LLM(object):
             result = self.ask_llama(prompt)
         elif model_type == "mpt":
             result = self.ask_mpt(prompt)
+        elif model_type == "gptj":
+            result = self.ask_gptj(prompt)
 
         logging.getLogger("gthnk").info(f"LLM response: {result}")
         return result
@@ -267,7 +305,7 @@ class DefaultEntriesStorage(object):
         )
         return [doc for doc in entries["documents"][0]]
 
-wizard_prompt = """Below is context and an instruction that describes a task. Write a response that appropriately completes the request.
+wizard_prompt = """You are an Agent named Ian and you wrote all of the following context. Based on this context, write a response that appropriately completes the request.
 ### Context:
 {context}
 ### Instruction:
@@ -279,3 +317,11 @@ plain_prompt = """Consider this list of statements, which provide context for th
 {context}
 
 Based on that context, answer the following question: {prompt}'"""
+
+manticore_prompt = """
+### Context:
+{context}
+### Instruction:
+{prompt}
+### Response:
+"""
