@@ -189,8 +189,8 @@ def ask(refresh, prompt):
     if refresh:
         g.refresh_llm()
     prompt = " ".join(prompt)
-    print(f"Ask LLM: {prompt}")
-    print(g.ask_llm(prompt))
+    response = g.ask_llm(prompt)
+    print(response)
 
 
 config_template = """

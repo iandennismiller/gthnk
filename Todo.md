@@ -9,7 +9,8 @@
 - [ ] repair day/entry mismatches
 - [ ] paginate search results
 - [ ] lazy load and export for filetree
-- [ ] improve LLM context and question answering
+- [ ] time ranges for question asking
+- [x] improve LLM context and question answering
 - [x] LLM integration with ChromaDB
 - [x] web UI backed by filetree
 - [x] remove tags

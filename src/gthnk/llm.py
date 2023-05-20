@@ -1,11 +1,12 @@
 import os
 import sys
+import random
 import logging
+import subprocess
 
 from typing import Dict, List
 from contextlib import redirect_stderr, redirect_stdout
 
-from llama_cpp import Llama
 import chromadb
 from chromadb.api.types import Documents, EmbeddingFunction, Embeddings
 from chromadb.utils import embedding_functions
@@ -20,54 +21,189 @@ from .model.day import Day
 class LLM(object):
 
     def __init__(self):
-        CTX_MAX = 2048
+        logging.getLogger("gthnk").info("Initializing Vector DB...")
+        self.context_db = DefaultEntriesStorage()
+
+    def get_context(self, prompt, model_type):
+        logging.getLogger("gthnk").info("Generating context...")
+
+        if model_type in ["llama_ggmlv2", "llama_ggmlv3"]:
+            num_query_results = 50
+            max_item_tokens = 40
+            max_context_tokens = 1024
+        elif model_type == "llama":
+            num_query_results = 50
+            max_item_tokens = 40
+            max_context_tokens = 256
+        elif model_type == "mpt":
+            num_query_results = 50
+            max_item_tokens = 32
+            max_context_tokens = 128
+
+        context_list = self.context_db.query(query=prompt, top_num=num_query_results)
+
+        if context_list:
+            context_task = ''
+
+            for i, c in enumerate(context_list):
+                item = c.replace("\n", " ")
+                item_token_count = len(item.split(" "))
+
+                if item_token_count > max_item_tokens:
+                    item = " ".join(item.split(" ")[:max_item_tokens]) + "..."
+
+                context_task += f'{i+1}. {item}\n'
+                # context_task += f'{item}\n'
+
+                token_count = len(context_task.split(" "))
+                if token_count > max_context_tokens:
+                    break
+
+            return context_task
+        else:
+            return
+
+    def ask_llama(self, prompt: str):
+        from llama_cpp import Llama
+
         LLAMA_THREADS_NUM = int(os.getenv("LLAMA_THREADS_NUM", 8))
-        LLAMA_MODEL_PATH = os.path.expanduser(os.getenv("LLAMA_MODEL_PATH"))
-        logging.getLogger("gthnk").info(f"LLAMA : {LLAMA_MODEL_PATH}" + "\n")
+        if os.getenv("LLAMA_MODEL_PATH"):
+            LLAMA_MODEL_PATH = os.path.expanduser(os.getenv("LLAMA_MODEL_PATH"))
+            logging.getLogger("gthnk").info(f"Loading LLAMA: {LLAMA_MODEL_PATH}" + "\n")
+        else:
+            raise Exception("LLAMA_MODEL_PATH not set")
 
         # with open('/dev/null', 'w') as f:
         #     with redirect_stderr(f):
         #         with redirect_stdout(f):
-        self.llm = Llama(
-            model_path=LLAMA_MODEL_PATH,
-            # n_predict=1024,
-            n_ctx=CTX_MAX,
-            n_threads=LLAMA_THREADS_NUM,
-            n_batch=512,
-            verbose=False,
-            # use_mlock=True,
-        )
+        if not hasattr(self, "llm"):
+            self.llm = Llama(
+                model_path=LLAMA_MODEL_PATH,
+                n_ctx=2048,
+                n_threads=LLAMA_THREADS_NUM,
+                n_batch=512,
+                verbose=False,
+                # n_predict=1024,
+                # use_mlock=True,
+            )
 
-        self.context_db = DefaultEntriesStorage()
-
-        logging.getLogger("gthnk").info(f"Llama models loaded")
-
-    def ask(self, prompt: str, CTX_MAX: int = 2048):
-        context = self.context_db.query(query=prompt, top_num=100)
-        if context:
-            prompt_task = 'Consider the following context:\n'
-            for i, c in enumerate(context):
-                item = c.replace("\n", " ")
-                item_token_count = len(item.split(" "))
-                if item_token_count > 40:
-                    item = " ".join(item.split(" ")[:40])
-                prompt_task += f'{i+1}. {item}\n'
-                token_count = len(prompt_task.split(" "))
-                if token_count > 256:
-                    break
-            prompt_task += f'\nBased on that context, answer the following question: {prompt}'
-        else:
-            prompt_task = f'Answer the following question: {prompt}'
-
-        logging.getLogger("gthnk").info(prompt_task)
-
-        result = self.llm(
-            prompt_task[:CTX_MAX],
+        # prompt += "\n### Assistant: "
+        result_raw = self.llm(
+            prompt,
             stop=["### Human"],
-            echo=True,
+            echo=False,
             temperature=0.2
         )
-        return str(result['choices'][0]['text'].strip())
+        result_str = str(result_raw['choices'][0]['text'].strip())
+
+        # for Vicuna
+        results = result_str.split("### Assistant: ")
+        if len(results) >= 2:
+            result = results[1]
+        else:
+            result = result_str
+
+        return result
+
+    def ask_llama_ggmlv3(self, prompt: str):
+        return self.ask_llama_ggml(prompt, model_type="ggmlv3")
+
+    def ask_llama_ggmlv2(self, prompt: str):
+        return self.ask_llama_ggml(prompt, model_type="ggmlv2")
+
+    def ask_llama_ggml(self, prompt: str, model_type: str="ggmlv3"):
+        if model_type == "ggmlv3":
+            binary_path = os.getenv("LLAMA_GGMLV3_BINARY_PATH")
+            model_path = os.getenv("LLAMA_GGMLV3_MODEL_PATH")
+        elif model_type == "ggmlv2":
+            binary_path = os.getenv("LLAMA_GGMLV2_BINARY_PATH")
+            model_path = os.getenv("LLAMA_GGMLV2_MODEL_PATH")
+        else:
+            raise Exception("Invalid model type")
+
+        if not binary_path or not model_path:
+            raise Exception(f"LLAMA_{model_type.toupper()}_BINARY_PATH or LLAMA_{model_type.toupper()}_MODEL_PATH not set")
+
+        LLAMA_THREADS_NUM = os.getenv("LLAMA_THREADS_NUM", "8")
+
+        # run the mpt binary as a subprocess and get the result
+        binary_path = os.path.expanduser(binary_path)
+        model_path = os.path.expanduser(model_path)
+
+        cmd = [
+            binary_path,
+            "--model", model_path,
+            "--prompt", prompt,
+            "--temp", "0.3",
+            "--ctx-size", "2048",
+            "--threads", LLAMA_THREADS_NUM,
+            "--repeat_penalty", "1.1"
+        ]
+        result_obj = subprocess.run(cmd, capture_output=True, text=True)
+
+        if result_obj.returncode != 0:
+            result = "Error generating response"
+        else:
+            # remove everything before the prompt
+            result = result_obj.stdout.split(prompt)[1]
+            # remove everything after the response
+            result = result.split("main: mem per token = ")[0]
+            result = result.strip()
+
+        return result
+
+    def ask_mpt(self, prompt: str):
+        mpt_binary_path = os.getenv("MPT_BINARY_PATH")
+        mpt_model_path = os.getenv("MPT_MODEL_PATH")
+        if not mpt_binary_path or not mpt_model_path:
+            raise Exception("MPT_BINARY_PATH or MPT_MODEL_PATH not set")
+        
+        # run the mpt binary as a subprocess and get the result
+        mpt_binary_path = os.path.expanduser(mpt_binary_path)
+        mpt_model_path = os.path.expanduser(mpt_model_path)
+        mpt_cmd = [
+            mpt_binary_path,
+            "--model", mpt_model_path,
+            "--prompt", prompt,
+            "--threads", "7",
+            "--temp", "0.2",
+            "--n_predict", "256",
+        ]
+        result_raw = subprocess.run(mpt_cmd, capture_output=True, text=True).stdout
+
+        # remove everything before the prompt
+        result = result_raw.split(prompt)[1]
+        # remove everything after the response
+        result = result.split("main: mem per token = ")[0]
+
+        return result
+
+    def ask(self, prompt: str):
+        model_type = os.getenv("LLM_TYPE", "llama_cpp")
+        prompt_type = os.getenv("LLM_PROMPT_TYPE", "plain")
+        logging.getLogger("gthnk").info(f"Using LLM type: {model_type}, prompt type: {prompt_type}")
+
+        context = self.get_context(prompt=prompt, model_type=model_type)
+
+        if prompt_type == "wizard":
+            prompt_fmt = wizard_prompt
+        else:
+            prompt_fmt = plain_prompt
+        prompt = prompt_fmt.format(prompt=prompt, context=context)
+
+        logging.getLogger("gthnk").info(f"Prompting LLM: {prompt}")
+
+        if model_type == "llama_ggmlv2":
+            result = self.ask_llama_ggmlv2(prompt)
+        elif model_type == "llama_ggmlv3":
+            result = self.ask_llama_ggmlv3(prompt)
+        elif model_type == "llama":
+            result = self.ask_llama(prompt)
+        elif model_type == "mpt":
+            result = self.ask_mpt(prompt)
+
+        logging.getLogger("gthnk").info(f"LLM response: {result}")
+        return result
 
 
 class DefaultEntriesStorage(object):
@@ -86,13 +222,12 @@ class DefaultEntriesStorage(object):
             )
         )
 
-        metric = "cosine"
-        # /Users/idm/.cache/torch/sentence_transformers/sentence-transformers_all-mpnet-base-v2
+        # ~/.cache/torch/sentence_transformers/sentence-transformers_all-mpnet-base-v2
         embedding_function = embedding_functions.SentenceTransformerEmbeddingFunction(
             model_name="all-mpnet-base-v2"
-            # model_name="all-MiniLM-L6-v2"
         )
 
+        metric = "cosine"
         self.collection = chroma_client.get_or_create_collection(
             name="gthnk",
             metadata={"hnsw:space": metric},
@@ -118,7 +253,7 @@ class DefaultEntriesStorage(object):
                 documents=entry.content,
                 metadatas=metadatas,
             )
-            logging.getLogger("gthnk").debug(f"Calculate embeddings for entry {entry_id}")
+            logging.getLogger("gthnk").info(f"Calculate embeddings for entry {entry_id}")
             return True
 
     def query(self, query: str, top_num: int) -> List[dict]:
@@ -131,3 +266,16 @@ class DefaultEntriesStorage(object):
             include=["documents"]
         )
         return [doc for doc in entries["documents"][0]]
+
+wizard_prompt = """Below is context and an instruction that describes a task. Write a response that appropriately completes the request.
+### Context:
+{context}
+### Instruction:
+{prompt}
+### Response:"""
+
+plain_prompt = """Consider this list of statements, which provide context for the following question:
+
+{context}
+
+Based on that context, answer the following question: {prompt}'"""
