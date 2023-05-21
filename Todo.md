@@ -7,9 +7,10 @@
 - [ ] artifacts (replaces Pages)
 - [ ] migration tool to leave sqlite backend
 - [ ] repair day/entry mismatches
-- [ ] paginate search results
+- [ ] paginate web search results
 - [ ] lazy load and export for filetree
 - [ ] time ranges for question asking
+- [ ] split entries by paragraph for chromedb
 - [x] improve LLM context and question answering
 - [x] LLM integration with ChromaDB
 - [x] web UI backed by filetree
