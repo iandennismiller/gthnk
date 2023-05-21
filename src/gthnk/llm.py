@@ -42,7 +42,7 @@ class LLM(object):
         elif model_type == "gptj":
             num_query_results = 50
             max_item_tokens = 32
-            max_context_tokens = 256
+            max_context_tokens = 384
 
         context_list = self.context_db.query(query=prompt, top_num=num_query_results)
 

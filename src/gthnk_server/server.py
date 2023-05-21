@@ -35,6 +35,9 @@ def create_app():
     from .blueprints.root import root
     app.register_blueprint(root)
 
+    from .blueprints.api import api
+    app.register_blueprint(api)
+
     from .blueprints.auth import auth
     app.register_blueprint(auth)
 

@@ -60,6 +60,7 @@ setup(
         "python-dotenv",
         "pytest",
         "rich",
+        "requests",
     ],
     extras_require={
         "llm": [
