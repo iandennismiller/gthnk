@@ -5,16 +5,21 @@
 ### Milestone: 0.8
 
 - [ ] artifacts (replaces Pages)
+- [ ] paginate web search results
 - [ ] migration tool to leave sqlite backend
 - [ ] repair day/entry mismatches
-- [ ] paginate web search results
 - [ ] lazy load and export for filetree
-- [ ] time ranges for question asking
-- [ ] split entries by paragraph for chromedb
-- [x] improve LLM context and question answering
-- [x] LLM integration with ChromaDB
 - [x] web UI backed by filetree
 - [x] remove tags
+
+### Milestone: LLM
+
+- [ ] try cascading simpler models (e.g. summarize context)
+- [ ] time ranges for question asking
+- [ ] split entries by paragraph for chromedb
+- [ ] Ask in web ui
+- [x] improve LLM context and question answering
+- [x] LLM integration with ChromaDB
 
 ### Milestone: onboarding
 

@@ -1,6 +1,7 @@
 import os
 import sys
 import logging
+import datetime
 import subprocess
 
 from dotenv import load_dotenv
@@ -23,13 +24,13 @@ class LLM(LlamaGgml, LlamaCpp, MptGgml, GptJGgml, GptNeoxGgml):
         self.context_db = DefaultEntriesStorage()
 
         self.model_type = os.getenv("LLM_TYPE", "llama_cpp")
-        model_ask_method_name = f"ask_{model_type}"
+        model_ask_method_name = f"ask_{self.model_type}"
 
         if hasattr(self, model_ask_method_name):
             self._ask_llm = getattr(self, model_ask_method_name)
-            logging.getLogger("gthnk").info(f"LLM type: {model_type}")
+            logging.getLogger("gthnk").info(f"LLM type: {self.model_type}")
         else:
-            raise Exception(f"Unknown LLM type: {model_type}")
+            raise Exception(f"Unknown LLM type: {self.model_type}")
 
         self.prompt_type = os.getenv("LLM_PROMPT_TYPE", "plain")
         logging.getLogger("gthnk").info(f"LLM prompt type: {self.prompt_type}")
@@ -62,31 +63,60 @@ class LLM(LlamaGgml, LlamaCpp, MptGgml, GptJGgml, GptNeoxGgml):
     def get_prompt(self, query:str, context, prompt_type):
         prompt_var = f"{prompt_type}_prompt"
 
-        if prompt_var in prompts:
-            prompt_fmt = prompts[prompt_var]
+        if hasattr(prompts, prompt_var):
+            prompt_fmt = getattr(prompts, prompt_var)
             return prompt_fmt.format(
                 query=query,
                 context=context,
-                agent_prompt=agent_prompt,
+                agent_prompt=prompts.agent_prompt,
             )
         else:
             raise ValueError(f"Invalid prompt type: {prompt_type}")
 
-    def ask(self, query: str):
-        context = self.get_context(query=query, **context_params[model_type])
-        prompt = self.get_prompt(query=query, context=context, prompt_type=self.prompt_type)
+    def summarize(self, query, context):
+        prompt = self.get_prompt(query=query, context=context, prompt_type="summary")
+        summary = self.send_prompt(prompt, model_selection="summary")
+        return summary
 
-        logging.getLogger("gthnk").info(f"Prompting LLM: {prompt}")
-        result = self._ask_llm(prompt)
+    def send_prompt(self, prompt, model_selection="gpt"):
+        logging.getLogger("gthnk").info(f"LLM prompt: {prompt}")
+
+        start_time = datetime.datetime.now()
+        result = self._ask_llm(prompt, model_selection=model_selection)
+        end_time = datetime.datetime.now()
+
         logging.getLogger("gthnk").info(f"LLM response: {result}")
+        logging.getLogger("gthnk").info(f"LLM elapsed time: {end_time - start_time}")
+
+        return result
+
+    def ask(self, query: str):
+        context = self.get_context(query=query, **context_params[self.model_type])
+        # summary = self.summarize(query=query, context=context)
+        # prompt = self.get_prompt(query=query, context=summary, prompt_type=self.prompt_type)
+        prompt = self.get_prompt(query=query, context=context, prompt_type="summary")
+
+        llm_log = os.path.expanduser(os.getenv("LLM_LOG", "/tmp/gthnk-llm.log"))
+
+        with open(llm_log, "a") as f:
+            # get date and time as YYYY-MM-DD HHMM
+            datetime_str = datetime.datetime.now().strftime("%Y-%m-%d %H%M")
+            f.write(f"{datetime_str}\n\n> {query}\n\n")
+
+        result = self.send_prompt(prompt=prompt)
+
+        with open(llm_log, "a") as f:
+            datetime_str = datetime.datetime.now().strftime("%Y-%m-%d %H%M")
+            f.write(f"{datetime_str}\n\n{result}\n\n")
+
         return result
 
 
 context_params = {
     "llama_ggml": {
         "num_query_results": 50,
-        "max_item_tokens": 96,
-        "max_context_tokens": 1024,
+        "max_item_tokens": 64,
+        "max_context_tokens": 256,
         },
     "llama": {
         "num_query_results": 50,

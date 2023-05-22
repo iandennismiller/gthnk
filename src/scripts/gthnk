@@ -9,6 +9,7 @@ import datetime
 
 import requests
 import click
+from trogon import tui
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -17,6 +18,7 @@ from gthnk.model.journal import Journal
 from gthnk.filebuffer import FileBuffer
 
 
+@tui()
 @click.group()
 def cli():
     pass
@@ -207,7 +209,7 @@ def ask(refresh, api, prompt):
             result = g.ask_llm(query)
     else:
         if refresh:
-            g.refresh_llm()
+            g.refresh_embeddings()
         result = g.ask_llm(query)
 
     print(result)

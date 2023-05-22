@@ -5,8 +5,14 @@ import subprocess
 
 class LlamaGgml(object):
 
-    def ask_llama_ggml(self, prompt: str):
-        model_path = os.getenv("LLAMA_GGML_MODEL_PATH")
+    def ask_llama_ggml(self, prompt: str, model_selection="gpt"):
+        if model_selection == "gpt":
+            model_path = os.getenv("LLAMA_GGML_MODEL_PATH", None)
+        elif model_selection == "summary":
+            model_path = os.getenv("LLAMA_GGML_SUMMARY_MODEL_PATH", None)
+        else:
+            raise ValueError(f"Invalid model selection: {model_selection}")
+
         if not model_path:
             raise Exception(f"LLAMA_GGML_MODEL_PATH not set")
 
@@ -33,8 +39,10 @@ class LlamaGgml(object):
             "--model", model_path,
             "--prompt", prompt,
             "--prompt-cache", cache_filename,
+            "--prompt-cache-all",
             "--temp", "0.3",
-            "--ctx-size", "2048",
+            "--ctx-size", "1024",
+            "--keep", "-1",
             "--threads", os.getenv("LLAMA_THREADS_NUM", "6"),
         ]
 

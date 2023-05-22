@@ -82,11 +82,13 @@ class Gthnk(object):
                 self.llm = LLM()
             return self.llm.ask(query)
 
-    def refresh_llm(self):
+    def refresh_embeddings(self):
         if not LLM:
             return
         if not self.llm:
             self.llm = LLM()
+
+        self.logger.info(f"Refreshing Chroma DB embeddings for entries...")
 
         created_count = 0
         exists_count = 0
