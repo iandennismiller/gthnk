@@ -3,21 +3,21 @@ agent_prompt = """You are an Agent named Ian and you wrote all of the following 
 plain_prompt = """Consider the following context when responding:
 
 {context}
-Based on that context, write a response that appropriately completes this request: {prompt}
+Based on that context, write a response that appropriately completes this request: {query}
 """
 
 manticore_prompt = """
 ### Context:
 {context}
 ### Instruction:
-{prompt}
+{query}
 ### Response:
 """
 
 vicuna_prompt = """{agent_prompt}
 ### Context:
 {context}
-### User: {prompt}
+### User: {query}
 ### Assistant:"""
 
 vicuna_v1_prompt = """{agent_prompt}
@@ -25,7 +25,7 @@ vicuna_v1_prompt = """{agent_prompt}
 CONTEXT:
 
 {context}
-HUMAN: {prompt}
+HUMAN: {query}
 ASSISTANT:"""
 
 wizard_prompt = vicuna_v1_prompt
@@ -49,5 +49,5 @@ KoboldGPT: A seismograph is the primary earthquake measuring instrument. The sei
 
 {context}
 
-You: {prompt}
+You: {query}
 KoboldGPT:"""

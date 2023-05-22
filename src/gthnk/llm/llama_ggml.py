@@ -5,43 +5,40 @@ import subprocess
 
 class LlamaGgml(object):
 
-    def ask_llama_ggmlv3(self, prompt: str):
-        return self.ask_llama_ggml(prompt, model_type="ggmlv3")
+    def ask_llama_ggml(self, prompt: str):
+        model_path = os.getenv("LLAMA_GGML_MODEL_PATH")
+        if not model_path:
+            raise Exception(f"LLAMA_GGML_MODEL_PATH not set")
 
-    def ask_llama_ggmlv2(self, prompt: str):
-        return self.ask_llama_ggml(prompt, model_type="ggmlv2")
-
-    def ask_llama_ggml(self, prompt: str, model_type: str="ggmlv3"):
-        if model_type == "ggmlv3":
-            binary_path = os.getenv("LLAMA_GGMLV3_BINARY_PATH")
-            model_path = os.getenv("LLAMA_GGMLV3_MODEL_PATH")
-        elif model_type == "ggmlv2":
-            binary_path = os.getenv("LLAMA_GGMLV2_BINARY_PATH")
-            model_path = os.getenv("LLAMA_GGMLV2_MODEL_PATH")
-        else:
-            raise Exception("Invalid model type")
-
-        if not binary_path or not model_path:
-            raise Exception(f"LLAMA_{model_type.toupper()}_BINARY_PATH or LLAMA_{model_type.toupper()}_MODEL_PATH not set")
-
-        LLAMA_THREADS_NUM = os.getenv("LLAMA_THREADS_NUM", "8")
-
-        # run the mpt binary as a subprocess and get the result
-        binary_path = os.path.expanduser(binary_path)
+        # extract model name
         model_path = os.path.expanduser(model_path)
         model_filename = os.path.basename(model_path)
         model_filename_noext = os.path.splitext(model_filename)[0]
+        logging.getLogger("gthnk").info(f"Llama model: {model_filename_noext}")
+
+        # prompt cache
+        prompt_cache_path = os.getenv("LLAMA_GGML_PROMPT_CACHE_PATH", "/tmp")
+        cache_filename = os.path.join(os.path.expanduser(prompt_cache_path), f"{model_filename_noext}.cache")
+        logging.getLogger("gthnk").info(f"Llama prompt cache: {cache_filename}")
+
+        # ggml binary
+        binary_path = os.getenv("LLAMA_GGML_BINARY_PATH")
+        if not binary_path:
+            raise Exception(f"LLAMA_GGML_BINARY_PATH not set")
+        binary_path = os.path.expanduser(binary_path)
+        logging.getLogger("gthnk").info(f"Llama binary: {binary_path}")
 
         cmd = [
             binary_path,
             "--model", model_path,
             "--prompt", prompt,
-            "--prompt-cache", os.path.expanduser(f"~/.ai/cache/{model_filename_noext}.cache"),
-            "--temp", "0.2",
+            "--prompt-cache", cache_filename,
+            "--temp", "0.3",
             "--ctx-size", "2048",
-            "--threads", LLAMA_THREADS_NUM,
+            "--threads", os.getenv("LLAMA_THREADS_NUM", "6"),
         ]
-        logging.getLogger("gthnk").info(f"Running LLAMA: {model_path}" + "\n")
+
+        # run the llama.cpp binary as a subprocess and get the result
         result_obj = subprocess.run(cmd, capture_output=True, text=True)
 
         if result_obj.returncode != 0:

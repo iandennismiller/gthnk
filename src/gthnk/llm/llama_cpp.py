@@ -5,7 +5,7 @@ import subprocess
 
 class LlamaCpp(object):
 
-    def ask_llama(self, prompt: str):
+    def ask_llama_cpp(self, prompt: str):
         from llama_cpp import Llama
 
         LLAMA_THREADS_NUM = int(os.getenv("LLAMA_THREADS_NUM", 8))
