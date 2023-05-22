@@ -10,12 +10,13 @@ from .llama_ggml import LlamaGgml
 from .llama_cpp import LlamaCpp
 from .mpt import MptGgml
 from .gptj import GptJGgml
+from .gpt_neox import GptNeoxGgml
 
 from .prompts import *
 from .vectordb import DefaultEntriesStorage
 
 
-class LLM(LlamaGgml, LlamaCpp, MptGgml, GptJGgml):
+class LLM(LlamaGgml, LlamaCpp, MptGgml, GptJGgml, GptNeoxGgml):
 
     def __init__(self):
         logging.getLogger("gthnk").info("Initializing Vector DB...")
@@ -36,10 +37,10 @@ class LLM(LlamaGgml, LlamaCpp, MptGgml, GptJGgml):
             num_query_results = 100
             max_item_tokens = 64
             max_context_tokens = 2048
-        elif model_type == "gptj":
+        elif model_type in ["gptj", "gptneox"]:
             num_query_results = 50
-            max_item_tokens = 32
-            max_context_tokens = 384
+            max_item_tokens = 128
+            max_context_tokens = 2048
 
         context_list = self.context_db.query(query=prompt, top_num=num_query_results)
 
@@ -64,13 +65,7 @@ class LLM(LlamaGgml, LlamaCpp, MptGgml, GptJGgml):
         else:
             return
 
-    def ask(self, prompt: str):
-        model_type = os.getenv("LLM_TYPE", "llama_cpp")
-        prompt_type = os.getenv("LLM_PROMPT_TYPE", "plain")
-        logging.getLogger("gthnk").info(f"Using LLM type: {model_type}, prompt type: {prompt_type}")
-
-        context = self.get_context(prompt=prompt, model_type=model_type)
-
+    def get_prompt(self, prompt:str, context, prompt_type):
         if prompt_type == "wizard":
             prompt_fmt = wizard_prompt
         elif prompt_type == "manticore":
@@ -90,6 +85,15 @@ class LLM(LlamaGgml, LlamaCpp, MptGgml, GptJGgml):
             agent_prompt=agent_prompt,
         )
 
+        return prompt
+
+    def ask(self, prompt: str):
+        model_type = os.getenv("LLM_TYPE", "llama_cpp")
+        prompt_type = os.getenv("LLM_PROMPT_TYPE", "plain")
+        logging.getLogger("gthnk").info(f"Using LLM type: {model_type}, prompt type: {prompt_type}")
+
+        context = self.get_context(prompt=prompt, model_type=model_type)
+        prompt = self.get_prompt(prompt=prompt, context=context, prompt_type=prompt_type)
         logging.getLogger("gthnk").info(f"Prompting LLM: {prompt}")
 
         if model_type == "llama_ggmlv2":
@@ -102,6 +106,10 @@ class LLM(LlamaGgml, LlamaCpp, MptGgml, GptJGgml):
             result = self.ask_mpt(prompt)
         elif model_type == "gptj":
             result = self.ask_gptj(prompt)
+        elif model_type == "gptneox":
+            result = self.ask_gpt_neox(prompt)
+        else:
+            raise Exception(f"Unknown LLM type: {model_type}")
 
         logging.getLogger("gthnk").info(f"LLM response: {result}")
         return result

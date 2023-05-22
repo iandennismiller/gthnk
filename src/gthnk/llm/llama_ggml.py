@@ -21,7 +21,6 @@ class LlamaGgml(object):
         else:
             raise Exception("Invalid model type")
 
-
         if not binary_path or not model_path:
             raise Exception(f"LLAMA_{model_type.toupper()}_BINARY_PATH or LLAMA_{model_type.toupper()}_MODEL_PATH not set")
 
