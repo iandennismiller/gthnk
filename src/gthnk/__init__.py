@@ -80,7 +80,7 @@ class Gthnk(object):
         if LLM:
             if not self.llm:
                 self.llm = LLM()
-            return self.llm.cascade(query)
+            return self.llm.instruct(query)
 
     def refresh_embeddings(self):
         if not LLM:

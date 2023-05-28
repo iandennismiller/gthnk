@@ -19,8 +19,7 @@ class Llama(object):
         self.model_path = os.path.expanduser(model_path)
         model_filename = os.path.basename(model_path)
         model_filename_noext = os.path.splitext(model_filename)[0]
-        logging.getLogger("gthnk").info(f"Llama model: {model_filename_noext}")
-        logging.getLogger("gthnk").info(f"Llama prompt: {prompt_type}")
+        logging.getLogger("gthnk").info(f"Llama prompt: {prompt_type}; model: {model_filename_noext}")
         
         # prompt cache
         prompt_cache_path = os.getenv("LLAMA_PROMPT_CACHE_PATH", "/tmp")
@@ -50,8 +49,8 @@ class Llama(object):
         return self.context_db.generate_context(
             query=query, 
             num_query_results = 50,
-            max_item_tokens = 64,
-            max_context_tokens = 256,
+            max_item_tokens = 48,
+            max_context_tokens = 512,
         )
 
     def query(self, query_str:str, context:str=None, prompt_type:str="instruct"):
@@ -71,14 +70,13 @@ class Llama(object):
             self.binary_path,
             "--prompt", prompt,
             "--model", self.model_path,
-            "--prompt-cache", self.cache_filename,
-            "--prompt-cache-all",
             "--temp", "0.3",
             "--ctx-size", "2048",
-            "--batch-size", "8",
-            "--keep", "-1",
+            "--batch-size", "16",
             "--n-predict", "512",
             "--threads", self.num_threads,
+            # "--prompt-cache", self.cache_filename,
+            # "--prompt-cache-all",
         ]
 
         # log the prompt and start time
@@ -87,6 +85,7 @@ class Llama(object):
 
         # run the llama.cpp binary as a subprocess and get the result
         result_obj = subprocess.run(cmd, capture_output=True, text=True)
+
         # log the result and end time
         end_time = datetime.datetime.now()
         logging.getLogger("gthnk").info(f"LLM elapsed time: {end_time - start_time}")

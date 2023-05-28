@@ -19,17 +19,16 @@ class Prompter(object):
 
 summary_prompt = """You are SummarizingAgent. When you are given a list, you are able to summarize it with 10 detailed items expressing the main ideas of the list.
 
-### List:
 {context}
-### Instruction: What are the main ideas in that list? Respond with a detailed list.
+
+### Instruction: What are the main ideas in list above? Respond with a detailed summary.
 ### Response: """
 
 ###
 # Instruct Prompt
 
-instruct_prompt = """You are ContextAgent. When you are given context and an instruction, you have the ability to use that context while responding to the instruction.
+instruct_prompt = """You are ContextAgent. When you are given context and an instruction, you have the ability to use that context while responding to the instruction. Do not respond with a list unless asked to do so. 
 
-### Context:
 {context}
-### Instruction: Consider the context above. {query}
+### Instruction: Synthesize the information above to respond to the following. {query}
 ### Response: """

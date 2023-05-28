@@ -15,6 +15,7 @@ class LLM(object):
             prompt_type="instruct",
             context_db=context_db, 
         )
+
         self.summary_llm = Llama(
             model_path=os.getenv("LLAMA_SUMMARY_MODEL_PATH"),
             prompt_type="summary",
@@ -25,9 +26,9 @@ class LLM(object):
         "Use LLM to summarize a list of context items"
         return self.summary_llm.query(query)
 
-    def instruct(self, query:str, context:str=None):
+    def instruct(self, query:str):
         "Send an instruction to the LLM and return the response"
-        return self.instruct_llm.query(query, context=context)
+        return self.instruct_llm.query(query)
 
     def cascade(self, query:str):
         "Use cascaded models to summarize, then query"
