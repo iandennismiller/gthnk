@@ -11,11 +11,12 @@ from ..model.entry import Entry
 from ..model.day import Day
 
 
-class DefaultEntriesStorage(object):
+class ContextStorage(object):
     "Entries storage using local ChromaDB"
 
     def __init__(self):
         logging.getLogger('chromadb').setLevel(logging.ERROR)
+        logging.getLogger("gthnk").info("Initializing Vector DB...")
 
         # Create Chroma collection
         CHROMA_PERSIST_DIR = os.getenv("CHROMA_PERSIST_DIR", "chroma")
@@ -71,3 +72,30 @@ class DefaultEntriesStorage(object):
             include=["documents"]
         )
         return [doc for doc in entries["documents"][0]]
+
+    def generate_context(self, query, num_query_results, max_item_tokens, max_context_tokens):
+        "Based on query, format the results into a context string suitable for an LLM prompt"
+
+        context_list = self.query(query=query, top_num=num_query_results)
+
+        if context_list:
+            context_task = ''
+
+            for i, c in enumerate(context_list):
+                item = c.replace("\n", " ")
+                item_token_count = len(item.split(" "))
+
+                if item_token_count > max_item_tokens:
+                    item = " ".join(item.split(" ")[:max_item_tokens]) + "..."
+
+                context_task += f'{i+1}. {item}\n'
+                # context_task += f'{item}\n'
+
+                token_count = len(context_task.split(" "))
+                if token_count > max_context_tokens:
+                    break
+
+            logging.getLogger("gthnk").info(f"Generated {i+1} context items for query: {query}")
+            return context_task
+        else:
+            return
