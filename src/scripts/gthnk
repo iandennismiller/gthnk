@@ -184,11 +184,10 @@ def get_artifact(uri, path, load, day_id, sequence):
         print(artifact)
 
 @cli.command()
-@click.option('--refresh', is_flag=True, default=False, help="Load new entries into vector db")
 @click.option('--api', is_flag=True, default=False, help="Query the API instead of the local LLM")
 @click.argument('prompt', nargs=-1, required=True)
 def ask(refresh, api, prompt):
-    "Use the LLM to answer a question based on journal entries"
+    "Answer a question based on journal entries"
     query = " ".join(prompt)
     g = Gthnk()
 
@@ -202,17 +201,59 @@ def ask(refresh, api, prompt):
                 result = req_json["result"]
                 elapsed = req_json["elapsed"]
                 logging.getLogger("gthnk").info(f"API result received in {elapsed} seconds")
+                print(result)
             else:
-                result = "API Error"
+                print("API Error")
+            return
 
+        # if connection error, fall back to local LLM
         except requests.exceptions.ConnectionError:
-            result = g.ask_llm(query)
-    else:
-        if refresh:
-            g.refresh_embeddings()
-        result = g.ask_llm(query)
+            pass
 
-    print(result)
+    # run the query against the local LLM
+    if g.llm:
+        print(g.llm.ask(query))
+
+@cli.command()
+def embeddings():
+    "Refresh LLM embeddings"
+    g = Gthnk()
+    if g.llm:
+        g.llm.refresh_embeddings()
+
+@cli.command()
+@click.argument('prompt', nargs=-1, required=True)
+def summarize(prompt):
+    "Summarize what Gthnk knows about a topic"
+    g = Gthnk()
+    if g.llm:
+        print(g.llm.summarize(query=" ".join(prompt)))
+
+@cli.command()
+@click.argument('prompt', nargs=-1, required=True)
+def instruct(prompt):
+    "Do something based on journal entries"
+    g = Gthnk()
+    if g.llm:
+        print(g.llm.instruct(query=" ".join(prompt)))
+
+
+@cli.command()
+@click.argument('prompt', nargs=-1, required=True)
+def keywords(prompt):
+    "Generate keywords related to a prompt, based on journal entries"
+    g = Gthnk()
+    if g.llm:
+        print(g.llm.keywords(query=" ".join(prompt)))
+
+
+@cli.command()
+@click.argument('prompt', nargs=-1, required=True)
+def table(prompt):
+    "Generate a table related to a prompt, based on journal entries"
+    g = Gthnk()
+    if g.llm:
+        print(g.llm.table(query=" ".join(prompt)))
 
 
 config_template = """

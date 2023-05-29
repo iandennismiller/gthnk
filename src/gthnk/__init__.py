@@ -7,11 +7,6 @@ from .utils import init_logger
 from .filebuffer import FileBuffer
 from .filetree import FileTreeRoot
 
-try:
-    from .llm import LLM
-except ModuleNotFoundError:
-    LLM = None
-
 
 class Gthnk(object):
     def __init__(self, config_filename=None):
@@ -52,9 +47,6 @@ class Gthnk(object):
         from .model.journal import Journal
         self.journal = Journal(gthnk=self)
 
-        # self.lazy = True
-        self.llm = None
-
         # if self.config["BACKEND"] == "filetree":
         self.init_filetree(filetree_root=self.config["FILETREE_ROOT"])
 
@@ -76,32 +68,16 @@ class Gthnk(object):
         # else:
         #     self.filetree.scan_ids()
 
-    def ask_llm(self, query):
-        if LLM:
-            if not self.llm:
-                self.llm = LLM()
-            return self.llm.instruct(query)
-
-    def refresh_embeddings(self):
-        if not LLM:
-            return
-        if not self.llm:
-            self.llm = LLM()
-
-        self.logger.info(f"Refreshing Chroma DB embeddings for entries...")
-
-        created_count = 0
-        exists_count = 0
-
-        for day in self.journal.days.values():
-            for entry in day.entries.values():
-                created = self.llm.context_db.add(entry)
-                if created:
-                    created_count += 1
-                else:
-                    exists_count += 1
-
-        self.logger.info(f"Refreshed entries in LLM context db: created {created_count}, exists {exists_count}")
+    @property
+    def llm(self):
+        "Lazy-load the LLM object."
+        if not hasattr(self, "_llm"):
+            try:
+                from .llm import LLM
+                self._llm = LLM(self)
+            except ModuleNotFoundError:
+                self._llm = None
+        return self._llm
 
     def register_buffers(self, buffer_filenames):
         "Register a new buffer with the journal."

@@ -19,7 +19,7 @@ class Llama(object):
         self.model_path = os.path.expanduser(model_path)
         model_filename = os.path.basename(model_path)
         model_filename_noext = os.path.splitext(model_filename)[0]
-        logging.getLogger("gthnk").info(f"Llama prompt: {prompt_type}; model: {model_filename_noext}")
+        logging.getLogger("gthnk").info(f"Llama(prompt='{prompt_type}', model='{model_filename_noext}')")
         
         # prompt cache
         prompt_cache_path = os.getenv("LLAMA_PROMPT_CACHE_PATH", "/tmp")
@@ -51,8 +51,8 @@ class Llama(object):
 
         return self.prompter.generate_context(
             context_list=context_list, 
-            max_item_tokens = 24,
-            max_context_tokens = 128,
+            max_item_tokens = 64,
+            max_context_tokens = 512,
         )
 
     def query(self, query_str:str, context:str=None, prompt_type:str="instruct"):
@@ -72,10 +72,10 @@ class Llama(object):
             self.binary_path,
             "--prompt", prompt,
             "--model", self.model_path,
-            "--temp", "0.3",
+            "--temp", "0.4",
             "--ctx-size", "2048",
-            "--batch-size", "16",
-            "--n-predict", "512",
+            "--batch-size", self.num_threads,
+            "--n-predict", "384",
             "--threads", self.num_threads,
             # "--prompt-cache", self.cache_filename,
             # "--prompt-cache-all",

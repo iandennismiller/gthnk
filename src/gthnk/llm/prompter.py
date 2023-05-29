@@ -1,12 +1,11 @@
 import os
+import re
 
 
 class Prompter(object):
     def __init__(self, prompt_type:str):
-        if prompt_type == "instruct":
-            self.prompt_fmt = instruct_prompt
-        elif prompt_type == "summary":
-            self.prompt_fmt = summary_prompt
+        if prompt_map.get(prompt_type):
+            self.prompt_fmt = prompt_map.get(prompt_type)
         else:
             raise ValueError(f"Invalid prompt type: {prompt_type}")
 
@@ -21,43 +20,102 @@ class Prompter(object):
         "Format a list of context items into a string suitable for an LLM prompt"
 
         if context_list:
-            context_task = ''
+            items = []
 
             for i, c in enumerate(context_list):
-                item = c.replace("\n", " ")
-                item_token_count = len(item.split(" "))
+                item = c
+                item = re.sub("\s+", " ", item)
+                item = re.sub(r" \.\.\. ", ". ", item)
+                item = re.sub(r" \.\.\.", ".", item)
+                item = re.sub(r"\.\.\.", ".", item)
+                item = re.sub(r"^- \[ \] ", "; ", item)
+                item = re.sub(r"^- ", "; ", item)
+                item = re.sub(r" - ", "; ", item)
+                item = re.sub(r"^Okay.\s", "", item)
+                item = re.sub(r"^So\s", "", item)
+                item = re.sub(r"\n", " ", item)
 
+                item_token_count = len(item.split(" "))
                 if item_token_count > max_item_tokens:
                     item = " ".join(item.split(" ")[:max_item_tokens]) + "..."
+                    item_token_count = len(item.split(" "))
 
-                # context_task += f'{i+1}. {item}\n'
-                context_task += f'{item}\n\n'
-
-                token_count = len(context_task.split(" "))
-                if token_count > max_context_tokens:
+                current_token_count = len("\n".join(items).split(" "))
+                if current_token_count + item_token_count > max_context_tokens:
                     break
+                
+                # context_task += f'{i+1}. {item}\n'
+                # context_task += f'{item}\n\n'
+                items.append(f'- {item}')
 
-            return context_task
+            return "\n".join(items)
         else:
             return
 
 
 ###
-# Summary Prompt
+# Filter Prompts
 
-summary_prompt = """[You are {your_name}. When you are given a list, you are able to summarize it with 10 detailed items expressing the main ideas of the list.
-
-{context}]
-
-### Instruction: What are the main ideas in list above? Respond with a detailed summary that is not a numbered list.
+summary_prompt = """### Instruction: We have provided context information below.
+------------
+{context}
+------------
+Rewrite the items in this list to summarize the main ideas with as much detail as necessary.
 ### Response: """
+
+
+filter_prompt = """### Instruction: We have provided context information below.
+------------
+{context}
+------------
+Rewrite this list, keeping only those items related to the following topic: "{query}".
+### Response: """
+
+
+keyword_prompt = """### Instruction: Some text is provided below.
+------------
+{context}
+------------
+Given the text, extract up to 6 keywords from the text. Avoid stopwords. Provide keywords in comma-separated format.
+### Response: """
+
+
+table_prompt = """### Instruction: Some text is provided below.
+------------
+{context}
+------------
+Given this text, classify each item by topic add it to a table with columns "topic" and "item".
+### Response: """
+
 
 ###
-# Instruct Prompt
+# Directed Prompts
 
-instruct_prompt = """[You are {your_name}. The following facts are true, which you will combine to answer the question below. You may not copy and paste the facts, but you will use them to answer the question. These are the facts:
-
-{context}]
-
-### Instruction: Refer to those facts while responding to the following: {query}
+instruct_prompt = """### Instruction: You are {your_name}. We have provided context information below.
+------------
+{context}
+------------
+Based solely on the information above, write a response that appropriately completes this request: "{query}".
 ### Response: """
+
+
+ask_prompt = """### Instruction: You are {your_name}. We have provided context information below.
+------------
+{context}
+------------
+Using the text above and no prior knowledge, compose a paragraph that answers the following question: "{query}".
+### Response: """
+# Explain which items in the text support your answer.
+
+
+###
+# Prompt map
+
+prompt_map = {
+    "instruct": instruct_prompt,
+    "summary": summary_prompt,
+    "filter": filter_prompt,
+    "keyword": keyword_prompt,
+    "table": table_prompt,
+    "ask": ask_prompt,
+}
