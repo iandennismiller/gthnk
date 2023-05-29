@@ -46,11 +46,13 @@ class Llama(object):
 
     def get_context(self, query: str):
         "Generate context from ContextStorage with parameters suitable for LLAMA"
-        return self.context_db.generate_context(
-            query=query, 
-            num_query_results = 50,
-            max_item_tokens = 48,
-            max_context_tokens = 512,
+        context_list = self.context_db.query(query=query)
+        logging.getLogger("gthnk").info(f"Generated {len(context_list)+1} context items for query: {query}")
+
+        return self.prompter.generate_context(
+            context_list=context_list, 
+            max_item_tokens = 24,
+            max_context_tokens = 128,
         )
 
     def query(self, query_str:str, context:str=None, prompt_type:str="instruct"):
