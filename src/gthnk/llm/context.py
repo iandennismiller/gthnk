@@ -1,4 +1,5 @@
 import os
+import re
 import logging
 
 from typing import Dict, List
@@ -72,3 +73,40 @@ class ContextStorage(object):
             include=["documents"]
         )
         return [doc for doc in entries["documents"][0]]
+
+    def as_string(self, context_list, max_item_tokens, max_context_tokens):
+        "Format a list of context items into a string suitable for an LLM prompt"
+
+        if context_list:
+            items = []
+
+            for i, c in enumerate(context_list):
+                item = c
+                item = re.sub("\s+", " ", item)
+                item = re.sub(r" \.\.\. ", ". ", item)
+                item = re.sub(r" \.\.\.", ".", item)
+                item = re.sub(r"\.\.\.", ".", item)
+                item = re.sub(r"^- \[ \] ", "; ", item)
+                item = re.sub(r"^- ", "; ", item)
+                item = re.sub(r" - ", "; ", item)
+                item = re.sub(r"^Okay.\s", "", item)
+                item = re.sub(r"^So\s", "", item)
+                item = re.sub(r"\n", " ", item)
+
+                item_token_count = len(item.split(" "))
+                if item_token_count > max_item_tokens:
+                    item = " ".join(item.split(" ")[:max_item_tokens]) + "..."
+                    item_token_count = len(item.split(" "))
+
+                current_token_count = len("\n".join(items).split(" "))
+                if current_token_count + item_token_count > max_context_tokens:
+                    break
+                
+                # context_task += f'{i+1}. {item}\n'
+                # context_task += f'{item}\n\n'
+                items.append(f'- {item}')
+
+            return "\n".join(items)
+        else:
+            return
+

@@ -186,7 +186,7 @@ def get_artifact(uri, path, load, day_id, sequence):
 @cli.command()
 @click.option('--api', is_flag=True, default=False, help="Query the API instead of the local LLM")
 @click.argument('prompt', nargs=-1, required=True)
-def ask(refresh, api, prompt):
+def ask(api, prompt):
     "Answer a question based on journal entries"
     query = " ".join(prompt)
     g = Gthnk()

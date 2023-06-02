@@ -14,16 +14,15 @@
 
 ### Milestone: LLM
 
-- [ ] try cascading simpler models (e.g. summarize context)
 - [ ] Ask() in web ui
-- [ ] use LangChain for summarize(), ask()
-- [ ] use marella/ctransformers instead of ggml subprocess
+- [x] try cascading simpler models (e.g. summarize context)
 - [x] improve LLM context and question answering
 - [x] LLM integration with ChromaDB
 
 ### Milestone: LLM content
 
 - [ ] time ranges for question asking
+- [ ] add dates to entries, include today's date in prompt
 - [ ] token frequency over time; surface to focus time ranges
 - [ ] split entries by paragraph for chromadb
 - [ ] Summarize each entry, day, week

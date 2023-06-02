@@ -4,6 +4,7 @@ import datetime
 import subprocess
 
 from .prompter import Prompter
+from llama_cpp import Llama as LlamaCpp
 
 
 class Llama(object):
@@ -12,8 +13,15 @@ class Llama(object):
     """
 
     def __init__(self, model_path, prompt_type, context_db):
-        self.context_db = context_db
-        self.prompter = Prompter(prompt_type=prompt_type)
+        # determine model type from model path
+        if "guanaco" in model_path.lower():
+            model_type = "guanaco"
+        elif "vicuna" in model_path.lower():
+            model_type = "vicuna"
+        elif "alpaca" in model_path.lower():
+            model_type = "alpaca"
+
+        self.prompter = Prompter(model_type=model_type, prompt_type=prompt_type)
 
         # extract model name
         self.model_path = os.path.expanduser(model_path)
@@ -35,8 +43,8 @@ class Llama(object):
 
         # store queries and results in a separate file (i.e. not the main log)
         self.log_filename = os.path.expanduser(os.getenv("LLM_LOG", "/tmp/gthnk-llm.log"))
-
         self.num_threads = os.getenv("LLAMA_NUM_THREADS", "6")
+        self.context_db = context_db
 
     def save_interaction(self, message: str):
         with open(self.log_filename, "a") as f:
@@ -49,8 +57,8 @@ class Llama(object):
         context_list = self.context_db.query(query=query)
         logging.getLogger("gthnk").info(f"Generated {len(context_list)+1} context items for query: {query}")
 
-        return self.prompter.generate_context(
-            context_list=context_list, 
+        return self.context_db.as_string(
+            context_list=context_list,
             max_item_tokens = 64,
             max_context_tokens = 512,
         )
@@ -108,8 +116,6 @@ class Llama(object):
         return result
 
     def send_prompt_pythonic(self, prompt: str):
-        from llama_cpp import Llama as LlamaCpp
-
         LLAMA_THREADS_NUM = int(os.getenv("LLAMA_THREADS_NUM", 6))
         if os.getenv("LLAMA_MODEL_PATH"):
             LLAMA_MODEL_PATH = os.path.expanduser(os.getenv("LLAMA_MODEL_PATH"))
