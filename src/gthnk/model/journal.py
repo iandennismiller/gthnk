@@ -19,6 +19,10 @@ class Journal(object):
         day = self.get_day(day_id)
         return day.get_entry(timestamp_str)
 
+    def get_artifact(self, day_id, sequence):
+        day = self.get_day(day_id)
+        return day.get_artifact(sequence)
+
     @property
     def uri(self):
         return "/"

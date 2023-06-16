@@ -1,6 +1,7 @@
 import os
 
 from .entry import Entry
+from .artifact import Artifact
 
 
 class Day(object):
@@ -8,6 +9,7 @@ class Day(object):
         self.journal = journal
         self.day_id = day_id
         self.entries = {}
+        self.artifacts = {}
 
     def get_entry(self, timestamp_str):
         if timestamp_str is None:
@@ -17,6 +19,14 @@ class Day(object):
             self.entries[timestamp_str] = new_entry
 
         return self.entries[timestamp_str]
+
+    def get_artifact(self, sequence=None, filename=None):
+        if sequence is None:
+            sequence = len(self.artifacts)
+        sequence_str = str(sequence)
+        if sequence_str not in self.artifacts:
+            self.artifacts[sequence_str] = Artifact(day=self, sequence=sequence, filename=filename)
+        return self.artifacts[sequence_str]
 
     @property
     def uri(self):

@@ -58,6 +58,7 @@ class Gthnk(object):
         )
 
         self.filetree.days.load_all()
+        self.filetree.artifacts.load_all()
 
         # # only load all days if lazy is explicitly False
         # if "lazy" in self.config and self.config["LAZY"] is False:

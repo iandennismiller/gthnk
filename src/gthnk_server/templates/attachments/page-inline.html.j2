@@ -1,0 +1,31 @@
+      <div id="pages_inline">
+        {% for page in day.pages %}
+
+          <div class="page_attachment" id="page{{ page.sequence }}">
+            <a id="{{ page.sequence }}" name="{{ page.sequence }}"></a>
+
+            <div class="image_container">
+              <img src="{{ url_for('gthnk.preview', date=day.date, sequence=page.sequence) }}">
+
+              <div class="controllable">
+                <div class="viewable">
+                  <a anchorid="{{page.sequence}}" href="{{ url_for('gthnk.attachment', date=day.date, sequence=page.sequence, extension=page.extension) }}" title="download"><i class="icon-download-alt"></i></a>
+                </div>
+
+                <div class="editable">
+                  <a href="{{ url_for('gthnk.move_page_up', date=day.date, sequence=page.sequence) }}" title="move up"><i class="icon-arrow-up"></i></a>
+                  <a href="{{ url_for('gthnk.move_page_down', date=day.date, sequence=page.sequence) }}" title="move down"><i class="icon-arrow-down"></i></a>
+
+                  <span class="delete_widget">
+                    <a class="delete_button" href="javascript:void(0);" title="delete"><i class="icon-trash"></i></a>
+                    <span class="confirm_widget">
+                      <a href="{{ url_for('gthnk.delete_page', date=day.date, sequence=page.sequence) }}" title="yes delete"><i class="icon-ok"></i></a>
+                      <a class="cancel_button" href="javascript:void(0);" title="do not delete"><i class="icon-remove"></i></a>
+                    </span>
+                  </span>
+                </div>
+              </div>
+          </div>
+
+        {% endfor %}
+      </div>

@@ -55,6 +55,8 @@ setup(
     install_requires=[
         "six",
         "puremagic",
+        "PyPDF2",
+        "Pillow",
         "python-dotenv",
         "pytest",
         "rich",
@@ -72,6 +74,12 @@ setup(
             "pylint",
             "Flask-Testing",
             "rstcheck",
+        ],
+        "7_to_8": [
+            "Flask-Migrate==2.6.0",
+            "SQLAlchemy==1.4",
+            "Flask-SQLAlchemy",
+            "Flask-Script",
         ],
         "server": [
             "jinja2<3.1.0",
