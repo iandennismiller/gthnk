@@ -68,5 +68,9 @@ model_setup = {
     "alpaca": {
         "setting": "Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.",
         "turn_template": "{setting}\n\n### Instruction:\n{instruction_1} {instruction_2}\n\n### Input:\n{context}\n\n### Response:\n",
-    }
+    },
+    "based": {
+        "setting": "A chat between a curious human and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.\n",
+        "turn_template": "{setting}\nHuman: {instruction_1}\n------------\n{context}\n------------\n{instruction_2}\nAssistant: ",
+    },
 }

@@ -20,6 +20,8 @@ class Llama(object):
             model_type = "vicuna"
         elif "alpaca" in model_path.lower():
             model_type = "alpaca"
+        elif "hermes" in model_path.lower():
+            model_type = "alpaca"
 
         self.prompter = Prompter(model_type=model_type, prompt_type=prompt_type)
 
@@ -60,7 +62,7 @@ class Llama(object):
         return self.context_db.as_string(
             context_list=context_list,
             max_item_tokens = 64,
-            max_context_tokens = 512,
+            max_context_tokens = 384,
         )
 
     def query(self, query_str:str, context:str=None, prompt_type:str="instruct"):
