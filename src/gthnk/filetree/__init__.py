@@ -2,7 +2,6 @@ import os
 
 from ..model.journal import Journal
 
-from .artifacts import FileTreeArtifacts
 from .entries import FileTreeEntries
 from .days import FileTreeDays
 
@@ -33,7 +32,6 @@ class FileTreeRoot(object):
 
         self.days = FileTreeDays(self)
         self.entries = FileTreeEntries(self)
-        self.artifacts = FileTreeArtifacts(self)
 
     def decode_path(self, path):
         "Return the journal object for a given filesystem path."
