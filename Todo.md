@@ -9,6 +9,7 @@
 - [ ] migration tool to leave sqlite backend
 - [ ] repair day/entry mismatches
 - [ ] lazy load and export for filetree
+- [ ] integration tools, perhaps
 - [x] web UI backed by filetree
 - [x] remove tags
 
