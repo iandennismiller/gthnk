@@ -44,9 +44,6 @@ def create_app():
     from .blueprints.day import day
     app.register_blueprint(day)
 
-    from .blueprints.attachments import attachments
-    app.register_blueprint(attachments)
-
     login_manager.init_app(app)
     app.markdown = Markdown(app, extensions=[
         LinkifyExtension(),
