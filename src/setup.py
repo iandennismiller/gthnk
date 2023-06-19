@@ -54,7 +54,6 @@ setup(
     url=grep('__url__'),
     install_requires=[
         "six",
-        "puremagic",
         "python-dotenv",
         "pytest",
         "rich",
