@@ -7,10 +7,15 @@ from flask_login import login_required
 from gthnk.model.day import Day
 from gthnk.model.journal import Journal
 from gthnk.filebuffer import FileBuffer
-from ..jinja_slugify import slugify, _slugify
-from ..server import gthnk
+from .j2_slugify import slugify, _slugify
+from ..app import gthnk
 
-day = flask.Blueprint('day', __name__)
+day = flask.Blueprint('day',
+    __name__,
+    template_folder='templates',
+    static_folder='static',
+    url_prefix='/day'
+)
 
 day.add_app_template_filter(slugify)
 

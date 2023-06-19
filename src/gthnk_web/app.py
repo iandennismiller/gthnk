@@ -32,16 +32,19 @@ def create_app():
 
     logging.getLogger("gthnk").info("Server: Start")
 
-    from .blueprints.root import root
+    from .root import root
     app.register_blueprint(root)
 
-    from .blueprints.api import api
+    from .home import home
+    app.register_blueprint(home)
+
+    from .api import api
     app.register_blueprint(api)
 
-    from .blueprints.auth import auth
+    from .auth import auth
     app.register_blueprint(auth)
 
-    from .blueprints.day import day
+    from .day import day
     app.register_blueprint(day)
 
     login_manager.init_app(app)

@@ -9,9 +9,15 @@ from flask_wtf import FlaskForm
 from wtforms import TextAreaField, SubmitField, validators
 
 from gthnk.model.entry import Entry
-from ..server import gthnk
+from ..app import gthnk
 
-root = flask.Blueprint('gthnk', __name__)
+home = flask.Blueprint(
+    'home',
+    __name__,
+    template_folder='templates',
+    static_folder='static',
+    url_prefix='/home'
+)
 
 class NoteForm(FlaskForm):
     entry = TextAreaField('Entry',
@@ -23,7 +29,7 @@ class NoteForm(FlaskForm):
     )
     save_button = SubmitField("Save")
 
-@root.route('/config')
+@home.route('/config')
 @login_required
 def config_view():
     return flask.render_template('config-view.html.j2',
@@ -31,7 +37,7 @@ def config_view():
         )
 
 
-@root.route('/note', methods=['GET', 'POST'])
+@home.route('/note', methods=['GET', 'POST'])
 @login_required
 def note_view():
     form = NoteForm()
@@ -66,7 +72,7 @@ def note_view():
         )
 
 
-@root.route("/search")
+@home.route("/search")
 @login_required
 def search_view():
     if not flask.request.args:
@@ -89,7 +95,7 @@ def search_view():
             count=count
             )
 
-@root.route("/refresh")
+@home.route("/refresh")
 @login_required
 def refresh():
     # librarian = Librarian(flask.current_app)
@@ -99,6 +105,6 @@ def refresh():
 ###
 # Index
 
-@root.route('/')
+@home.route('/')
 def index():
     return flask.render_template('index.html.j2')

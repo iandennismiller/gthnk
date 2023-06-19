@@ -7,10 +7,6 @@ help:
 
 install:
 	pip install -U pip
-	pip install -e ./src[llm]
-
-install-bare:
-	pip install -U pip
 	pip install -e ./src
 
 install-server:
@@ -25,7 +21,7 @@ server:
 	export SETTINGS=$$PWD/.env && \
 	FLASK_ENV=development \
 	FLASK_RUN_PORT=1620 \
-	FLASK_APP=src/gthnk_server/server \
+	FLASK_APP=src/gthnk_web/app \
 	flask run
 
 clean:

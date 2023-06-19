@@ -46,20 +46,15 @@
     <script src="/static/lib/swiper/swiper.js"></script>
 
     <!-- gthnk -->
-    <link href="/static/css/gthnk.css" rel="stylesheet">
+    <link href="/home/static/home.css" rel="stylesheet">
 
-    <!-- attachments -->
-    <link href="/static/css/gthnk-attachments.css" rel="stylesheet">
-
-    <script src="/static/js/gthnk.js"></script>
-    <script src="/static/js/gthnk-darkmode.js"></script>
+    <script src="/home/static/gthnk.js"></script>
+    <script src="/home/static/darkmode.js"></script>
 
 </head>
 
 <body id="{{current_page}}" class="bootstrap-dark">
-    <script src="/static/js/gthnk-darkmode.js"></script>
-
-    {% include "shared/navigation.html.j2" %}
+    {% include "navigation.html.j2" %}
     
     {% with messages = get_flashed_messages() %}
     <div aria-live="polite" aria-atomic="true" style="position: relative;">

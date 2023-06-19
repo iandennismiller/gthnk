@@ -4,9 +4,8 @@ import logging
 from flask_wtf import FlaskForm
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from wtforms import StringField, PasswordField, SubmitField, validators
-from ..server import login_manager #, bcrypt
-from ..model.user import User
-from ..model.user_store import UserStore
+from ..app import login_manager #, bcrypt
+from ..model import User, UserStore
 
 
 login_manager.login_view = "auth.login"
@@ -24,7 +23,13 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[validators.DataRequired()])
     submit_button = SubmitField("Login")
 
-auth = flask.Blueprint('auth', __name__)
+auth = flask.Blueprint(
+    'auth',
+    __name__,
+    template_folder='templates',
+    static_folder='static',
+    url_prefix='/auth'
+    )
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():

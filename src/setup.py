@@ -29,7 +29,7 @@ setup(
     description="gthnk is a personal knowledge management system",
     packages=[
         "gthnk",
-        "gthnk_server",
+        "gthnk_web",
     ],
     scripts=[
         "scripts/gthnk",

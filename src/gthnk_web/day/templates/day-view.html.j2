@@ -1,4 +1,4 @@
-{% extends 'shared/base.html.j2' %}
+{% extends 'base.html.j2' %}
 
 {% set current_page = 'day-view' %}
 
@@ -81,11 +81,10 @@
 </script>
 
 {% if is_buffer %}
-<script src="/static/js/gthnk-live-update.js"></script>
+<script src="/day/static/gthnk-live-update.js"></script>
 {% endif %}
 
-<script src="/static/js/gthnk-attachments.js"></script>
-<script src="/static/js/gthnk-images.js"></script>
-<script src="/static/js/gthnk-navigate.js"></script>
+<script src="/day/static/gthnk-images.js"></script>
+<script src="/day/static/gthnk-navigate.js"></script>
 
 {% endblock %}
