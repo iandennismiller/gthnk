@@ -20,7 +20,7 @@ else:
     gthnk = Gthnk()
 
 def create_app():
-    app = flask.Flask(__name__)
+    app = flask.Flask(__name__, static_folder=None)
     
     try:
         app.config.from_envvar('SETTINGS')
@@ -52,6 +52,8 @@ def create_app():
         LinkifyExtension(),
         JournalExtension()
     ])
+
+    print(app.url_map)
 
     return app
 

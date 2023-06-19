@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-# gthnk (c) Ian Dennis Miller
+# gthnk
 
 from setuptools import setup, find_packages
 import os

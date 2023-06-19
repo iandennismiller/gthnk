@@ -1,5 +1,9 @@
 # gthnk
 
+requirements:
+	pip install -U pip
+	pip install -e ./src[dev]
+
 clean:
 	rm -rf src/*.egg-info src/build src/dist
 	find . -name '*.pyc' -delete

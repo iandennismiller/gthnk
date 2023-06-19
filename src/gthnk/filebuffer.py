@@ -2,7 +2,7 @@ import os
 import shutil
 import datetime
 
-from .gthnk_format import parse_text
+from .syntax import parse_text
 from .model.journal import Journal
 
 

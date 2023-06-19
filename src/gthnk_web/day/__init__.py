@@ -20,7 +20,7 @@ day = flask.Blueprint('day',
 day.add_app_template_filter(slugify)
 
 
-@day.route("/nearest/<date>")
+@day.route("nearest/<date>")
 @login_required
 def nearest_day_view(date):
     day_id = str(datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -60,7 +60,7 @@ def nearest_day_view(date):
     return flask.redirect(flask.url_for('gthnk.index'))
 
 
-@day.route("/latest")
+@day.route("latest")
 @login_required
 def latest_view():
     day_id = gthnk.journal.get_latest_day_id()
@@ -102,7 +102,7 @@ def render_day_pipeline(day_str):
     return day_md
 
 
-@day.route("/day/live/latest.json")
+@day.route("latest.json")
 @login_required
 def buffer_timestamp():
     input_files = flask.current_app.config["INPUT_FILES"]
@@ -117,7 +117,7 @@ def buffer_timestamp():
     return {'timestamp': latest_time}
 
 
-@day.route("/day/live")
+@day.route("live")
 @login_required
 def buffer_view():
 
@@ -145,7 +145,7 @@ def buffer_view():
     )
 
 
-@day.route("/day/<date>.html")
+@day.route("<date>.html")
 @login_required
 def day_view(date):
     day = gthnk.journal.get_day(date)
@@ -170,7 +170,7 @@ def day_view(date):
         return flask.redirect(flask.url_for('.nearest_day_view', date=date))
 
 
-@day.route("/day/<date>.txt")
+@day.route("<date>.txt")
 @login_required
 def text_view(date):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -180,7 +180,7 @@ def text_view(date):
         return flask.redirect(flask.url_for('gthnk.index'))
 
 
-@day.route("/day/<date>.md")
+@day.route("<date>.md")
 @login_required
 def markdown_view(date):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -190,7 +190,7 @@ def markdown_view(date):
         return flask.redirect(flask.url_for('gthnk.index'))
 
 
-@day.route("/day/<date>.pdf")
+@day.route("<date>.pdf")
 @login_required
 def download(date):
     day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())

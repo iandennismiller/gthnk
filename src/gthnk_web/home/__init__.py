@@ -15,8 +15,7 @@ home = flask.Blueprint(
     'home',
     __name__,
     template_folder='templates',
-    static_folder='static',
-    url_prefix='/home'
+    url_prefix='/'
 )
 
 class NoteForm(FlaskForm):

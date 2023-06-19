@@ -1,6 +1,6 @@
-# Gthnk
-# docker-compose.yaml
+# gthnk
 # inspired by https://stackoverflow.com/a/48611098
+
 version: "3.3"
 services:
   gthnk-server:

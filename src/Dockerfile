@@ -1,5 +1,4 @@
-# docker-gthnk
-# Ian Dennis Miller
+# gthnk
 
 FROM iandennismiller/python:latest
 
