@@ -30,11 +30,9 @@ setup(
     packages=[
         "gthnk",
         "gthnk_server",
-        "gthnk_integration",
     ],
     scripts=[
         "scripts/gthnk",
-        "scripts/gthnk-7-to-8.py",
     ],
     long_description=read('../Readme.rst'),
     classifiers=[
@@ -53,24 +51,20 @@ setup(
     author_email=grep('__email__'),
     url=grep('__url__'),
     install_requires=[
-        "six",
         "python-dotenv",
-        "pytest",
         "rich",
-        "requests",
     ],
     extras_require={
         "dev": [
+            "ipython",
+            "pytest",
             "pdbpp",
-            "GitPython",
             "Sphinx",
             "alabaster",
-            "twine",
-            "ipython",
             "watchdog",
             "pylint",
-            "Flask-Testing",
             "rstcheck",
+            "GitPython",
         ],
         "server": [
             "jinja2<3.1.0",
@@ -83,6 +77,7 @@ setup(
             "flask-markdown",
             "mdx-linkify==1.0",
             "mdx-journal>=0.1.4",
+            "Flask-Testing",
         ],
     },
     license='MIT',

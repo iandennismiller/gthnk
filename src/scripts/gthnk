@@ -7,7 +7,6 @@ import glob
 import logging
 import datetime
 
-import requests
 import click
 from trogon import tui
 from dotenv import load_dotenv
