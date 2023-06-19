@@ -67,17 +67,6 @@ class Gthnk(object):
         # else:
         #     self.filetree.scan_ids()
 
-    @property
-    def llm(self):
-        "Lazy-load the LLM object."
-        if not hasattr(self, "_llm"):
-            try:
-                from .llm import LLM
-                self._llm = LLM(self)
-            except ModuleNotFoundError:
-                self._llm = None
-        return self._llm
-
     def register_buffers(self, buffer_filenames):
         "Register a new buffer with the journal."
         for buffer_filename in buffer_filenames:
