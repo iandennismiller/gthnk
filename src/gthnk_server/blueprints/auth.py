@@ -5,7 +5,8 @@ from flask_wtf import FlaskForm
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from wtforms import StringField, PasswordField, SubmitField, validators
 from ..server import login_manager #, bcrypt
-from ..user import User, UserStore
+from ..model.user import User
+from ..model.user_store import UserStore
 
 
 login_manager.login_view = "auth.login"
