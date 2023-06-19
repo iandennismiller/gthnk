@@ -1,5 +1,4 @@
-###
-# Docker
+# gthnk
 
 USERNAME=gthnk
 PASSWORD=gthnk
@@ -26,21 +25,3 @@ docker-build: clean
 
 docker-push:
 	docker push iandennismiller/gthnk
-
-docker-config:
-	$(CONTAINER_EXEC) gthnk-config-init.sh /home/gthnk/.gthnk/gthnk.conf
-
-docker-db:
-	$(CONTAINER_EXEC) gthnk-db-init.sh
-
-docker-user-add:
-	$(CONTAINER_EXEC) gthnk-user-add.sh $(USERNAME) $(PASSWORD)
-
-docker-user-del:
-	$(CONTAINER_EXEC) gthnk-user-del.sh $(USERNAME)
-
-docker-rotate:
-	$(CONTAINER_EXEC) gthnk-rotate.sh
-
-docker-shell:
-	docker exec -it gthnk-server bash
