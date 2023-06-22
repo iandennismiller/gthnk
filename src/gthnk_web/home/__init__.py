@@ -31,7 +31,7 @@ class NoteForm(FlaskForm):
 @home.route('/config')
 @login_required
 def config_view():
-    return flask.render_template('config-view.html.j2',
+    return flask.render_template('config.html.j2',
             configuration=flask.current_app.config
         )
 
@@ -64,7 +64,7 @@ def note_view():
         
         return flask.redirect(flask.url_for('day.buffer_view'))
     else:
-        return flask.render_template('note-view.html.j2',
+        return flask.render_template('note.html.j2',
             form=form,
             timestamp=timestamp,
             datestamp=datestamp
@@ -78,17 +78,26 @@ def search_view():
         return flask.redirect(flask.url_for("gthnk.index"))
     else:
         query_str = flask.request.args['q']
+        if 'page' in flask.request.args:
+            page = int(flask.request.args['page'])
+        else:
+            page = 1
+
         matches = list(gthnk.journal.search(query_str))
         count = len(matches)
-        results = matches[:20]
+
+        per_page = 10
+        start_id = (page - 1) * per_page
+        end_id = start_id + per_page
+        results = matches[start_id:end_id]
 
         # highlight matched term
         # for idx in range(0, len(results)):
         #     results[idx].content = re.sub(query_str, "**{}**".format(
         #         query_str), results[idx].content, flags=re.I)
 
-        return flask.render_template('results-list.html.j2',
-            tag_results=[],
+        return flask.render_template('search.html.j2',
+            page=page,
             results=results,
             query_str=query_str,
             count=count
@@ -97,6 +106,7 @@ def search_view():
 @home.route("/refresh")
 @login_required
 def refresh():
+    # TODO: enable rotation
     # librarian = Librarian(flask.current_app)
     # librarian.rotate_buffers()
     return flask.redirect(flask.url_for('day.latest_view'))

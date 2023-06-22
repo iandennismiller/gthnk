@@ -53,7 +53,7 @@ def create_app():
         JournalExtension()
     ])
 
-    print(app.url_map)
+    # print(app.url_map)
 
     return app
 
