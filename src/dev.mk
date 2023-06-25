@@ -1,5 +1,7 @@
 # gthnk
 
+TEST_ONE=test_import_buffers
+
 requirements:
 	pip install -U pip
 	pip install -e ./src[dev]
@@ -8,6 +10,9 @@ clean:
 	rm -rf src/*.egg-info src/build src/dist
 	find . -name '*.pyc' -delete
 	find . -name __pycache__ -delete
+
+test-one:
+	pytest -k $(TEST_ONE) ./src
 
 test:
 	pytest ./src

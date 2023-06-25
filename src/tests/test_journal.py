@@ -1,43 +1,42 @@
+import os
 import pytest
 
 from gthnk import Gthnk
 from gthnk.model.journal import Journal
-from gthnk.filetree import FileTreeRoot
 from gthnk.filebuffer import FileBuffer
 
 
-def test_journal(journal):
-    assert journal is not None
-
-def test_gthnk():
-    g = Gthnk(config_filename="/Users/idm/Work/gthnk/.env")
-    assert g.journal
-
-def test_load_all_days():
+def test_journal_obj(gthnk):
     j = Journal()
-    # create a filetree and associate it with this journal
-    filetree = FileTreeRoot(journal=j, path="/tmp/gthnk")
-    filetree.days.load_all()
-    assert j
+    assert j is not None
 
-def test_initial_structure():
-    j = Journal()
-    fb = FileBuffer("/Users/idm/Work/gthnk/src/tests/data/2012-10-04.txt", journal=j)
+    j = Journal(gthnk=gthnk)
+    assert j is not None
 
-    # load new file buffer and append to existing journal
-    fb = FileBuffer("/Users/idm/Work/gthnk/src/tests/data/2012-10-05.txt", journal=j)
+def test_gthnk_obj(gthnk, config_tmp):
+    assert gthnk is not None
+    assert gthnk.config["INPUT_FILES"] == "/tmp/gthnk/journal.txt"
 
-    filetree = FileTreeRoot(journal=j, path="/tmp/gthnk")
-    filetree.write_journal()
+    g = Gthnk(config=config_tmp)
+    assert g.config["INPUT_FILES"] == "/tmp/gthnk/journal.txt"
 
-def test_write_day():
-    j = Journal()
-    fb = FileBuffer("/Users/idm/Work/gthnk/src/tests/data/2012-10-04.txt", journal=j)
-    filetree = FileTreeRoot(journal=j)
+    assert gthnk.journal is not None
 
-    day = j.get_day(day_id="2012-10-04")
-    print(day.get_entry("1101").get_uri())
-    print(filetree.get_path())
-    print(filetree.days.get_path(day))
-    filetree.entries.write(day.get_entry("1101"))
-    filetree.days.write(day)
+def test_import_buffers(cwd, filetree, gthnk):
+    with open("/tmp/gthnk/journal.txt", 'w') as f:
+        f.write("1999-12-31\n\n2359\n\nA test entry.\n")
+
+    gthnk.import_buffers()
+    assert "1999-12-31" in gthnk.journal.days.keys()
+
+def test_gthnk_rotate(cwd, filetree, gthnk):
+    buffer_filename = "/tmp/gthnk/journal.txt"
+    with open(buffer_filename, 'w') as f:
+        f.write("1999-12-31\n\n2359\n\nA test entry.\n")
+
+    rotate_buffers = gthnk.rotate_buffers()
+
+    assert "1999-12-31" in gthnk.journal.days.keys()
+    assert os.path.exists("/tmp/gthnk/day/1999-12-31.txt")
+    with open(buffer_filename, 'r') as f:
+        assert f.read() == ""
