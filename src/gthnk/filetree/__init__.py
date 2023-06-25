@@ -1,4 +1,5 @@
 import os
+import re
 
 from ..model.journal import Journal
 
@@ -16,7 +17,10 @@ class FileTreeRoot(object):
         self.journal = journal
 
         if path is None:
-            self.path = "/tmp/gthnk"
+            if "FILETREE_ROOT" in self.journal.gthnk.config:
+                self.path = self.journal.gthnk.config["FILETREE_ROOT"]
+            else:
+                raise ValueError("No FILETREE_ROOT in config")
         else:
             self.path = path
 

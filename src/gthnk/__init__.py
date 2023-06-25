@@ -9,15 +9,20 @@ from .filetree import FileTreeRoot
 
 
 class Gthnk(object):
-    def __init__(self, config_filename=None):
-        if config_filename is None:
+    def __init__(self, config=None, config_filename=None):
+        if config is not None:
+            self.config = config
+            config_filename = "[self.config]"
+        elif config_filename is not None:
+            self.config = dotenv_values(config_filename)
+        else:
             config_filename = ".env"
             self.config = dotenv_values(config_filename)
             if self.config == {}:
                 config_filename = os.path.expanduser("~/.config/gthnk/gthnk.conf")
                 self.config = dotenv_values(config_filename)
-        else:
-            self.config = dotenv_values(config_filename)
+        if self.config == {}:
+            raise ValueError(f"Config file not found: {config_filename}")
 
         if "LOG_LEVEL" in self.config:
             log_level = self.config["LOG_LEVEL"]
@@ -73,14 +78,24 @@ class Gthnk(object):
             self.logger.info(f"Buffer: {buffer_filename}")
             self.buffers.append(buffer_filename)
 
+    def update_filetree(self):
+        "Write a day to the filesystem."
+        self.filetree.write_journal()
+
     def import_buffers(self):
         "Scan the available buffers for new entries and import them."
         for buffer_filename in self.buffers:
-            buffer = FileBuffer(buffer_filename, journal=self.journal)
+            FileBuffer(buffer_filename, journal=self.journal).read()
+        self.update_filetree()
 
     def rotate_buffers(self):
         "Tell all of the buffers to rotate their files."
+        self.import_buffers()
+
         for buffer_filename in self.buffers:
             buffer = FileBuffer(buffer_filename, journal=self.journal)
-            buffer.backup(filetree_root=self.config["FILETREE_ROOT"])
+            buffer.backup()
+
+        for buffer_filename in self.buffers:
+            buffer = FileBuffer(buffer_filename, journal=self.journal)
             buffer.clear()

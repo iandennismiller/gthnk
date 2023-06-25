@@ -33,10 +33,11 @@ class FileBuffer(object):
 
             return self.journal
 
-    def backup(self, filetree_root):
+    def backup(self):
         """
         Backup the file buffer.
         """
+        filetree_root = os.path.expanduser(self.journal.gthnk.config["FILETREE_ROOT"])
         current_day_id = datetime.datetime.now().strftime("%Y-%m-%d")
         current_timestamp = current_time = datetime.datetime.now().strftime("%H%M")
         basename = os.path.basename(self.filename)

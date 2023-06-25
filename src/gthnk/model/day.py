@@ -34,9 +34,6 @@ class Day(object):
     def __repr__(self):
         buf = f"{self.day_id}\n\n"
         if len(self.entries) > 0:
-            try: 
-                for timestamp in sorted(self.entries.keys()):
-                    buf += self.entries[timestamp].__repr__()
-            except TypeError:
-                breakpoint()
-            return buf
+            for timestamp in sorted(self.entries.keys()):
+                buf += self.entries[timestamp].__repr__()
+        return buf
