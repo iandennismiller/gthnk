@@ -36,3 +36,28 @@ def filetree(gthnk):
 def cwd():
     import pathlib
     return(pathlib.Path(__file__).parent.absolute())
+
+@pytest.fixture()
+def correct_output(cwd):
+    with open(f"{cwd}/data/correct_output.txt", 'r') as f:
+        return ''.join(f.readlines())
+
+@pytest.fixture()
+def correct_merge(cwd):
+    with open(f"{cwd}/data/correct_merge.txt", 'r') as f:
+        return ''.join(f.readlines())
+
+@pytest.fixture()
+def correct_twodays(cwd):
+    with open(f"{cwd}/data/correct_two_days.txt", 'r') as f:
+        return ''.join(f.readlines())
+
+@pytest.fixture()
+def day_04(cwd):
+    with open(f"{cwd}/data/2012-10-04.txt", 'r') as f:
+        return ''.join(f.readlines())
+
+@pytest.fixture()
+def day_05(cwd):
+    with open(f"{cwd}/data/2012-10-05.txt", 'r') as f:
+        return ''.join(f.readlines())

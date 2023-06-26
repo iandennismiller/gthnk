@@ -1,5 +1,4 @@
 import os
-import pytest
 
 from gthnk import Gthnk
 from gthnk.model.journal import Journal

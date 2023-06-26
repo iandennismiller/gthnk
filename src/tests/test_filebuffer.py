@@ -1,5 +1,4 @@
 import os
-import pytest
 
 from gthnk.filetree.buffer import FileBuffer
 

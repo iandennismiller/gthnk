@@ -1,6 +1,6 @@
 # gthnk
 
-TEST_ONE=test_import_buffers
+-include ./src/test-one.mk
 
 requirements:
 	pip install -U pip
