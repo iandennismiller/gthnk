@@ -1,7 +1,7 @@
 import os
 import pytest
 
-from gthnk.filebuffer import FileBuffer
+from gthnk.filetree.buffer import FileBuffer
 
 
 def test_filebuffer(cwd, journal):

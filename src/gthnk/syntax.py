@@ -1,5 +1,6 @@
 import re
 from collections import defaultdict
+from typing import Dict
 
 
 re_day = re.compile(r'^(\d\d\d\d-\d\d-\d\d)\s*$')
@@ -12,7 +13,7 @@ def parse_text(raw_text):
     """
     parse a Journal-encoded text string; add content to an Entries dictionary, with timestamp.
     """
-    entries = defaultdict(lambda: defaultdict(str))
+    entries:Dict[str, Dict[str, str]] = defaultdict(lambda: defaultdict(str))
 
     current_day = None
     current_time = None
@@ -45,7 +46,7 @@ def parse_text(raw_text):
             tag = match_time_tag.group(2)
             #current_time = "%s %s" % (current_time, tag)
         else:
-            entries[current_day][current_time] += "{0}\n".format(line)
+            entries[str(current_day)][str(current_time)] += "{0}\n".format(line)
 
     for day in entries:
         for timestamp in entries[day]:

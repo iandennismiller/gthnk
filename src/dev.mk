@@ -16,6 +16,8 @@ test-one:
 
 test:
 	pytest ./src
+	mypy --check-untyped-defs ./src/gthnk
+#	mypy ./src/gthnk_web
 
 docs:
 	rm -rf build/sphinx

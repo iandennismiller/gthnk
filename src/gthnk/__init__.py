@@ -1,29 +1,41 @@
 import os
 import json
+from typing import List
 
 from dotenv import dotenv_values
 
 from .utils import init_logger
-from .filebuffer import FileBuffer
-from .filetree import FileTreeRoot
+from .filetree import FileTree
+from .filetree.buffer import FileBuffer
+from .model.journal import Journal
 
 
 class Gthnk(object):
-    def __init__(self, config=None, config_filename=None):
-        if config is not None:
-            self.config = config
-            config_filename = "[self.config]"
-        elif config_filename is not None:
-            self.config = dotenv_values(config_filename)
-        else:
-            config_filename = ".env"
-            self.config = dotenv_values(config_filename)
-            if self.config == {}:
-                config_filename = os.path.expanduser("~/.config/gthnk/gthnk.conf")
-                self.config = dotenv_values(config_filename)
-        if self.config == {}:
-            raise ValueError(f"Config file not found: {config_filename}")
+    def __init__(self, config:dict={}, config_filename:str=""):
+        self.journal = Journal(gthnk=self)
+        self.init_config(config, config_filename)
+        self.init_logging()
+        self.init_filetree(filetree_root=self.config["FILETREE_ROOT"])
+        self.init_filebuffers()
 
+    def init_config(self, config:dict={}, config_filename:str=""):
+        if config is not {}:
+            self.config = config
+            self.config_filename = "[self.config]"
+        elif config_filename is not "":
+            self.config = dotenv_values(config_filename)
+            self.config_filename = config_filename
+        else:
+            self.config_filename = ".env"
+            self.config = dotenv_values(self.config_filename)
+            if self.config == {}:
+                self.config_filename = os.path.expanduser("~/.config/gthnk/gthnk.conf")
+                self.config = dotenv_values(self.config_filename)
+
+        if self.config == {}:
+            raise ValueError(f"Config file not found: {self.config_filename}")
+
+    def init_logging(self):
         if "LOG_LEVEL" in self.config:
             log_level = self.config["LOG_LEVEL"]
         else:
@@ -41,38 +53,26 @@ class Gthnk(object):
                 level=log_level
             )
         self.logger.info("[bold yellow]Start Gthnk[/bold yellow]")
-        self.logger.info(f"Load config: {config_filename}")
+        self.logger.info(f"Load config: {self.config_filename}")
 
-        self.buffers = []
+    def init_filebuffers(self):
+        "Directly parse a string containing a comma-separated list of input filenames"
+
+        self.buffers:List[str] = []
         if "INPUT_FILES" in self.config:
             self.register_buffers(buffer_filenames=self.config["INPUT_FILES"].split(","))
         else:
             raise ValueError("No INPUT_FILES in config")
 
-        from .model.journal import Journal
-        self.journal = Journal(gthnk=self)
-
-        # if self.config["BACKEND"] == "filetree":
-        self.init_filetree(filetree_root=self.config["FILETREE_ROOT"])
-
-    def init_filetree(self, filetree_root):
+    def init_filetree(self, filetree_root:str):
         self.logger.info(f"Filetree: {filetree_root}")
-        self.filetree = FileTreeRoot(
+        self.filetree = FileTree(
             journal=self.journal,
             path=filetree_root,
         )
+        self.filetree.read_journal()
 
-        self.filetree.days.load_all()
-
-        # # only load all days if lazy is explicitly False
-        # if "lazy" in self.config and self.config["LAZY"] is False:
-        #     self.filetree.days.load_all()
-        #     self.lazy = False
-        # # default to lazy loading
-        # else:
-        #     self.filetree.scan_ids()
-
-    def register_buffers(self, buffer_filenames):
+    def register_buffers(self, buffer_filenames:list):
         "Register a new buffer with the journal."
         for buffer_filename in buffer_filenames:
             self.logger.info(f"Buffer: {buffer_filename}")
@@ -82,20 +82,18 @@ class Gthnk(object):
         "Write a day to the filesystem."
         self.filetree.write_journal()
 
-    def import_buffers(self):
-        "Scan the available buffers for new entries and import them."
+    def rotate_buffers(self):
+        "Import all buffers and rotate them."
+
         for buffer_filename in self.buffers:
             FileBuffer(buffer_filename, journal=self.journal).read()
+
+        # now write the journal to the filesystem
         self.update_filetree()
 
-    def rotate_buffers(self):
-        "Tell all of the buffers to rotate their files."
-        self.import_buffers()
+        # backup the buffers and clear them
+        for buffer_filename in self.buffers:
+            FileBuffer(buffer_filename, journal=self.journal).backup()
 
         for buffer_filename in self.buffers:
-            buffer = FileBuffer(buffer_filename, journal=self.journal)
-            buffer.backup()
-
-        for buffer_filename in self.buffers:
-            buffer = FileBuffer(buffer_filename, journal=self.journal)
-            buffer.clear()
+            FileBuffer(buffer_filename, journal=self.journal).clear()

@@ -64,6 +64,7 @@ setup(
             "pylint",
             "rstcheck",
             "GitPython",
+            "mypy",
         ],
         "server": [
             "jinja2<3.1.0",

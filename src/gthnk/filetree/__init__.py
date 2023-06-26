@@ -1,22 +1,23 @@
 import os
 import re
+import logging
 
 from ..model.journal import Journal
 
-from .entries import FileTreeEntries
-from .days import FileTreeDays
+from .entries import EntriesCollection
+from .days import DaysCollection
 
 
-class FileTreeRoot(object):
+class FileTree(object):
     """
     Represents a full journal as a filesystem tree.
     Works by mapping a journal URI to a filesystem path.
     """
 
-    def __init__(self, journal:Journal, path:str=None):
+    def __init__(self, journal:Journal, path:str=""):
         self.journal = journal
 
-        if path is None:
+        if path is "":
             if "FILETREE_ROOT" in self.journal.gthnk.config:
                 self.path = self.journal.gthnk.config["FILETREE_ROOT"]
             else:
@@ -28,36 +29,32 @@ class FileTreeRoot(object):
         if not os.path.exists(self.path):
             os.makedirs(self.path)
 
-        # ensure artifacts path exists as subdirectory of root
-        for subdir in ["day", "entry", "backup", "artifact"]:
+        # ensure paths exist as subdirectory of root
+        for subdir in ["day", "entry", "backup"]:
             path = os.path.join(self.path, subdir)
             if not os.path.exists(path):
                 os.makedirs(path)
 
-        self.days = FileTreeDays(self)
-        self.entries = FileTreeEntries(self)
-
-    def decode_path(self, path):
-        "Return the journal object for a given filesystem path."
-
-        # match day path
-        if re.match(r"^.*/\d{4}-\d{2}-\d{2}.txt$", path):
-            day_id = re.match(r"^.*/(\d{4}-\d{2}-\d{2}).txt$", path).group(1)
-            day = self.journal.get_day(day_id)
-            return day
-        # match entry path
-        elif re.match(r"^.*/\d{4}-\d{2}-\d{2}/\d{4}.txt$", path):
-            day_id = re.match(r"^.*/(\d{4}-\d{2}-\d{2})/\d{4}.txt$", path).group(1)
-            timestamp = re.match(r"^.*/\d{4}-\d{2}-\d{2}/(\d{4}).txt$", path).group(1)
-            day = self.journal.get_day(day_id)
-            entry = day.get_entry(timestamp)
-            return entry
-
-    def get_path(self):
-        "Return the filesystem path of the journal."
-        return self.path
+        self.days = DaysCollection(self.path, self.journal)
+        self.entries = EntriesCollection(self.path, self.journal)
 
     def write_journal(self):
         "Update the filetree with the contents of the journal."
         for day in self.journal:
             self.days.write(day)
+
+            for entry in day.entries.values():
+                self.entries.write(entry)
+
+    def read_journal(self):
+        "Load all days from the filesystem."
+        datestamps = self.days.scan()
+        for datestamp in datestamps:
+            if datestamp not in self.journal.days:
+                self.journal.get_day(datestamp)
+
+        for datestamp in self.journal.days.keys():
+            self.days.read(datestamp)
+            logging.getLogger("gthnk").debug(f"Loaded day {datestamp} from filesystem.")
+
+        logging.getLogger("gthnk").info(f"Loaded {len(self.journal.days)} days from filesystem.")

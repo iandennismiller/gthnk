@@ -3,7 +3,7 @@ import pytest
 
 from gthnk import Gthnk
 from gthnk.model.journal import Journal
-from gthnk.filebuffer import FileBuffer
+from gthnk.filetree.buffer import FileBuffer
 
 
 def test_journal_obj(gthnk):
@@ -21,13 +21,6 @@ def test_gthnk_obj(gthnk, config_tmp):
     assert g.config["INPUT_FILES"] == "/tmp/gthnk/journal.txt"
 
     assert gthnk.journal is not None
-
-def test_import_buffers(cwd, filetree, gthnk):
-    with open("/tmp/gthnk/journal.txt", 'w') as f:
-        f.write("1999-12-31\n\n2359\n\nA test entry.\n")
-
-    gthnk.import_buffers()
-    assert "1999-12-31" in gthnk.journal.days.keys()
 
 def test_gthnk_rotate(cwd, filetree, gthnk):
     buffer_filename = "/tmp/gthnk/journal.txt"

@@ -2,7 +2,7 @@ import pytest
 import shutil
 
 from gthnk.model.journal import Journal
-from gthnk.filetree import FileTreeRoot
+from gthnk.filetree import FileTree
 from gthnk import Gthnk
 
 
@@ -30,7 +30,7 @@ def journal(gthnk):
 
 @pytest.fixture()
 def filetree(gthnk):
-    return FileTreeRoot(journal=gthnk.journal)
+    return FileTree(journal=gthnk.journal)
 
 @pytest.fixture()
 def cwd():
