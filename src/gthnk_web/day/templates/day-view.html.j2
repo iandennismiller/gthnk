@@ -37,28 +37,6 @@
 
   </div>
 
-  {% if todo_items %}
-  <div class="row">
-    <div class="col-xl-1"></div>
-    <div class="col-xl-10">
-      <div class="gthnk-card" id="agenda">
-        <h4>Agenda</h4>
-        <ul>
-        {% for checked, item in todo_items %}
-          <li>
-            <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="{{ item|slugify }}" disabled {% if checked %}checked="checked"{% endif %}>
-              <label class="custom-control-label" for="{{ item|slugify }}">{{ item }}</label>
-            </div>
-          </li>
-        {% endfor %}
-        </ul>
-      </div>
-    </div>
-    <div class="col-xl-1"></div>
-  </div>
-  {% endif %}
-
 </div>
 
 <script>

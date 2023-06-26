@@ -3,9 +3,9 @@ import os
 import click
 from trogon import tui # type: ignore
 
-from gthnk import Gthnk
-from gthnk.model.journal import Journal
-from gthnk.filetree.buffer import FileBuffer
+from . import Gthnk
+from .model.journal import Journal
+from .filetree.buffer import FileBuffer
 
 
 @tui()
@@ -14,9 +14,25 @@ def cli():
     pass
 
 @cli.command()
+@click.argument('gthnk_path')
+def config(gthnk_path:str):
+    "Generate a sample config file, optionally saving to a file"
+    secret_key = str(os.urandom(24))
+    buf = config_template.format(
+        gthnk_path=gthnk_path,
+        secret_key=secret_key,
+    )
+    print(buf)
+
+@cli.command()
 def path():
     "Display the path of the journal filetree"
     print(Gthnk().filetree.path)
+
+@cli.command()
+def rotate():
+    "Import file buffers and rotate them"
+    Gthnk().rotate_buffers()
 
 @cli.command()
 def buffer():
@@ -27,6 +43,15 @@ def buffer():
     for buffer in g.buffers:
         FileBuffer(buffer, journal=j).read()
     print(j)
+
+@cli.command()
+@click.argument('filename')
+def read(filename:str):
+    "Import a properly-formatted text file into the journal"
+    g = Gthnk()
+    FileBuffer(filename, journal=g.journal).read()
+    g.filetree.write_journal()
+    print(f"Journal contains {len(g.journal)} entries")
 
 @cli.command()
 @click.option('--date', is_flag=True, default=False, help="Print only the date, not the entry")
@@ -108,31 +133,6 @@ def search(date:bool, uri:bool, path:bool, count:bool, num:int, reverse:bool, qu
             print(entry.render_standalone())
         if num and counter >= num:
             break
-
-@cli.command()
-@click.argument('gthnk_path')
-def config(gthnk_path:str):
-    "Generate a sample config file, optionally saving to a file"
-    secret_key = str(os.urandom(24))
-    buf = config_template.format(
-        gthnk_path=gthnk_path,
-        secret_key=secret_key,
-    )
-    print(buf)
-
-@cli.command()
-def rotate():
-    "Import file buffers and rotate them"
-    Gthnk().rotate_buffers()
-
-@cli.command()
-@click.argument('filename')
-def read(filename:str):
-    "Import a properly-formatted text file into the journal"
-    g = Gthnk()
-    FileBuffer(filename, journal=g.journal).read()
-    g.filetree.write_journal()
-    print(f"Journal contains {len(g.journal)} entries")
 
 
 config_template = """\

@@ -10,7 +10,7 @@ var go_yesterday = function() {
     if (yesterday) {
         window.location.href = "/day/" + yesterday + ".html";
     } else {
-        window.location.href = "/latest";
+        window.location.href = "/day/latest";
     }
 }
 
