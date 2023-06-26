@@ -17,13 +17,17 @@ test-one:
 test:
 	pytest ./src
 	mypy --check-untyped-defs ./src/gthnk
-#	mypy ./src/gthnk_web
+
+lint:
+	pylint ./src/gthnk
 
 docs:
-	rm -rf build/sphinx
+	rm -rf var/sphinx
 	pip install -r docs/requirements.txt
-	SETTINGS=$$PWD/usr/conf/testing.conf sphinx-build -b html docs build/sphinx
+	sphinx-build -b html docs var/sphinx
 
 release:
 	cd src && python setup.py sdist bdist_wheel
 	twine upload --config-file ~/.pypirc src/dist/*
+
+.PHONY: docs

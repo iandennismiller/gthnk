@@ -58,12 +58,9 @@ setup(
             "ipython",
             "pytest",
             "pdbpp",
-            "Sphinx",
-            "alabaster",
             "watchdog",
             "pylint",
             "rstcheck",
-            "GitPython",
             "mypy",
         ],
         "server": [

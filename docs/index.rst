@@ -1,6 +1,6 @@
 .. gthnk documentation master file
 
-.. include:: ../src/Readme.rst
+.. include:: ../Readme.rst
 
 Introduction
 ------------
