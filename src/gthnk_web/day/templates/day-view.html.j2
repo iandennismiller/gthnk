@@ -68,13 +68,13 @@
 <!-- inter-day navigation -->
 <script>
   {% if day and day.yesterday %}
-  var yesterday = "{{day.yesterday.day_id}}";
+  var yesterday = "{{day.yesterday.datestamp}}";
   {% else %}
   var yesterday = null;
   {% endif %}
 
   {% if day and day.tomorrow %}
-  var tomorrow = "{{day.tomorrow.day_id}}";
+  var tomorrow = "{{day.tomorrow.datestamp}}";
   {% else %}
   var tomorrow = null;
   {% endif %}

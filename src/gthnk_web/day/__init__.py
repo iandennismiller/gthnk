@@ -6,7 +6,7 @@ import datetime
 from flask_login import login_required
 from gthnk.model.day import Day
 from gthnk.model.journal import Journal
-from gthnk.filebuffer import FileBuffer
+from gthnk.filetree.buffer import FileBuffer
 from .j2_slugify import slugify, _slugify
 from ..app import gthnk
 
@@ -23,38 +23,38 @@ day.add_app_template_filter(slugify)
 @day.route("nearest/<date>")
 @login_required
 def nearest_day_view(date):
-    day_id = str(datetime.datetime.strptime(date, "%Y-%m-%d").date())
-    day = gthnk.journal.get_day(day_id)
+    datestamp = str(datetime.datetime.strptime(date, "%Y-%m-%d").date())
+    day = gthnk.journal.get_day(datestamp)
 
     # if content exists, then the day exists
     if len(day.entries) > 0:
-        return flask.redirect(flask.url_for('day.day_view', date=day.day_id))
+        return flask.redirect(flask.url_for('day.day_view', date=day.datestamp))
     else:
         # find the index of the first date that is larger
-        day_id_list = sorted(list(gthnk.journal.days.keys()))
+        datestamp_list = sorted(list(gthnk.journal.days.keys()))
         try:
-            day_index = next(idx for idx, value in enumerate(day_id_list) if value > date)
-            day_id = day_id_list[day_index]
+            day_index = next(idx for idx, value in enumerate(datestamp_list) if value > date)
+            datestamp = datestamp_list[day_index]
         except StopIteration:
             # or try to find the first one that is smaller
-            day_id_list = list(reversed(day_id_list))
+            datestamp_list = list(reversed(datestamp_list))
             try:
-                day_index = next(idx for idx, value in enumerate(day_id_list) if value < date)
-                day_id = day_id_list[day_index]
+                day_index = next(idx for idx, value in enumerate(datestamp_list) if value < date)
+                datestamp = datestamp_list[day_index]
             except StopIteration:
                 return flask.redirect(flask.url_for('gthnk.index'))
 
         # if content exists, then the day exists
-        day = gthnk.journal.days[day_id]
+        day = gthnk.journal.days[datestamp]
         if 'entries' in day.__dict__ and len(day.entries) > 0:
-            return flask.redirect(flask.url_for('day.day_view', date=day.day_id))
+            return flask.redirect(flask.url_for('day.day_view', date=day.datestamp))
         else:
-            day_id_list = sorted(list(gthnk.journal.days.keys()))
+            datestamp_list = sorted(list(gthnk.journal.days.keys()))
             breakpoint()
-            day_index = next(idx for idx, value in enumerate(day_id_list) if value < date)
-            day_id = day_id_list[day_index]
+            day_index = next(idx for idx, value in enumerate(datestamp_list) if value < date)
+            datestamp = datestamp_list[day_index]
             if day:
-                return flask.redirect(flask.url_for('day.day_view', date=day.day_id))
+                return flask.redirect(flask.url_for('day.day_view', date=day.datestamp))
 
     # if no dates are found, redirect to home page
     return flask.redirect(flask.url_for('gthnk.index'))
@@ -63,23 +63,12 @@ def nearest_day_view(date):
 @day.route("latest")
 @login_required
 def latest_view():
-    day_id = gthnk.journal.get_latest_day_id()
-    if day_id:
-        return flask.redirect(flask.url_for('day.day_view', date=day_id))
+    datestamp = gthnk.journal.get_latest_datestamp()
+    if datestamp:
+        return flask.redirect(flask.url_for('day.day_view', date=datestamp))
     else:
         return flask.render_template('day-view.html.j2',
             day=None, day_str="No entries yet")
-
-
-def extract_todo_items(day_md):
-    todo_items = []
-
-    regex = re.compile(r'\s*-\s*\[([\sxX])\]\s*(.+)$', re.MULTILINE)
-    if day_md:
-        for checked, item in regex.findall(day_md):
-            todo_items.append((checked != ' ', item))
-
-    return todo_items
 
 
 def render_day_pipeline(day_str):
@@ -128,7 +117,6 @@ def buffer_view():
     date = datetime.datetime.today().strftime('%Y-%m-%d')
 
     buffer_str = j.__repr__()
-    todo_items = extract_todo_items(buffer_str)
     day_md = render_day_pipeline(buffer_str)
 
     days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -140,7 +128,6 @@ def buffer_view():
         day=None,
         day_str=day_md,
         day_of_week=day_of_week,
-        todo_items=todo_items,
         is_buffer=True,
     )
 
@@ -152,7 +139,6 @@ def day_view(date):
     # if there is any content, this day exists
     if len(day.entries) > 0:
         day_str = day.__repr__()
-        todo_items = extract_todo_items(day_str)
         day_md = render_day_pipeline(day_str)
 
         days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -164,7 +150,6 @@ def day_view(date):
             day=day,
             day_str=day_md,
             day_of_week=day_of_week,
-            todo_items=todo_items,
         )
     else:
         return flask.redirect(flask.url_for('.nearest_day_view', date=date))
@@ -173,32 +158,8 @@ def day_view(date):
 @day.route("<date>.txt")
 @login_required
 def text_view(date):
-    day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
+    day = gthnk.journal.get_day(date)
     if day:
-        return day.render()
+        return str(day)
     else:
         return flask.redirect(flask.url_for('gthnk.index'))
-
-
-@day.route("<date>.md")
-@login_required
-def markdown_view(date):
-    day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
-    if day:
-        return day.render_markdown()
-    else:
-        return flask.redirect(flask.url_for('gthnk.index'))
-
-
-@day.route("<date>.pdf")
-@login_required
-def download(date):
-    day = Day.find(date=datetime.datetime.strptime(date, "%Y-%m-%d").date())
-    if day:
-        response = flask.make_response(day.render_pdf())
-        response.headers['Content-Type'] = 'application/pdf'
-        disposition_str = 'attachment; filename="{0}.pdf"'.format(day.date)
-        response.headers['Content-Disposition'] = disposition_str
-        return response
-    else:
-        return flask.redirect(flask.url_for('day.day_view', date=date))

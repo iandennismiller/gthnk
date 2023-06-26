@@ -1,7 +1,7 @@
-# -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
 import os
+import sys
 import logging
 
 import flask
@@ -14,16 +14,20 @@ login_manager = LoginManager()
 
 from gthnk import Gthnk
 
-if 'SETTINGS' in os.environ:
-    gthnk = Gthnk(os.getenv('SETTINGS'))
+default_filename = os.path.expanduser('~/.config/gthnk/gthnk.conf')
+if 'GTHNK_CONFIG' in os.environ:
+    gthnk = Gthnk(config_filename=os.getenv('GTHNK_CONFIG'))
+elif os.path.isfile(default_filename):
+    gthnk = Gthnk(config_filename=default_filename)
 else:
-    gthnk = Gthnk()
+    print("ERROR: GTHNK_CONFIG environment variable not set")
+    sys.exit(1)
 
 def create_app():
     app = flask.Flask(__name__, static_folder=None)
     
     try:
-        app.config.from_envvar('SETTINGS')
+        app.config.from_envvar('GTHNK_CONFIG')
     except RuntimeError:
         default_filename = os.path.expanduser('~/.config/gthnk/gthnk.conf')
         if os.path.isfile(default_filename):
@@ -37,9 +41,6 @@ def create_app():
 
     from .home import home
     app.register_blueprint(home)
-
-    from .api import api
-    app.register_blueprint(api)
 
     from .auth import auth
     app.register_blueprint(auth)

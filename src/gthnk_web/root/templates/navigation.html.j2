@@ -15,7 +15,7 @@
 
             {% if day %}
                 {% if day.yesterday %}
-                    <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('day.day_view', date=day.yesterday.day_id) }}" title="previous day"><i class="fas fa-backward"></i></a>
+                    <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('day.day_view', date=day.yesterday.datestamp) }}" title="previous day"><i class="fas fa-backward"></i></a>
                 {% else %}
                     <a class="nav-item nav-link px-1 text-secondary" href="javascript:void(0)" title="no past days"><i class="fas fa-stop"></i></a>
                 {% endif %}
@@ -25,7 +25,7 @@
 
             {% if day %} 
                 {%if day.tomorrow %}
-                    <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('day.day_view', date=day.tomorrow.day_id) }}" title="next day"><i class="fas fa-forward"></i></a>
+                    <a class="nav-item nav-link px-1 text-secondary" href="{{ url_for('day.day_view', date=day.tomorrow.datestamp) }}" title="next day"><i class="fas fa-forward"></i></a>
                 {% else %}
                     {# <a class="nav-item nav-link px-1 text-secondary" href="javascript:void(0)" title="no further days"><i class="fas fa-stop"></i></a> #}
                 {% endif %}

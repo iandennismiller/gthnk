@@ -71,13 +71,16 @@ class Gthnk(object):
     def init_filetree(self):
         "Initialize the filetree."
 
-        filetree_root = self.config["FILETREE_ROOT"]
-        self.logger.info(f"Filetree: {filetree_root}")
-        self.filetree = FileTree(
-            journal=self.journal,
-            path=filetree_root,
-        )
-        self.filetree.read_journal()
+        if "FILETREE_ROOT" in self.config:
+            filetree_root = self.config["FILETREE_ROOT"]
+            self.logger.info(f"Filetree: {filetree_root}")
+            self.filetree = FileTree(
+                journal=self.journal,
+                path=filetree_root,
+            )
+            self.filetree.read_journal()
+        else:
+            raise ValueError("No FILETREE_ROOT in config")
 
     def rotate_buffers(self):
         "Import all buffers, back them up, and clear them for the next day."
