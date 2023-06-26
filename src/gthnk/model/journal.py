@@ -67,7 +67,10 @@ class Journal(object):
                     yield entry
 
     def __repr__(self):
-        return f"<Journal: {', '.join(self.days.keys())}>"
+        buf = ""
+        for day_id in sorted(self.days.keys()):
+            buf += f"{self.days[day_id]}\n\n"
+        return buf
 
     def __iter__(self):
         return iter(self.days.values())

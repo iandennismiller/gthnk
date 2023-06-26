@@ -1,20 +1,15 @@
 #!/usr/bin/env python3
 
+# from gthnk.cli import cli as gthnk_cli
+
 import os
-import sys
-import json
-import glob
-import logging
-import datetime
 
 import click
 from trogon import tui
-from dotenv import load_dotenv
-load_dotenv()
 
 from gthnk import Gthnk
 from gthnk.model.journal import Journal
-from gthnk.filebuffer import FileBuffer
+from gthnk.filetree.buffer import FileBuffer
 
 
 @tui()
@@ -26,16 +21,16 @@ def cli():
 def path():
     "Display the path of the journal filetree"
     g = Gthnk()
-    print(g.filetree.get_path())
+    print(g.filetree.path)
 
 @cli.command()
 def buffer():
     "Display the contents of the file buffers"
     g = Gthnk()
+    j = Journal(gthnk=g)
     # parse and accumulate into a blank journal
-    j = Journal()
     for buffer in g.buffers:
-        fb = FileBuffer(buffer, journal=j)
+        FileBuffer(buffer, journal=j).read()
     print(j)
 
 @cli.command()
@@ -43,19 +38,19 @@ def buffer():
 @click.option('--previous', is_flag=True, default=False, help="Retrieve the day before the id provided")
 @click.option('--next', is_flag=True, default=False, help="Retrieve the day after the id provided")
 @click.option('--latest', is_flag=True, default=False, help="Retrieve the latest day")
-@click.argument('day_id', default=None, required=False)
-def day(date, previous, next, latest, day_id):
+@click.argument('datestamp', default=None, required=False)
+def day(date, previous, next, latest, datestamp):
     "Retrieve a day from the journal by id (YYYY-MM-DD)"
     g = Gthnk()
 
-    if day_id is None:
+    if datestamp is None:
         if latest:
-            day_id = g.journal.get_latest_day_id()
+            datestamp = g.journal.get_latest_datestamp()
         else:
             print("Please provide a day id")
             return
     
-    day = g.journal.get_day(day_id)
+    day = g.journal.get_day(datestamp)
     if day is None:
         print("Day not found")
         return
@@ -66,7 +61,7 @@ def day(date, previous, next, latest, day_id):
         day = g.journal.get_next_day(day)
     
     if date:
-        print(day.day_id)
+        print(day.datestamp)
     else:
         print(day)
 
@@ -81,10 +76,6 @@ def day(date, previous, next, latest, day_id):
 def search(date, uri, path, count, num, reverse, query):
     "Search the journal for a query"
     g = Gthnk()
-
-    # # load all days if lazy
-    # if g.lazy:
-    #     g.filetree.days.load_all()
 
     query_str = " ".join(query)
     if not query_str:
@@ -106,15 +97,15 @@ def search(date, uri, path, count, num, reverse, query):
     for entry in g.journal.search(query_str, chronological=reverse):
         count += 1
         if date and uri:
-            print(entry.day.get_uri())
+            print(entry.day.uri)
         elif date and path:
-            print(f"{g.filetree.get_path()}/day{entry.day.get_uri()}")
+            print(f"{g.filetree.get_path()}/day{entry.day.uri}")
         elif date:
-            print(entry.day.day_id)
+            print(entry.day.datestamp)
         elif uri:
-            print(entry.get_uri())
+            print(entry.uri)
         elif path:
-            print(f"{g.filetree.get_path()}/entry{entry.get_uri()}")
+            print(f"{g.filetree.get_path()}/entry{entry.uri}")
         else:
             print(entry.render_standalone())
         if num and count >= num:
@@ -122,50 +113,38 @@ def search(date, uri, path, count, num, reverse, query):
 
 @cli.command()
 @click.argument('gthnk_path')
-@click.argument('out_filename', default=None, required=False)
-def config(gthnk_path, out_filename):
+def config(gthnk_path):
     "Generate a sample config file, optionally saving to a file"
     secret_key = str(os.urandom(24))
     buf = config_template.format(
         gthnk_path=gthnk_path,
         secret_key=secret_key,
     )
-
-    if out_filename:
-        with open(out_filename, "w") as f:
-            f.write(buf)
-    else:
-        print(buf)
+    print(buf)
 
 @cli.command()
 def rotate():
     "Import file buffers and rotate them"
-    g = Gthnk()
-    g.rotate_buffers()
+    Gthnk().rotate_buffers()
 
 @cli.command()
 @click.argument('filename')
 def read(filename):
-    "Read a file buffer and import it into the journal"
+    "Import a properly-formatted text file into the journal"
     g = Gthnk()
-    fb = FileBuffer(filename, journal=g.journal)
+    FileBuffer(filename, journal=g.journal).read()
     g.filetree.write_journal()
     print(f"Journal contains {len(g.journal)} entries")
 
 
-config_template = """
+config_template = """\
 # Gthnk Configuration
-
-INPUT_FILES = "{gthnk_path}/journal.txt"
-
 FILETREE_ROOT="{gthnk_path}"
-LAZY = True
-
+INPUT_FILES = "{gthnk_path}/journal.txt"
 LOG_FILENAME = "{gthnk_path}/gthnk.log"
 LOG_LEVEL = "INFO"
-
 SECRET_KEY = {secret_key}
-BASE_URL = "http://gthnk.lan"
+BASE_URL = "http://gthnk.lan"\
 """
 
 
