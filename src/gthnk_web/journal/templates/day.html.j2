@@ -2,8 +2,11 @@
 
 {% set current_page = 'day-view' -%}
 
-{% block content -%}
+{% block navigation -%}
+{% include "pager.html.j2" -%}
+{% endblock -%}
 
+{% block content -%}
   <div id="backdrop" class="container">
     <div class="row">
       <div class="col-xl-1"></div>
@@ -25,12 +28,10 @@
     </div>
   </div>
 
-  <script>
-    var today = "{{ date }}";
-  </script>
-
   {# inter-day navigation -#}
   <script>
+    var today = "{{ date }}";
+
     {% if day and day.yesterday -%}
       var yesterday = "{{day.yesterday.datestamp}}";
     {% else -%}
@@ -43,12 +44,10 @@
       var tomorrow = null;
     {% endif -%}
   </script>
+  <script src="{{ url_for('.static', filename='gthnk-images.js') }}"></script>
+  <script src="{{ url_for('.static', filename='gthnk-navigate.js') }}"></script>
 
   {% if is_buffer -%}
     <script src="{{ url_for('.static', filename='gthnk-live-update.js') }}"></script>
   {% endif -%}
-
-  <script src="{{ url_for('.static', filename='gthnk-images.js') }}"></script>
-  <script src="{{ url_for('.static', filename='gthnk-navigate.js') }}"></script>
-
 {% endblock -%}
