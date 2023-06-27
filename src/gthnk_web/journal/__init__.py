@@ -30,7 +30,7 @@ def nearest_day(date):
     day = gthnk.journal.get_nearest_day(datestamp)
 
     if day:
-        return flask.redirect(flask.url_for('journal.day_view', date=day.datestamp))
+        return flask.redirect(flask.url_for('.day_view', date=day.datestamp))
     else:
         return flask.redirect(flask.url_for('.latest'))
 
@@ -39,16 +39,15 @@ def nearest_day(date):
 def latest():
     datestamp = gthnk.journal.get_latest_datestamp()
     if datestamp:
-        return flask.redirect(flask.url_for('journal.day_view', date=datestamp))
+        return flask.redirect(flask.url_for('.day_view', date=datestamp))
     else:
-        return flask.render_template('day.html.j2',
-            day=None, day_str="No entries yet")
+        return flask.render_template('day.html.j2', day=None, day_str="No entries yet")
 
 @journal.route("/search")
 @login_required
 def search_view():
     if not flask.request.args:
-        return flask.redirect(flask.url_for("gthnk.index"))
+        return flask.redirect(flask.url_for("home.index"))
     else:
         query_str = flask.request.args['q']
         if 'page' in flask.request.args:
@@ -128,7 +127,7 @@ def text_view(date):
     if day:
         return str(day)
     else:
-        return flask.redirect(flask.url_for('gthnk.index'))
+        return flask.redirect(flask.url_for('home.index'))
 
 def render_day_pipeline(day_str):
     # convert Markdown to string to avoid HTML escaping
