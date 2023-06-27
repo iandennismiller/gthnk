@@ -18,6 +18,7 @@ test:
 	pytest --cov=gthnk ./src
 	mypy --check-untyped-defs --ignore-missing-imports ./src/gthnk ./src/gthnk_web
 	pylint --disable C0114,R0913 ./src/gthnk
+	pylint --disable C0114,R0913 ./src/gthnk_web
 
 docs:
 	rm -rf var/sphinx

@@ -17,7 +17,7 @@ def slugify(value):
     # if not isinstance(value, unicode):
     #     value = unicode(value)
     # value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
-    
+
     value = _slugify_strip_re.sub('', value).strip().lower()
 
     return _slugify_hyphenate_re.sub('-', value)

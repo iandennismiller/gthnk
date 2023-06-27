@@ -25,24 +25,24 @@ def init_logger(logger=None, name=None, filename=None, level=None):
         logger.setLevel(level)
         logger.propagate = False
 
-        with open(filename, 'a', encoding="utf-8") as logfile:
-            monitor_format = logging.Formatter('%(message)s')
-            stderr = Console(
-                file=logfile,
-                tab_size=2,
-                width=100,
-                force_terminal=True
-            )
-            handler = RichHandler(
-                markup=True,
-                console=stderr,
-                show_path=True,
-                show_time=True,
-                show_level=True,
-                rich_tracebacks=True
-            )
-            handler.setFormatter(monitor_format)
-            logger.addHandler(handler)
+        logfile = open(filename, 'a', encoding="utf-8") # pylint: disable=consider-using-with
+        monitor_format = logging.Formatter('%(message)s')
+        stderr = Console(
+            file=logfile,
+            tab_size=2,
+            width=100,
+            force_terminal=True
+        )
+        handler = RichHandler(
+            markup=True,
+            console=stderr,
+            show_path=True,
+            show_time=True,
+            show_level=True,
+            rich_tracebacks=True
+        )
+        handler.setFormatter(monitor_format)
+        logger.addHandler(handler)
 
         logger.info(
             "Process %d (parent %d) logging to %s at level %s",

@@ -36,13 +36,13 @@
 
 ## To Do
 
-- dockerfile updates
-- what was in first-run?
 - remove password and stuff?
 - documentation updates
 
 ## Doing
 
+- dockerfile updates
+- what was in first-run?
 
 ## Waiting
 
