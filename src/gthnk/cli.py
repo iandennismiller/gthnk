@@ -1,7 +1,7 @@
 import os
 
 import click
-from trogon import tui # type: ignore
+from trogon import tui
 
 from . import Gthnk
 from .model.journal import Journal

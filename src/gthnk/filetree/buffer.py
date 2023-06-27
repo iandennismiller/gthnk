@@ -21,18 +21,23 @@ class FileBuffer(object):
         self.journal = journal
     
     def read(self):
-        "Read the file buffer and return a Journal object."
+        "Read the file buffer."
         with open(self.filename, 'r') as f:
             raw_entries = parse_text(f.read())
 
             for datestamp in raw_entries.keys():
                 day = self.journal.get_day(datestamp)
+                if day is None:
+                    day = self.journal.create_day(datestamp)
 
                 for timestamp in raw_entries[datestamp].keys():
+                    new_content = raw_entries[datestamp][timestamp]
                     entry = day.get_entry(timestamp)
-                    entry.content = raw_entries[datestamp][timestamp]
-
-            return self.journal
+                    if entry is None:
+                        day.create_entry(timestamp=timestamp, content=new_content)
+                    else:
+                        # overwrite the content with whatever is in the file buffer
+                        entry.content = new_content
 
     def backup(self):
         """

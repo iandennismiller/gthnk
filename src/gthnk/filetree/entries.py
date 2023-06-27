@@ -36,4 +36,4 @@ class EntriesCollection(object):
         "Read an entry from the filesystem."
         filename = os.path.join(self.path, "entry", f"{datestamp}/{timestamp}.txt")
         FileBuffer(filename=filename, journal=self.journal).read()
-        return self.journal.get_day(datestamp)
+        return self.journal.get_day(datestamp).get_entry(timestamp)

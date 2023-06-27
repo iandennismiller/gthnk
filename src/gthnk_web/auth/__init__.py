@@ -35,7 +35,7 @@ def login():
     user = userstore.get_by_id(1)
     login_user(user)
     logging.getLogger("gthnk").info("{user} automatically logs in without password".format(user=current_user))
-    return flask.redirect(flask.url_for('gthnk.index'))
+    return flask.redirect(flask.url_for('home.index'))
 
 @auth.route('/logout', methods=['GET'])
 @login_required
@@ -44,4 +44,4 @@ def logout():
         logging.getLogger("gthnk").info("{user} logs out".format(user=current_user))
         logout_user()
         flask.flash('You have successfully logged out.')
-    return flask.redirect(flask.url_for('gthnk.index'))
+    return flask.redirect(flask.url_for('home.index'))

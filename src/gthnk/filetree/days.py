@@ -28,10 +28,9 @@ class DaysCollection(object):
             f.write(day.__repr__())
 
     def read(self, datestamp:str):
-        "Read a day from the filesystem, add to journal, and return day object."
+        "Read a day from the filesystem, add to journal."
         filename = os.path.join(self.path, "day", f"{datestamp}.txt")
         FileBuffer(filename=filename, journal=self.journal).read()
-        return self.journal.get_day(datestamp)
 
     def scan(self):
         "Scan the filesystem for day datestamps."

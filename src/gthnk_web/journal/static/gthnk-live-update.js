@@ -3,7 +3,7 @@ var mtime = 0;
 function check_buffer(do_reload) {
   $.ajax({
     dataType: "json",
-    url: "/day/latest.json",
+    url: "/journal/live.json",
     success: function(data) {
       if (data.timestamp > mtime) {
         mtime = data.timestamp;

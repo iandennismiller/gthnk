@@ -16,14 +16,14 @@ class Day(object):
         self.datestamp = datestamp
         self.entries:dict[str, Entry] = {}
 
-    def get_entry(self, timestamp:str):
-        if timestamp is None:
-            timestamp = "0000"
-        if timestamp not in self.entries:
-            new_entry = Entry(day=self, timestamp=timestamp)
-            self.entries[timestamp] = new_entry
+    def create_entry(self, timestamp:str, content:str):
+        new_entry = Entry(day=self, timestamp=timestamp, content=content)
+        self.entries[timestamp] = new_entry
+        return new_entry
 
-        return self.entries[timestamp]
+    def get_entry(self, timestamp:str):
+        if timestamp in self.entries:
+            return self.entries[timestamp]
 
     @property
     def uri(self):
@@ -39,7 +39,6 @@ class Day(object):
 
     def __repr__(self):
         buf = f"{self.datestamp}\n\n"
-        if len(self.entries) > 0:
-            for timestamp in sorted(self.entries.keys()):
-                buf += self.entries[timestamp].__repr__()
+        for timestamp in sorted(self.entries.keys()):
+            buf += str(self.entries[timestamp])
         return buf

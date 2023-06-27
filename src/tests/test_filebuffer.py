@@ -8,11 +8,9 @@ def test_filebuffer(cwd, journal):
     assert fb
 
 def test_read(cwd, journal):
-    
-    fb = FileBuffer(f"{cwd}/data/2012-10-04.txt", journal=journal)
-    updated_journal = fb.read()
-    assert updated_journal
-    assert len(updated_journal.days) == 1
+    assert len(journal.days) == 0
+    FileBuffer(f"{cwd}/data/2012-10-04.txt", journal=journal).read()
+    assert len(journal.days) == 1
 
 def test_backup(cwd, filetree):
     buffer = FileBuffer(f"{cwd}/data/2012-10-04.txt", journal=filetree.journal)

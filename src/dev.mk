@@ -16,9 +16,9 @@ test-one:
 
 test:
 	pytest ./src
-	mypy --check-untyped-defs ./src/gthnk
+	mypy --check-untyped-defs --ignore-missing-imports ./src/gthnk ./src/gthnk_web
 
-lint:
+quality:
 	pylint ./src/gthnk
 
 docs:

@@ -8,16 +8,15 @@ class Journal(object):
         self.days = {}
         self.gthnk = gthnk
 
+    def create_day(self, datestamp:str):
+        "Create a new day in the journal"
+        new_day = Day(journal=self, datestamp=datestamp)
+        self.days[datestamp] = new_day
+        return new_day
+
     def get_day(self, datestamp:str):
-        if datestamp not in self.days:
-            new_day = Day(journal=self, datestamp=datestamp)
-            self.days[datestamp] = new_day
-
-        return self.days[datestamp]
-
-    def get_entry(self, datestamp:str, timestamp:str):
-        day = self.get_day(datestamp)
-        return day.get_entry(timestamp)
+        if datestamp in self.days:
+            return self.days[datestamp]
 
     @property
     def uri(self):
@@ -54,6 +53,20 @@ class Journal(object):
         else:
             # return the day after that
             return self.days[sorted_days[index + 1]]
+
+    def get_nearest_day(self, datestamp:str):
+        "obtain the nearest day in the journal"
+
+        # if the day exists, return it
+        if datestamp in self.days.keys() and len(self.days[datestamp].entries) > 0:
+            return self.days[datestamp]
+        else:
+            # obtain all datestamps, only including days with entries
+            datestamps = sorted([key for key, value in self.days.items() if len(value.entries) > 0])
+            # iterate sorted list to find first day that is larger
+            larger_datestamps = [x for x in datestamps if x > datestamp]
+            if larger_datestamps:
+                return self.days[larger_datestamps[0]]                
 
     def search(self, query:str, chronological:bool=False):
         query = query.lower()

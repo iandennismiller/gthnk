@@ -50,10 +50,6 @@ class FileTree(object):
         "Load all days from the filesystem."
         datestamps = self.days.scan()
         for datestamp in datestamps:
-            if datestamp not in self.journal.days:
-                self.journal.get_day(datestamp)
-
-        for datestamp in self.journal.days.keys():
             self.days.read(datestamp)
             logging.getLogger("gthnk").debug(f"Loaded day {datestamp} from filesystem.")
 

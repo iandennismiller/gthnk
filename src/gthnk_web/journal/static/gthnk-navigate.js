@@ -1,16 +1,16 @@
 var go_tomorrow = function() {
     if (tomorrow) {
-        window.location.href = "/day/" + tomorrow + ".html";
+        window.location.href = "/journal/" + tomorrow + ".html";
     } else {
-        window.location.href = "/day/live";
+        window.location.href = "/journal/live";
     }
 }
 
 var go_yesterday = function() {
     if (yesterday) {
-        window.location.href = "/day/" + yesterday + ".html";
+        window.location.href = "/journal/" + yesterday + ".html";
     } else {
-        window.location.href = "/day/latest";
+        window.location.href = "/journal/latest";
     }
 }
 
@@ -25,7 +25,7 @@ function checkKey(e) {
         go_tomorrow();
     }
     else if (e.keyCode == 192) { 
-        window.location.href = "/day/live";
+        window.location.href = "/journal/live";
     }
 }
 
@@ -40,7 +40,7 @@ $('a#calendar_button').daterangepicker(
         startDate: moment(today) // set this value in the html body, within script tags
     },
     function(start, end, label) {
-        window.location = "/nearest/" + start.format('YYYY-MM-DD');
+        window.location = "/journal/nearest/" + start.format('YYYY-MM-DD');
     }
 );
 
