@@ -25,4 +25,4 @@ docker-build: clean
 	cd src && docker build -t iandennismiller/gthnk:latest .
 
 docker-push:
-	cd src && docker push iandennismiller/gthnk
+	cd src && docker buildx build --platform linux/amd64,linux/arm64 -t iandennismiller/gthnk:latest --push .
