@@ -14,14 +14,20 @@ def cli():
     pass
 
 @cli.command()
-@click.argument('gthnk_path')
-def config(gthnk_path:str):
-    "Generate a sample config file, optionally saving to a file"
-    secret_key = str(os.urandom(24))
-    buf = config_template.format(
-        gthnk_path=gthnk_path,
-        secret_key=secret_key,
-    )
+@click.option('--current', is_flag=True, default=False, help="Print the current configuration")
+@click.argument('gthnk_path', default="/tmp/gthnk", required=False)
+def config(gthnk_path:str, current:bool):
+    "Generate a sample config file or view current configuration"
+    if current:
+        g = Gthnk()
+        with open(g.config_filename, 'r') as f:
+            buf = f.read()
+    else:
+        secret_key = str(os.urandom(24))
+        buf = config_template.format(
+            gthnk_path=gthnk_path,
+            secret_key=secret_key,
+        )
     print(buf)
 
 @cli.command()
@@ -137,10 +143,10 @@ def search(date:bool, uri:bool, path:bool, count:bool, num:int, reverse:bool, qu
 
 config_template = """\
 # Gthnk Configuration
-FILETREE_ROOT="{gthnk_path}"
+FILETREE_ROOT = "{gthnk_path}"
 INPUT_FILES = "{gthnk_path}/journal.txt"
 LOG_FILENAME = "{gthnk_path}/gthnk.log"
 LOG_LEVEL = "INFO"
 SECRET_KEY = {secret_key}
-BASE_URL = "http://gthnk.lan"\
+BASE_URL = "http://gthnk.lan"
 """
