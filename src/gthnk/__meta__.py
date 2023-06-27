@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # gthnk (c) Ian Dennis Miller
 
 __version__ = '0.8.0'

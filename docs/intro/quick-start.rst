@@ -6,11 +6,11 @@ The simplest installation method is to use Docker.
 ::
 
     docker run -d --rm \
-        --name gthnk-server \
+        --name gthnk \
         -p 1620:1620 \
         -e TZ=America/Toronto \
-        -v ~/.gthnk:/home/gthnk/.gthnk \
-        iandennismiller/gthnk
+        -v ~/.gthnk:/opt/gthnk/var \
+        iandennismiller/gthnk:0.8
 
 However, advanced methods are also available to install **Gthnk** as a Python package.
 Read :doc:`installation` for more installation options.

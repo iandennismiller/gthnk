@@ -3,13 +3,7 @@ System Requirements
 
 If you plan to install Gthnk as a python package, you will need to install Python 3.5+ first.
 
-You can manually install the required python packages from the project repository:
-
-::
-
-    git clone https://github.com/iandennismiller/gthnk.git
-    cd gthnk
-    make requirements
+If you want to run the Docker image, then you must install Docker that first.
 
 Next Steps
 ----------
