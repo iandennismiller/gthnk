@@ -41,48 +41,36 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      {% if current_user.is_authenticated -%}
-        <div class="collapse navbar-collapse" id="navbarSupportedContent2">
-          <ul class="navbar-nav ml-md-auto">
-            {% if current_page != 'index' -%}
-              <form class="nav-item form-inline" method="GET" action="{{ url_for('journal.search_view') }}">
-                <div class="input-group">
-                  <input class="form-control" type="search" name="q" placeholder="Search" aria-label="Search">
-                </div>
-                <div class="input-group-append">
-                  <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
-                </div>
-              </form>
-            {% endif -%}
+      <div class="collapse navbar-collapse" id="navbarSupportedContent2">
+        <ul class="navbar-nav ml-md-auto">
+          {% if current_page != 'index' -%}
+            <form class="nav-item form-inline" method="GET" action="{{ url_for('journal.search_view') }}">
+              <div class="input-group">
+                <input class="form-control" type="search" name="q" placeholder="Search" aria-label="Search">
+              </div>
+              <div class="input-group-append">
+                <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
+              </div>
+            </form>
+          {% endif -%}
 
-            <li class="nav-item">
-              <a class="nav-link" id="calendar_button" href="javascript:void(0)" title="go to day"><i class="far fa-calendar-alt"></i></a>
-            </li>
+          <li class="nav-item">
+            <a class="nav-link" id="calendar_button" href="javascript:void(0)" title="go to day"><i class="far fa-calendar-alt"></i></a>
+          </li>
 
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('journal.live_view') }}" title="configuration"><i class="fas fa-book"></i></a>
-            </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('journal.live_view') }}" title="configuration"><i class="fas fa-book"></i></a>
+          </li>
 
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('home.config_view') }}" title="configuration"><i class="fas fa-info-circle"></i></a>
-            </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('home.config_view') }}" title="configuration"><i class="fas fa-info-circle"></i></a>
+          </li>
 
-            <li class="nav-item">
-              <a class="nav-link" href="javascript:toggle_darkmode();" title="dark mode"><i class="far fa-lightbulb"></i></a>
-            </li>
-
-            {# <li class="nav-item">
-              <a class="nav-link" href="/logout" title="logout"><i class="fas fa-power-off"></i></a>
-            </li> -#}
-          </ul>
-        </div>
-      {% else -%}
-          {# <ul class="navbar-nav ml-md-auto">
-              <li class="nav-item">
-                  <a class="nav-link" href="/login" title="log in"><i class="fas fa-user"></i></a>
-              </li>
-          </ul> -#}
-      {% endif -%}
+          <li class="nav-item">
+            <a class="nav-link" href="javascript:toggle_darkmode();" title="dark mode"><i class="far fa-lightbulb"></i></a>
+          </li>
+        </ul>
+      </div>
     </nav>
 
     {% with messages = get_flashed_messages() -%}

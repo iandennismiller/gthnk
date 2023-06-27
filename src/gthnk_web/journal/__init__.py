@@ -4,7 +4,6 @@ import logging
 import datetime
 
 import flask
-from flask_login import login_required
 
 from gthnk.model.day import Day
 from gthnk.model.journal import Journal
@@ -24,7 +23,6 @@ journal = flask.Blueprint('journal',
 journal.add_app_template_filter(slugify)
 
 @journal.route("nearest/<date>")
-@login_required
 def nearest_day(date):
     "Redirect to the nearest day."
     datestamp = str(datetime.datetime.strptime(date, "%Y-%m-%d").date())
@@ -35,7 +33,6 @@ def nearest_day(date):
     return flask.redirect(flask.url_for('.latest'))
 
 @journal.route("latest")
-@login_required
 def latest():
     "Redirect to the latest day."
     datestamp = gthnk.journal.get_latest_datestamp()
@@ -44,7 +41,6 @@ def latest():
     return flask.render_template('day.html.j2', day=None, day_str="No entries yet")
 
 @journal.route("/search")
-@login_required
 def search_view():
     "Render the search page, handle search, and render results."
     if not flask.request.args:
@@ -72,7 +68,6 @@ def search_view():
         )
 
 @journal.route("live.json")
-@login_required
 def live_timestamp():
     "Return the timestamp of the latest input file."
     input_files = flask.current_app.config["INPUT_FILES"]
@@ -87,7 +82,6 @@ def live_timestamp():
     return {'timestamp': latest_time}
 
 @journal.route("live")
-@login_required
 def live_view():
     "View the current buffer"
     days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -107,7 +101,6 @@ def live_view():
     )
 
 @journal.route("<date>.html")
-@login_required
 def day_view(date):
     "View the specified day as HTML."
     day = gthnk.journal.get_day(date)
@@ -124,7 +117,6 @@ def day_view(date):
     return flask.redirect(flask.url_for('.nearest_day', date=date))
 
 @journal.route("<date>.txt")
-@login_required
 def text_view(date):
     "Render the day as plain text."
     day = gthnk.journal.get_day(date)

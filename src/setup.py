@@ -55,10 +55,8 @@ setup(
     ],
     extras_require={
         "dev": [
-            "ipython",
             "pytest",
             "pdbpp",
-            "watchdog",
             "pylint",
             "rstcheck",
             "mypy",
@@ -70,7 +68,6 @@ setup(
             "werkzeug==2.0.3",
             "Markdown<3.2",
             "itsdangerous==2.0.1",
-            "flask-login",
             "Flask-WTF",
             "flask-markdown",
             "mdx-linkify==1.0",

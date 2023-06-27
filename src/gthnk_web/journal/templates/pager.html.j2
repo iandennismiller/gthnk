@@ -1,27 +1,25 @@
-{% if current_user.is_authenticated -%}
-  {% if day -%}
-    {% if day.yesterday -%}
-      <a class="nav-item nav-link px-1 text-white" href="{{ url_for('journal.day_view', date=day.yesterday.datestamp) }}" title="previous day"><i class="fas fa-backward"></i></a>
-    {% else %}
-      <a class="nav-item nav-link px-1 disabled" href="javascript:void(0)" title="no past days"><i class="fas fa-stop"></i></a>
-    {% endif -%}
-  {% else -%}
-    <a class="nav-item nav-link px-1 text-white" href="{{ url_for('journal.latest') }}" title="previous day"><i class="fas fa-backward"></i></a>    
+{% if day -%}
+  {% if day.yesterday -%}
+    <a class="nav-item nav-link px-1 text-white" href="{{ url_for('journal.day_view', date=day.yesterday.datestamp) }}" title="previous day"><i class="fas fa-backward"></i></a>
+  {% else %}
+    <a class="nav-item nav-link px-1 disabled" href="javascript:void(0)" title="no past days"><i class="fas fa-stop"></i></a>
   {% endif -%}
+{% else -%}
+  <a class="nav-item nav-link px-1 text-white" href="{{ url_for('journal.latest') }}" title="previous day"><i class="fas fa-backward"></i></a>    
+{% endif -%}
 
-  {% if day %}
-    {% if day.tomorrow %}
-      <a class="nav-item nav-link px-1 text-white" href="{{ url_for('journal.day_view', date=day.tomorrow.datestamp) }}" title="next day"><i class="fas fa-forward"></i></a>
-    {% else %}
-      <a class="nav-item nav-link px-1 text-white" href="{{ url_for('journal.live_view') }}"><i class="fas fa-forward"></i></a>
-    {% endif -%}
-  {% else -%}
-    <a class="nav-item nav-link px-1 disabled" href="javascript:void(0)" title="no upcoming days"><i class="fas fa-forward"></i></a>
+{% if day %}
+  {% if day.tomorrow %}
+    <a class="nav-item nav-link px-1 text-white" href="{{ url_for('journal.day_view', date=day.tomorrow.datestamp) }}" title="next day"><i class="fas fa-forward"></i></a>
+  {% else %}
+    <a class="nav-item nav-link px-1 text-white" href="{{ url_for('journal.live_view') }}"><i class="fas fa-forward"></i></a>
   {% endif -%}
+{% else -%}
+  <a class="nav-item nav-link px-1 disabled" href="javascript:void(0)" title="no upcoming days"><i class="fas fa-forward"></i></a>
+{% endif -%}
 
-  {% if day -%}
-    <a class="nav-item nav-link px-1 text-white" href="{{ url_for('journal.live_view') }}" title="live journal"><i class="fas fa-fast-forward"></i></a>
-  {% else -%}
-    <a class="nav-item nav-link px-1 disabled" href="javascript:void(0)" title="live journal"><i class="fas fa-fast-forward"></i></a>
-  {% endif -%}
+{% if day -%}
+  <a class="nav-item nav-link px-1 text-white" href="{{ url_for('journal.live_view') }}" title="live journal"><i class="fas fa-fast-forward"></i></a>
+{% else -%}
+  <a class="nav-item nav-link px-1 disabled" href="javascript:void(0)" title="live journal"><i class="fas fa-fast-forward"></i></a>
 {% endif -%}
