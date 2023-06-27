@@ -106,11 +106,10 @@ When the journal rotates, all the entries are imported from ``journal.txt`` into
 After import, the ``journal.txt`` file is wiped.
 
 The preferred rotation method method is to use an automatic process like ``cron``, ``systemd``, or ``launchd``.
-A full server with rotation using ``docker-compose`` is available in the readme.
+The journal can be manually rotated with the command line interface: ``gthnk rotate``.
 
-The journal can be manually rotated using the interface by clicking the **refresh** button in the hamburger menu.
-
-Before ``journal.txt`` is wiped, its contents are backed up - so information is never lost even if there is a problem with rotation.
+Before ``journal.txt`` is wiped, its contents are backed up.
+Information is never lost even if there is a problem with rotation.
 
 Integration with Text Editors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
