@@ -9,12 +9,6 @@ DOCKER_CMD=docker run \
 	-v ~/Work/gthnk/var/gthnk:/opt/gthnk/var \
 	iandennismiller/gthnk:0.8
 
-docker-compose-up:
-	cd src && docker-compose -f docker-compose.yaml up
-
-docker-compose-down:
-	cd src && docker-compose -f docker-compose.yaml down
-
 docker-shell:
 	cd src && $(DOCKER_CMD) /bin/bash
 

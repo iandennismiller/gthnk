@@ -1,3 +1,5 @@
+# docker-compose -f docker-compose.yaml up
+# docker-compose -f docker-compose.yaml down
 version: "3.3"
 services:
   gthnk-server:
