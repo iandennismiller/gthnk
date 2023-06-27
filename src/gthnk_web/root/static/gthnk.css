@@ -107,3 +107,36 @@ body.bootstrap-dark .gthnk-card {
         font-weight: bold;
     }
 }
+
+/*
+    Dark Mode for Date Range Picker
+*/
+
+body.bootstrap-dark .daterangepicker {
+    background-color: #343a40;
+    border: 1px solid #212427;
+}
+
+body.bootstrap-dark .daterangepicker .calendar-table {
+    background-color: #343a40;
+}
+
+body.bootstrap-dark .daterangepicker td.off {
+    background-color: #212427;
+}
+
+body.bootstrap-dark .daterangepicker td.available:hover {
+    background-color: #454b51;
+}
+
+body.bootstrap-dark .daterangepicker th.available span {
+    color: #ddd;
+}
+
+body.bootstrap-dark .daterangepicker th.available:hover {
+    background-color: #454b51;
+}
+
+body.bootstrap-dark .daterangepicker:before, body.bootstrap-dark .daterangepicker:after {
+    border-bottom: 7px solid #343a40;
+}

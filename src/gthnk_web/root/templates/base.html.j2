@@ -14,40 +14,23 @@
 
     <title>{% block title -%}{% endblock -%}</title>
 
-    {# jquery -#}
-    <script src="{{ url_for('root.static', filename='lib/jquery/jquery-3.5.1.min.js') }}"></script>
-
-    {# bootstrap-dark -#}
     <link rel="stylesheet" href="{{ url_for('root.static', filename='lib/bootstrap-dark/css/bootstrap-dark.min.css') }}" />
     <link rel="stylesheet" href="{{ url_for('root.static', filename='lib/bootstrap-dark/css/toggle-bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ url_for('root.static', filename='lib/bootstrap-dark/css/toggle-bootstrap-dark.min.css') }}" />
-    <script src="{{ url_for('root.static', filename='lib/bootstrap-dark/js/bootstrap.min.js') }}"></script>
-
-    {# fontawesome -#}
     <link rel="stylesheet" href="{{ url_for('root.static', filename='lib/fontawesome/fontawesome-free-5.13.0-web/css/all.min.css') }}" />
-    <script src="{{ url_for('root.static', filename='lib/fontawesome/fontawesome-free-5.13.0-web/js/all.min.js') }}"></script>
-
-    {# moment.js -#}
-    <script src="{{ url_for('root.static', filename='lib/moment/moment.min.js') }}"></script>
-
-    {# daterangepicker -#}
-    <script src="{{ url_for('root.static', filename='lib/daterangepicker/daterangepicker.min.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('root.static', filename='lib/daterangepicker/daterangepicker.css') }}" />
-
-    {# filedrag -#}
-    <script src="{{ url_for('root.static', filename='lib/filedrag/filedrag.js') }}"></script>
-
-    {# swiper -#}
-    <script src="{{ url_for('root.static', filename='lib/swiper/swiper.js') }}"></script>
-
-    {# gthnk -#}
     <link href="{{ url_for('root.static', filename='gthnk.css') }}" rel="stylesheet">
-    <script src="{{ url_for('root.static', filename='gthnk.js') }}"></script>
-    <script src="{{ url_for('root.static', filename='darkmode.js') }}"></script>
+
+    <script src="{{ url_for('root.static', filename='lib/jquery/jquery-3.5.1.min.js') }}"></script>
+    <script src="{{ url_for('root.static', filename='lib/bootstrap-dark/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('root.static', filename='lib/fontawesome/fontawesome-free-5.13.0-web/js/all.min.js') }}"></script>
+    <script src="{{ url_for('root.static', filename='lib/moment/moment.min.js') }}"></script>
+    <script src="{{ url_for('root.static', filename='lib/daterangepicker/daterangepicker.min.js') }}"></script>
+    <script src="{{ url_for('root.static', filename='lib/filedrag/filedrag.js') }}"></script>
+    <script src="{{ url_for('root.static', filename='lib/swiper/swiper.js') }}"></script>
   </head>
 
   <body id="{{current_page}}" class="bootstrap-dark">
-    {# {% include "navigation.html.j2" -%} #}
     <nav class="navbar navbar-expand-sm navbar-themed sticky-top">
       <a class="navbar-brand" href="{{ url_for('home.index') }}">gthnk</a>
 
@@ -135,5 +118,7 @@
     {# <div class="container" id="footer">
         &nbsp;
     </div> -#}
+
+    <script src="{{ url_for('root.static', filename='gthnk.js') }}"></script>
   </body>
 </html>

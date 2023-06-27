@@ -29,21 +29,6 @@ function checkKey(e) {
     }
 }
 
-// http://www.daterangepicker.com/
-// 1.3.15
-// https://github.com/dangrossman/bootstrap-daterangepicker/tree/0d7f4f26618e09ba6d2488a7e42273fd2fb07ae7
-
-$('a#calendar_button').daterangepicker(
-    {
-        format: 'YYYY-MM-DD',
-        singleDatePicker: true,
-        startDate: moment(today) // set this value in the html body, within script tags
-    },
-    function(start, end, label) {
-        window.location = "/journal/nearest/" + start.format('YYYY-MM-DD');
-    }
-);
-
 document.onkeydown = checkKey;
 
 var swiper = new Swipe(document.getElementsByTagName('body')[0]);
