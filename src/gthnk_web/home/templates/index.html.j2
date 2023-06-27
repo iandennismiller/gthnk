@@ -1,0 +1,23 @@
+{% extends "base.html.j2" -%}
+{% set current_page = 'index' -%}
+{% block content -%}
+<div class="container-fluid">
+  <p class="text-center mt-5">
+    <img id="gthnk-logo" src="{{ url_for('root.static', filename='gthnk-logo.png') }}">
+  </p>
+  <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+      <form class="my-2 my-sm-0" method="GET" action="/journal/search" class="search-form">
+        <div class="input-group justify-content-center">
+          <input class="form-control " type="text" name="q" value="" placeholder="Search" autofocus>
+          <div class="input-group-append">
+            <button type="submit" class="btn btn-sm btn-secondary">Submit</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-4"></div>
+  </div>
+</div>
+{% endblock -%}

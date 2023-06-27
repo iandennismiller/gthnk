@@ -15,8 +15,6 @@ Implement your favorite feature
 -------------------------------
 
 If you know a feature you'd like to code in order to help with Gthnk, then make your own local branch and write it until you are happy.
-Depending on the scope of the feature, you might want to get in touch via the `chat room <https://app.element.io/#/room/#gthnk:matrix.org>`_ to brainstorm, first.
-
 If you end up writing a feature that is really useful to you, then maybe you will consider contributing it to the community.
 In that case, be sure to write tests for your feature and add code comments where appropriate.
 The code should pass a Python linter that checks for PEP8 compliance.

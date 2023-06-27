@@ -1,6 +1,6 @@
 .. gthnk documentation master file
 
-.. include:: ../src/Readme.rst
+.. include:: ../Readme.rst
 
 Introduction
 ------------
@@ -20,7 +20,6 @@ User Guide
 
     user/using-the-journal
     user/text-editor-macros
-    user/handwritten-notes-on-paper
     user/browser-integration
     user/mobile-devices
     user/text-file-format
@@ -42,7 +41,6 @@ Development
     :maxdepth: 1
 
     dev/release
-    dev/migrations
 
 About
 -----

@@ -1,0 +1,66 @@
+{% extends 'base.html.j2' %}
+
+{% set current_page = 'results-list' %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="row">
+      <div class="col-1"></div>
+      <div class="col-10">
+        <strong>{{count}} Results: {{ query_str }}; Page {{ page }}</strong>
+      </div>
+      <div class="col-1"></div>
+    </div>
+
+  {% if results|length > 0 %}
+
+    {% for row in results %}
+      <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10">
+          <div class="gthnk-card" id="agenda">
+          <p>
+            <a href="{{ url_for('journal.day_view', date=row.day.datestamp) }}#{{ row.timestamp }}">
+              {{row.day.datestamp}} <strong>{{row.timestamp}}</strong>
+            </a>
+          </p>
+
+          {% filter markdown %}{{row.content}}{% endfilter %}
+          </div>
+        </div>
+        <div class="col-1"></div>
+      </div>
+    {% endfor %}
+
+    <!-- paginate results -->
+    <div class="row">
+      <div class="col-1"></div>
+      <div class="col-10">
+        <p align="center">
+          {% if page > 1 %}
+            <a role="button" class="btn btn-secondary" href="{{ url_for('.search_view', q=query_str) }}">&lt;&lt; First</a>
+            
+            <a role="button" class="btn btn-secondary" href="{{ url_for('.search_view', q=query_str, page=page-1) }}">&lt; Previous</a>
+            
+          {% endif %}
+
+          <a role="button" class="btn btn-secondary" href="{{ url_for('.search_view', q=query_str, page=page+1) }}">Next &gt;</a>
+        </p>
+      </div>
+      <div class="col-1"></div>
+    </div>
+  {% else %}
+    <div class="row">
+      <div class="col-1"></div>
+      <div class="col-10">
+        <p>No results found.</p>
+      </div>
+      <div class="col-1"></div>
+    </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}

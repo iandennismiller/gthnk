@@ -1,9 +1,0 @@
-[report]
-omit =
-    tests/*
-    src/gthnk/migrations/*
-    src/gthnk/templates/*
-    src/gthnk/__meta__.py
-    src/gthnk/adaptors/__init__.py
-    src/gthnk/models/__init__.py
-    src/gthnk/models/mixins/__init__.py

@@ -13,10 +13,6 @@ Make a journal that lasts 100 years.
     :target: https://gthnk.readthedocs.io/en/latest/
     :alt: Documentation Status
 
-.. image:: https://travis-ci.org/iandennismiller/gthnk.svg?branch=master
-    :target: https://travis-ci.org/github/iandennismiller/gthnk
-    :alt: Build Status
-
 .. image:: https://img.shields.io/github/stars/iandennismiller/gthnk.svg?style=social&label=GitHub
     :target: https://github.com/iandennismiller/gthnk
     :alt: Github Project
@@ -30,8 +26,6 @@ Overview
 - **Entries** are searchable using the embedded **Gthnk** server, which can be accessed with a browser.
 - Plain-text enables backup/restore via hardcopy (e.g. paper) for long-term archival.
 
-.. Additional media, including images and PDFs, can be attached to the journal.
-
 The easiest way to run **Gthnk** is with Docker.
 **Gthnk** also installs on Windows, Linux, and MacOS systems with Python 3.5+.
 See the `Installation document <https://gthnk.readthedocs.io/en/latest/intro/installation.html>`_ for more details.
@@ -44,11 +38,11 @@ Use Docker to run Gthnk with all files stored locally in ``~/.gthnk``.
 ::
 
     docker run -d --rm \
-        --name gthnk-server \
+        --name gthnk \
         -p 1620:1620 \
         -e TZ=America/Toronto \
-        -v ~/.gthnk:/home/gthnk/.gthnk \
-        iandennismiller/gthnk
+        -v ~/.gthnk:/opt/gthnk/var \
+        iandennismiller/gthnk:0.8
 
 The default text file where you will record journal entries is ``~/.gthnk/journal.txt``.
 
@@ -80,10 +74,25 @@ The rest is Markdown.
 
 You can add multiple entries per day - and multiple days in a single journal - by inserting date and time markers as you work.
 
-User Interface
-^^^^^^^^^^^^^^
+Command Line Interface
+^^^^^^^^^^^^^^^^^^^^^^
 
-To interact with the Gthnk journal, connect to http://localhost:1620 and log in with the username ``gthnk`` and the password ``gthnk``.
+While the Docker container is running, the Gthnk command line interface is available using ``docker exec``.
+Create a shell alias to simplify access.
+
+::
+
+    alias gthnk="docker exec -it gthnk /opt/gthnk/.venv/bin/gthnk"
+    gthnk --help
+
+To view the current journal buffer, use ``gthnk buffer``.
+
+To search for a keyword, use ``gthnk search``.
+
+Web Interface
+^^^^^^^^^^^^^
+
+To interact with the Gthnk journal, connect to http://localhost:1620.
 
 Click the **fast-forward** icon to view the live journal buffer.
 As you edit ``journal.txt``, this live buffer will be updated.
@@ -97,11 +106,10 @@ When the journal rotates, all the entries are imported from ``journal.txt`` into
 After import, the ``journal.txt`` file is wiped.
 
 The preferred rotation method method is to use an automatic process like ``cron``, ``systemd``, or ``launchd``.
-A full server with rotation using ``docker-compose`` is available in the readme.
+The journal can be manually rotated with the command line interface: ``gthnk rotate``.
 
-The journal can be manually rotated using the interface by clicking the **refresh** button in the hamburger menu.
-
-Before ``journal.txt`` is wiped, its contents are backed up to ``~/.gthnk/backups`` - so information is never lost even if there is a problem with rotation.
+Before ``journal.txt`` is wiped, its contents are backed up.
+Information is never lost even if there is a problem with rotation.
 
 Integration with Text Editors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -109,41 +117,18 @@ Integration with Text Editors
 Text editor integrations make it easier to insert journal entries.
 
 - VS Code: https://marketplace.visualstudio.com/items?itemName=IanDennisMiller.gthnk
-- Sublime Text: https://github.com/iandennismiller/gthnk/tree/master/src/sublime-text-plugin
+- Sublime Text: https://github.com/iandennismiller/sublime-text-gthnk
 
 After installing the plugin for your editor, the following key combinations are available:
 
 - Ctrl-Alt-Cmd-N: Insert date marker YYYYMMDD
 - Ctrl-Alt-Cmd-M: Insert time marker HHMM
 
-Tags
-^^^^
-
-Tagging is available with double-square brackets:
-
-::
-
-    2020-07-04
-
-    0804
-
-    To insert a [[tag]] in [[gthnk]], put one or more words inside square brackets.
-
-A tag links to all other entries containing the tag or fulltext keyword.
-
-Configuration
-^^^^^^^^^^^^^
-
-The default configuration file is ``~/.gthnk/gthnk.conf``.
-This file can be edited to change the location of input journal files, database, logging, and other system parameters.
-
-In particular, you can change ``INPUT_FILES`` to pull from multiple journal text sources including shared files on other devices.
-
 Cloud Sync
 ^^^^^^^^^^
 
-You can sync Gthnk to multiple devices using a cloud file system like Dropbox or Seafile.
-Use the ``docker run -v`` flag to point to your cloud storage: ``-v ${PATH_TO_CLOUD}/gthnk:/home/gthnk/cloud-storage``
+You can sync Gthnk to multiple devices using a cloud file system like Dropbox or Syncthing.
+Use the ``docker run -v`` flag to point to your cloud storage: ``-v ${PATH_TO_CLOUD}/gthnk:/opt/gthnk/var``
 
 A complete example using Dropbox could look like:
 
@@ -153,77 +138,41 @@ A complete example using Dropbox could look like:
         --name gthnk-server \
         -p 1620:1620 \
         -e TZ=America/Toronto \
-        -v ~/.gthnk:/home/gthnk/.gthnk \
-        -v ~/Dropbox/gthnk:/home/gthnk/cloud-storage \
-        iandennismiller/gthnk
+        -v ~/Dropbox/gthnk:/opt/gthnk/var \
+        iandennismiller/gthnk:0.8
 
 This configuration supports running Gthnk on a dedicated server, like a local Linux machine, while editing the journal files on devices that are synced via the cloud.
 
-To support a laptop and phone, edit ``~/.gthnk/gthnk.conf`` to specify multiple INPUT_FILES located on cloud storage.
+To support a laptop and phone, use a custom configuration file.
 
 ::
 
-    INPUT_FILES = "/home/gthnk/cloud-storage/journal-laptop.txt,/home/gthnk/cloud-storage/journal-phone.txt"
+    docker run -d --rm \
+        --name gthnk-server \
+        -p 1620:1620 \
+        -e TZ=America/Toronto \
+        -v ~/.gthnk/gthnk.conf:/opt/gthnk/.config/gthnk/gthnk.conf \
+        -v ~/Dropbox/gthnk:/opt/gthnk/var
+        iandennismiller/gthnk:0.8
 
-Full Server with Rotation
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-In order for Gthnk to rotate the journals automatically, a separate process needs to run periodically.
-
-The full suite of Gthnk server processes can be run as:
+Then edit ``~/.gthnk/gthnk.conf`` to specify multiple INPUT_FILES.
 
 ::
 
-    wget https://github.com/iandennismiller/gthnk/raw/master/src/docker/docker-compose.yaml
-    docker-compose up -d
+    INPUT_FILES = "/opt/gthnk/var/journal-laptop.txt,/opt/gthnk/var/journal-phone.txt"
 
 Other Gthnk Resources
 ^^^^^^^^^^^^^^^^^^^^^
 
-- Project repository
-    - https://github.com/iandennismiller/gthnk
-- Public website
-    - http://www.gthnk.com
-    - repo: https://github.com/iandennismiller/www-gthnk
-- Read The Docs
-    - https://readthedocs.org/projects/gthnk
-    - repo: https://github.com/iandennismiller/gthnk/tree/master/docs
-- Python Package Index
-    - https://pypi.org/project/gthnk/
-- Presentation
-    - https://iandennismiller.github.io/pres-gthnk-overview
-    - repo: https://github.com/iandennismiller/pres-gthnk-overview
-- Chat room (matrix)
-    - https://app.element.io/#/room/#gthnk:matrix.org
-- Continuous Integration
-    - https://travis-ci.org/iandennismiller/gthnk
-- VS Code Extension
-    - https://marketplace.visualstudio.com/items?itemName=IanDennisMiller.gthnk
-    - repo: https://github.com/iandennismiller/vscode-gthnk
-- Chrome App
-    - https://github.com/iandennismiller/gthnk/tree/master/src/chrome-app
-- Python-Markdown gthnk journal Extension
-    - https://pypi.org/project/mdx_journal/
-    - repo: https://github.com/iandennismiller/mdx_journal
-
-Diamond Methods
-^^^^^^^^^^^^^^^
-
-- Routine
-    - http://www.idmiller.com/books/routine/index.html
-    - https://www.amazon.com/Routine-Reflection-Ian-Dennis-Miller/dp/1974269108
-- Project System
-    - https://project-system.readthedocs.io/en/latest/
-    - python: https://pypi.org/project/project-system/
-    - repo: https://github.com/iandennismiller/project-system
-- Diamond Patterns
-    - https://diamond-patterns.readthedocs.io/en/latest/
-    - python: https://pypi.org/project/diamond-patterns/
-    - repo: https://github.com/iandennismiller/diamond-patterns
-- Gthnk
-    - http://www.gthnk.com
-    - python: https://pypi.org/project/gthnk/
-    - repo: https://github.com/iandennismiller/gthnk
+- `Project repository <https://github.com/iandennismiller/gthnk>`_
+- `Public website <http://www.gthnk.com>`_ - `repo <https://github.com/iandennismiller/www-gthnk>`_
+- `Read The Docs <https://gthnk.readthedocs.io/en/latest/>`_ - `project <https://readthedocs.org/projects/gthnk>`_ - `repo <https://github.com/iandennismiller/gthnk/tree/master/docs>`_
+- `Python Package Index <https://pypi.org/project/gthnk/>`_
+- `Presentation: Overview of Gthnk <https://iandennismiller.github.io/pres-gthnk-overview>`_ - `repo <https://github.com/iandennismiller/pres-gthnk-overview>`_
+- `Continuous Integration <https://travis-ci.org/iandennismiller/gthnk>`_
+- `VS Code Extension <https://marketplace.visualstudio.com/items?itemName=IanDennisMiller.gthnk>`_ - `repo <https://github.com/iandennismiller/vscode-gthnk>`_
+- `Chrome App <https://github.com/iandennismiller/gthnk/tree/master/share/chrome-app>`_
+- `Python-Markdown gthnk journal Extension <https://pypi.org/project/mdx_journal/>`_ - `repo <https://github.com/iandennismiller/mdx_journal>`_
 
 Documentation
 ^^^^^^^^^^^^^

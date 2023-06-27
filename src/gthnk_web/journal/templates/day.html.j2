@@ -1,0 +1,53 @@
+{% extends 'base.html.j2' -%}
+
+{% set current_page = 'day-view' -%}
+
+{% block navigation -%}
+{% include "pager.html.j2" -%}
+{% endblock -%}
+
+{% block content -%}
+  <div id="backdrop" class="container">
+    <div class="row">
+      <div class="col-xl-1"></div>
+      <div class="col-xl-10">
+        <a id="entries_anchor" name="entries_anchor"></a>
+
+        <div class="gthnk-card" id="entries">
+          <p id="day-of-week">
+            {% if is_buffer -%}
+              (buffer)
+            {% else -%}
+              {{ day_of_week }}
+            {% endif -%}
+          </p>
+          {{ day_str|safe }}
+        </div>
+      </div>
+      <div class="col-xl-1"></div>
+    </div>
+  </div>
+
+  {# inter-day navigation -#}
+  <script>
+    var today = "{{ date }}";
+
+    {% if day and day.yesterday -%}
+      var yesterday = "{{day.yesterday.datestamp}}";
+    {% else -%}
+      var yesterday = null;
+    {% endif -%}
+
+    {% if day and day.tomorrow -%}
+      var tomorrow = "{{day.tomorrow.datestamp}}";
+    {% else -%}
+      var tomorrow = null;
+    {% endif -%}
+  </script>
+  <script src="{{ url_for('.static', filename='gthnk-images.js') }}"></script>
+  <script src="{{ url_for('.static', filename='gthnk-navigate.js') }}"></script>
+
+  {% if is_buffer -%}
+    <script src="{{ url_for('.static', filename='gthnk-live-update.js') }}"></script>
+  {% endif -%}
+{% endblock -%}

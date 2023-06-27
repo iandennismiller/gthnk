@@ -8,7 +8,7 @@ Sublime Text
 
 I personally use Sublime Text 3 as my primary method for editing my work journal.  The following steps will help you extend Sublime Text 3 to add datestamps and timestamps using a key combination.
 
-1. Download `journal_date.py <https://raw.githubusercontent.com/iandennismiller/gthnk/master/integration/sublime-text/journal_date.py>`_
+1. Download `journal_date.py <https://raw.githubusercontent.com/iandennismiller/sublime-text-gthnk/master/src/journal_date.py>`_
 2. Copy ``journal_date.py`` to the Sublime Text 3 Packages directory
 
 ::

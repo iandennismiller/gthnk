@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-# gthnk (c) Ian Dennis Miller
+# gthnk
 
 from setuptools import setup, find_packages
 import os
@@ -9,10 +8,11 @@ import re
 def fpath(name):
     return os.path.join(os.path.dirname(__file__), name)
 
-
 def read(fname):
-    return open(fpath(fname)).read()
-
+    try:
+        return open(fpath(fname)).read()
+    except FileNotFoundError:
+        return f"File '{fname}' not found."
 
 file_text = read(fpath('gthnk/__meta__.py'))
 
@@ -27,12 +27,14 @@ setup(
     version=grep('__version__'),
     name='gthnk',
     description="gthnk is a personal knowledge management system",
-    packages=find_packages(),
+    packages=[
+        "gthnk",
+        "gthnk_web",
+    ],
     scripts=[
         "scripts/gthnk",
-        "scripts/gthnk-config-init.py",
     ],
-    long_description=read('Readme.rst'),
+    long_description=read('../Readme.rst'),
     classifiers=[
         "Development Status :: 4 - Beta",
         "Framework :: Flask",
@@ -40,7 +42,7 @@ setup(
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Operating System :: MacOS :: MacOS X",
-        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.8",
         "Topic :: Database :: Front-Ends",
     ],
     include_package_data=True,
@@ -48,7 +50,33 @@ setup(
     author=grep('__author__'),
     author_email=grep('__email__'),
     url=grep('__url__'),
-    install_requires=read('requirements.txt'),
+    install_requires=[
+        "python-dotenv",
+        "rich",
+        "trogon",
+    ],
+    extras_require={
+        "dev": [
+            "pytest",
+            "pdbpp",
+            "pylint",
+            "rstcheck",
+            "mypy",
+            "pytest-cov",
+            "Flask-Testing",
+        ],
+        "server": [
+            "jinja2<3.1.0",
+            "flask==1.1.2",
+            "werkzeug==2.0.3",
+            "Markdown<3.2",
+            "itsdangerous==2.0.1",
+            "Flask-WTF",
+            "flask-markdown",
+            "mdx-linkify==1.0",
+            "mdx-journal>=0.1.4",
+        ],
+    },
     license='MIT',
     zip_safe=False,
 )
