@@ -10,19 +10,25 @@ from .filetree.buffer import FileBuffer
 from .model.journal import Journal
 
 
-class Gthnk(object):
-    def __init__(self, config:dict={}, config_filename:str=""):
+class Gthnk:
+    """
+    Gthnk is the main class for the Gthnk application.
+    It combines a journal with a file tree.
+    """
+
+    def __init__(self, config:dict={}, config_filename:str=""): # pylint: disable=dangerous-default-value
         self.journal = Journal(gthnk=self)
         self.init_config(config, config_filename)
         self.init_logging()
         self.init_filetree()
         self.init_filebuffers()
 
-    def init_config(self, config:dict={}, config_filename:str=""):
-        if not config == {}:
+    def init_config(self, config:dict={}, config_filename:str=""): # pylint: disable=dangerous-default-value
+        "Initialize the configuration."
+        if config != {}:
             self.config_filename = "Dict()"
             self.config = config
-        elif not config_filename == "":
+        elif config_filename != "":
             self.config_filename = config_filename
             self.config = dotenv_values(config_filename)
         elif "GTHNK_CONFIG" in os.environ:
@@ -37,6 +43,7 @@ class Gthnk(object):
             sys.exit(1)
 
     def init_logging(self):
+        "Initialize logging."
         if "LOG_LEVEL" in self.config:
             log_level = self.config["LOG_LEVEL"]
         else:
@@ -54,7 +61,7 @@ class Gthnk(object):
                 level=log_level
             )
         self.logger.info("[bold yellow]Start Gthnk[/bold yellow]")
-        self.logger.info(f"Load config: {self.config_filename}")
+        self.logger.info("Load config: %s", self.config_filename)
 
     def init_filebuffers(self):
         "Directly parse a string containing a comma-separated list of input filenames"
@@ -63,7 +70,7 @@ class Gthnk(object):
         if "INPUT_FILES" in self.config:
             buffer_filenames = self.config["INPUT_FILES"].split(",")
             for buffer_filename in buffer_filenames:
-                self.logger.info(f"Buffer: {buffer_filename}")
+                self.logger.info("Buffer: %s", buffer_filename)
                 self.buffers.append(buffer_filename)
         else:
             raise ValueError("No INPUT_FILES in config")
@@ -73,7 +80,7 @@ class Gthnk(object):
 
         if "FILETREE_ROOT" in self.config:
             filetree_root = self.config["FILETREE_ROOT"]
-            self.logger.info(f"Filetree: {filetree_root}")
+            self.logger.info("Filetree: %s", filetree_root)
             self.filetree = FileTree(
                 journal=self.journal,
                 path=filetree_root,

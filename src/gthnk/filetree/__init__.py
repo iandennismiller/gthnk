@@ -8,7 +8,7 @@ from .entries import EntriesCollection
 from .days import DaysCollection
 
 
-class FileTree(object):
+class FileTree:
     """
     Represents a full journal as a filesystem tree.
     Works by mapping a journal URI to a filesystem path.
@@ -17,7 +17,7 @@ class FileTree(object):
     def __init__(self, journal:Journal, path:str=""):
         self.journal = journal
 
-        if path is "":
+        if path == "":
             if "FILETREE_ROOT" in self.journal.gthnk.config:
                 self.path = self.journal.gthnk.config["FILETREE_ROOT"]
             else:
@@ -51,6 +51,6 @@ class FileTree(object):
         datestamps = self.days.scan()
         for datestamp in datestamps:
             self.days.read(datestamp)
-            logging.getLogger("gthnk").debug(f"Loaded day {datestamp} from filesystem.")
+            logging.getLogger("gthnk").debug("Loaded day %s from filesystem.", datestamp)
 
-        logging.getLogger("gthnk").info(f"Loaded {len(self.journal.days)} days from filesystem.")
+        logging.getLogger("gthnk").info("Loaded %d days from filesystem.", len(self.journal.days))

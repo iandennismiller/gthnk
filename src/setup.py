@@ -62,6 +62,7 @@ setup(
             "pylint",
             "rstcheck",
             "mypy",
+            "pytest-cov",
         ],
         "server": [
             "jinja2<3.1.0",

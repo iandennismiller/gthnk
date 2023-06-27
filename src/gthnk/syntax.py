@@ -24,7 +24,6 @@ def parse_text(raw_text):
         match_day = re_day.match(line)
         match_time = re_time.match(line)
         match_time_tag = re_time_tag.match(line)
-        tag = ""
 
         if match_day:
             current_day = match_day.group(1)
@@ -43,13 +42,11 @@ def parse_text(raw_text):
             current_time = match_time.group(1)
         elif match_time_tag:
             current_time = match_time_tag.group(1)
-            tag = match_time_tag.group(2)
-            #current_time = "%s %s" % (current_time, tag)
         else:
-            entries[str(current_day)][str(current_time)] += "{0}\n".format(line)
+            entries[str(current_day)][str(current_time)] += f"{line}\n"
 
     for day in entries:
         for timestamp in entries[day]:
             entries[day][timestamp] = entries[day][timestamp].rstrip()
-    
+
     return entries

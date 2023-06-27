@@ -11,7 +11,7 @@ from .filetree.buffer import FileBuffer
 @tui()
 @click.group()
 def cli():
-    pass
+    "Gthnk: a journaling tool"
 
 @cli.command()
 @click.option('--current', is_flag=True, default=False, help="Print the current configuration")
@@ -19,19 +19,19 @@ def cli():
 def config(gthnk_path:str, current:bool):
     "Generate a sample config file or view current configuration"
     if current:
-        g = Gthnk()
-        with open(g.config_filename, 'r') as f:
-            buf = f.read()
+        gthnk = Gthnk()
+        with open(gthnk.config_filename, 'r', encoding="utf-8") as file_handle:
+            buf = file_handle.read()
     else:
         secret_key = str(os.urandom(24))
-        buf = config_template.format(
+        buf = CONFIG_TEMPLATE.format(
             gthnk_path=gthnk_path,
             secret_key=secret_key,
         )
     print(buf)
 
-@cli.command()
-def path():
+@cli.command(name="path")
+def print_path():
     "Display the path of the journal filetree"
     print(Gthnk().filetree.path)
 
@@ -43,50 +43,54 @@ def rotate():
 @cli.command()
 def buffer():
     "Display the contents of the file buffers"
-    g = Gthnk()
-    j = Journal(gthnk=g)
+    gthnk = Gthnk()
+    journal = Journal(gthnk=gthnk)
     # parse and accumulate into a blank journal
-    for buffer in g.buffers:
-        FileBuffer(buffer, journal=j).read()
-    print(j)
+    for buffer_name in gthnk.buffers:
+        FileBuffer(buffer_name, journal=journal).read()
+    print(journal)
 
 @cli.command()
 @click.argument('filename')
 def read(filename:str):
     "Import a properly-formatted text file into the journal"
-    g = Gthnk()
-    FileBuffer(filename, journal=g.journal).read()
-    g.filetree.write_journal()
-    print(f"Journal contains {len(g.journal)} entries")
+    gthnk = Gthnk()
+    FileBuffer(filename, journal=gthnk.journal).read()
+    gthnk.filetree.write_journal()
+    print(f"Journal contains {len(gthnk.journal)} entries")
 
-@cli.command()
+@cli.command(name="day")
 @click.option('--date', is_flag=True, default=False, help="Print only the date, not the entry")
-@click.option('--previous', is_flag=True, default=False, help="Retrieve the day before the id provided")
+@click.option('--previous',
+    is_flag=True,
+    default=False,
+    help="Retrieve the day before the id provided"
+)
 @click.option('--next', is_flag=True, default=False, help="Retrieve the day after the id provided")
 @click.option('--latest', is_flag=True, default=False, help="Retrieve the latest day")
 @click.option('--uri', is_flag=True, default=False, help="URI of the day")
 @click.argument('datestamp', default=None, required=False)
-def day(date:bool, previous:bool, next:bool, latest:bool, uri:bool, datestamp:str):
+def print_day(date:bool, previous:bool, next:bool, latest:bool, uri:bool, datestamp:str): # pylint: disable=redefined-builtin
     "Retrieve a day from the journal by id (YYYY-MM-DD)"
-    g = Gthnk()
+    gthnk = Gthnk()
 
     if datestamp is None:
         if latest:
-            datestamp = g.journal.get_latest_datestamp()
+            datestamp = gthnk.journal.get_latest_datestamp()
         else:
             print("Please provide a day id")
             return
-    
-    day = g.journal.get_day(datestamp)
+
+    day = gthnk.journal.get_day(datestamp)
     if len(day.entries) == 0:
         print("Day not found")
         return
-    
+
     if previous:
-        day = g.journal.get_previous_day(day)
+        day = gthnk.journal.get_previous_day(day)
     elif next:
-        day = g.journal.get_next_day(day)
-    
+        day = gthnk.journal.get_next_day(day)
+
     if date:
         print(day.datestamp)
     elif uri:
@@ -99,12 +103,16 @@ def day(date:bool, previous:bool, next:bool, latest:bool, uri:bool, datestamp:st
 @click.option('--uri', is_flag=True, default=False, help="Print only the uri")
 @click.option('--path', is_flag=True, default=False, help="Print the full file path")
 @click.option('--reverse', is_flag=True, default=False, help="Reverse the order of the entries")
-@click.option('--count', is_flag=True, default=False, help="Print the number of entries that matched")
+@click.option('--count',
+    is_flag=True,
+    default=False,
+    help="Print the number of entries that matched"
+)
 @click.option('--num', default=None, help="Number of entries to return")
 @click.argument('query', nargs=-1)
 def search(date:bool, uri:bool, path:bool, count:bool, num:int, reverse:bool, query:str):
     "Search the journal for a query"
-    g = Gthnk()
+    gthnk = Gthnk()
 
     query_str = " ".join(query)
     if not query_str:
@@ -115,7 +123,7 @@ def search(date:bool, uri:bool, path:bool, count:bool, num:int, reverse:bool, qu
         num = int(num)
 
     if count:
-        print(len(list(g.journal.search(query_str))))
+        print(len(list(gthnk.journal.search(query_str))))
         return
 
     if uri and path:
@@ -123,25 +131,25 @@ def search(date:bool, uri:bool, path:bool, count:bool, num:int, reverse:bool, qu
         return
 
     counter = 0
-    for entry in g.journal.search(query_str, chronological=reverse):
+    for entry in gthnk.journal.search(query_str, chronological=reverse):
         counter += 1
         if date and uri:
             print(entry.day.uri)
         elif date and path:
-            print(f"{g.filetree.path}/day{entry.day.uri}")
+            print(f"{gthnk.filetree.path}/day{entry.day.uri}")
         elif date:
             print(entry.day.datestamp)
         elif uri:
             print(entry.uri)
         elif path:
-            print(f"{g.filetree.path}/entry{entry.uri}")
+            print(f"{gthnk.filetree.path}/entry{entry.uri}")
         else:
             print(entry.render_standalone())
         if num and counter >= num:
             break
 
 
-config_template = """\
+CONFIG_TEMPLATE = """\
 # Gthnk Configuration
 FILETREE_ROOT = "{gthnk_path}"
 INPUT_FILES = "{gthnk_path}/journal.txt"

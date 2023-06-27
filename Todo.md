@@ -1,7 +1,5 @@
 ## Requested
 
-- vscode extension could embed gthnk browser
-- test coverage
 - repair day/entry mismatches
 - lazy load and export for filetree
 - migration tool to leave sqlite backend
@@ -38,8 +36,6 @@
 
 ## To Do
 
-- test coverage for search
-- other cli things that should be tested?
 - dockerfile updates
 - what was in first-run?
 - remove password and stuff?
@@ -47,7 +43,6 @@
 
 ## Doing
 
-- move "nearest day" to core gthnk, out of web
 
 ## Waiting
 
@@ -98,3 +93,7 @@
 - improve LLM context and question answering
 - LLM integration with ChromaDB
 - agenda widget extracts todo items from a day's entries; render separately at bottom of day
+- other cli things that should be tested?
+- move "nearest day" to core gthnk, out of web
+- test coverage for search
+- test coverage

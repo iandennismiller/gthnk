@@ -15,11 +15,9 @@ test-one:
 	pytest -k $(TEST_ONE) ./src
 
 test:
-	pytest ./src
+	pytest --cov=gthnk ./src
 	mypy --check-untyped-defs --ignore-missing-imports ./src/gthnk ./src/gthnk_web
-
-quality:
-	pylint ./src/gthnk
+	pylint --disable C0114,R0913 ./src/gthnk
 
 docs:
 	rm -rf var/sphinx
