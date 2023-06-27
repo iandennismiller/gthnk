@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   gthnk-server:
-    image: iandennismiller/gthnk:latest
+    image: iandennismiller/gthnk:0.8
     container_name: gthnk-server
     volumes:
       - ~/Work/gthnk/var/gthnk:/opt/gthnk/var

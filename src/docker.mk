@@ -7,7 +7,7 @@ DOCKER_CMD=docker run \
 	-p 1620:1620 \
 	-e TZ=America/Toronto \
 	-v ~/Work/gthnk/var/gthnk:/opt/gthnk/var \
-	iandennismiller/gthnk:latest
+	iandennismiller/gthnk:0.8
 
 docker-compose-up:
 	cd src && docker-compose -f docker-compose.yaml up
@@ -22,7 +22,7 @@ docker-server:
 	cd src && $(DOCKER_CMD)
 
 docker-build: clean
-	cd src && docker build -t iandennismiller/gthnk:latest .
+	cd src && docker build -t iandennismiller/gthnk:0.8 .
 
 docker-push:
-	cd src && docker buildx build --platform linux/amd64,linux/arm64 -t iandennismiller/gthnk:latest --push .
+	cd src && docker buildx build --platform linux/amd64,linux/arm64 -t iandennismiller/gthnk:0.8 --push .
