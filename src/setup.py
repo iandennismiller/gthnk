@@ -8,10 +8,11 @@ import re
 def fpath(name):
     return os.path.join(os.path.dirname(__file__), name)
 
-
 def read(fname):
-    return open(fpath(fname)).read()
-
+    try:
+        return open(fpath(fname)).read()
+    except FileNotFoundError:
+        return f"File '{fname}' not found."
 
 file_text = read(fpath('gthnk/__meta__.py'))
 
@@ -52,6 +53,7 @@ setup(
     install_requires=[
         "python-dotenv",
         "rich",
+        "trogon",
     ],
     extras_require={
         "dev": [
@@ -61,6 +63,7 @@ setup(
             "rstcheck",
             "mypy",
             "pytest-cov",
+            "Flask-Testing",
         ],
         "server": [
             "jinja2<3.1.0",
@@ -72,7 +75,6 @@ setup(
             "flask-markdown",
             "mdx-linkify==1.0",
             "mdx-journal>=0.1.4",
-            "Flask-Testing",
         ],
     },
     license='MIT',

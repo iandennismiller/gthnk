@@ -1,27 +1,28 @@
 # gthnk
 
-USERNAME=gthnk
-PASSWORD=gthnk
-CONTAINER_EXEC=docker exec -it gthnk-server sudo -i -u gthnk
+DOCKER_CMD=docker run \
+	-it \
+	--rm \
+	--name gthnk \
+	-p 1620:1620 \
+	-e TZ=America/Toronto \
+	-v ~/Work/gthnk/var/gthnk:/opt/gthnk/var \
+	iandennismiller/gthnk:latest
 
-docker-compose:
-	docker-compose -f docker-compose.yaml up -d
+docker-compose-up:
+	cd src && docker-compose -f docker-compose.yaml up
 
 docker-compose-down:
-	docker-compose -f docker-compose.yaml down
+	cd src && docker-compose -f docker-compose.yaml down
 
-docker-run:
-	docker run \
-		-it \
-		--rm \
-		--name gthnk-server \
-		-p 1620:1620 \
-		-e TZ=America/Toronto \
-		-v ~/.gthnk:/home/gthnk/.gthnk \
-		iandennismiller/gthnk
+docker-shell:
+	cd src && $(DOCKER_CMD) /bin/bash
+
+docker-server:
+	cd src && $(DOCKER_CMD)
 
 docker-build: clean
-	docker build -t iandennismiller/gthnk:latest .
+	cd src && docker build --platform linux/arm64 -t iandennismiller/gthnk:latest .
 
 docker-push:
-	docker push iandennismiller/gthnk
+	cd src && docker push iandennismiller/gthnk

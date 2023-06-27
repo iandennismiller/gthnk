@@ -1,32 +1,30 @@
-# gthnk
-
-FROM iandennismiller/python:latest
-
-ENV LANG=C.UTF-8
-ENV LC_ALL=C.UTF-8
+FROM python:3.11-slim-bookworm
 
 # Add application user
 RUN adduser \
-  --home "/home/gthnk" \
+  --home "/opt/gthnk" \
   --uid 1000 \
-  --gecos "gthnk" \
   --disabled-password \
   "gthnk"
 
-# Copy home directory structure
-RUN mkdir -p /home/gthnk/.gthnk
+RUN python3 -m venv /opt/gthnk/.venv
 
-# Install Gthnk Requirements
-COPY src/requirements.txt /home/gthnk/
-RUN sudo -i -u gthnk pip3 install --user -r /home/gthnk/requirements.txt
+RUN mkdir /usr/local/src/gthnk
+COPY gthnk /usr/local/src/gthnk/gthnk
+COPY gthnk_web /usr/local/src/gthnk/gthnk_web
+COPY scripts /usr/local/src/gthnk/scripts
+COPY setup.py /usr/local/src/gthnk
+COPY MANIFEST.in /usr/local/src/gthnk
+RUN /opt/gthnk/.venv/bin/pip3 install --disable-pip-version-check --no-cache-dir '/usr/local/src/gthnk[server]' && chown -R gthnk:gthnk /opt/gthnk/.venv
 
-COPY src/docker/bin/ /home/gthnk/.local/bin
-RUN chown -R gthnk:gthnk /home/gthnk/.local/bin
+USER gthnk
+WORKDIR /opt/gthnk
+RUN mkdir -p /opt/gthnk/.config/gthnk
+RUN /opt/gthnk/.venv/bin/gthnk config /opt/gthnk/var > /opt/gthnk/.config/gthnk/gthnk.conf
+RUN echo 'source /opt/gthnk/.venv/bin/activate' >> /opt/gthnk/.bashrc
 
-# Install Gthnk
-COPY src/ /home/gthnk/gthnk/src
-RUN sudo -i -u gthnk pip3 install --user /home/gthnk/gthnk/src
-
-# 1) Generate configuration if necessary
-# 2) Launch the Gthnk server
-CMD sudo -i -u gthnk sh -c 'gthnk-firstrun.sh /home/gthnk/.gthnk; gthnk-server.sh'
+ENV FLASK_ENV=production
+ENV FLASK_RUN_PORT=1620
+ENV FLASK_RUN_HOST=0.0.0.0
+ENV FLASK_APP=gthnk_web.app
+CMD .venv/bin/flask run

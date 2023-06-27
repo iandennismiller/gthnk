@@ -36,7 +36,6 @@
 
 ## To Do
 
-- remove password and stuff?
 - documentation updates
 
 ## Doing
@@ -97,3 +96,4 @@
 - move "nearest day" to core gthnk, out of web
 - test coverage for search
 - test coverage
+- remove password and stuff?

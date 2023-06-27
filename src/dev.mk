@@ -10,6 +10,7 @@ clean:
 	rm -rf src/*.egg-info src/build src/dist
 	find . -name '*.pyc' -delete
 	find . -name __pycache__ -delete
+	find . -name '.DS_Store' -delete
 
 test-one:
 	pytest -k $(TEST_ONE) ./src

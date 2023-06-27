@@ -1,22 +1,16 @@
-# gthnk
-# inspired by https://stackoverflow.com/a/48611098
-
 version: "3.3"
 services:
   gthnk-server:
-    image: iandennismiller/gthnk
+    image: iandennismiller/gthnk:latest
     container_name: gthnk-server
     volumes:
-      - ~/.gthnk:/home/gthnk/.gthnk
-      # - ~/Dropbox/gthnk:/home/gthnk/.gthnk
-      # - ~/Seafile/gthnk:/home/gthnk/.gthnk
+      - ~/Work/gthnk/var/gthnk:/opt/gthnk/var
     networks:
       - gthnk-net
     ports:
       - "1620:1620"
     environment:
       - TZ=America/Toronto
-    command: sudo -i -u gthnk sh -c 'gthnk-firstrun.sh /home/gthnk/.gthnk; gthnk-server.sh'
 
   gthnk-rotate:
     image: docker:edge
@@ -25,13 +19,13 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - gthnk-net
+    # inspired by https://stackoverflow.com/a/48611098
     # This image does not support time zones and is always in UTC.
     # You must set the cron job to execute at a sensible time relative to your local time zone.
     # For Eastern (America/Toronto) use 5 AM UTC to ensure post-midnight run, which is: 0 5 * * * 
     command: >
       sh -c "
-      echo '0 5 * * * docker exec gthnk-server sudo -i -u gthnk gthnk-rotate.sh' > /etc/crontabs/root
+      echo '0 5 * * * docker exec gthnk-server /opt/gthnk/.venv/bin/gthnk rotate' > /etc/crontabs/root
       && crond -f"
-
 networks:
   gthnk-net:
