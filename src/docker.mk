@@ -22,7 +22,7 @@ docker-server:
 	cd src && $(DOCKER_CMD)
 
 docker-build: clean
-	cd src && docker build --platform linux/arm64 -t iandennismiller/gthnk:latest .
+	cd src && docker build -t iandennismiller/gthnk:latest .
 
 docker-push:
 	cd src && docker push iandennismiller/gthnk
