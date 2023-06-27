@@ -13,10 +13,6 @@ Make a journal that lasts 100 years.
     :target: https://gthnk.readthedocs.io/en/latest/
     :alt: Documentation Status
 
-.. .. image:: https://travis-ci.org/iandennismiller/gthnk.svg?branch=master
-..     :target: https://travis-ci.org/github/iandennismiller/gthnk
-..     :alt: Build Status
-
 .. image:: https://img.shields.io/github/stars/iandennismiller/gthnk.svg?style=social&label=GitHub
     :target: https://github.com/iandennismiller/gthnk
     :alt: Github Project
@@ -30,8 +26,6 @@ Overview
 - **Entries** are searchable using the embedded **Gthnk** server, which can be accessed with a browser.
 - Plain-text enables backup/restore via hardcopy (e.g. paper) for long-term archival.
 
-.. Additional media, including images and PDFs, can be attached to the journal.
-
 The easiest way to run **Gthnk** is with Docker.
 **Gthnk** also installs on Windows, Linux, and MacOS systems with Python 3.5+.
 See the `Installation document <https://gthnk.readthedocs.io/en/latest/intro/installation.html>`_ for more details.
@@ -44,11 +38,11 @@ Use Docker to run Gthnk with all files stored locally in ``~/.gthnk``.
 ::
 
     docker run -d --rm \
-        --name gthnk-server \
+        --name gthnk \
         -p 1620:1620 \
         -e TZ=America/Toronto \
-        -v ~/.gthnk:/home/gthnk/.gthnk \
-        iandennismiller/gthnk
+        -v ~/.gthnk:/opt/gthnk/var \
+        iandennismiller/gthnk:0.8
 
 The default text file where you will record journal entries is ``~/.gthnk/journal.txt``.
 
@@ -80,10 +74,25 @@ The rest is Markdown.
 
 You can add multiple entries per day - and multiple days in a single journal - by inserting date and time markers as you work.
 
-User Interface
-^^^^^^^^^^^^^^
+Command Line Interface
+^^^^^^^^^^^^^^^^^^^^^^
 
-To interact with the Gthnk journal, connect to http://localhost:1620 and log in with the username ``gthnk`` and the password ``gthnk``.
+While the Docker container is running, the Gthnk command line interface is available using ``docker exec``.
+Create a shell alias to simplify access.
+
+::
+
+    alias gthnk="docker exec -it gthnk /opt/gthnk/.venv/bin/gthnk"
+    gthnk --help
+
+To view the current journal buffer, use ``gthnk buffer``.
+
+To search for a keyword, use ``gthnk search``.
+
+Web Interface
+^^^^^^^^^^^^^
+
+To interact with the Gthnk journal, connect to http://localhost:1620.
 
 Click the **fast-forward** icon to view the live journal buffer.
 As you edit ``journal.txt``, this live buffer will be updated.
@@ -101,7 +110,7 @@ A full server with rotation using ``docker-compose`` is available in the readme.
 
 The journal can be manually rotated using the interface by clicking the **refresh** button in the hamburger menu.
 
-Before ``journal.txt`` is wiped, its contents are backed up to ``~/.gthnk/backups`` - so information is never lost even if there is a problem with rotation.
+Before ``journal.txt`` is wiped, its contents are backed up - so information is never lost even if there is a problem with rotation.
 
 Integration with Text Editors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -109,26 +118,18 @@ Integration with Text Editors
 Text editor integrations make it easier to insert journal entries.
 
 - VS Code: https://marketplace.visualstudio.com/items?itemName=IanDennisMiller.gthnk
-- Sublime Text: https://github.com/iandennismiller/gthnk/tree/master/src/sublime-text-plugin
+- Sublime Text: https://github.com/iandennismiller/sublime-text-gthnk
 
 After installing the plugin for your editor, the following key combinations are available:
 
 - Ctrl-Alt-Cmd-N: Insert date marker YYYYMMDD
 - Ctrl-Alt-Cmd-M: Insert time marker HHMM
 
-Configuration
-^^^^^^^^^^^^^
-
-The default configuration file is ``~/.gthnk/gthnk.conf``.
-This file can be edited to change the location of input journal files, database, logging, and other system parameters.
-
-In particular, you can change ``INPUT_FILES`` to pull from multiple journal text sources including shared files on other devices.
-
 Cloud Sync
 ^^^^^^^^^^
 
-You can sync Gthnk to multiple devices using a cloud file system like Dropbox or Seafile.
-Use the ``docker run -v`` flag to point to your cloud storage: ``-v ${PATH_TO_CLOUD}/gthnk:/home/gthnk/cloud-storage``
+You can sync Gthnk to multiple devices using a cloud file system like Dropbox or Syncthing.
+Use the ``docker run -v`` flag to point to your cloud storage: ``-v ${PATH_TO_CLOUD}/gthnk:/opt/gthnk/var``
 
 A complete example using Dropbox could look like:
 
@@ -138,29 +139,28 @@ A complete example using Dropbox could look like:
         --name gthnk-server \
         -p 1620:1620 \
         -e TZ=America/Toronto \
-        -v ~/.gthnk:/home/gthnk/.gthnk \
-        -v ~/Dropbox/gthnk:/home/gthnk/cloud-storage \
-        iandennismiller/gthnk
+        -v ~/Dropbox/gthnk:/opt/gthnk/var \
+        iandennismiller/gthnk:0.8
 
 This configuration supports running Gthnk on a dedicated server, like a local Linux machine, while editing the journal files on devices that are synced via the cloud.
 
-To support a laptop and phone, edit ``~/.gthnk/gthnk.conf`` to specify multiple INPUT_FILES located on cloud storage.
+To support a laptop and phone, use a custom configuration file.
 
 ::
 
-    INPUT_FILES = "/home/gthnk/cloud-storage/journal-laptop.txt,/home/gthnk/cloud-storage/journal-phone.txt"
+    docker run -d --rm \
+        --name gthnk-server \
+        -p 1620:1620 \
+        -e TZ=America/Toronto \
+        -v ~/.gthnk/gthnk.conf:/opt/gthnk/.config/gthnk/gthnk.conf \
+        -v ~/Dropbox/gthnk:/opt/gthnk/var
+        iandennismiller/gthnk:0.8
 
-Full Server with Rotation
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-In order for Gthnk to rotate the journals automatically, a separate process needs to run periodically.
-
-The full suite of Gthnk server processes can be run as:
+Then edit ``~/.gthnk/gthnk.conf`` to specify multiple INPUT_FILES.
 
 ::
 
-    wget https://github.com/iandennismiller/gthnk/raw/master/src/docker/docker-compose.yaml
-    docker-compose up -d
+    INPUT_FILES = "/opt/gthnk/var/journal-laptop.txt,/opt/gthnk/var/journal-phone.txt"
 
 Other Gthnk Resources
 ^^^^^^^^^^^^^^^^^^^^^

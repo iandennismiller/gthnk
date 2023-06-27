@@ -144,7 +144,7 @@ def search(date:bool, uri:bool, path:bool, count:bool, num:int, reverse:bool, qu
         elif path:
             print(f"{gthnk.filetree.path}/entry{entry.uri}")
         else:
-            print(entry.render_standalone())
+            print(entry)
         if num and counter >= num:
             break
 
