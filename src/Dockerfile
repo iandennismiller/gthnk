@@ -8,14 +8,33 @@ RUN adduser \
   "gthnk"
 
 RUN python3 -m venv /opt/gthnk/.venv
+RUN /opt/gthnk/.venv/bin/pip3 install \
+  --disable-pip-version-check \
+  --no-cache-dir \
+  'python-dotenv' \
+  'rich' \
+  'trogon' \
+  'jinja2<3.1.0' \
+  'flask==1.1.2' \
+  'werkzeug==2.0.3' \
+  'Markdown<3.2' \
+  'itsdangerous==2.0.1' \
+  'Flask-WTF' \
+  'flask-markdown' \
+  'mdx-linkify==1.0' \
+  'mdx-journal>=0.1.4' && \
+  chown -R gthnk:gthnk /opt/gthnk/.venv
 
 RUN mkdir /usr/local/src/gthnk
-COPY gthnk /usr/local/src/gthnk/gthnk
-COPY gthnk_web /usr/local/src/gthnk/gthnk_web
-COPY scripts /usr/local/src/gthnk/scripts
-COPY setup.py /usr/local/src/gthnk
 COPY MANIFEST.in /usr/local/src/gthnk
-RUN /opt/gthnk/.venv/bin/pip3 install --disable-pip-version-check --no-cache-dir '/usr/local/src/gthnk[server]' && chown -R gthnk:gthnk /opt/gthnk/.venv
+COPY setup.py /usr/local/src/gthnk
+COPY scripts /usr/local/src/gthnk/scripts
+COPY gthnk_web /usr/local/src/gthnk/gthnk_web
+COPY gthnk /usr/local/src/gthnk/gthnk
+RUN /opt/gthnk/.venv/bin/pip3 install \
+  --disable-pip-version-check \
+  --no-cache-dir '/usr/local/src/gthnk[server]' && \
+  chown -R gthnk:gthnk /opt/gthnk/.venv
 
 USER gthnk
 WORKDIR /opt/gthnk

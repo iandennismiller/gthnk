@@ -49,8 +49,9 @@ class FileTree:
     def read_journal(self):
         "Load all days from the filesystem."
         datestamps = self.days.scan()
-        for datestamp in datestamps:
-            self.days.read(datestamp)
-            logging.getLogger("gthnk").debug("Loaded day %s from filesystem.", datestamp)
+        if len(datestamps) > 0:
+            for datestamp in datestamps:
+                self.days.read(datestamp)
+                logging.getLogger("gthnk").debug("Loaded day %s from filesystem.", datestamp)
 
-        logging.getLogger("gthnk").info("Loaded %d days from filesystem.", len(self.journal.days))
+            logging.getLogger("gthnk").info("Loaded %d days from filesystem.", len(self.journal.days))

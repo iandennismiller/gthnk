@@ -94,6 +94,7 @@ class Gthnk:
 
         for buffer_filename in self.buffers:
             FileBuffer(buffer_filename, journal=self.journal).read()
+            logging.getLogger("gthnk").info("Read FileBuffer %s.", buffer_filename)
 
         # write the journal to the filetree
         self.filetree.write_journal()
@@ -101,6 +102,12 @@ class Gthnk:
         # backup the buffers and clear them
         for buffer_filename in self.buffers:
             FileBuffer(buffer_filename, journal=self.journal).backup()
+            logging.getLogger("gthnk").info("Backup FileBuffer %s.", buffer_filename)
 
         for buffer_filename in self.buffers:
             FileBuffer(buffer_filename, journal=self.journal).clear()
+            logging.getLogger("gthnk").info("Clear FileBuffer %s.", buffer_filename)
+        
+        # finally, read the journal from the filetree
+        self.filetree.read_journal()
+        logging.getLogger("gthnk").info("Reload Journal.")

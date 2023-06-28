@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Set
 import os
 import logging
 
@@ -19,6 +19,7 @@ class DaysCollection:
     def __init__(self, path:str, journal:Journal):
         self.path = path
         self.journal = journal
+        self.datestamps:Set[str] = set()
 
     def write(self, day:Day):
         "Write a day to the filetree, along with its entries"
@@ -33,11 +34,13 @@ class DaysCollection:
 
     def scan(self):
         "Scan the filesystem for day datestamps."
-        datestamps = []
+        new_datestamps = set()
         logging.getLogger("gthnk").debug("Scanning %s/day for days.", self.path)
         for filename in os.listdir(os.path.join(self.path, "day")):
             if filename.endswith(".txt"):
                 datestamp = filename.replace(".txt", "")
-                datestamps.append(datestamp)
-        logging.getLogger("gthnk").debug("Scanned %d days from filesystem.", len(datestamps))
-        return datestamps
+                if datestamp not in self.datestamps:
+                    new_datestamps.add(datestamp)
+                    self.datestamps.add(datestamp)
+        logging.getLogger("gthnk").debug("Scanned %d days from filesystem.", len(new_datestamps))
+        return list(new_datestamps)
