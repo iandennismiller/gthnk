@@ -103,6 +103,8 @@ def live_view():
 @journal.route("<date>.html")
 def day_view(date):
     "View the specified day as HTML."
+    # check for any new days that have been added
+    gthnk.filetree.read_journal()
     day = gthnk.journal.get_day(date)
     # if there is any content, this day exists
     if len(day.entries) > 0:

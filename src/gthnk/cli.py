@@ -21,7 +21,7 @@ def config(gthnk_path:str, current:bool):
     if current:
         gthnk = Gthnk()
         with open(gthnk.config_filename, 'r', encoding="utf-8") as file_handle:
-            buf = file_handle.read()
+            buf = f"# Filename: {gthnk.config_filename}\n" + file_handle.read()
     else:
         secret_key = str(os.urandom(24))
         buf = CONFIG_TEMPLATE.format(

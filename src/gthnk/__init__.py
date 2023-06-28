@@ -1,5 +1,6 @@
 import os
 import sys
+import logging
 from typing import List
 
 from dotenv import dotenv_values
