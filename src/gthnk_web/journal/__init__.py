@@ -12,6 +12,7 @@ from gthnk.filetree.buffer import FileBuffer
 from .j2_slugify import slugify, _slugify
 from ..app import gthnk
 
+days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
 journal = flask.Blueprint('journal',
     __name__,
@@ -67,8 +68,8 @@ def search_view():
         count=count
         )
 
-@journal.route("live.json")
-def live_timestamp():
+@journal.route("status.json")
+def status_json():
     "Return the timestamp of the latest input file."
     input_files = flask.current_app.config["INPUT_FILES"]
     latest_time = 0.0
@@ -79,44 +80,46 @@ def live_timestamp():
             if mtime > latest_time:
                 latest_time = mtime
 
-    return {'timestamp': latest_time}
+    # check the filetree for any updates
+    gthnk.filetree.read_journal()
 
-@journal.route("live")
-def live_view():
-    "View the current buffer"
-    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-    today = datetime.datetime.today()
-
-    j = Journal()
-    for buffer in gthnk.buffers:
-        FileBuffer(buffer, journal=j).read()
-
-    return flask.render_template(
-        'day.html.j2',
-        date=today.strftime('%Y-%m-%d'),
-        day=None,
-        day_str=render_day_pipeline(str(j)),
-        day_of_week=days[today.weekday()],
-        is_buffer=True,
-    )
+    return {
+        'timestamp': latest_time,
+        'latest': gthnk.journal.get_latest_datestamp(),
+    }
 
 @journal.route("<date>.html")
 def day_view(date):
     "View the specified day as HTML."
-    # check for any new days that have been added
-    gthnk.filetree.read_journal()
-    day = gthnk.journal.get_day(date)
-    # if there is any content, this day exists
-    if len(day.entries) > 0:
-        days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-        return flask.render_template(
-            'day.html.j2',
-            date=date,
-            day=day,
-            day_str=render_day_pipeline(str(day)),
-            day_of_week=days[datetime.datetime.strptime(date, "%Y-%m-%d").weekday()],
-        )
-    return flask.redirect(flask.url_for('.nearest_day', date=date))
+    return flask.render_template('day.html.j2', date=date)
+
+@journal.route("<date>.json")
+def day_json(date):
+    day_struct = {}
+    if date == "live":
+        today = datetime.datetime.today()
+        j = Journal()
+        for buffer in gthnk.buffers:
+            FileBuffer(buffer, journal=j).read()
+        day_struct = {
+            'datestamp': today.strftime('%Y-%m-%d'),
+            'content': render_day_pipeline(str(j)),
+            'day_of_week': days_of_week[today.weekday()],
+            'yesterday': gthnk.journal.get_latest_datestamp(),
+            'tomorrow': None,
+        }
+    else:
+        day = gthnk.journal.get_day(date)
+        if day:
+            day_struct = {
+                'datestamp': day.datestamp,
+                'content': render_day_pipeline(str(day)),
+                'day_of_week': days_of_week[datetime.datetime.strptime(date, "%Y-%m-%d").weekday()],
+                'yesterday': day.yesterday.datestamp if day.yesterday else None,
+                'tomorrow': day.tomorrow.datestamp if day.tomorrow else None,
+            }
+    if day_struct:
+        return flask.jsonify(day_struct)
 
 @journal.route("<date>.txt")
 def text_view(date):

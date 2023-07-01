@@ -3,7 +3,9 @@
 {% set current_page = 'day-view' -%}
 
 {% block navigation -%}
-{% include "pager.html.j2" -%}
+  <a id="link-yesterday" class="nav-item nav-link px-1" href="javascript:go_to_yesterday();" title="previous day"><i class="fas fa-backward"></i></a>
+  <a id="link-tomorrow" class="nav-item nav-link px-1" href="javascript:go_to_tomorrow();" title="next day"><i class="fas fa-forward"></i></a>
+  <a id="link-live" class="nav-item nav-link px-1" href="javascript:update_day('live');" title="live journal"><i class="fas fa-fast-forward"></i></a>
 {% endblock -%}
 
 {% block content -%}
@@ -12,42 +14,16 @@
       <div class="col-xl-1"></div>
       <div class="col-xl-10">
         <a id="entries_anchor" name="entries_anchor"></a>
-
-        <div class="gthnk-card" id="entries">
-          <p id="day-of-week">
-            {% if is_buffer -%}
-              (buffer)
-            {% else -%}
-              {{ day_of_week }}
-            {% endif -%}
-          </p>
-          {{ day_str|safe }}
-        </div>
+        <div class="gthnk-card" id="day-of-week"></div>
+        <div class="gthnk-card" id="entries"></div>
       </div>
       <div class="col-xl-1"></div>
     </div>
   </div>
 
-  {# inter-day navigation -#}
+  <script src="{{ url_for('.static', filename='images.js') }}"></script>
+  <script src="{{ url_for('.static', filename='dynamic-day.js') }}"></script>
   <script>
-    var today = "{{ date }}";
-
-    {% if day and day.yesterday -%}
-      var yesterday = "{{day.yesterday.datestamp}}";
-    {% else -%}
-      var yesterday = null;
-    {% endif -%}
-
-    {% if day and day.tomorrow -%}
-      var tomorrow = "{{day.tomorrow.datestamp}}";
-    {% else -%}
-      var tomorrow = null;
-    {% endif -%}
+    update_day("{{ date }}");
   </script>
-  <script src="{{ url_for('.static', filename='gthnk-images.js') }}"></script>
-  <script src="{{ url_for('.static', filename='gthnk-navigate.js') }}"></script>
-
-  {% if is_buffer -%}
-    <script src="{{ url_for('.static', filename='gthnk-live-update.js') }}"></script>
-  {% endif -%}
 {% endblock -%}
