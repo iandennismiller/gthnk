@@ -54,6 +54,7 @@ async function update_day(date_str) {
         stop_checking_status();
     }
 
+    update_calendar();
     window.history.pushState({}, date_str, url="/journal/" + date_str + ".html");
 }
 

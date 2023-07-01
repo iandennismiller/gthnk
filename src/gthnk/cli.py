@@ -4,6 +4,7 @@ import click
 from trogon import tui
 
 from . import Gthnk
+from .__meta__ import __version__
 from .model.journal import Journal
 from .filetree.buffer import FileBuffer
 
@@ -12,6 +13,13 @@ from .filetree.buffer import FileBuffer
 @click.group()
 def cli():
     "Gthnk: a journaling tool"
+
+
+@cli.command()
+def version():
+    "Print the version of Gthnk"
+    print(f"Gthnk {__version__}")
+
 
 @cli.command()
 @click.option('--current', is_flag=True, default=False, help="Print the current configuration")

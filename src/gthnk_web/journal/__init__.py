@@ -26,9 +26,12 @@ journal.add_app_template_filter(slugify)
 @journal.route("nearest/<date>")
 def nearest_day(date):
     "Redirect to the nearest day."
-    datestamp = str(datetime.datetime.strptime(date, "%Y-%m-%d").date())
-    day = gthnk.journal.get_nearest_day(datestamp)
+    try:
+        datestamp = str(datetime.datetime.strptime(date, "%Y-%m-%d").date())
+    except ValueError:
+        return flask.redirect(flask.url_for('.latest'))
 
+    day = gthnk.journal.get_nearest_day(datestamp)
     if day:
         return flask.redirect(flask.url_for('.day_view', date=day.datestamp))
     return flask.redirect(flask.url_for('.latest'))
