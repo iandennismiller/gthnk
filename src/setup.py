@@ -58,21 +58,16 @@ setup(
     ],
     extras_require={
         "dev": [
+            "Flask-Testing",
+            "mypy",
+            "pdbpp",
             "pytest",
             "pytest-cov",
-            "pdbpp",
             "pylint",
-            "mypy",
             "twine",
             "rstcheck",
             "Sphinx",
-            "Flask-Testing",
             "sphinx_rtd_theme",
-            "GitPython",
-        ],
-        "rtd": [
-            "sphinx_rtd_theme",
-            "GitPython",
         ],
         "server": [
             "jinja2<3.1.0",
