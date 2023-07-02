@@ -59,13 +59,20 @@ setup(
     extras_require={
         "dev": [
             "pytest",
+            "pytest-cov",
             "pdbpp",
             "pylint",
-            "rstcheck",
             "mypy",
-            "pytest-cov",
-            "Flask-Testing",
             "twine",
+            "rstcheck",
+            "Sphinx",
+            "Flask-Testing",
+            "sphinx_rtd_theme",
+            "GitPython",
+        ],
+        "rtd": [
+            "sphinx_rtd_theme",
+            "GitPython",
         ],
         "server": [
             "jinja2<3.1.0",

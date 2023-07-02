@@ -25,7 +25,6 @@ test:
 
 docs:
 	rm -rf var/sphinx
-	pip install -r docs/requirements.txt
 	sphinx-build -b html docs var/sphinx
 
 version-propagate:
