@@ -1,6 +1,13 @@
 .. gthnk documentation master file
 
-.. include:: ../Readme.rst
+Overview
+--------
+
+- **Gthnk** presents a **journal** consisting of many **entries**.
+- **Entries** are created using plain old text files, which **Gthnk** imports once per day.
+- Any text editor can be used to add information to **Gthnk**.
+- **Entries** are searchable using the embedded **Gthnk** server, which can be accessed with a browser.
+- Plain-text enables backup/restore via hardcopy (e.g. paper) for long-term archival.
 
 Introduction
 ------------

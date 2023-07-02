@@ -42,7 +42,7 @@ Use Docker to run Gthnk with all files stored locally in ``~/.gthnk``.
         -p 1620:1620 \
         -e TZ=America/Toronto \
         -v ~/.gthnk:/opt/gthnk/var \
-        iandennismiller/gthnk:0.8
+        iandennismiller/gthnk:0.8.1
 
 The default text file where you will record journal entries is ``~/.gthnk/journal.txt``.
 
@@ -139,7 +139,7 @@ A complete example using Dropbox could look like:
         -p 1620:1620 \
         -e TZ=America/Toronto \
         -v ~/Dropbox/gthnk:/opt/gthnk/var \
-        iandennismiller/gthnk:0.8
+        iandennismiller/gthnk:0.8.1
 
 This configuration supports running Gthnk on a dedicated server, like a local Linux machine, while editing the journal files on devices that are synced via the cloud.
 
@@ -153,7 +153,7 @@ To support a laptop and phone, use a custom configuration file.
         -e TZ=America/Toronto \
         -v ~/.gthnk/gthnk.conf:/opt/gthnk/.config/gthnk/gthnk.conf \
         -v ~/Dropbox/gthnk:/opt/gthnk/var
-        iandennismiller/gthnk:0.8
+        iandennismiller/gthnk:0.8.1
 
 Then edit ``~/.gthnk/gthnk.conf`` to specify multiple INPUT_FILES.
 
@@ -170,7 +170,7 @@ Other Gthnk Resources
 - `Python Package Index <https://pypi.org/project/gthnk/>`_
 - `Presentation: Overview of Gthnk <https://iandennismiller.github.io/pres-gthnk-overview>`_ - `presentation repo <https://github.com/iandennismiller/pres-gthnk-overview>`_
 - `Continuous Integration <https://travis-ci.org/iandennismiller/gthnk>`_
-- `VS Code Extension <https://marketplace.visualstudio.com/items?itemName=IanDennisMiller.gthnk>`_ - `repo <https://github.com/iandennismiller/vscode-gthnk>`_
+- `VS Code Extension <https://marketplace.visualstudio.com/items?itemName=IanDennisMiller.gthnk>`_ - `vsc extension repo <https://github.com/iandennismiller/vscode-gthnk>`_
 - `Chrome App <https://github.com/iandennismiller/gthnk/tree/master/share/chrome-app>`_
 - `Python-Markdown gthnk journal Extension <https://pypi.org/project/mdx_journal/>`_ - `mdx_journal repo <https://github.com/iandennismiller/mdx_journal>`_
 

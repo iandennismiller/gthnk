@@ -26,7 +26,11 @@ docs:
 	pip install -r docs/requirements.txt
 	sphinx-build -b html docs var/sphinx
 
-release: clean
+readme:
+	sed  -I .bak -E 's/iandennismiller\/gthnk:.+$$/iandennismiller\/gthnk:$(GTHNK_VER)/g' Readme.rst
+	rm Readme.rst.bak
+
+release: clean readme
 	cd src && python setup.py sdist bdist_wheel
 	twine check src/dist/*
 

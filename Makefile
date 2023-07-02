@@ -1,5 +1,7 @@
 # gthnk
 
+GTHNK_VER=$(word 3, $(shell grep __version__ src/gthnk/__meta__.py))
+
 help:
 	@echo The following makefile targets are available:
 	@echo
@@ -20,6 +22,9 @@ server:
 	FLASK_RUN_PORT=1620 \
 	FLASK_APP=src/gthnk_web/app \
 		flask run
+
+version:
+	@echo $(GTHNK_VER)
 
 -include src/docker.mk
 -include src/dev.mk

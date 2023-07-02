@@ -1,7 +1,5 @@
 # gthnk
 
-GTHNK_VER=$(word 3, $(shell grep __version__ src/gthnk/__meta__.py))
-
 DOCKER_CMD=docker run \
 	-it \
 	--rm \
