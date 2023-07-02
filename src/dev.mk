@@ -30,6 +30,7 @@ docs:
 
 version-propagate:
 	$(REPLACE_VERSION_CMD) Readme.rst && rm Readme.rst.bak
+	$(REPLACE_VERSION_CMD) docs/index.rst && rm docs/index.rst.bak
 	$(REPLACE_VERSION_CMD) docs/intro/quick-start.rst && rm docs/intro/quick-start.rst.bak
 	$(REPLACE_VERSION_CMD) docs/intro/installation.rst && rm docs/intro/installation.rst.bak
 	$(REPLACE_VERSION_CMD) docs/_static/docker-compose.yaml && rm docs/_static/docker-compose.yaml.bak
