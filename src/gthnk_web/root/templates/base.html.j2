@@ -55,19 +55,31 @@
           {% endif -%}
 
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('journal.latest') }}" title="latest day"><i class="fas fa-book"></i></a>
+            <a class="nav-link" href="{{ url_for('journal.latest') }}" title="latest day">
+              <i class="fas fa-book"></i>
+              <span class="nav-link-description">latest day</span>
+            </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" id="calendar_button" href="javascript:void(0)" title="go to day"><i class="far fa-calendar-alt"></i></a>
+            <a class="nav-link" id="calendar_button" href="javascript:void(0)" title="go to day">
+              <i class="far fa-calendar-alt"></i>
+              <span class="nav-link-description">go to day</span>
+            </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('home.config_view') }}" title="configuration"><i class="fas fa-info-circle"></i></a>
+            <a class="nav-link" href="{{ url_for('home.config_view') }}" title="configuration">
+              <i class="fas fa-info-circle"></i>
+              <span class="nav-link-description">configuration</span>
+            </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="javascript:toggle_darkmode();" title="dark mode"><i class="far fa-lightbulb"></i></a>
+            <a class="nav-link" href="javascript:toggle_darkmode();" title="dark mode">
+              <i class="far fa-lightbulb"></i>
+              <span class="nav-link-description">dark mode</span>
+            </a>
           </li>
         </ul>
       </div>
