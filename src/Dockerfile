@@ -33,7 +33,9 @@ COPY gthnk_web /usr/local/src/gthnk/gthnk_web
 COPY gthnk /usr/local/src/gthnk/gthnk
 RUN /opt/gthnk/.venv/bin/pip3 install \
   --disable-pip-version-check \
-  --no-cache-dir '/usr/local/src/gthnk[server]' && \
+  --no-deps \
+  --no-cache-dir \
+  '/usr/local/src/gthnk[server]' && \
   chown -R gthnk:gthnk /opt/gthnk/.venv
 
 USER gthnk
