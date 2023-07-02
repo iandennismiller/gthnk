@@ -35,6 +35,7 @@ setup(
         "scripts/gthnk",
     ],
     long_description=read('../Readme.rst'),
+    long_description_content_type="text/x-rst",
     classifiers=[
         "Development Status :: 4 - Beta",
         "Framework :: Flask",
@@ -64,6 +65,7 @@ setup(
             "mypy",
             "pytest-cov",
             "Flask-Testing",
+            "twine",
         ],
         "server": [
             "jinja2<3.1.0",

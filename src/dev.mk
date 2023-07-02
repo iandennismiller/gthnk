@@ -26,8 +26,11 @@ docs:
 	pip install -r docs/requirements.txt
 	sphinx-build -b html docs var/sphinx
 
-release:
+release: clean
 	cd src && python setup.py sdist bdist_wheel
+	twine check src/dist/*
+
+upload:
 	twine upload --config-file ~/.pypirc src/dist/*
 
 .PHONY: docs

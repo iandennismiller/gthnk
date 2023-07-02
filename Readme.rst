@@ -165,14 +165,14 @@ Other Gthnk Resources
 ^^^^^^^^^^^^^^^^^^^^^
 
 - `Project repository <https://github.com/iandennismiller/gthnk>`_
-- `Public website <http://www.gthnk.com>`_ - `repo <https://github.com/iandennismiller/www-gthnk>`_
-- `Read The Docs <https://gthnk.readthedocs.io/en/latest/>`_ - `project <https://readthedocs.org/projects/gthnk>`_ - `repo <https://github.com/iandennismiller/gthnk/tree/master/docs>`_
+- `Public website <http://www.gthnk.com>`_ - `website repo <https://github.com/iandennismiller/www-gthnk>`_
+- `Read The Docs <https://gthnk.readthedocs.io/en/latest/>`_ - `project <https://readthedocs.org/projects/gthnk>`_ - `docs repo <https://github.com/iandennismiller/gthnk/tree/master/docs>`_
 - `Python Package Index <https://pypi.org/project/gthnk/>`_
-- `Presentation: Overview of Gthnk <https://iandennismiller.github.io/pres-gthnk-overview>`_ - `repo <https://github.com/iandennismiller/pres-gthnk-overview>`_
+- `Presentation: Overview of Gthnk <https://iandennismiller.github.io/pres-gthnk-overview>`_ - `presentation repo <https://github.com/iandennismiller/pres-gthnk-overview>`_
 - `Continuous Integration <https://travis-ci.org/iandennismiller/gthnk>`_
 - `VS Code Extension <https://marketplace.visualstudio.com/items?itemName=IanDennisMiller.gthnk>`_ - `repo <https://github.com/iandennismiller/vscode-gthnk>`_
 - `Chrome App <https://github.com/iandennismiller/gthnk/tree/master/share/chrome-app>`_
-- `Python-Markdown gthnk journal Extension <https://pypi.org/project/mdx_journal/>`_ - `repo <https://github.com/iandennismiller/mdx_journal>`_
+- `Python-Markdown gthnk journal Extension <https://pypi.org/project/mdx_journal/>`_ - `mdx_journal repo <https://github.com/iandennismiller/mdx_journal>`_
 
 Documentation
 ^^^^^^^^^^^^^
