@@ -18,7 +18,7 @@ Use Docker to run **Gthnk** with all files stored locally in ``~/.gthnk``.
         -p 1620:1620 \
         -e TZ=America/Toronto \
         -v ~/.gthnk:/opt/gthnk/var \
-        iandennismiller/gthnk:0.8
+        iandennismiller/gthnk:0.8.1
 
 The default text file where you will record journal entries is ``~/.gthnk/journal.txt``.
 

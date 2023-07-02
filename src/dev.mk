@@ -2,6 +2,8 @@
 
 -include ./src/test-one.mk
 
+REPLACE_VERSION_CMD=sed -I .bak -E 's/iandennismiller\/gthnk:.+$$/iandennismiller\/gthnk:$(GTHNK_VER)/g'
+
 requirements:
 	pip install -U pip
 	pip install -e ./src[dev]
@@ -26,9 +28,11 @@ docs:
 	pip install -r docs/requirements.txt
 	sphinx-build -b html docs var/sphinx
 
-readme:
-	sed  -I .bak -E 's/iandennismiller\/gthnk:.+$$/iandennismiller\/gthnk:$(GTHNK_VER)/g' Readme.rst
-	rm Readme.rst.bak
+version-propagate:
+	$(REPLACE_VERSION_CMD) Readme.rst && rm Readme.rst.bak
+	$(REPLACE_VERSION_CMD) docs/intro/quick-start.rst && rm docs/intro/quick-start.rst.bak
+	$(REPLACE_VERSION_CMD) docs/intro/installation.rst && rm docs/intro/installation.rst.bak
+	$(REPLACE_VERSION_CMD) docs/_static/docker-compose.yaml && rm docs/_static/docker-compose.yaml.bak
 
 release: clean readme
 	cd src && python setup.py sdist bdist_wheel

@@ -10,7 +10,7 @@ The simplest installation method is to use Docker.
         -p 1620:1620 \
         -e TZ=America/Toronto \
         -v ~/.gthnk:/opt/gthnk/var \
-        iandennismiller/gthnk:0.8
+        iandennismiller/gthnk:0.8.1
 
 However, advanced methods are also available to install **Gthnk** as a Python package.
 Read :doc:`installation` for more installation options.
