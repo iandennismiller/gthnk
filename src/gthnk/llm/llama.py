@@ -12,7 +12,12 @@ class Llama(object):
     Llama is a wrapper around the llama.cpp binary, which must be installed separately.
     """
 
-    def __init__(self, model_path, prompt_type, context_db):
+    def __init__(self, model_path, prompt_type, context_db, prompt_cache_path, binary_path, log_filename, num_threads, your_name):
+        if not model_path:
+            raise ValueError(f"model_path cannot be empty. Set LLAMA_BIG_MODEL_PATH and LLAMA_SMALL_MODEL_PATH in configuration.")
+
+        self.model_path = model_path
+
         # determine model type from model path
         if "guanaco" in model_path.lower():
             model_type = "guanaco"
@@ -23,7 +28,7 @@ class Llama(object):
         elif "hermes" in model_path.lower():
             model_type = "alpaca"
 
-        self.prompter = Prompter(model_type=model_type, prompt_type=prompt_type)
+        self.prompter = Prompter(model_type=model_type, prompt_type=prompt_type, your_name=your_name)
 
         # extract model name
         self.model_path = os.path.expanduser(model_path)
@@ -32,20 +37,16 @@ class Llama(object):
         logging.getLogger("gthnk").info(f"Llama(prompt='{prompt_type}', model='{model_filename_noext}')")
         
         # prompt cache
-        prompt_cache_path = os.getenv("LLAMA_PROMPT_CACHE_PATH", "/tmp")
-        self.cache_filename = os.path.join(os.path.expanduser(prompt_cache_path), f"{model_filename_noext}.cache")
+        self.cache_filename = os.path.join(prompt_cache_path, f"{model_filename_noext}.cache")
         logging.getLogger("gthnk").debug(f"Llama prompt cache: {self.cache_filename}")
 
         # ggml binary
-        binary_path = os.getenv("LLAMA_BINARY_PATH")
-        if not binary_path:
-            raise Exception(f"LLAMA_BINARY_PATH not set")
-        self.binary_path = os.path.expanduser(binary_path)
+        self.binary_path = binary_path
         logging.getLogger("gthnk").debug(f"Llama binary: {self.binary_path}")
 
         # store queries and results in a separate file (i.e. not the main log)
-        self.log_filename = os.path.expanduser(os.getenv("LLM_LOG", "/tmp/gthnk-llm.log"))
-        self.num_threads = os.getenv("LLAMA_NUM_THREADS", "6")
+        self.log_filename = log_filename
+        self.num_threads = num_threads
         self.context_db = context_db
 
     def save_interaction(self, message: str):
@@ -118,21 +119,13 @@ class Llama(object):
         return result
 
     def send_prompt_pythonic(self, prompt: str):
-        LLAMA_THREADS_NUM = int(os.getenv("LLAMA_THREADS_NUM", 6))
-        if os.getenv("LLAMA_MODEL_PATH"):
-            LLAMA_MODEL_PATH = os.path.expanduser(os.getenv("LLAMA_MODEL_PATH"))
-            logging.getLogger("gthnk").info(f"Loading LLAMA: {LLAMA_MODEL_PATH}" + "\n")
-        else:
-            raise Exception("LLAMA_MODEL_PATH not set")
+        logging.getLogger("gthnk").info(f"Loading LLAMA: {self.model_path}" + "\n")
 
-        # with open('/dev/null', 'w') as f:
-        #     with redirect_stderr(f):
-        #         with redirect_stdout(f):
         if not hasattr(self, "llm"):
             self.llm = LlamaCpp(
-                model_path=LLAMA_MODEL_PATH,
+                model_path=self.model_path,
                 n_ctx=2048,
-                n_threads=LLAMA_THREADS_NUM,
+                n_threads=self.num_threads,
                 n_batch=512,
                 verbose=False,
                 # n_predict=1024,

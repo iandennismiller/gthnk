@@ -14,21 +14,28 @@ class LLM(object):
     @property
     def context_db(self):
         if not hasattr(self, "_context_db"):
-            self._context_db = ContextStorage()
+            self._context_db = ContextStorage(chroma_persist_dir=self.gthnk.config.get("CHROMA_PERSIST_DIR"))
         return self._context_db
 
     def get_llama(self, model_size:str, prompt_type:str):
         "Return the LLM object for a given model size and prompt type"
 
         if model_size == "big":
-            model_path = os.getenv("LLAMA_BIG_MODEL_PATH")
+            model_path = self.gthnk.config.get("LLAMA_BIG_MODEL_PATH")
         elif model_size == "small":
-            model_path = os.getenv("LLAMA_SMALL_MODEL_PATH")
+            model_path = self.gthnk.config.get("LLAMA_SMALL_MODEL_PATH")
+        else:
+            model_path = self.gthnk.config.get("LLAMA_SMALL_MODEL_PATH")
 
         return Llama(
-            model_path=model_path,
+            model_path=os.path.expanduser(model_path),
             prompt_type=prompt_type,
             context_db=self.context_db,
+            prompt_cache_path=os.path.expanduser(self.gthnk.config.get("LLAMA_PROMPT_CACHE_PATH", "/tmp")),
+            binary_path=os.path.expanduser(self.gthnk.config.get("LLAMA_BINARY_PATH")),
+            log_filename=os.path.expanduser(self.gthnk.config.get("LLM_LOG", "/tmp/gthnk-llm.log")),
+            num_threads=self.gthnk.config.get("LLAMA_THREADS_NUM", "6"),
+            your_name=self.gthnk.config.get("LLAMA_YOUR_NAME", "Gthnk"),
         )
 
     def refresh_embeddings(self):

@@ -1,6 +1,7 @@
 import os
 
 import click
+import requests
 from trogon import tui
 
 from . import Gthnk
@@ -155,6 +156,45 @@ def search(date:bool, uri:bool, path:bool, count:bool, num:int, reverse:bool, qu
             print(entry)
         if num and counter >= num:
             break
+
+@cli.command()
+@click.option('--api', is_flag=True, default=False, help="Query the API instead of the local LLM")
+@click.argument('prompt', nargs=-1, required=True)
+def ask(api, prompt):
+    "Answer a question based on journal entries"
+    query = " ".join(prompt)
+    g = Gthnk()
+
+    if api:
+        try:
+            req = requests.get("http://127.0.0.1:1620/api/ask", params={"q": query})
+            breakpoint()
+
+            # if not error
+            if req.status_code == 200:
+                req_json = req.json()
+                result = req_json["result"]
+                elapsed = req_json["elapsed"]
+                logging.getLogger("gthnk").info(f"API result received in {elapsed} seconds")
+                print(result)
+            else:
+                print(f"API Error: {req}")
+            return
+
+        # if connection error, fall back to local LLM
+        except requests.exceptions.ConnectionError:
+            pass
+
+    # run the query against the local LLM
+    if g.llm:
+        print(g.llm.ask(query))
+
+@cli.command()
+def embeddings():
+    "Refresh LLM embeddings"
+    g = Gthnk()
+    if g.llm:
+        g.llm.refresh_embeddings()
 
 
 CONFIG_TEMPLATE = """\

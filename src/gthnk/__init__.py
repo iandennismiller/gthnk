@@ -112,3 +112,14 @@ class Gthnk:
         # finally, read the journal from the filetree
         self.filetree.read_journal()
         logging.getLogger("gthnk").info("Reload Journal.")
+
+    @property
+    def llm(self):
+        "Lazy-load the LLM object."
+        if not hasattr(self, "_llm"):
+            try:
+                from .llm import LLM
+                self._llm = LLM(self)
+            except ModuleNotFoundError:
+                self._llm = None
+        return self._llm

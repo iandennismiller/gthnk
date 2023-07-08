@@ -2,11 +2,12 @@ import os
 
 
 class Prompter(object):
-    def __init__(self, prompt_type:str, model_type:str="guanaco"):
+    def __init__(self, prompt_type:str, model_type:str, your_name:str):
         # self.model_type = model_type
         self.model_setup = model_setup.get(model_type)
         # self.prompt_type = prompt_type
         self.prompt_data = prompts[prompt_type]
+        self.your_name = your_name
 
     def get_prompt(self, query:str, context:str):
         prompt_fmt = self.model_setup["turn_template"]
@@ -17,7 +18,7 @@ class Prompter(object):
             context=context,
         )
         prompt_resolved_2 = prompt_resolved_1.format(
-            your_name=os.getenv("LLM_YOUR_NAME", "Gthnk"),
+            your_name=self.your_name,
             query=query,
         )
         return prompt_resolved_2

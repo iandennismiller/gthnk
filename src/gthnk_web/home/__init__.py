@@ -27,3 +27,26 @@ def config_view():
 def index():
     "Render the index page."
     return flask.render_template('index.html.j2')
+
+
+@home.route('/api/ask', methods=['GET'])
+def api_ask():
+    query = flask.request.args.get('q')
+    if not query:
+        return flask.jsonify({
+            'error': 'no query',
+            "result": None,
+            "elapsed": None
+        })
+
+    # record the start time, in seconds
+    start_time = datetime.datetime.now()
+    result = gthnk.llm.ask(query)
+    end_time = datetime.datetime.now()
+    elapsed = end_time - start_time
+
+    return flask.jsonify({
+        'error': None,
+        'result': result,
+        'elapsed': elapsed.total_seconds()
+    })

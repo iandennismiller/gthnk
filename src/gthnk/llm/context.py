@@ -15,16 +15,15 @@ from ..model.day import Day
 class ContextStorage(object):
     "Entries storage using local ChromaDB"
 
-    def __init__(self):
+    def __init__(self, chroma_persist_dir):
         logging.getLogger('chromadb').setLevel(logging.ERROR)
         logging.getLogger("gthnk").info("Initializing Vector DB...")
 
         # Create Chroma collection
-        CHROMA_PERSIST_DIR = os.getenv("CHROMA_PERSIST_DIR", "chroma")
         chroma_client = chromadb.Client(
             settings=chromadb.config.Settings(
                 chroma_db_impl="duckdb+parquet",
-                persist_directory=CHROMA_PERSIST_DIR,
+                persist_directory=chroma_persist_dir,
                 anonymized_telemetry=False,
             )
         )
@@ -43,24 +42,24 @@ class ContextStorage(object):
 
     def add(self, entry:Entry):
         day = entry.day
-        entry_id = f"{day.day_id}-{entry.timestamp}"
+        timestamp = f"{day.datestamp}-{entry.timestamp}"
         metadatas = {
-            "entry_id": entry_id,
-            "day_id": day.day_id,
+            "timestamp": timestamp,
+            "datestamp": day.datestamp,
             "timestamp": entry.timestamp,
         }
 
         # Check if the entry already exists
-        if len(self.collection.get(ids=[entry_id], include=[])["ids"]) > 0:
-            logging.getLogger("gthnk").debug(f"Entry {entry_id} already exists")
+        if len(self.collection.get(ids=[timestamp], include=[])["ids"]) > 0:
+            logging.getLogger("gthnk").debug(f"Entry {timestamp} already exists")
             return
         else:
             self.collection.add(
-                ids=entry_id,
+                ids=timestamp,
                 documents=entry.content,
                 metadatas=metadatas,
             )
-            logging.getLogger("gthnk").info(f"Calculate embeddings for entry {entry_id}")
+            logging.getLogger("gthnk").info(f"Calculate embeddings for entry {timestamp}")
             return True
 
     def query(self, query:str, top_num:int=50) -> List[dict]:
