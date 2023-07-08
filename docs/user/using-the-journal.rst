@@ -44,18 +44,12 @@ Every day, **Gthnk** automatically does two maintenance tasks:
 - Just after midnight, **Gthnk** will collect any new journal entries for the day and store them in the database.
 - At 9:00am, **Gthnk** will open a browser window with the previous day's entries.
 
-Attachments
------------
-
-Archive images and PDFs in the journal by dragging those files onto the "Attachments" target in the GUI.  Use this to attach :doc:`/user/handwritten-notes-on-paper` to your digital entries, bridging the gap with the writing/drawing experience.
-
 Next Steps
 ----------
 
 Read the following to learn more about **Gthnk**:
 
 - :doc:`/user/text-editor-macros`
-- :doc:`/user/handwritten-notes-on-paper`
 - :doc:`/user/browser-integration`
 - :doc:`/user/mobile-devices`
 - :doc:`/user/text-file-format`

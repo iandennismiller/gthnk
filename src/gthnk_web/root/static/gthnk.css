@@ -1,0 +1,156 @@
+/* @import url(/static/css/gthnk-attachments.css); */
+
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+}
+
+body#day-view {
+    background: rgb(230, 230, 230);
+}
+
+.navbar {
+    padding: .1rem 1rem !important;
+}
+
+.image_container img {
+    max-height: 600px;
+}
+
+.image_container {
+    text-align: center;
+    margin: 0 auto;
+}
+
+#backdrop {
+    padding-top: 2em;
+    padding-bottom: 2em;
+}
+
+.gthnk-card {
+    padding: 1em;
+    font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+    word-wrap: break-word;
+}
+
+body.bootstrap .gthnk-card {
+    background: white;
+    box-shadow: 1px 1px 5px #999;
+}
+
+#agenda {
+    margin-top: 1em;
+}
+
+#agenda li {
+    list-style-type: none;
+}
+
+a.anchor {
+    display: block;
+    position: relative;
+    top: -60px;
+    visibility: hidden;
+}
+
+#day-of-week {
+    text-align: right;
+    font-size: small;
+    font-style: italic;
+}
+
+.nav-link-description {
+    display: none;
+}
+
+/*
+    Images
+*/
+
+.img-thumbnail {
+    max-width: 200px;
+    max-height: 200px;
+}
+
+.img-thumbnail:hover {
+    cursor: zoom-in;
+}
+
+/*
+    Dark Mode
+*/
+
+body.bootstrap-dark#day-view {
+    background: rgb(25, 29, 33);
+}
+
+body.bootstrap-dark .gthnk-card {
+    background: rgb(38, 38, 38);
+    /* box-shadow: 1px 1px 5px #333; */
+}
+
+/*
+    Mobile
+*/
+
+@media screen and (max-width: 767px) {
+    body {
+        font-size: 0.7rem !important;
+    }
+
+    h3 {
+        font-size: 0.9rem !important;
+        font-weight: bold;
+    }
+
+    h4 {
+        font-size: 0.8rem !important;
+        font-weight: bold;
+    }
+
+    .nav-item {
+        font-size: xx-large;
+    }
+
+    .nav-link-description {
+        font-size: large;
+        display: inline;
+        padding-left: 0.5em;
+    }
+}
+
+/*
+    Dark Mode for Date Range Picker
+*/
+
+body.bootstrap-dark .daterangepicker {
+    background-color: #343a40;
+    border: 1px solid #212427;
+}
+
+body.bootstrap-dark .daterangepicker .calendar-table {
+    background-color: #343a40;
+}
+
+body.bootstrap-dark .daterangepicker td.off {
+    background-color: #212427;
+}
+
+body.bootstrap-dark .daterangepicker td.available:hover {
+    background-color: #454b51;
+}
+
+body.bootstrap-dark .daterangepicker th.available span {
+    color: #ddd;
+}
+
+body.bootstrap-dark .daterangepicker th.available:hover {
+    background-color: #454b51;
+}
+
+body.bootstrap-dark .daterangepicker:before, body.bootstrap-dark .daterangepicker:after {
+    border-bottom: 7px solid #343a40;
+}

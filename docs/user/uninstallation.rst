@@ -1,20 +1,8 @@
 Uninstallation
 ==============
 
-System integration is only partially supported.
-
-It is currently easier to run via Docker.
-
-Windows
--------
+If installed with pip, do the following
 
 ::
 
-    gthnk do_uninstall
-
-OS X
-----
-
-::
-
-    gthnk do_uninstall
+    pip uninstall gthnk gthnk_web

@@ -1,42 +1,52 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
 import os
-
 from .entry import Entry
 
+if TYPE_CHECKING:
+    from .journal import Journal
 
-class Day(object):
-    def __init__(self, journal, day_id):
+
+class Day:
+    """
+    Represents a single day in a journal.
+    """
+
+    def __init__(self, journal:Journal, datestamp:str):
         self.journal = journal
-        self.day_id = day_id
-        self.entries = {}
+        self.datestamp = datestamp
+        self.entries:dict[str, Entry] = {}
 
-    def get_entry(self, timestamp_str):
-        if timestamp_str is None:
-            timestamp_str = "0000"
-        if timestamp_str not in self.entries:
-            new_entry = Entry(day=self, timestamp=timestamp_str)
-            self.entries[timestamp_str] = new_entry
+    def create_entry(self, timestamp:str, content:str):
+        "Create a new entry in the day."
+        new_entry = Entry(day=self, timestamp=timestamp, content=content)
+        self.entries[timestamp] = new_entry
+        return new_entry
 
-        return self.entries[timestamp_str]
+    def get_entry(self, timestamp:str):
+        "Return an entry by timestamp."
+        if timestamp in self.entries:
+            return self.entries[timestamp]
+        return None
 
     @property
     def uri(self):
-        return os.path.join(self.journal.uri, "day", f"{self.day_id}.txt")
+        "Return the URI of the day."
+        return os.path.join(self.journal.uri, "day", f"{self.datestamp}.txt")
 
     @property
     def yesterday(self):
-        yd = self.journal.get_previous_day(self)
-        return yd
+        "Return the previous day."
+        return self.journal.get_previous_day(self)
 
     @property
     def tomorrow(self):
+        "Return the next day."
         return self.journal.get_next_day(self)
 
     def __repr__(self):
-        buf = f"{self.day_id}\n\n"
-        if len(self.entries) > 0:
-            try: 
-                for timestamp in sorted(self.entries.keys()):
-                    buf += self.entries[timestamp].__repr__()
-            except TypeError:
-                breakpoint()
-            return buf
+        "Return a string representation of the day."
+        buf = f"{self.datestamp}\n\n"
+        for timestamp in sorted(self.entries.keys()):
+            buf += str(self.entries[timestamp])
+        return buf

@@ -1,6 +1,22 @@
 Changelog
 =========
 
+0.8.0
+-----
+
+2023-06-27
+
+- complete rewrite of gthnk backend
+- deprecating sqlite support; only text files now
+- focused on essential features, trimmed low-use/high-maintenance features
+- removed: tags, todo, attachments/pages, web UI notes, user accounts, sqlite
+- new command line interface
+- refreshed web interface
+- decent test coverage
+- good code linting
+- tons of bugfixes
+- web search results are paginated
+
 0.7.0
 -----
 

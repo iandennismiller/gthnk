@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-# gthnk (c) Ian Dennis Miller
+# gthnk
 
 from setuptools import setup, find_packages
 import os
@@ -9,10 +8,11 @@ import re
 def fpath(name):
     return os.path.join(os.path.dirname(__file__), name)
 
-
 def read(fname):
-    return open(fpath(fname)).read()
-
+    try:
+        return open(fpath(fname)).read()
+    except FileNotFoundError:
+        return f"File '{fname}' not found."
 
 file_text = read(fpath('gthnk/__meta__.py'))
 
@@ -29,14 +29,13 @@ setup(
     description="gthnk is a personal knowledge management system",
     packages=[
         "gthnk",
-        "gthnk_server",
-        "gthnk_integration",
+        "gthnk_web",
     ],
     scripts=[
         "scripts/gthnk",
-        "scripts/gthnk-7-to-8.py",
     ],
     long_description=read('../Readme.rst'),
+    long_description_content_type="text/x-rst",
     classifiers=[
         "Development Status :: 4 - Beta",
         "Framework :: Flask",
@@ -53,12 +52,9 @@ setup(
     author_email=grep('__email__'),
     url=grep('__url__'),
     install_requires=[
-        "six",
-        "puremagic",
         "python-dotenv",
-        "pytest",
         "rich",
-        "requests",
+        "trogon",
     ],
     extras_require={
         "llm": [
@@ -66,16 +62,16 @@ setup(
             "chromadb==0.3.21",
         ],
         "dev": [
-            "pdbpp",
-            "GitPython",
-            "Sphinx",
-            "alabaster",
-            "twine",
-            "ipython",
-            "watchdog",
-            "pylint",
             "Flask-Testing",
+            "mypy",
+            "pdbpp",
+            "pytest",
+            "pytest-cov",
+            "pylint",
+            "twine",
             "rstcheck",
+            "Sphinx",
+            "sphinx_rtd_theme",
         ],
         "server": [
             "jinja2<3.1.0",
@@ -83,7 +79,6 @@ setup(
             "werkzeug==2.0.3",
             "Markdown<3.2",
             "itsdangerous==2.0.1",
-            "flask-login",
             "Flask-WTF",
             "flask-markdown",
             "mdx-linkify==1.0",

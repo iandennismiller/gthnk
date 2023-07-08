@@ -13,3 +13,5 @@ __pycache__/
 .env
 .pytest_cache/
 /chroma
+/.mypy_cache
+/src/test-one.mk

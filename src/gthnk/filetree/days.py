@@ -1,61 +1,46 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING, Set
 import os
 import logging
 
-from ..filebuffer import FileBuffer
+from .buffer import FileBuffer
+
+if TYPE_CHECKING:
+    from ..model.day import Day
+    from ..model.journal import Journal
 
 
-class FileTreeDays(object):
+class DaysCollection:
     """
-    Represents a full journal as a filesystem tree.
-    Works by mapping a journal URI to a filesystem path.
+    Days: a collection of days in the journal.
+    Can be used to read and write days to the filesystem.
     """
 
-    def __init__(self, filetree):
-        self.filetree = filetree
+    def __init__(self, path:str, journal:Journal):
+        self.path = path
+        self.journal = journal
+        self.datestamps:Set[str] = set()
 
-    def get_path(self, day):
-        "Return the filesystem path for a day."
-        return os.path.join(self.filetree.path, f".{day.uri}")
+    def write(self, day:Day):
+        "Write a day to the filetree, along with its entries"
+        path = os.path.join(self.path, f".{day.uri}")
+        with open(path, "w", encoding="utf-8") as file_handle:
+            file_handle.write(str(day))
 
-    def get_path_id(self, day_id):
-        "Return the filesystem path for a day."
-        return os.path.join(self.filetree.path, "day", f"{day_id}.txt")
+    def read(self, datestamp:str):
+        "Read a day from the filesystem, add to journal."
+        filename = os.path.join(self.path, "day", f"{datestamp}.txt")
+        FileBuffer(filename=filename, journal=self.journal).read()
 
-    def write(self, day):
-        "Write a day to the filesystem."
-        path = self.get_path(day)
-        with open(path, "w") as f:
-            f.write(day.__repr__())
-        
-        for entry in day.entries.values():
-            self.filetree.entries.write(entry)
-
-    def read_id(self, day_id):
-        "Read a day from the filesystem."
-        filename = self.get_path_id(day_id)
-        fb = FileBuffer(filename=filename, journal=self.filetree.journal)
-        return self.filetree.journal.get_day(day_id)
-
-    def scan_ids(self):
-        "Scan the filesystem for day ids and create days for them."
-        day_ids = []
-        logging.getLogger("gthnk").debug(f"Scanning {self.filetree.path}/day for days.")
-        for filename in os.listdir(os.path.join(self.filetree.path, "day")):
+    def scan(self):
+        "Scan the filesystem for day datestamps."
+        new_datestamps = set()
+        logging.getLogger("gthnk").debug("Scanning %s/day for days.", self.path)
+        for filename in os.listdir(os.path.join(self.path, "day")):
             if filename.endswith(".txt"):
-                day_id = filename.replace(".txt", "")
-                day_ids.append(day_id)
-        logging.getLogger("gthnk").debug(f"Scanned {len(day_ids)} days from filesystem.")
-        return day_ids
-
-    def load_all(self):
-        "Load all days from the filesystem."
-        day_ids = self.scan_ids()
-        for day_id in day_ids:
-            if day_id not in self.filetree.journal.days:
-                self.filetree.journal.get_day(day_id)
-
-        for day_id in self.filetree.journal.days.keys():
-            self.read_id(day_id)
-            logging.getLogger("gthnk").debug(f"Loaded day {day_id} from filesystem.")
-
-        logging.getLogger("gthnk").info(f"Loaded {len(self.filetree.journal.days)} days from filesystem.")
+                datestamp = filename.replace(".txt", "")
+                if datestamp not in self.datestamps:
+                    new_datestamps.add(datestamp)
+                    self.datestamps.add(datestamp)
+        logging.getLogger("gthnk").debug("Scanned %d days from filesystem.", len(new_datestamps))
+        return list(new_datestamps)

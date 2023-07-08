@@ -1,2 +1,3 @@
 graft gthnk
+graft gthnk_web
 include *.cfg *.rst *.in *.txt *.ini *.mako *.html *.js *.css *.jpg *.gif *.rb *.sh *.j2 *.json

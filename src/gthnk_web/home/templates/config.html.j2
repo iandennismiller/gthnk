@@ -1,0 +1,48 @@
+{% extends 'base.html.j2' %}
+
+{% set current_page = 'config-view' %}
+
+{% block content %}
+<div id="backdrop" class="container">
+
+  <div class="row">
+    <div class="col-xl-1"></div>
+    <div class="col-xl-10">
+
+      <h1>Configuration</h1>
+
+      <div class="gthnk-card" id="entries">
+        <style type="text/css">.key { display: inline-block; width: 12em; }</style>
+        <p>
+          <span class="key">Version</span>
+          <span class="value">{{ version }}</span>
+        </p>
+
+        <p>
+          <span class="key">Input Files</span>
+          <span class="value">{{ configuration['INPUT_FILES'] }}</span>
+        </p>
+
+        <p>
+          <span class="key">Log Filename</span>
+          <span class="value">{{ configuration['LOG_FILENAME'] }}</span>
+        </p>
+
+        <p>
+          <span class="key">Gthnk Server URL</span>
+          <span class="value">{{ configuration['BASE_URL'] }}</span>
+        </p>
+
+        <p>
+          <span class="key">Number of Days in Journal</span>
+          <span class="value">{{ num_journal_days }}</span>
+        </p>
+
+      </div>
+    </div>
+    <div class="col-xl-1"></div>
+  </div>
+
+</div>
+
+{% endblock %}

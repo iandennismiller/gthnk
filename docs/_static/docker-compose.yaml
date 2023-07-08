@@ -1,0 +1,33 @@
+# docker-compose -f docker-compose.yaml up
+# docker-compose -f docker-compose.yaml down
+version: "3.3"
+services:
+  gthnk-server:
+    image: iandennismiller/gthnk:0.8.1
+    container_name: gthnk-server
+    volumes:
+      - ~/Work/gthnk/var/gthnk:/opt/gthnk/var
+    networks:
+      - gthnk-net
+    ports:
+      - "1620:1620"
+    environment:
+      - TZ=America/Toronto
+
+  gthnk-rotate:
+    image: docker:edge
+    container_name: gthnk-rotate
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - gthnk-net
+    # inspired by https://stackoverflow.com/a/48611098
+    # This image does not support time zones and is always in UTC.
+    # You must set the cron job to execute at a sensible time relative to your local time zone.
+    # For Eastern (America/Toronto) use 5 AM UTC to ensure post-midnight run, which is: 0 5 * * * 
+    command: >
+      sh -c "
+      echo '0 5 * * * docker exec gthnk-server /opt/gthnk/.venv/bin/gthnk rotate' > /etc/crontabs/root
+      && crond -f"
+networks:
+  gthnk-net:
