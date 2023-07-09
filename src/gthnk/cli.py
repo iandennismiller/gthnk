@@ -168,7 +168,6 @@ def ask(api, prompt):
     if api:
         try:
             req = requests.get("http://127.0.0.1:1620/api/ask", params={"q": query})
-            breakpoint()
 
             # if not error
             if req.status_code == 200:
@@ -177,9 +176,7 @@ def ask(api, prompt):
                 elapsed = req_json["elapsed"]
                 logging.getLogger("gthnk").info(f"API result received in {elapsed} seconds")
                 print(result)
-            else:
-                print(f"API Error: {req}")
-            return
+                return
 
         # if connection error, fall back to local LLM
         except requests.exceptions.ConnectionError:
