@@ -32,7 +32,6 @@ class LLM(object):
             prompt_type=prompt_type,
             context_db=self.context_db,
             prompt_cache_path=os.path.expanduser(self.gthnk.config.get("LLAMA_PROMPT_CACHE_PATH", "/tmp")),
-            binary_path=os.path.expanduser(self.gthnk.config.get("LLAMA_BINARY_PATH")),
             log_filename=os.path.expanduser(self.gthnk.config.get("LLM_LOG", "/tmp/gthnk-llm.log")),
             num_threads=self.gthnk.config.get("LLAMA_THREADS_NUM", "6"),
             your_name=self.gthnk.config.get("LLAMA_YOUR_NAME", "Gthnk"),

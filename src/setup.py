@@ -58,7 +58,7 @@ setup(
     ],
     extras_require={
         "llm": [
-            "llama-cpp-python==0.1.43",
+            "llama-cpp-python",
             "chromadb==0.3.21",
         ],
         "dev": [

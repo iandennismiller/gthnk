@@ -1,7 +1,6 @@
 import os
 import logging
 import datetime
-import subprocess
 
 from .prompter import Prompter
 from llama_cpp import Llama as LlamaCpp
@@ -12,23 +11,16 @@ class Llama(object):
     Llama is a wrapper around the llama.cpp binary, which must be installed separately.
     """
 
-    def __init__(self, model_path, prompt_type, context_db, prompt_cache_path, binary_path, log_filename, num_threads, your_name):
+    def __init__(self, model_path, prompt_type, context_db, prompt_cache_path, log_filename, num_threads, your_name):
         if not model_path:
             raise ValueError(f"model_path cannot be empty. Set LLAMA_BIG_MODEL_PATH and LLAMA_SMALL_MODEL_PATH in configuration.")
 
         self.model_path = model_path
-
-        # determine model type from model path
-        if "guanaco" in model_path.lower():
-            model_type = "guanaco"
-        elif "vicuna" in model_path.lower():
-            model_type = "vicuna"
-        elif "alpaca" in model_path.lower():
-            model_type = "alpaca"
-        elif "hermes" in model_path.lower():
-            model_type = "alpaca"
-
-        self.prompter = Prompter(model_type=model_type, prompt_type=prompt_type, your_name=your_name)
+        self.prompter = Prompter(
+            model_type=Prompter.classify_model(model_path),
+            prompt_type=prompt_type,
+            your_name=your_name
+        )
 
         # extract model name
         self.model_path = os.path.expanduser(model_path)
@@ -39,10 +31,6 @@ class Llama(object):
         # prompt cache
         self.cache_filename = os.path.join(prompt_cache_path, f"{model_filename_noext}.cache")
         logging.getLogger("gthnk").debug(f"Llama prompt cache: {self.cache_filename}")
-
-        # ggml binary
-        self.binary_path = binary_path
-        logging.getLogger("gthnk").debug(f"Llama binary: {self.binary_path}")
 
         # store queries and results in a separate file (i.e. not the main log)
         self.log_filename = log_filename
@@ -68,76 +56,36 @@ class Llama(object):
 
     def query(self, query_str:str, context:str=None, prompt_type:str="instruct"):
         self.save_interaction(message=query_str)
+
         prompt = self.prompter.get_prompt(
             query=query_str,
             context=context if context else self.get_context(query_str)
         )
-        result = self.send(prompt)
-        self.save_interaction(message=result)
-        return result
 
-    def send(self, prompt: str):
-        "Send prompt to the llama.cpp binary and return the response"
-
-        cmd = [
-            self.binary_path,
-            "--prompt", prompt,
-            "--model", self.model_path,
-            "--temp", "0.4",
-            "--ctx-size", "2048",
-            "--batch-size", self.num_threads,
-            "--n-predict", "384",
-            "--threads", self.num_threads,
-            # "--prompt-cache", self.cache_filename,
-            # "--prompt-cache-all",
-        ]
-
-        # log the prompt and start time
-        logging.getLogger("gthnk").info(f"LLM prompt: {prompt}")
-        start_time = datetime.datetime.now()
-
-        # run the llama.cpp binary as a subprocess and get the result
-        result_obj = subprocess.run(cmd, capture_output=True, text=True)
-
-        # log the result and end time
-        end_time = datetime.datetime.now()
-        logging.getLogger("gthnk").info(f"LLM elapsed time: {end_time - start_time}")
-
-        # process the result
-        if result_obj.returncode != 0:
-            logging.getLogger("gthnk").error(result_obj.stderr)
-            result = "Error generating response"
-        else:
-            # remove everything before the prompt
-            result = result_obj.stdout.split(prompt)[1]
-
-            # remove everything after the response
-            result = result.split("main: mem per token = ")[0]
-            result = result.strip()
-            logging.getLogger("gthnk").info(f"LLM response: {result}")
-
-        return result
-
-    def send_prompt_pythonic(self, prompt: str):
         logging.getLogger("gthnk").info(f"Loading LLAMA: {self.model_path}" + "\n")
 
         if not hasattr(self, "llm"):
             self.llm = LlamaCpp(
                 model_path=self.model_path,
                 n_ctx=2048,
-                n_threads=self.num_threads,
-                n_batch=512,
+                n_threads=int(self.num_threads),
+                n_batch=8,
                 verbose=False,
-                # n_predict=1024,
+                seed=-1,
                 # use_mlock=True,
             )
+
+        # log the prompt and start time
+        logging.getLogger("gthnk").info(f"LLM prompt: {prompt}")
+        start_time = datetime.datetime.now()
 
         # prompt += "\n### Assistant: "
         result_raw = self.llm(
             prompt,
             stop=["### Human"],
             echo=False,
-            temperature=0.2
+            max_tokens=-1,
+            temperature=0.4
         )
         result_str = str(result_raw['choices'][0]['text'].strip())
 
@@ -148,4 +96,9 @@ class Llama(object):
         else:
             result = result_str
 
+        # log the result and end time
+        end_time = datetime.datetime.now()
+        logging.getLogger("gthnk").info(f"LLM elapsed time: {end_time - start_time}")
+
+        self.save_interaction(message=result)
         return result

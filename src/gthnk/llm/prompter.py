@@ -23,6 +23,22 @@ class Prompter(object):
         )
         return prompt_resolved_2
 
+    @classmethod
+    def classify_model(cls, model_path:str):
+        model_path_lower = model_path.lower()
+
+        # determine model type from model path
+        if "guanaco" in model_path_lower:
+            return "guanaco"
+        elif "vicuna" in model_path_lower:
+            return "vicuna"
+        elif "alpaca" in model_path_lower:
+            return "alpaca"
+        elif "hermes" in model_path_lower:
+            return "alpaca"
+        elif "orca" in model_path_lower:
+            return "orca"
+
 ###
 # Prompt map
 
@@ -74,4 +90,8 @@ model_setup = {
         "setting": "A chat between a curious human and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.\n",
         "turn_template": "{setting}\nHuman: {instruction_1}\n------------\n{context}\n------------\n{instruction_2}\nAssistant: ",
     },
+    "orca": {
+        "setting": "",
+        "turn_template": "### System:\nYou are an AI assistant named {{your_name}} that follows instruction extremely well. Help as much as you can.\n\n### User:\n{{query}}\n\n### Input:\nThe following are your journal entries, which can help in completing this task.\n{context}\n\n### Response:\n",
+    }
 }
