@@ -17,7 +17,7 @@ class Llama(object):
 
         self.model_path = model_path
         self.prompter = Prompter(
-            model_type=Prompter.classify_model(model_path),
+            model_type=self.classify_model(model_path),
             prompt_type=prompt_type,
             your_name=your_name
         )
@@ -50,9 +50,29 @@ class Llama(object):
 
         return self.context_db.as_string(
             context_list=context_list,
-            max_item_tokens = 64,
-            max_context_tokens = 384,
+            max_item_tokens = 128,
+            max_context_tokens = 4096 - 512,
         )
+
+    def classify_model(self, model_path:str):
+        model_path_lower = model_path.lower()
+
+        model_types = [
+            "guanaco",
+            "alpaca",
+            "hermes",
+            "orca",
+            "vicuna",
+            "based",
+            "scarlett",
+            "mistral",
+        ]
+
+        for model_type in model_types:
+            if model_type in model_path_lower:
+                return model_type
+        
+        return "llama"
 
     def query(self, query_str:str, context:str=None, prompt_type:str="instruct"):
         self.save_interaction(message=query_str)
@@ -67,9 +87,9 @@ class Llama(object):
         if not hasattr(self, "llm"):
             self.llm = LlamaCpp(
                 model_path=self.model_path,
-                n_ctx=2048,
+                n_ctx=4096,
                 n_threads=int(self.num_threads),
-                n_batch=8,
+                n_gpu_layers=1,
                 verbose=False,
                 seed=-1,
                 # use_mlock=True,
@@ -85,7 +105,7 @@ class Llama(object):
             stop=["### Human"],
             echo=False,
             max_tokens=-1,
-            temperature=0.4
+            temperature=0.05
         )
         result_str = str(result_raw['choices'][0]['text'].strip())
 
