@@ -20,12 +20,8 @@ class ContextStorage(object):
         logging.getLogger("gthnk").info("Initializing Vector DB...")
 
         # Create Chroma collection
-        chroma_client = chromadb.Client(
-            settings=chromadb.config.Settings(
-                chroma_db_impl="duckdb+parquet",
-                persist_directory=chroma_persist_dir,
-                anonymized_telemetry=False,
-            )
+        chroma_client = chromadb.PersistentClient(
+            path=chroma_persist_dir,
         )
 
         # ~/.cache/torch/sentence_transformers/sentence-transformers_all-mpnet-base-v2

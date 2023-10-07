@@ -16,6 +16,9 @@ install:
 	pip install -U pip
 	pip install -e ./src[server]
 
+install-llm:
+	pip install -e ./src[llm]
+
 server:
 	GTHNK_CONFIG=$$PWD/.env \
 	FLASK_ENV=development \

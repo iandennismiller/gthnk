@@ -59,7 +59,8 @@ setup(
     extras_require={
         "llm": [
             "llama-cpp-python",
-            "chromadb==0.3.21",
+            "chromadb",
+            "chroma-migrate",
         ],
         "dev": [
             "Flask-Testing",
